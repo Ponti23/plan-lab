@@ -8,10 +8,6 @@ description: Execute the next unblocked PlanLab bucket through its required veri
 Drive authorized work through the active plan in dependency order. Use
 `knowledge/patterns/delegation-playbook.md` for agent roles and fallback.
 
-**Astra entry guard:** when this skill runs in Astra, return only the next eligible bucket's
-self-contained brief/report in the response, then stop. The authorized executor persists it and
-executes the bucket; Astra does not continue the run loop.
-
 ## Resume
 
 1. Read `HANDOFF.md`, `DELEGATION-PLAN.md`, `knowledge/BOARD.md`, and
@@ -23,13 +19,13 @@ executes the bucket; Astra does not continue the run loop.
 
 ## Execute one bucket at a time
 
-1. For planning or judgment, request an Astra report or brief. Astra is read-only and returns
-   findings in its response; the executor records project state where authorized.
-2. Dispatch routine work to a fresh Luna and complex engineering/solver work to Sol. If native
-   dispatch is unavailable, use the manual DeepSeek Flash fallback described in the playbook.
+1. Opus plans the bucket and writes its self-contained brief.
+2. Dispatch routine work to a fresh Luna and complex engineering/solver work to Sol with
+   `scripts/codex-worker.sh` (one writer per checkout; see the playbook). If Codex
+   is unavailable, use the manual DeepSeek Flash fallback described in the playbook.
    Provide the full bucket, relevant specification, exact scope, verification, and result format.
 3. The author performs the bucket's requested checks and reports changed files, results, and
-   remaining issues. Do not treat an Astra report as execution or verification.
+   remaining issues. Do not treat a plan as execution or verification.
 4. Send consequential changes to a fresh independent reviewer who did not author them. Resolve
    findings and record the review result before marking the bucket done. Do not self-review as
    the independent reviewer.

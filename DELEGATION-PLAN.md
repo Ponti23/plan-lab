@@ -6,7 +6,7 @@ Astra authored the decomposition on 2026-10-05. An executor persists it here. Th
 
 ## Dispatch and completion
 
-- Astra reasons, decomposes, briefs and judges in reports. Luna handles routine execution; Sol handles complex geometry, solver and integration work. An executor writes files and persists the board. Claude models are inactive. DeepSeek Flash is a manual external fallback.
+- Opus 5.5 plans, briefs, dispatches, reviews and persists the board (rows below that say "Astra" mean this planner/judge role). Codex Luna handles routine execution; Codex Sol handles complex geometry, solver and integration work; one writer per checkout. DeepSeek Flash is a manual external fallback.
 - Each bucket has bounded artifacts, prerequisites, gates and acceptance evidence. A fresh agent/session independently reviews an author's result. `done` requires the artifact, evidence, review and applicable approvals; naming a check is not a passing check.
 - Planned paths under `knowledge/specs/`, `spike/`, `engine/` and `src/` describe future artifacts; they are not present merely because this plan names them. Final module paths follow the measured baseline.
 - Use one coherent branch/review unit per implementation bucket. Preserve others' dirty work; do not switch branches, stage it, or claim its completion. A blocked report need not have a fabricated commit.
@@ -19,7 +19,7 @@ Gates record concrete scope and existing consent; they are not mandatory separat
 | Gate | Current record | What it controls |
 | --- | --- | --- |
 | G-DESIGN | Confirmed in the product plan's 2026-10-05 design-confirmed entry | D01–D55 and explicit deferrals; do not restart the interview. |
-| G-SPIKE | Stage 0 is drafted for dispatch; executable work is not being started by this documentation task | Bounded spike execution described in PL-14/20/21; resolve dispatch scope from existing authorization and the user's execution request. |
+| G-SPIKE | **Approved by the user 2026-10-05 (plan B)** for an early PL-20 on golden brief GB-01 + Fixture A: headless, zero-dependency TypeScript, provisional values, assumptions stated where PL-11–14 are unwritten. Wider spike scope (PL-21) still follows the normal dependencies | Bounded spike execution described in PL-14/20/21; resolve dispatch scope from existing authorization and the user's execution request. |
 | G-BUILD | No production-engine/app execution requested in this task | Production implementation against the measured/specification baseline. |
 | G-CALIBRATION | Exact numerical defaults and group/quality interpretations remain provisional | Approve architect-reviewed calibration and genuinely new product interpretations before affected production behavior. Experiments may use visibly provisional fixtures. |
 | G-UX | Existing Drawing-Set Sheet mockups are pre-review | New interface/copy/export presentation choices; settled workflow requirements need no repeat approval. |

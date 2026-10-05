@@ -7,20 +7,34 @@ tags: [progress, resume]
 
 ## Resume here
 
-- **Current focus (2026-10-05):** Round 12 (D56–D60 + future AI-suggester note) is **recorded** in `plan-lab-astra-plan.md`, `ARCHITECTURE.md` and the board. Luna authored it from [`knowledge/briefs/round12-luna-brief.md`](briefs/round12-luna-brief.md). A separate Claude Sonnet reviewer passed it.
-- **Working model changed (user, 2026-10-05):** Opus 5.5 orchestrates: it plans, briefs, dispatches, judges and reports. Haiku, Sonnet and Luna execute by difficulty; Sol takes complex engineering. Astra is retired from the live loop. See the [delegation playbook](patterns/delegation-playbook.md). Luna is dispatched via `.claude/agents/luna.md` or `scripts/codex-worker.sh`.
-- **Settled in D56:** the Outdoor/Alfresco zone is low priority. Alfresco and the extra Family room have no default zone, like Study, Theatre and custom rooms.
-- **Waiting on user:** the reference-plan image files (4 shown in chat) for `knowledge/reference/`. Not blocking PL-10, which can use the numbers in the brief.
-- **Remember:** the user is colorblind. Explain by labels, never colour, and the UI must not rely on colour alone (D56).
-- **Next step:** PL-10 (dimensions and brief contract → `knowledge/specs/dimensions-and-briefs.md`) with the D56/D58/D59 board notes applied. Then PL-11 → PL-14. These contracts are needed before the Stage 0 spike (PL-20/21, the first code), and the spike is needed before product code (PL-30+).
-- **In-flight checkout:** see the branch record in `knowledge/BOARD.md`. The UI mockups are separate, unreviewed exploration and are not solver evidence.
+- **Current focus (2026-10-05, late):** plan B is running. Luna (Codex) is writing **PL-10** →
+  `knowledge/specs/dimensions-and-briefs.md` from [`briefs/pl10-luna-brief.md`](briefs/pl10-luna-brief.md),
+  dispatched 22:41 from the previous thread. While it runs, `.git/codex-worker.lock` exists;
+  Luna's final message goes to `C:UserspontiAppDataLocalTemppl10-result.md`.
+- **Next:** start the overnight goal in a new thread: [`briefs/overnight-goal.md`](briefs/overnight-goal.md).
+- **User decisions (2026-10-05):**
+  - **Plan B:** PL-10 first, then an early Stage 0 spike (PL-20) on golden brief GB-01 + Fixture A
+    while PL-11–14 are written.
+  - **G-SPIKE approved** for that early spike: headless, zero-dependency TypeScript run by Node 24.
+  - **Commits allowed** on a new `work/plan-b` branch, one per reviewed bucket. No push or merge.
+- **Working model:** Opus 5.5 orchestrates. The only workers are Codex: Luna (`gpt-5.6-luna`, max)
+  for routine work and Sol (`gpt-5.6-sol`, max; Sol 6.1 isn't available on this account yet) for
+  complex engineering. Dispatch via `scripts/codex-worker.sh`, which allows one writer per checkout.
+  Astra, Haiku and Sonnet are retired as workers. See the [delegation playbook](patterns/delegation-playbook.md).
+- **Settled in D56:** Outdoor/Alfresco zone is low priority. Alfresco, extra Family, Study, Theatre and
+  custom rooms have no default zone.
+- **Reference plans:** `C:UserspontiOneDriveprojectsloorplan-enginedataaw` (read-only, not
+  in the repo). See [`reference/README.md`](reference/README.md).
+- **Remember:** the user is colorblind. Explain by labels, never colour; the UI must not rely on colour (D56).
+- **Uncommitted:** everything on `design/ui-mockups` since 1c5fb1f (roster/rules/docs edits).
+  The goal moves it onto `work/plan-b`.
 - **Deferred:**
-  - Possibly revisit D07 (Kitchen/Dining/Living as one rectangle).
-  - Calibration (G-CALIBRATION).
+  - Possibly revisit D07.
+  - G-CALIBRATION.
   - UI (PL-40–42, G-UX).
-  - Project/export (PL-43, PL-50–51).
-  - Release 2 items per D60.
-  - The `ARCHITECTURE.md` §6 baseline stays proposed until the Stage 0 evidence is in.
+  - Projects/exports (PL-43, PL-50–51).
+  - Release 2 items (D60).
+  - `ARCHITECTURE.md` §6 stays proposed until spike evidence is in.
 
 _(This block is rewritten by the `save-progress` skill. Everything below is the append-only timeline.)_
 

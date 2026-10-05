@@ -15,12 +15,11 @@ fallback are in [[delegation-playbook]].
    the next unblocked bucket and its dependencies, verification, and human gates.
 2. A gate blocks only buckets that depend on its decision. Stop those rows at `needs-human` and
    continue independent, authorized work.
-3. If planning is needed, ask Astra for a brief or judgment. Astra's response is advisory until
-   the executor records relevant state in the authorized files. Do not wait for Astra to write
-   files or perform execution.
-4. Dispatch the bucket to a fresh Luna for routine work or Sol for complex engineering. Include
-   the bucket, scope, relevant spec, constraints, checks, and a requested result format. If native
-   dispatch is unavailable, use the manual DeepSeek Flash fallback in the playbook.
+3. Opus plans the bucket and writes a self-contained brief.
+4. Dispatch the bucket to a fresh Luna for routine work or Sol for complex engineering via
+   `scripts/codex-worker.sh`, one writer per checkout. Include
+   the bucket, scope, relevant spec, constraints, checks, and a requested result format. If Codex
+   is unavailable, use the manual DeepSeek Flash fallback in the playbook.
 5. Have the author report changes and raw verification results. Route consequential changes to a
    fresh, separate reviewer; never accept an author's own review as independent. Record review
    findings and verification evidence before marking the bucket `done`.
