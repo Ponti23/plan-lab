@@ -1,0 +1,189 @@
+{
+ "stage": 4,
+ "id": "3-1175166",
+ "briefId": "FIXTURE-A",
+ "seed": 3,
+ "attempt": 1175166,
+ "cfPattern": "CF-01",
+ "hallShape": "spine",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 1535,
+  "y": 5700,
+  "w": 11930,
+  "h": 14300
+ },
+ "inner": {
+  "x": 1785,
+  "y": 5950,
+  "w": 11430,
+  "h": 13800
+ },
+ "zones": [
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 1785,
+    "y": 5950,
+    "w": 1830,
+    "h": 2220
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "Z-pantry",
+   "name": "Living (Pantry)",
+   "type": "living",
+   "rect": {
+    "x": 1785,
+    "y": 8270,
+    "w": 1830,
+    "h": 1680
+   },
+   "roomIds": [
+    "pantry"
+   ]
+  },
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 3715,
+    "y": 5950,
+    "w": 5070,
+    "h": 4000
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 1785,
+    "y": 10050,
+    "w": 7000,
+    "h": 4100
+   },
+   "roomIds": [
+    "wir",
+    "ensuite",
+    "master"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 1785,
+    "y": 14250,
+    "w": 7000,
+    "h": 5500
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-beds1",
+   "name": "Bedrooms (part 1 of 2)",
+   "type": "bedrooms",
+   "rect": {
+    "x": 9985,
+    "y": 5950,
+    "w": 3230,
+    "h": 2870
+   },
+   "roomIds": [
+    "bed2"
+   ]
+  },
+  {
+   "id": "Z-beds2",
+   "name": "Bedrooms (part 2 of 2)",
+   "type": "bedrooms",
+   "rect": {
+    "x": 9985,
+    "y": 8920,
+    "w": 3230,
+    "h": 6880
+   },
+   "roomIds": [
+    "bed3",
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 11085,
+    "y": 15900,
+    "w": 2130,
+    "h": 1030
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 9985,
+    "y": 17030,
+    "w": 3230,
+    "h": 2720
+   },
+   "roomIds": [
+    "bath"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 8885,
+    "y": 5950,
+    "w": 1000,
+    "h": 12600
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 8885,
+    "y": 18550,
+    "w": 1000,
+    "h": 1200
+   }
+  },
+  {
+   "id": "H-bay9",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 9985,
+    "y": 15900,
+    "w": 1000,
+    "h": 1030
+   }
+  }
+ ],
+ "omittedOptional": []
+}

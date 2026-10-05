@@ -1,0 +1,190 @@
+{
+ "stage": 4,
+ "id": "1-3223706",
+ "briefId": "FIXTURE-A",
+ "seed": 1,
+ "attempt": 3223706,
+ "cfPattern": "CF-01",
+ "hallShape": "T",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 0,
+  "y": 8640,
+  "w": 15000,
+  "h": 11360
+ },
+ "inner": {
+  "x": 250,
+  "y": 8890,
+  "w": 14500,
+  "h": 10860
+ },
+ "zones": [
+  {
+   "id": "Z-flex",
+   "name": "Flex",
+   "type": "flex",
+   "rect": {
+    "x": 250,
+    "y": 8890,
+    "w": 2040,
+    "h": 2700
+   },
+   "roomIds": [
+    "flex1"
+   ]
+  },
+  {
+   "id": "Z-beds",
+   "name": "Bedrooms",
+   "type": "bedrooms",
+   "rect": {
+    "x": 2390,
+    "y": 8890,
+    "w": 8610,
+    "h": 2700
+   },
+   "roomIds": [
+    "bed2",
+    "bed3",
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 11100,
+    "y": 8890,
+    "w": 1140,
+    "h": 2700
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 12340,
+    "y": 8890,
+    "w": 2410,
+    "h": 2700
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 250,
+    "y": 12790,
+    "w": 3700,
+    "h": 6960
+   },
+   "roomIds": [
+    "master",
+    "ensuite",
+    "wir"
+   ]
+  },
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 5150,
+    "y": 12790,
+    "w": 4000,
+    "h": 5060
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-pantry",
+   "name": "Living (Pantry)",
+   "type": "living",
+   "rect": {
+    "x": 5150,
+    "y": 17950,
+    "w": 1750,
+    "h": 1800
+   },
+   "roomIds": [
+    "pantry"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 7000,
+    "y": 17950,
+    "w": 2150,
+    "h": 1800
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 9250,
+    "y": 12790,
+    "w": 5500,
+    "h": 6960
+   },
+   "roomIds": [
+    "garage"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 250,
+    "y": 11690,
+    "w": 14500,
+    "h": 1000
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway stem",
+   "kind": "stem",
+   "rect": {
+    "x": 4050,
+    "y": 12790,
+    "w": 1000,
+    "h": 5540
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 4050,
+    "y": 18330,
+    "w": 1000,
+    "h": 1420
+   }
+  }
+ ],
+ "omittedOptional": []
+}

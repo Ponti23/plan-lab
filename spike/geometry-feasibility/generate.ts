@@ -516,8 +516,8 @@ function buildFrame(brief: Brief, rng: Rng, opts: GenOptions): Frame | { fail: s
     side === 'left' || side === 'right'
       ? { wMin: 1000, wMax: 1500, hMin: 100, hMax: BIG }
       : { wMin: 100, wMax: BIG, hMin: 1000, hMax: 1500 };
-  const cell = (unit: GNode, side: Side): GNode => {
-    if (!opts.bays || !rng.chance(0.65)) return unit;
+  const cell = (unit: GNode, side: Side, widen: boolean): GNode => {
+    if (!widen) return unit;
     const bay = hallLeaf(`H-bay${++bayCount}`, 'Hallway widening (slack)', 'bay', bayBox(side));
     switch (side) {
       case 'right':
@@ -534,8 +534,15 @@ function buildFrame(brief: Brief, rng: Rng, opts: GenOptions): Frame | { fail: s
   const wing = (u: Unit): number => u.side + (rng.next() - 0.5) * 0.6;
   /** Build a unit against the hallway side; retry a few random orientations/bays until `accept` likes its ranges. */
   const tryCell = (u: Unit, side: Side, accept: (r: Box) => boolean): GNode | null => {
+    // plain cell first; a >= 1000 mm widening is added only when no plain attempt fits (rework 2)
     for (let t = 0; t < 8; t++) {
-      const c = cell(u.build(side), side);
+      const c = cell(u.build(side), side, false);
+      const r = ranges(c);
+      if (r && accept(r)) return c;
+    }
+    if (!opts.bays) return null;
+    for (let t = 0; t < 8; t++) {
+      const c = cell(u.build(side), side, true);
       const r = ranges(c);
       if (r && accept(r)) return c;
     }

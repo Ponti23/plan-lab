@@ -105,3 +105,27 @@ test('default options emit only the four D58 shapes; two-hall-via-core is opt-in
     if (a.s4) assert.ok(!a.s4.halls.some((h) => h.kind === 'bay'));
   }
 });
+
+test('plain cells first: with the WHAT-IF WC override some valid layouts need no widening; default catalog is PL-10 and the override is reversible', async () => {
+  const { setWcMaxLong, CATALOG } = await import('./briefs.ts');
+  const brief = BRIEFS['FIXTURE-A'];
+  assert.ok(brief);
+  assert.equal(CATALOG.WC.max[1], 2600, 'default catalog is PL-10');
+  const prev = setWcMaxLong(2700);
+  try {
+    const rng = makeRng(4);
+    let valid = 0;
+    let plain = 0;
+    for (let i = 0; i < 200000; i++) {
+      const a = runAttempt(brief, 4, i, rng);
+      if (!a.s6 || !a.s4 || !validate(a.s6, brief).valid) continue;
+      valid++;
+      if (!a.s4.halls.some((h) => h.kind === 'bay')) plain++;
+    }
+    assert.ok(valid > 0);
+    assert.ok(plain > 0, 'some valid layouts carry no widening once the WC fits beside a Bedroom');
+  } finally {
+    setWcMaxLong(prev);
+  }
+  assert.equal(CATALOG.WC.max[1], 2600);
+});

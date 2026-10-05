@@ -1,0 +1,282 @@
+{
+ "stage": 5,
+ "id": "1-1052210",
+ "from": {
+  "stage": 4,
+  "id": "1-1052210"
+ },
+ "briefId": "GB-01",
+ "footprint": {
+  "x": 160,
+  "y": 5640,
+  "w": 12180,
+  "h": 14860
+ },
+ "inner": {
+  "x": 410,
+  "y": 5890,
+  "w": 11680,
+  "h": 14360
+ },
+ "zones": [
+  {
+   "id": "Z-alfresco",
+   "name": "Alfresco",
+   "type": "outdoor",
+   "rect": {
+    "x": 410,
+    "y": 5890,
+    "w": 2520,
+    "h": 7480
+   },
+   "roomIds": [
+    "alfresco"
+   ]
+  },
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 3030,
+    "y": 5890,
+    "w": 4160,
+    "h": 7480
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 410,
+    "y": 13470,
+    "w": 6780,
+    "h": 6780
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-beds",
+   "name": "Bedrooms",
+   "type": "bedrooms",
+   "rect": {
+    "x": 8390,
+    "y": 5890,
+    "w": 3700,
+    "h": 5500
+   },
+   "roomIds": [
+    "bed2",
+    "bed3"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 9550,
+    "y": 11490,
+    "w": 2540,
+    "h": 1030
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 9550,
+    "y": 12620,
+    "w": 2540,
+    "h": 2030
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 8390,
+    "y": 14750,
+    "w": 3700,
+    "h": 5500
+   },
+   "roomIds": [
+    "master",
+    "ensuite",
+    "wir"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 7290,
+    "y": 5890,
+    "w": 1000,
+    "h": 13090
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 7290,
+    "y": 18980,
+    "w": 1000,
+    "h": 1270
+   }
+  },
+  {
+   "id": "H-bay9",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 8390,
+    "y": 11490,
+    "w": 1060,
+    "h": 3160
+   }
+  }
+ ],
+ "rooms": [
+  {
+   "id": "alfresco",
+   "name": "Alfresco",
+   "kind": "Alfresco",
+   "zoneId": "Z-alfresco",
+   "rect": {
+    "x": 410,
+    "y": 5890,
+    "w": 2520,
+    "h": 7480
+   }
+  },
+  {
+   "id": "core",
+   "name": "Family Core",
+   "kind": "FamilyCore",
+   "zoneId": "Z-living",
+   "rect": {
+    "x": 3030,
+    "y": 5890,
+    "w": 4160,
+    "h": 7480
+   }
+  },
+  {
+   "id": "garage",
+   "name": "Double Garage",
+   "kind": "Garage",
+   "zoneId": "Z-garage",
+   "rect": {
+    "x": 410,
+    "y": 13470,
+    "w": 6780,
+    "h": 6780
+   }
+  },
+  {
+   "id": "bed2",
+   "name": "Bedroom 2",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 8390,
+    "y": 5890,
+    "w": 3700,
+    "h": 2700
+   }
+  },
+  {
+   "id": "bed3",
+   "name": "Bedroom 3",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 8390,
+    "y": 8690,
+    "w": 3700,
+    "h": 2700
+   }
+  },
+  {
+   "id": "wc",
+   "name": "WC",
+   "kind": "WC",
+   "zoneId": "Z-wc",
+   "rect": {
+    "x": 9550,
+    "y": 11490,
+    "w": 2540,
+    "h": 1030
+   }
+  },
+  {
+   "id": "bath",
+   "name": "Shared Bathroom",
+   "kind": "Bathroom",
+   "zoneId": "Z-bath",
+   "rect": {
+    "x": 9550,
+    "y": 12620,
+    "w": 2540,
+    "h": 2030
+   }
+  },
+  {
+   "id": "master",
+   "name": "Master",
+   "kind": "Master",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 8390,
+    "y": 14750,
+    "w": 3700,
+    "h": 3000
+   }
+  },
+  {
+   "id": "ensuite",
+   "name": "Ensuite",
+   "kind": "Ensuite",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 8390,
+    "y": 17850,
+    "w": 1800,
+    "h": 2400
+   }
+  },
+  {
+   "id": "wir",
+   "name": "WIR",
+   "kind": "WIR",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 10290,
+    "y": 17850,
+    "w": 1800,
+    "h": 2400
+   }
+  }
+ ],
+ "flex": []
+}

@@ -1,0 +1,176 @@
+{
+ "stage": 4,
+ "id": "1-3868469",
+ "briefId": "FIXTURE-A",
+ "seed": 1,
+ "attempt": 3868469,
+ "cfPattern": "CF-01",
+ "hallShape": "T",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 0,
+  "y": 8650,
+  "w": 15000,
+  "h": 11350
+ },
+ "inner": {
+  "x": 250,
+  "y": 8900,
+  "w": 14500,
+  "h": 10850
+ },
+ "zones": [
+  {
+   "id": "Z-beds",
+   "name": "Bedrooms",
+   "type": "bedrooms",
+   "rect": {
+    "x": 250,
+    "y": 8900,
+    "w": 10250,
+    "h": 2700
+   },
+   "roomIds": [
+    "bed2",
+    "bed3",
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 10600,
+    "y": 8900,
+    "w": 1510,
+    "h": 2700
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 12210,
+    "y": 8900,
+    "w": 2540,
+    "h": 2700
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 250,
+    "y": 12800,
+    "w": 4000,
+    "h": 5030
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-pantry",
+   "name": "Living (Pantry)",
+   "type": "living",
+   "rect": {
+    "x": 250,
+    "y": 17930,
+    "w": 1890,
+    "h": 1820
+   },
+   "roomIds": [
+    "pantry"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 2240,
+    "y": 17930,
+    "w": 2010,
+    "h": 1820
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 5450,
+    "y": 12800,
+    "w": 5500,
+    "h": 6950
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 11050,
+    "y": 12800,
+    "w": 3700,
+    "h": 6950
+   },
+   "roomIds": [
+    "master",
+    "ensuite",
+    "wir"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 250,
+    "y": 11700,
+    "w": 14500,
+    "h": 1000
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway stem",
+   "kind": "stem",
+   "rect": {
+    "x": 4350,
+    "y": 12800,
+    "w": 1000,
+    "h": 5450
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 4350,
+    "y": 18250,
+    "w": 1000,
+    "h": 1500
+   }
+  }
+ ],
+ "omittedOptional": []
+}

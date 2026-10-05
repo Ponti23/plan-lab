@@ -1,0 +1,228 @@
+{
+ "brief": "GB-01",
+ "seed": 1,
+ "budgetSeconds": 60,
+ "whatIf": "WHAT-IF: envelope width 13500 (not the PL-10 envelope 12500; needs-human calibration)",
+ "shapes": "d58 (spine, L, T, central-junction)",
+ "hallwayWideningsAllowed": true,
+ "stopped": "wall-clock budget reached (a timeout is not a proof of anything)",
+ "attempts": 5640448,
+ "attemptsPerSecond": 94005,
+ "stageReached": {
+  "failedInStage4": 5195713,
+  "failedInStage5": 375749,
+  "failedInStage6": 37114,
+  "stage6RecordEmitted": 31872
+ },
+ "valid": 31872,
+ "invalidEmitted": 0,
+ "distinctValid": 242,
+ "distinctValid2x2Grid": 145,
+ "hallwayWidenings": {
+  "note": "widenings are >= 1000 mm hallway pieces between a unit and the hallway (slack); counted among valid layouts",
+  "validWithAtLeastOneWidening": 31872,
+  "shareOfValidWithWidening": 1,
+  "medianWideningAreaM2": 8.71
+ },
+ "hallwayAreaM2AmongValid": {
+  "median": 25.62,
+  "pl10ProxyM2": 9
+ },
+ "distinctMethod": "signature = hallway shape + sorted list of (zone type @ 3x3 grid cell of the zone centre; row 2 = front) over all zones except Flex and the optional Pantry zone; min of the layout and its left/right mirror; label swaps cannot differ because only zone types are used",
+ "validByHallShape": {
+  "spine": 31872
+ },
+ "hallwayShareOfFootprintAmongValid": {
+  "min": 0.0856,
+  "median": 0.139,
+  "p90": 0.1808,
+  "max": 0.2387
+ },
+ "meanRoomAreaVsBriefTargetAmongValid": {
+  "note": "mean over rooms of (clear area / brief target area); informational only, not a validity rule",
+  "min": 0.904,
+  "median": 1.157,
+  "max": 1.47
+ },
+ "cf01LikeTraitsAmongValid": {
+  "note": "informational: Master centre in front third; all bedrooms in rear half; Alfresco centre in rear third (mirror-agnostic)",
+  "masterInFrontThird": 12453,
+  "bedroomsInRearHalf": 22408,
+  "alfrescoInRearThird": 12597,
+  "allThree": 4798,
+  "evaluated": 31872
+ },
+ "validatorRuleFailuresAmongEmitted": {},
+ "generatorRejectionReasons": {
+  "s4: no common extents (cross-axis range intersection empty)": 243982,
+  "s4: unit wet fits neither spine column": 1983312,
+  "s4: unit wet fits neither band of the cross hallway": 1624181,
+  "s4: unit beds fits neither band of the cross hallway": 937671,
+  "s5: Bedroom aspect limit exceeded": 283252,
+  "s5: WC aspect limit exceeded": 92004,
+  "s4: unit flex fits neither spine column": 129904,
+  "s4: unit alfresco fits neither band of the cross hallway": 163797,
+  "s6: no door position for WC": 37114,
+  "s4: unit flex fits neither band of the cross hallway": 95736,
+  "s4: unit beds fits neither spine column": 16829,
+  "s5: Ensuite aspect limit exceeded": 493,
+  "s4: unit alfresco fits neither spine column": 301
+ },
+ "timeToFirstValidMs": 14,
+ "totalTimeMs": 60002,
+ "node": "v24.21.0",
+ "os": "win32 10.0.26300",
+ "cpu": "AMD Ryzen 5 9500F 6-Core Processor              x12",
+ "retained": [
+  {
+   "id": "1-378550",
+   "status": "VALID",
+   "signature": "spine|bedrooms@00,garage@22,living@21,master@02,outdoor@20,wet@01,wet@01",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0.0969,
+   "failedRules": [],
+   "note": "retained valid candidate 1 of 6",
+   "files": [
+    "cand-1-378550.stage4.json",
+    "cand-1-378550.stage5.json",
+    "cand-1-378550.stage6.json",
+    "cand-1-378550.validation.json",
+    "cand-1-378550.stage4.svg",
+    "cand-1-378550.stage5.svg",
+    "cand-1-378550.stage6.svg"
+   ]
+  },
+  {
+   "id": "1-4858302",
+   "status": "VALID",
+   "signature": "spine|bedrooms@01,garage@22,living@21,master@02,outdoor@20,wet@00,wet@01",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0.0988,
+   "failedRules": [],
+   "note": "retained valid candidate 2 of 6",
+   "files": [
+    "cand-1-4858302.stage4.json",
+    "cand-1-4858302.stage5.json",
+    "cand-1-4858302.stage6.json",
+    "cand-1-4858302.validation.json",
+    "cand-1-4858302.stage4.svg",
+    "cand-1-4858302.stage5.svg",
+    "cand-1-4858302.stage6.svg"
+   ]
+  },
+  {
+   "id": "1-3546670",
+   "status": "VALID",
+   "signature": "spine|bedrooms@00,bedrooms@00,garage@22,living@21,master@02,outdoor@20,wet@01,wet@01",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0.0988,
+   "failedRules": [],
+   "note": "retained valid candidate 3 of 6",
+   "files": [
+    "cand-1-3546670.stage4.json",
+    "cand-1-3546670.stage5.json",
+    "cand-1-3546670.stage6.json",
+    "cand-1-3546670.validation.json",
+    "cand-1-3546670.stage4.svg",
+    "cand-1-3546670.stage5.svg",
+    "cand-1-3546670.stage6.svg"
+   ]
+  },
+  {
+   "id": "1-1491000",
+   "status": "VALID",
+   "signature": "spine|bedrooms@00,garage@22,living@21,master@02,outdoor@20,wet@00,wet@01",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0.0996,
+   "failedRules": [],
+   "note": "retained valid candidate 4 of 6",
+   "files": [
+    "cand-1-1491000.stage4.json",
+    "cand-1-1491000.stage5.json",
+    "cand-1-1491000.stage6.json",
+    "cand-1-1491000.validation.json",
+    "cand-1-1491000.stage4.svg",
+    "cand-1-1491000.stage5.svg",
+    "cand-1-1491000.stage6.svg"
+   ]
+  },
+  {
+   "id": "1-5128553",
+   "status": "VALID",
+   "signature": "spine|bedrooms@00,garage@22,living@10,master@02,outdoor@20,wet@01,wet@01",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0.0998,
+   "failedRules": [],
+   "note": "retained valid candidate 5 of 6",
+   "files": [
+    "cand-1-5128553.stage4.json",
+    "cand-1-5128553.stage5.json",
+    "cand-1-5128553.stage6.json",
+    "cand-1-5128553.validation.json",
+    "cand-1-5128553.stage4.svg",
+    "cand-1-5128553.stage5.svg",
+    "cand-1-5128553.stage6.svg"
+   ]
+  },
+  {
+   "id": "1-1745881",
+   "status": "VALID",
+   "signature": "spine|bedrooms@00,bedrooms@01,garage@22,living@21,master@02,outdoor@20,wet@00,wet@01",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0.1001,
+   "failedRules": [],
+   "note": "retained valid candidate 6 of 6",
+   "files": [
+    "cand-1-1745881.stage4.json",
+    "cand-1-1745881.stage5.json",
+    "cand-1-1745881.stage6.json",
+    "cand-1-1745881.validation.json",
+    "cand-1-1745881.stage4.svg",
+    "cand-1-1745881.stage5.svg",
+    "cand-1-1745881.stage6.svg"
+   ]
+  },
+  {
+   "id": "1-55",
+   "status": "REJECTED-BY-GENERATOR",
+   "signature": "spine|bedrooms@00,garage@02,living@21,master@22,outdoor@01,wet@20,wet@20",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0,
+   "failedRules": [
+    "generator-rejected"
+   ],
+   "note": "WHAT-IF: envelope width 13500 (not the PL-10 envelope 12500; needs-human calibration) | REJECTED BY GENERATOR at stage 6: s6: no door position for WC",
+   "files": [
+    "cand-1-55.stage4.json",
+    "cand-1-55.stage5.json",
+    "cand-1-55.stage4.svg",
+    "cand-1-55.stage5.svg"
+   ]
+  },
+  {
+   "id": "1-366",
+   "status": "REJECTED-BY-GENERATOR",
+   "signature": "spine|bedrooms@01,garage@02,living@21,master@22,outdoor@00,wet@20,wet@20",
+   "hallShape": "spine",
+   "cfPattern": "CF-01",
+   "hallwayShareOfFootprint": 0,
+   "failedRules": [
+    "generator-rejected"
+   ],
+   "note": "WHAT-IF: envelope width 13500 (not the PL-10 envelope 12500; needs-human calibration) | REJECTED BY GENERATOR at stage 6: s6: no door position for WC",
+   "files": [
+    "cand-1-366.stage4.json",
+    "cand-1-366.stage5.json",
+    "cand-1-366.stage4.svg",
+    "cand-1-366.stage5.svg"
+   ]
+  }
+ ]
+}

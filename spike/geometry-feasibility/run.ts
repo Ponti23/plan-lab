@@ -9,7 +9,7 @@ import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { performance } from 'node:perf_hooks';
-import { BRIEFS } from './briefs.ts';
+import { BRIEFS, setWcMaxLong } from './briefs.ts';
 import { D58_SHAPES, makeRng, runAttempt, signature } from './generate.ts';
 import type { GenOptions } from './generate.ts';
 import type { HallShape } from './types.ts';
@@ -26,8 +26,8 @@ function arg(name: string, def?: string): string | undefined {
 }
 
 const briefId = arg('brief', 'GB-01') as string;
-const brief = BRIEFS[briefId];
-if (!brief) {
+const baseBrief = BRIEFS[briefId];
+if (!baseBrief) {
   console.error(`unknown brief ${briefId}; use ${Object.keys(BRIEFS).join(' | ')}`);
   process.exit(2);
 }
@@ -41,11 +41,33 @@ if (shapesArg !== 'd58' && shapesArg !== 'all') {
   process.exit(2);
 }
 const noBays = process.argv.includes('--no-bays');
+// ---- what-if overrides (diagnostic only; loudly labelled everywhere)
+const whatIfs: { key: string; value: number; label: string; tag: string }[] = [];
+for (let i = 0; i < process.argv.length; i++) {
+  if (process.argv[i] !== '--what-if') continue;
+  const m = /^(wc-max-long|envelope-width)=(\d+)$/.exec(process.argv[i + 1] ?? '');
+  if (!m) {
+    console.error('--what-if expects wc-max-long=<mm> or envelope-width=<mm>');
+    process.exit(2);
+  }
+  const value = Number(m[2]);
+  if (m[1] === 'wc-max-long')
+    whatIfs.push({ key: m[1], value, label: `WHAT-IF: WC max long side ${value} (not PL-10; needs-human calibration)`, tag: `whatif-wc${value}` });
+  else
+    whatIfs.push({ key: m[1], value, label: `WHAT-IF: envelope width ${value} (not the PL-10 envelope ${baseBrief.envelope.maxW}; needs-human calibration)`, tag: `whatif-envw${value}` });
+}
+const whatIfLabel = whatIfs.map((w) => w.label).join(' | ');
+let brief = baseBrief;
+for (const w of whatIfs) {
+  if (w.key === 'wc-max-long') setWcMaxLong(w.value);
+  else brief = { ...brief, envelope: { ...brief.envelope, maxW: w.value } };
+}
+if (whatIfLabel) brief = { ...brief, title: `${brief.title} [${whatIfLabel}]` };
 const opts: GenOptions = {
   shapes: new Set<HallShape>(shapesArg === 'all' ? [...D58_SHAPES, 'two-hall-via-core'] : D58_SHAPES),
   bays: !noBays,
 };
-const variant = (shapesArg === 'all' ? '-shapes-all' : '') + (noBays ? '-no-bays' : '');
+const variant = (shapesArg === 'all' ? '-shapes-all' : '') + whatIfs.map((w) => '-' + w.tag).join('') + (noBays ? '-no-bays' : '');
 const outDir = join(arg('out', join(here, 'out')) as string, briefId, `seed-${seed}${variant}`);
 
 interface Kept {
@@ -188,7 +210,7 @@ function writeCandidate(k: Kept, status: 'VALID' | 'INVALID', note?: string): vo
   const s5 = a.s5 as NonNullable<Attempt['s5']>;
   const s6 = a.s6 as NonNullable<Attempt['s6']>;
   const id = s6.id;
-  const ctx = { brief, validation: k.v, note };
+  const ctx = { brief, validation: k.v, note: whatIfLabel ? `${whatIfLabel}${note ? ' | ' + note : ''}` : note };
   const files: string[] = [];
   const put = (name: string, content: string): void => {
     writeFileSync(join(outDir, name), content);
@@ -236,7 +258,7 @@ if (invalidKept.length < 2) {
       writeFileSync(join(outDir, name), content);
       files.push(name);
     };
-    const ctx = { brief, validation: fakeV, note: `REJECTED BY GENERATOR at stage ${a.failStage}: ${a.reason}` };
+    const ctx = { brief, validation: fakeV, note: `${whatIfLabel ? whatIfLabel + ' | ' : ''}REJECTED BY GENERATOR at stage ${a.failStage}: ${a.reason}` };
     put(`cand-${id}.stage4.json`, JSON.stringify(a.s4, null, 1));
     put(`cand-${id}.stage5.json`, JSON.stringify(a.s5, null, 1));
     put(`cand-${id}.stage4.svg`, renderStage4(a.s4, ctx));
@@ -268,6 +290,7 @@ const summary = {
   brief: brief.id,
   seed,
   budgetSeconds: budgetSec,
+  whatIf: whatIfLabel || null,
   shapes: shapesArg === 'all' ? 'all (D58 four + two-hall-via-core)' : 'd58 (spine, L, T, central-junction)',
   hallwayWideningsAllowed: !noBays,
   stopped: timedOut ? 'wall-clock budget reached (a timeout is not a proof of anything)' : 'attempt cap reached',
@@ -334,6 +357,6 @@ console.log(
     .join('\n');
   writeFileSync(
     join(outDir, 'index.html'),
-    `<!doctype html><meta charset="utf-8"><title>${esc(brief.id)} seed ${seed}</title><body style="font-family:Arial,sans-serif;max-width:1600px;margin:12px auto"><h1>${esc(brief.title)} - seed ${seed}</h1><p>${valid} valid of ${attempts} attempts; ${bestBySig.size} distinct valid signatures; time to first valid ${summary.timeToFirstValidMs} ms; all numbers provisional - uncalibrated (G-CALIBRATION). Click an image to open the full-size SVG. No colour is used: read the labels.</p>${rows}</body>`,
+    `<!doctype html><meta charset="utf-8"><title>${esc(brief.id)} seed ${seed}</title><body style="font-family:Arial,sans-serif;max-width:1600px;margin:12px auto"><h1>${esc(brief.title)} - seed ${seed}${whatIfLabel ? '' : ''}</h1>${whatIfLabel ? `<h2 style="border:3px solid #000;padding:6px">${esc(whatIfLabel)}</h2>` : ''}<p>${valid} valid of ${attempts} attempts; ${bestBySig.size} distinct valid signatures; time to first valid ${summary.timeToFirstValidMs} ms; all numbers provisional - uncalibrated (G-CALIBRATION). Click an image to open the full-size SVG. No colour is used: read the labels.</p>${rows}</body>`,
   );
 }

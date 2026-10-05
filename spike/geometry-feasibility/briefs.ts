@@ -40,6 +40,17 @@ export const CATALOG: Record<CatKey, CatalogRow> = {
   Alfresco: row('Alfresco', 'Alfresco', [2500, 3000], [3000, 4500], [5000, 7500], 3.0),
 };
 
+/**
+ * WHAT-IF override (diagnostic only, not PL-10): replace the WC's maximum long side. Mutates the shared catalog for the
+ * rest of the process; run.ts calls it once, before anything is generated or validated. Returns the previous value.
+ */
+export function setWcMaxLong(mm: number): number {
+  const wc = CATALOG.WC;
+  const prev = wc.max[1];
+  wc.max = [wc.max[0], mm];
+  return prev;
+}
+
 function spec(
   id: string,
   name: string,
