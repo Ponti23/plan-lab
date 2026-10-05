@@ -6,8 +6,7 @@ and `main` is untouched. Everything below is described by labels, not by colour.
 ## Short version
 
 - **Plan B is done.** Six contracts were reviewed and committed: PL-10 dimensions, PL-11
-  relationships, PL-12 families, PL-13 benchmarks, PL-14 engine/runtime and PL-15 project data
-.
+  relationships, PL-12 families, PL-13 benchmarks, PL-14 engine/runtime and PL-15 project data.
 - **The PL-20 early spike** on GB-01 and Fixture A is committed and **in review**. The open
   question is whether its drawings are useful, and that is your call.
 - **Biggest finding:** with today's provisional room sizes, the hallway comes out at 2.5–3× PL-10's
