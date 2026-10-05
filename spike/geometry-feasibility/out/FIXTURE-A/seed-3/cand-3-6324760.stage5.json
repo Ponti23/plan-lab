@@ -1,0 +1,332 @@
+{
+ "stage": 5,
+ "id": "3-6324760",
+ "from": {
+  "stage": 4,
+  "id": "3-6324760"
+ },
+ "briefId": "FIXTURE-A",
+ "footprint": {
+  "x": 0,
+  "y": 8230,
+  "w": 15000,
+  "h": 11770
+ },
+ "inner": {
+  "x": 250,
+  "y": 8480,
+  "w": 14500,
+  "h": 11270
+ },
+ "zones": [
+  {
+   "id": "Z-beds",
+   "name": "Bedrooms",
+   "type": "bedrooms",
+   "rect": {
+    "x": 250,
+    "y": 8480,
+    "w": 10600,
+    "h": 3070
+   },
+   "roomIds": [
+    "bed2",
+    "bed3",
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 10950,
+    "y": 8480,
+    "w": 1200,
+    "h": 1970
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 12250,
+    "y": 8480,
+    "w": 2500,
+    "h": 3070
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 250,
+    "y": 12750,
+    "w": 4000,
+    "h": 5100
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-pantry",
+   "name": "Living (Pantry)",
+   "type": "living",
+   "rect": {
+    "x": 250,
+    "y": 17950,
+    "w": 1810,
+    "h": 1800
+   },
+   "roomIds": [
+    "pantry"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 2160,
+    "y": 17950,
+    "w": 2090,
+    "h": 1800
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 5450,
+    "y": 12750,
+    "w": 3700,
+    "h": 7000
+   },
+   "roomIds": [
+    "master",
+    "wir",
+    "ensuite"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 9250,
+    "y": 12750,
+    "w": 5500,
+    "h": 7000
+   },
+   "roomIds": [
+    "garage"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-bay4",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 10950,
+    "y": 10550,
+    "w": 1200,
+    "h": 1000
+   }
+  },
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 250,
+    "y": 11650,
+    "w": 14500,
+    "h": 1000
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway stem",
+   "kind": "stem",
+   "rect": {
+    "x": 4350,
+    "y": 12750,
+    "w": 1000,
+    "h": 5800
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 4350,
+    "y": 18550,
+    "w": 1000,
+    "h": 1200
+   }
+  }
+ ],
+ "rooms": [
+  {
+   "id": "bed2",
+   "name": "Bedroom 2",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 250,
+    "y": 8480,
+    "w": 3290,
+    "h": 3070
+   }
+  },
+  {
+   "id": "bed3",
+   "name": "Bedroom 3",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 3640,
+    "y": 8480,
+    "w": 3910,
+    "h": 3070
+   }
+  },
+  {
+   "id": "bed4",
+   "name": "Bedroom 4",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 7650,
+    "y": 8480,
+    "w": 3200,
+    "h": 3070
+   }
+  },
+  {
+   "id": "wc",
+   "name": "WC",
+   "kind": "WC",
+   "zoneId": "Z-wc",
+   "rect": {
+    "x": 10950,
+    "y": 8480,
+    "w": 1200,
+    "h": 1970
+   }
+  },
+  {
+   "id": "bath",
+   "name": "Shared Bathroom",
+   "kind": "Bathroom",
+   "zoneId": "Z-bath",
+   "rect": {
+    "x": 12250,
+    "y": 8480,
+    "w": 2500,
+    "h": 3070
+   }
+  },
+  {
+   "id": "core",
+   "name": "Family Core",
+   "kind": "FamilyCore",
+   "zoneId": "Z-living",
+   "rect": {
+    "x": 250,
+    "y": 12750,
+    "w": 4000,
+    "h": 5100
+   }
+  },
+  {
+   "id": "pantry",
+   "name": "Pantry",
+   "kind": "Pantry",
+   "zoneId": "Z-pantry",
+   "rect": {
+    "x": 250,
+    "y": 17950,
+    "w": 1810,
+    "h": 1800
+   }
+  },
+  {
+   "id": "laundry",
+   "name": "Laundry",
+   "kind": "Laundry",
+   "zoneId": "Z-laundry",
+   "rect": {
+    "x": 2160,
+    "y": 17950,
+    "w": 2090,
+    "h": 1800
+   }
+  },
+  {
+   "id": "master",
+   "name": "Master",
+   "kind": "Master",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 5450,
+    "y": 12750,
+    "w": 3700,
+    "h": 3960
+   }
+  },
+  {
+   "id": "wir",
+   "name": "WIR",
+   "kind": "WIR",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 5450,
+    "y": 16810,
+    "w": 1800,
+    "h": 2940
+   }
+  },
+  {
+   "id": "ensuite",
+   "name": "Ensuite",
+   "kind": "Ensuite",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 7350,
+    "y": 16810,
+    "w": 1800,
+    "h": 2940
+   }
+  },
+  {
+   "id": "garage",
+   "name": "Double Garage",
+   "kind": "Garage",
+   "zoneId": "Z-garage",
+   "rect": {
+    "x": 9250,
+    "y": 12750,
+    "w": 5500,
+    "h": 7000
+   }
+  }
+ ],
+ "flex": []
+}

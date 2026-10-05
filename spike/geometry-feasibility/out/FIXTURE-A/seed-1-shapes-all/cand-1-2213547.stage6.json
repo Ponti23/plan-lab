@@ -1,0 +1,736 @@
+{
+ "stage": 6,
+ "id": "1-2213547",
+ "from": {
+  "stage": 5,
+  "id": "1-2213547"
+ },
+ "briefId": "FIXTURE-A",
+ "seed": 1,
+ "cfPattern": "CF-01",
+ "hallShape": "two-hall-via-core",
+ "exteriorWall": 250,
+ "interiorWall": 100,
+ "footprint": {
+  "x": 1100,
+  "y": 3630,
+  "w": 12800,
+  "h": 16370
+ },
+ "inner": {
+  "x": 1350,
+  "y": 3880,
+  "w": 12300,
+  "h": 15870
+ },
+ "rooms": [
+  {
+   "id": "bed2",
+   "name": "Bedroom 2",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 1350,
+    "y": 3880,
+    "w": 2700,
+    "h": 3080
+   }
+  },
+  {
+   "id": "bed3",
+   "name": "Bedroom 3",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 4150,
+    "y": 3880,
+    "w": 2700,
+    "h": 3080
+   }
+  },
+  {
+   "id": "bed4",
+   "name": "Bedroom 4",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 6950,
+    "y": 3880,
+    "w": 2700,
+    "h": 3080
+   }
+  },
+  {
+   "id": "bath",
+   "name": "Shared Bathroom",
+   "kind": "Bathroom",
+   "zoneId": "Z-bath",
+   "rect": {
+    "x": 9750,
+    "y": 3880,
+    "w": 2000,
+    "h": 3080
+   }
+  },
+  {
+   "id": "wc",
+   "name": "WC",
+   "kind": "WC",
+   "zoneId": "Z-wc",
+   "rect": {
+    "x": 11850,
+    "y": 3880,
+    "w": 1800,
+    "h": 1570
+   }
+  },
+  {
+   "id": "core",
+   "name": "Family Core",
+   "kind": "FamilyCore",
+   "zoneId": "Z-living",
+   "rect": {
+    "x": 1350,
+    "y": 8260,
+    "w": 9000,
+    "h": 5140
+   }
+  },
+  {
+   "id": "pantry",
+   "name": "Pantry",
+   "kind": "Pantry",
+   "zoneId": "Z-pantry",
+   "rect": {
+    "x": 10450,
+    "y": 8260,
+    "w": 3200,
+    "h": 2160
+   }
+  },
+  {
+   "id": "laundry",
+   "name": "Laundry",
+   "kind": "Laundry",
+   "zoneId": "Z-laundry",
+   "rect": {
+    "x": 10450,
+    "y": 10520,
+    "w": 3200,
+    "h": 2880
+   }
+  },
+  {
+   "id": "garage",
+   "name": "Double Garage",
+   "kind": "Garage",
+   "zoneId": "Z-garage",
+   "rect": {
+    "x": 1350,
+    "y": 13500,
+    "w": 6570,
+    "h": 6250
+   }
+  },
+  {
+   "id": "master",
+   "name": "Master",
+   "kind": "Master",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 9220,
+    "y": 13500,
+    "w": 4430,
+    "h": 3340
+   }
+  },
+  {
+   "id": "ensuite",
+   "name": "Ensuite",
+   "kind": "Ensuite",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 9220,
+    "y": 16940,
+    "w": 2020,
+    "h": 2810
+   }
+  },
+  {
+   "id": "wir",
+   "name": "WIR",
+   "kind": "WIR",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 11340,
+    "y": 16940,
+    "w": 2310,
+    "h": 2810
+   }
+  }
+ ],
+ "hallSegments": [
+  {
+   "id": "H-bay1",
+   "name": "Hallway widening (slack)",
+   "kind": "widening",
+   "rect": {
+    "x": 11850,
+    "y": 5550,
+    "w": 1800,
+    "h": 1410
+   }
+  },
+  {
+   "id": "H-strip",
+   "name": "Hallway strip (rear)",
+   "kind": "strip",
+   "rect": {
+    "x": 1350,
+    "y": 7060,
+    "w": 12300,
+    "h": 1100
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway stem",
+   "kind": "stem",
+   "rect": {
+    "x": 8020,
+    "y": 13500,
+    "w": 1100,
+    "h": 4830
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 8020,
+    "y": 18330,
+    "w": 1100,
+    "h": 1420
+   }
+  },
+  {
+   "id": "H-conn1",
+   "name": "Hallway link",
+   "kind": "connector",
+   "rect": {
+    "x": 11850,
+    "y": 6510,
+    "w": 1800,
+    "h": 1000
+   }
+  }
+ ],
+ "flex": [],
+ "walls": [
+  {
+   "id": "W-ext-top",
+   "kind": "exterior",
+   "rect": {
+    "x": 1100,
+    "y": 3630,
+    "w": 12800,
+    "h": 250
+   },
+   "thickness": 250,
+   "centreline": {
+    "x1": 1100,
+    "y1": 3755,
+    "x2": 13900,
+    "y2": 3755
+   }
+  },
+  {
+   "id": "W-ext-bottom",
+   "kind": "exterior",
+   "rect": {
+    "x": 1100,
+    "y": 19750,
+    "w": 12800,
+    "h": 250
+   },
+   "thickness": 250,
+   "centreline": {
+    "x1": 1100,
+    "y1": 19875,
+    "x2": 13900,
+    "y2": 19875
+   }
+  },
+  {
+   "id": "W-ext-left",
+   "kind": "exterior",
+   "rect": {
+    "x": 1100,
+    "y": 3880,
+    "w": 250,
+    "h": 15870
+   },
+   "thickness": 250,
+   "centreline": {
+    "x1": 1225,
+    "y1": 3880,
+    "x2": 1225,
+    "y2": 19750
+   }
+  },
+  {
+   "id": "W-ext-right",
+   "kind": "exterior",
+   "rect": {
+    "x": 13650,
+    "y": 3880,
+    "w": 250,
+    "h": 15870
+   },
+   "thickness": 250,
+   "centreline": {
+    "x1": 13775,
+    "y1": 3880,
+    "x2": 13775,
+    "y2": 19750
+   }
+  },
+  {
+   "id": "W-int1",
+   "kind": "interior",
+   "rect": {
+    "x": 4050,
+    "y": 3880,
+    "w": 100,
+    "h": 3180
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 4100,
+    "y1": 3880,
+    "x2": 4100,
+    "y2": 7060
+   }
+  },
+  {
+   "id": "W-int2",
+   "kind": "interior",
+   "rect": {
+    "x": 6850,
+    "y": 3880,
+    "w": 100,
+    "h": 3180
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 6900,
+    "y1": 3880,
+    "x2": 6900,
+    "y2": 7060
+   }
+  },
+  {
+   "id": "W-int3",
+   "kind": "interior",
+   "rect": {
+    "x": 9650,
+    "y": 3880,
+    "w": 100,
+    "h": 3180
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 9700,
+    "y1": 3880,
+    "x2": 9700,
+    "y2": 7060
+   }
+  },
+  {
+   "id": "W-int4",
+   "kind": "interior",
+   "rect": {
+    "x": 11750,
+    "y": 3880,
+    "w": 100,
+    "h": 3180
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 11800,
+    "y1": 3880,
+    "x2": 11800,
+    "y2": 7060
+   }
+  },
+  {
+   "id": "W-int5",
+   "kind": "interior",
+   "rect": {
+    "x": 10350,
+    "y": 8160,
+    "w": 100,
+    "h": 5340
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 10400,
+    "y1": 8160,
+    "x2": 10400,
+    "y2": 13500
+   }
+  },
+  {
+   "id": "W-int6",
+   "kind": "interior",
+   "rect": {
+    "x": 7920,
+    "y": 13400,
+    "w": 100,
+    "h": 6350
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 7970,
+    "y1": 13400,
+    "x2": 7970,
+    "y2": 19750
+   }
+  },
+  {
+   "id": "W-int7",
+   "kind": "interior",
+   "rect": {
+    "x": 9120,
+    "y": 13400,
+    "w": 100,
+    "h": 6350
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 9170,
+    "y1": 13400,
+    "x2": 9170,
+    "y2": 19750
+   }
+  },
+  {
+   "id": "W-int8",
+   "kind": "interior",
+   "rect": {
+    "x": 11240,
+    "y": 16840,
+    "w": 100,
+    "h": 2910
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 11290,
+    "y1": 16840,
+    "x2": 11290,
+    "y2": 19750
+   }
+  },
+  {
+   "id": "W-int9",
+   "kind": "interior",
+   "rect": {
+    "x": 1350,
+    "y": 6960,
+    "w": 10500,
+    "h": 100
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 1350,
+    "y1": 7010,
+    "x2": 11850,
+    "y2": 7010
+   }
+  },
+  {
+   "id": "W-int10",
+   "kind": "interior",
+   "rect": {
+    "x": 11750,
+    "y": 5450,
+    "w": 1900,
+    "h": 100
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 11750,
+    "y1": 5500,
+    "x2": 13650,
+    "y2": 5500
+   }
+  },
+  {
+   "id": "W-int11",
+   "kind": "interior",
+   "rect": {
+    "x": 1350,
+    "y": 13400,
+    "w": 12300,
+    "h": 100
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 1350,
+    "y1": 13450,
+    "x2": 13650,
+    "y2": 13450
+   }
+  },
+  {
+   "id": "W-int12",
+   "kind": "interior",
+   "rect": {
+    "x": 1350,
+    "y": 8160,
+    "w": 12300,
+    "h": 100
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 1350,
+    "y1": 8210,
+    "x2": 13650,
+    "y2": 8210
+   }
+  },
+  {
+   "id": "W-int13",
+   "kind": "interior",
+   "rect": {
+    "x": 10350,
+    "y": 10420,
+    "w": 3300,
+    "h": 100
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 10350,
+    "y1": 10470,
+    "x2": 13650,
+    "y2": 10470
+   }
+  },
+  {
+   "id": "W-int14",
+   "kind": "interior",
+   "rect": {
+    "x": 9120,
+    "y": 16840,
+    "w": 4530,
+    "h": 100
+   },
+   "thickness": 100,
+   "centreline": {
+    "x1": 9120,
+    "y1": 16890,
+    "x2": 13650,
+    "y2": 16890
+   }
+  }
+ ],
+ "doors": [
+  {
+   "id": "D-bed2",
+   "kind": "door",
+   "a": "bed2",
+   "b": "H-strip",
+   "rect": {
+    "x": 3090,
+    "y": 6960,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-bed3",
+   "kind": "door",
+   "a": "bed3",
+   "b": "H-strip",
+   "rect": {
+    "x": 5180,
+    "y": 6960,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-bed4",
+   "kind": "door",
+   "a": "bed4",
+   "b": "H-strip",
+   "rect": {
+    "x": 8310,
+    "y": 6960,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-bath",
+   "kind": "door",
+   "a": "bath",
+   "b": "H-strip",
+   "rect": {
+    "x": 10720,
+    "y": 6960,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-wc",
+   "kind": "door",
+   "a": "wc",
+   "b": "H-bay1",
+   "rect": {
+    "x": 12220,
+    "y": 5450,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-pantry",
+   "kind": "door",
+   "a": "pantry",
+   "b": "core",
+   "rect": {
+    "x": 10350,
+    "y": 8690,
+    "w": 100,
+    "h": 820
+   },
+   "width": 820
+  },
+  {
+   "id": "D-laundry",
+   "kind": "door",
+   "a": "laundry",
+   "b": "core",
+   "rect": {
+    "x": 10350,
+    "y": 12120,
+    "w": 100,
+    "h": 820
+   },
+   "width": 820
+  },
+  {
+   "id": "D-garage",
+   "kind": "door",
+   "a": "garage",
+   "b": "H-stem",
+   "rect": {
+    "x": 7920,
+    "y": 17040,
+    "w": 100,
+    "h": 820
+   },
+   "width": 820
+  },
+  {
+   "id": "D-master",
+   "kind": "door",
+   "a": "master",
+   "b": "H-stem",
+   "rect": {
+    "x": 9120,
+    "y": 15240,
+    "w": 100,
+    "h": 820
+   },
+   "width": 820
+  },
+  {
+   "id": "D-ensuite",
+   "kind": "door",
+   "a": "ensuite",
+   "b": "master",
+   "rect": {
+    "x": 10280,
+    "y": 16840,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-wir",
+   "kind": "door",
+   "a": "wir",
+   "b": "master",
+   "rect": {
+    "x": 11890,
+    "y": 16840,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-core-1",
+   "kind": "door",
+   "a": "core",
+   "b": "H-strip",
+   "rect": {
+    "x": 6690,
+    "y": 8160,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-core-2",
+   "kind": "door",
+   "a": "core",
+   "b": "H-stem",
+   "rect": {
+    "x": 8140,
+    "y": 13400,
+    "w": 820,
+    "h": 100
+   },
+   "width": 820
+  },
+  {
+   "id": "D-front",
+   "kind": "front",
+   "a": "H-entry",
+   "b": "OUTSIDE",
+   "rect": {
+    "x": 8110,
+    "y": 19750,
+    "w": 920,
+    "h": 250
+   },
+   "width": 920
+  },
+  {
+   "id": "D-vehicle",
+   "kind": "vehicle",
+   "a": "garage",
+   "b": "OUTSIDE",
+   "rect": {
+    "x": 2235,
+    "y": 19750,
+    "w": 4800,
+    "h": 250
+   },
+   "width": 4800
+  }
+ ],
+ "omittedOptional": []
+}

@@ -1,0 +1,282 @@
+{
+ "stage": 5,
+ "id": "2-2865684",
+ "from": {
+  "stage": 4,
+  "id": "2-2865684"
+ },
+ "briefId": "GB-01",
+ "footprint": {
+  "x": 800,
+  "y": 4020,
+  "w": 10900,
+  "h": 16480
+ },
+ "inner": {
+  "x": 1050,
+  "y": 4270,
+  "w": 10400,
+  "h": 15980
+ },
+ "zones": [
+  {
+   "id": "Z-alfresco",
+   "name": "Alfresco",
+   "type": "outdoor",
+   "rect": {
+    "x": 1050,
+    "y": 4270,
+    "w": 5500,
+    "h": 2500
+   },
+   "roomIds": [
+    "alfresco"
+   ]
+  },
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 1050,
+    "y": 6870,
+    "w": 5500,
+    "h": 7400
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 1050,
+    "y": 14370,
+    "w": 5500,
+    "h": 5880
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-beds",
+   "name": "Bedrooms",
+   "type": "bedrooms",
+   "rect": {
+    "x": 7750,
+    "y": 4270,
+    "w": 3700,
+    "h": 6630
+   },
+   "roomIds": [
+    "bed2",
+    "bed3"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 8940,
+    "y": 11000,
+    "w": 2510,
+    "h": 2000
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 8940,
+    "y": 13100,
+    "w": 2510,
+    "h": 1040
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 7750,
+    "y": 14240,
+    "w": 3700,
+    "h": 6010
+   },
+   "roomIds": [
+    "wir",
+    "ensuite",
+    "master"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 6650,
+    "y": 4270,
+    "w": 1000,
+    "h": 14320
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 6650,
+    "y": 18590,
+    "w": 1000,
+    "h": 1660
+   }
+  },
+  {
+   "id": "H-bay3",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 7750,
+    "y": 11000,
+    "w": 1090,
+    "h": 3140
+   }
+  }
+ ],
+ "rooms": [
+  {
+   "id": "alfresco",
+   "name": "Alfresco",
+   "kind": "Alfresco",
+   "zoneId": "Z-alfresco",
+   "rect": {
+    "x": 1050,
+    "y": 4270,
+    "w": 5500,
+    "h": 2500
+   }
+  },
+  {
+   "id": "core",
+   "name": "Family Core",
+   "kind": "FamilyCore",
+   "zoneId": "Z-living",
+   "rect": {
+    "x": 1050,
+    "y": 6870,
+    "w": 5500,
+    "h": 7400
+   }
+  },
+  {
+   "id": "garage",
+   "name": "Double Garage",
+   "kind": "Garage",
+   "zoneId": "Z-garage",
+   "rect": {
+    "x": 1050,
+    "y": 14370,
+    "w": 5500,
+    "h": 5880
+   }
+  },
+  {
+   "id": "bed2",
+   "name": "Bedroom 2",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 7750,
+    "y": 4270,
+    "w": 3700,
+    "h": 2950
+   }
+  },
+  {
+   "id": "bed3",
+   "name": "Bedroom 3",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 7750,
+    "y": 7320,
+    "w": 3700,
+    "h": 3580
+   }
+  },
+  {
+   "id": "bath",
+   "name": "Shared Bathroom",
+   "kind": "Bathroom",
+   "zoneId": "Z-bath",
+   "rect": {
+    "x": 8940,
+    "y": 11000,
+    "w": 2510,
+    "h": 2000
+   }
+  },
+  {
+   "id": "wc",
+   "name": "WC",
+   "kind": "WC",
+   "zoneId": "Z-wc",
+   "rect": {
+    "x": 8940,
+    "y": 13100,
+    "w": 2510,
+    "h": 1040
+   }
+  },
+  {
+   "id": "wir",
+   "name": "WIR",
+   "kind": "WIR",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 7750,
+    "y": 14240,
+    "w": 1800,
+    "h": 2850
+   }
+  },
+  {
+   "id": "ensuite",
+   "name": "Ensuite",
+   "kind": "Ensuite",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 9650,
+    "y": 14240,
+    "w": 1800,
+    "h": 2850
+   }
+  },
+  {
+   "id": "master",
+   "name": "Master",
+   "kind": "Master",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 7750,
+    "y": 17190,
+    "w": 3700,
+    "h": 3060
+   }
+  }
+ ],
+ "flex": []
+}

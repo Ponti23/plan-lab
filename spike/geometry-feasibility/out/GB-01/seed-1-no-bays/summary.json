@@ -1,0 +1,71 @@
+{
+ "brief": "GB-01",
+ "seed": 1,
+ "budgetSeconds": 60,
+ "shapes": "d58 (spine, L, T, central-junction)",
+ "hallwayWideningsAllowed": false,
+ "stopped": "wall-clock budget reached (a timeout is not a proof of anything)",
+ "attempts": 13690368,
+ "attemptsPerSecond": 228172,
+ "stageReached": {
+  "failedInStage4": 13690368,
+  "failedInStage5": 0,
+  "failedInStage6": 0,
+  "stage6RecordEmitted": 0
+ },
+ "valid": 0,
+ "invalidEmitted": 0,
+ "distinctValid": 0,
+ "distinctValid2x2Grid": 0,
+ "hallwayWidenings": {
+  "note": "widenings are >= 1000 mm hallway pieces between a unit and the hallway (slack); counted among valid layouts",
+  "validWithAtLeastOneWidening": 0,
+  "shareOfValidWithWidening": null,
+  "medianWideningAreaM2": null
+ },
+ "hallwayAreaM2AmongValid": {
+  "median": null,
+  "pl10ProxyM2": 9
+ },
+ "distinctMethod": "signature = hallway shape + sorted list of (zone type @ 3x3 grid cell of the zone centre; row 2 = front) over all zones except Flex and the optional Pantry zone; min of the layout and its left/right mirror; label swaps cannot differ because only zone types are used",
+ "validByHallShape": {},
+ "hallwayShareOfFootprintAmongValid": {
+  "min": null,
+  "median": null,
+  "p90": null,
+  "max": null
+ },
+ "meanRoomAreaVsBriefTargetAmongValid": {
+  "note": "mean over rooms of (clear area / brief target area); informational only, not a validity rule",
+  "min": null,
+  "median": null,
+  "max": null
+ },
+ "cf01LikeTraitsAmongValid": {
+  "note": "informational: Master centre in front third; all bedrooms in rear half; Alfresco centre in rear third (mirror-agnostic)",
+  "masterInFrontThird": 0,
+  "bedroomsInRearHalf": 0,
+  "alfrescoInRearThird": 0,
+  "allThree": 0,
+  "evaluated": 0
+ },
+ "validatorRuleFailuresAmongEmitted": {},
+ "generatorRejectionReasons": {
+  "s4: unit wet fits neither spine column": 4036096,
+  "s4: unit wet fits neither band of the cross hallway": 3979155,
+  "s4: unit beds fits neither spine column": 2410723,
+  "s4: unit beds fits neither band of the cross hallway": 2321250,
+  "s4: unit flex fits neither band of the cross hallway": 395975,
+  "s4: unit flex fits neither spine column": 386391,
+  "s4: unit alfresco fits neither band of the cross hallway": 134305,
+  "s4: unit master fits neither spine column": 10931,
+  "s4: unit master fits neither band of the cross hallway": 15531,
+  "s4: unit alfresco fits neither spine column": 11
+ },
+ "timeToFirstValidMs": null,
+ "totalTimeMs": 60000,
+ "node": "v24.21.0",
+ "os": "win32 10.0.26300",
+ "cpu": "AMD Ryzen 5 9500F 6-Core Processor              x12",
+ "retained": []
+}

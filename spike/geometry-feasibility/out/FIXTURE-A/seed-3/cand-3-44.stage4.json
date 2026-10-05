@@ -1,0 +1,255 @@
+{
+ "stage": 4,
+ "id": "3-44",
+ "briefId": "FIXTURE-A",
+ "seed": 3,
+ "attempt": 44,
+ "cfPattern": "CF-01",
+ "hallShape": "spine",
+ "hallwayWidthMm": 1100,
+ "footprint": {
+  "x": 1405,
+  "y": 3660,
+  "w": 12190,
+  "h": 16340
+ },
+ "inner": {
+  "x": 1655,
+  "y": 3910,
+  "w": 11690,
+  "h": 15840
+ },
+ "zones": [
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 1655,
+    "y": 3910,
+    "w": 5780,
+    "h": 5280
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 1655,
+    "y": 9290,
+    "w": 5790,
+    "h": 4500
+   },
+   "roomIds": [
+    "wir",
+    "ensuite",
+    "master"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 1655,
+    "y": 13890,
+    "w": 5720,
+    "h": 5860
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-beds2",
+   "name": "Bedrooms (part 2 of 2)",
+   "type": "bedrooms",
+   "rect": {
+    "x": 9845,
+    "y": 3910,
+    "w": 3500,
+    "h": 5740
+   },
+   "roomIds": [
+    "bed3",
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-beds1",
+   "name": "Bedrooms (part 1 of 2)",
+   "type": "bedrooms",
+   "rect": {
+    "x": 9845,
+    "y": 9750,
+    "w": 3500,
+    "h": 3130
+   },
+   "roomIds": [
+    "bed2"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 11045,
+    "y": 12980,
+    "w": 2300,
+    "h": 1010
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 11035,
+    "y": 14090,
+    "w": 2310,
+    "h": 1800
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 10945,
+    "y": 15990,
+    "w": 2400,
+    "h": 2060
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-pantry",
+   "name": "Living (Pantry)",
+   "type": "living",
+   "rect": {
+    "x": 11005,
+    "y": 18150,
+    "w": 2340,
+    "h": 1600
+   },
+   "roomIds": [
+    "pantry"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-bay2",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 7535,
+    "y": 3910,
+    "w": 1010,
+    "h": 5280
+   }
+  },
+  {
+   "id": "H-bay6",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 7545,
+    "y": 9290,
+    "w": 1000,
+    "h": 4500
+   }
+  },
+  {
+   "id": "H-bay1",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 7475,
+    "y": 13890,
+    "w": 1070,
+    "h": 5860
+   }
+  },
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 8645,
+    "y": 3910,
+    "w": 1100,
+    "h": 14640
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 8645,
+    "y": 18550,
+    "w": 1100,
+    "h": 1200
+   }
+  },
+  {
+   "id": "H-bay8",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 9845,
+    "y": 12980,
+    "w": 1100,
+    "h": 1010
+   }
+  },
+  {
+   "id": "H-bay16",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 9845,
+    "y": 14090,
+    "w": 1090,
+    "h": 1800
+   }
+  },
+  {
+   "id": "H-bay7",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 9845,
+    "y": 15990,
+    "w": 1000,
+    "h": 2060
+   }
+  },
+  {
+   "id": "H-bay9",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 9845,
+    "y": 18150,
+    "w": 1060,
+    "h": 1600
+   }
+  }
+ ],
+ "omittedOptional": []
+}
