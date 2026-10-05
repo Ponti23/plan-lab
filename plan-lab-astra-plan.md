@@ -155,7 +155,7 @@ Export dimensioned PDF, vector SVG, editable DXF, and the PlanLab project file. 
 | Engine and runtime | Select stack, solver, execution location, geometry representation, search allocation, longer-search behavior, seed/reproducibility policy, and detailed diagnostics (proposed engineering deferral). Saved exact geometry already has an accepted preservation requirement. |
 | App and files | Select local storage/autosave/recovery behavior, project schema/import handling, exact export presentation, and detailed interface styling/variant controls (proposed engineering deferral). Retain the accepted local-project and PDF/SVG/DXF/project-file scope. |
 
-No additional implementation defaults are approved by this document. A final confirmation approves the complete product baseline and explicitly listed deferrals. It does not authorize application implementation, installing dependencies, or deployment.
+No additional implementation defaults are approved by this document. A final confirmation approves the complete product baseline and explicitly listed deferrals. It does not authorize application implementation, installing dependencies, or deployment. _(Superseded 2026-10-05 — see the Resume checkpoint's Work authorization: the proposed engineering baseline in `ARCHITECTURE.md` §6 and Stage 0 work via the delegation board are authorized; deployment is not.)_
 
 ## Accepted decisions — round 1
 
