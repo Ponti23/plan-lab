@@ -7,34 +7,26 @@ tags: [progress, resume]
 
 ## Resume here
 
-- **Current focus (2026-10-05, late):** plan B is running. Luna (Codex) is writing **PL-10** →
-  `knowledge/specs/dimensions-and-briefs.md` from [`briefs/pl10-luna-brief.md`](briefs/pl10-luna-brief.md),
-  dispatched 22:41 from the previous thread. While it runs, `.git/codex-worker.lock` exists;
-  Luna's final message goes to `C:UserspontiAppDataLocalTemppl10-result.md`.
-- **Next:** start the overnight goal in a new thread: [`briefs/overnight-goal.md`](briefs/overnight-goal.md).
-- **User decisions (2026-10-05):**
-  - **Plan B:** PL-10 first, then an early Stage 0 spike (PL-20) on golden brief GB-01 + Fixture A
-    while PL-11–14 are written.
-  - **G-SPIKE approved** for that early spike: headless, zero-dependency TypeScript run by Node 24.
-  - **Commits allowed** on a new `work/plan-b` branch, one per reviewed bucket. No push or merge.
-- **Working model:** Opus 5.5 orchestrates. The only workers are Codex: Luna (`gpt-5.6-luna`, max)
-  for routine work and Sol (`gpt-5.6-sol`, max; Sol 6.1 isn't available on this account yet) for
-  complex engineering. Dispatch via `scripts/codex-worker.sh`, which allows one writer per checkout.
-  Astra, Haiku and Sonnet are retired as workers. See the [delegation playbook](patterns/delegation-playbook.md).
-- **Settled in D56:** Outdoor/Alfresco zone is low priority. Alfresco, extra Family, Study, Theatre and
-  custom rooms have no default zone.
-- **Reference plans:** `C:UserspontiOneDriveprojectsloorplan-enginedataaw` (read-only, not
-  in the repo). See [`reference/README.md`](reference/README.md).
-- **Remember:** the user is colorblind. Explain by labels, never colour; the UI must not rely on colour (D56).
-- **Uncommitted:** everything on `design/ui-mockups` since 1c5fb1f (roster/rules/docs edits).
-  The goal moves it onto `work/plan-b`.
-- **Deferred:**
-  - Possibly revisit D07.
-  - G-CALIBRATION.
-  - UI (PL-40–42, G-UX).
-  - Projects/exports (PL-43, PL-50–51).
-  - Release 2 items (D60).
-  - `ARCHITECTURE.md` §6 stays proposed until spike evidence is in.
+- **Current focus (2026-10-06, 07:05):** plan B is complete on branch `work/plan-b` (not pushed or merged).
+  PL-10, 11, 12, 13, 14 and 15 are reviewed contracts (`knowledge/specs/`). The PL-20 early spike is
+  committed and in `review`: the user judges usefulness from its SVGs. Morning report:
+  [`briefs/overnight-report.md`](briefs/overnight-report.md).
+- **Blocked on the user (needs-human):**
+  - WC max long side 2600 → 2700? (root cause of the oversized hallway; room-size preset gate).
+  - Real GB-01 envelope width (12.5 m is a PL-10 estimate; L/T/junction need ≈14–15 m).
+  - Stage 0 usefulness of the spike SVGs; B-U-B reading.
+  - G-SPIKE extension for PL-21 (brief in `specs/engine-runtime.md` §8).
+  - Yes/no tables: PL-11 §14–15, PL-12 §12, PL-13 §13, PL-14 §9, PL-15 question table.
+- **Next:** after the user answers — re-run the spike with the WC decision; dispatch PL-21 to Sol;
+  then PL-22 (evidence judgment + go/no-go, human). PL-30+ wait on PL-22.
+- **Workers:** Codex Luna/Sol are default; Codex hit its usage limit (until 11:16 on 2026-10-06).
+  Sonnet/Haiku stand in while Codex is out (user, 2026-10-06); the reviewer is always a different agent.
+- **Remember:** the user is colorblind — labels, never colour. `module.stripTypeScriptTypes` is
+  experimental in Node 24.21. PL-13/14/15 must align `J(X)` key names (`doors/walls` vs
+  `openings/wall bands`) before PL-31.
+- **Reference plans:** `C:\Users\ponti\OneDrive\projects\floorplan-engine\data\raw` (read-only).
+- **Deferred:** D07 revisit; G-CALIBRATION; UI (PL-40–42, G-UX); PL-43, PL-50–51; Release 2 items (D60);
+  `ARCHITECTURE.md` §6 stays proposed until PL-21/22.
 
 _(This block is rewritten by the `save-progress` skill. Everything below is the append-only timeline.)_
 

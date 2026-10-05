@@ -44,7 +44,7 @@ Statuses: `todo` · `in-progress` · `needs-human` · `blocked` · `review` · `
 
 ## Current baton
 
-PL-00/01/02 passed fresh independent review by `luna_workflow_review` on 2026-10-05; the evidence and validation limitation are recorded in their rows. **Plan B (user, 2026-10-05):** PL-10 done; early PL-20 spike on GB-01 + Fixture A approved under G-SPIKE and runs while PL-11–14 are written. Work branch: `work/plan-b`. The TypeScript/integer-mm/slicing-tree/worker/Node baseline remains proposed pending Stage 0 evidence. Existing Drawing-Set Sheet mockups on `design/ui-mockups` are a separate, unreviewed UI exploration; they provide context for PL-40 only and are not solver or implementation evidence.
+**2026-10-06 07:05 — plan B complete.** PL-10–15 are reviewed contracts; the PL-20 early spike is in `review` (the user judges usefulness from its SVGs). Every remaining bucket is gated on the user: PL-21 needs a G-SPIKE extension; PL-22 is the human go/no-go; PL-30+ depend on PL-22. Calibration answers (WC max, GB-01 width, Near, quality floor) are listed in [`briefs/overnight-report.md`](briefs/overnight-report.md). The TypeScript/integer-mm/slicing-tree baseline remains proposed pending PL-21/22.
 
 ## Branch / checkout record
 
@@ -53,4 +53,5 @@ PL-00/01/02 passed fresh independent review by `luna_workflow_review` on 2026-10
 | PL-00 | Reuse current checkout for project policy files; user-kit edits are outside Git | `design/ui-mockups`, shared working tree; kit and policy artifacts exist; no commit or merge claimed |
 | PL-01, PL-02 | Reuse current checkout for this authorized documentation pass | `design/ui-mockups`, shared working tree; documentation artifacts present; mockup files untouched; no commit or merge claimed |
 | Round 12 recording, orchestration roster | Reuse a docs branch | `docs/round12-orchestration` off `main`; committed 2026-10-05 |
-| PL-10–15, PL-20–22, PL-30–34, PL-40–43, PL-50–53 | One coherent branch per implementation/review bucket, selected at dispatch | Not started; no branch or checkout claimed |
+| PL-10–15, PL-20 (early) | `work/plan-b` (user-approved 2026-10-05), one commit per reviewed bucket | `work/plan-b`; not pushed or merged |
+| PL-21–22, PL-30–34, PL-40–43, PL-50–53 | One coherent branch per bucket, selected at dispatch | Not started |
