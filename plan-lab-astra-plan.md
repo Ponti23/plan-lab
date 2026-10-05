@@ -2,15 +2,27 @@
 
 Living design record for the grilling session begun on 2026-10-03 (Australia/Perth).
 
+## Resume checkpoint - Round 12 accepted - 2026-10-05
+
+**Current position:** Round 12 accepted. The user accepted all five Q55-Q59 recommendations after reviewing the workflow sketch and the additional reference plans. They are recorded as D56-D60 below. The product-design interview remains complete.
+
+**Accepted record:** decisions D01-D60 below, applying the latest clarifications where earlier positions were superseded. Q55-Q59 are accepted in D56-D60. The D01-D55 history remains below and is not deleted.
+
+**Next action:** Start PL-10 from the delegation board (`DELEGATION-PLAN.md`, `knowledge/BOARD.md`) and apply the D56-D60 notes to the dimensions, relationship, hallway, benchmark, and release-scope contracts. Keep numerical defaults provisional until G-CALIBRATION.
+
+**Work authorization:** this is a documentation-only pass. No code, spike, reference-image import, commit, merge, or deployment is authorized by this record. Reference-plan images remain pending from the user.
+
+**Superseded checkpoint:** the Round 11 resume checkpoint immediately below is retained as historical wording and is superseded by this Round 12 checkpoint.
+
 ## Resume checkpoint — 2026-10-05
 
 **Current position:** Round 11 is accepted. The user accepted all five Q50–Q54 recommendations, recorded as D51–D55. The interview rounds are complete. The consolidated product design below was presented for the user's final confirmation of shared understanding; that confirmation was **given on 2026-10-05** (the user replied "lets go with your suggestions" to the proposal to confirm the design and proceed).
 
 **Accepted record:** decisions D01–D55 below, applying the latest clarifications where earlier positions were superseded. Decision IDs (`D`) and question numbers (`Q`) are separate sequences. Q45–Q49 are accepted in D46–D50; Q50–Q54 are accepted in D51–D55.
 
-**Next action:** Run the Stage 0 solver spike via the delegation board (`DELEGATION-PLAN.md`, `knowledge/BOARD.md`), then the Stage 0 go/no-go judgement. If the user corrects the design, update the same living document. Do not restart settled rounds.
+**Next action:** Start PL-10 from the delegation board (`DELEGATION-PLAN.md`, `knowledge/BOARD.md`): draft dimensions and brief conventions in `knowledge/specs/dimensions-and-briefs.md` with uncalibrated values labeled. PL-00/01/02 passed fresh independent review; evidence is recorded in the board. Do not restart settled rounds. Stage 0 execution remains separately scoped under G-SPIKE.
 
-**Work authorization (updated 2026-10-05):** final shared-understanding confirmation is given. Authorized now: planning docs, the proposed engineering baseline (see `ARCHITECTURE.md` section 6, pending the Stage 0 go/no-go), and drafting Stage 0. Running the Stage 0 spike and any further implementation proceed via the delegation board in `DELEGATION-PLAN.md` / `knowledge/BOARD.md`. Deployment is not authorized (first deploy is a hard gate). The repository check recorded below was read-only and is dated.
+**Work authorization (updated 2026-10-05):** final shared-understanding confirmation is given. Authorized: the proposed engineering baseline (see `ARCHITECTURE.md` section 6, pending measured evidence), drafting Stage 0, and the planning-doc/kit/board/resume work explicitly requested in the current task. Running the Stage 0 spike and any further implementation proceed via the delegation board in `DELEGATION-PLAN.md` / `knowledge/BOARD.md`, within the named execution request and scoped gates. This documentation pass did not execute a spike or production work. Deployment is not authorized (first deploy is a hard gate). The repository check recorded below was read-only and is dated.
 
 **Continuation method:** continue the decision tree in rounds, asking independent questions whose prerequisites are settled. Give a concrete recommendation with each numbered question, wait for answers, then update accepted decisions and recompute the next round. Keep user-facing rounds to at most five questions. Research discoverable facts rather than asking the user to supply them; use read-only fact-finding subagents when available as directed by the grilling skill. Do not assume missing answers mean agreement. End the session only when the design branches are resolved or explicitly deferred and the user confirms shared understanding.
 
@@ -36,6 +48,8 @@ Generate architecturally sensible single-storey residential concepts with meanin
 
 This is the consolidated product design from accepted decisions D01–D55. The decision history below remains the detailed record. The product rules in sections 1–5 are accepted individually, and the complete design was confirmed by the user on 2026-10-05. Deferrals remain deferred. Section 5 distinguishes agreed calibration work from remaining engineering choices proposed for deferral. No implementation defaults have been silently selected beyond the proposed engineering baseline in `ARCHITECTURE.md`.
 
+**Round 12 extension:** D56-D60 below amend the complete design with default semantic zones, real inspectable intermediate stages, hallway-first generation and automatic Entry, golden-brief evidence, and the Release 1 scope. Where the earlier wording below conflicts with these delivery clarifications, the Round 12 wording is controlling; the earlier wording remains marked as superseded at the affected point.
+
 ### 1. Product, user, and workflow
 
 PlanLab v1 is a single-user browser app with local project storage. It generates dimensioned, single-storey residential concepts for an architect to develop further. A concept includes room geometry, walls, workable door/opening locations, usable circulation, and labeled areas. Architect refinement happens in external drawing/CAD software.
@@ -51,6 +65,8 @@ The frontend integrates the illustrated workflow:
 | 5. Room placement | Inspect the resolved room layout. |
 | 6. Walls and hallways | Inspect walls, openings, circulation, and dimensions. |
 | 7. Architect refinement | Save/export the concept for external development. |
+
+**Round 12 stage delivery note (D57/D60; supersedes the immediate-v1 wording about editable stage 3):** the engine emits the real intermediate results for stages 4, 5, and 6: zone plus circulation layout, rooms inside zones, and walls/doors/hallway detail. Release 1 displays stages 3-6 read-only using the auto-generated relationship graph. The target design in D08, D14, D31, D36, and D40 remains; only graph editing, overrides, variants, Apply to Brief, and PDF delivery move to Release 2.
 
 Generate a complete concept without requiring approval at every stage. Stages expose the work for inspection; they do not require the engine to defer wall or circulation feasibility until stage 6. Changes to earlier inputs invalidate dependent later outputs. Direct editing of zone shapes or room coordinates is not part of the agreed v1 workflow.
 
@@ -77,6 +93,8 @@ Relationships and positions can be Required or Preferred. Required architect cho
 
 Zones are semantic groups expected to cluster coherently, not fixed exclusive rectangular containers. The Family Core has its separately agreed shared rectangular geometry. A zone relationship stays scoped to the group, preserves its Required/Preferred strength, and does not create all possible room-pair edges. Explain its resolved treatment and surface conflicts with explicit room choices. Exact group interpretation, clustering tests, and numerical proximity thresholds remain deferred.
 
+**Default semantic zones (D56).** Bedrooms contains normal Bedrooms. Living (Family Core) contains Kitchen, Dining, Living, and Pantry. Master is its own group and contains Master plus its selected Ensuite/WIR; it is not part of Bedrooms. Garage is its own group containing Garage only. Wet rooms are not a group: Shared Bathroom and WC default Near the Bedrooms group, while Laundry has no fixed attachment and may sit near Kitchen, Bedrooms, or Garage. A group may split across the hallway and still count as one coherent group when both pieces open onto the same hallway stretch. Alfresco, extra Family/Living, Study, Theatre, and custom rooms have no default group yet and remain open PL-10/PL-11 items. These are semantic defaults, not rigid containers; architects can edit them. For UI work, labels, patterns, or outlines must identify zones, flex, hallways, and stages without relying on colour alone.
+
 **Positions and edit scope.** Room-center tests use front/middle/rear thirds and left/right halves of the generated footprint, with visible bands. Front means the bottom of the drawing. A front-room preference does not itself require external frontage; garage and entrance have explicit front-edge access rules. Boundary ties and zone-position semantics remain unselected.
 
 Graph edits before generation change the shared brief. Graph edits while exploring a selected concept create a variant without changing other saved concepts or the shared brief. An explicit Apply to Brief action transfers those edits to future broad exploration.
@@ -94,6 +112,8 @@ The entrance and the garage's vehicle access, when a garage is included, are alw
 **Circulation.** Choose an intentional access structure early, such as a spine, branching spine, or central junction, and coordinate rooms, wall allowances, corridor geometry, and workable openings. A joint solver or staged process with feedback may implement this. Corridors need explicit widths and connected destinations; graph connectivity alone is insufficient.
 
 Entry/halls and shared living/dining spaces can carry general circulation when clear usable routes are reserved. Private bedrooms, bathrooms, and garages cannot be compulsory through-routes to unrelated rooms. Access through the Master to its own Ensuite/WIR is the agreed exception. Routes within open-plan rooms remain part of their room area, so they are not counted again as dedicated circulation.
+
+**Round 12 hallway/entry clarification (D58; supersedes the earlier "choose an intentional access structure early" wording for stage order):** Stage 4 chooses the hallway shape first: a straight spine, L, T, or central junction, with a default per CF pattern to be defined in PL-12. Zones are placed along it. Add a short branch ("mini") hallway only when a zone has several rooms that cannot each open directly onto the main hallway, such as the sketch's B-U-B bedroom group. Open-plan Living/Dining may carry circulation per D15, and the Master-to-Ensuite/WIR exception remains. The stage 4 view labels the hallway as a Hallway strip and reports its area separately from room area; clear width is a provisional approximately 1000 mm until calibrated. Entry is automatic at the front door/front edge as the start of the main hallway, not a selectable catalog room. Built-in robes, linen cupboards, and the porch are excluded from v1 generation; WIR remains selectable under Master.
 
 **Flex.** After brief requirements are met, usable internal Unallocated / Flex Space is allowed. Each separate patch is rectangular, at least 4 m², at least 1.5 m on its shorter side, and accessibly connected. These are adjustable starting design settings. Fix or absorb tiny slivers and trapped pockets; they do not qualify as flex. Do not shrink/drop requested rooms or enlarge the footprint to manufacture flex. Prefer permitted room growth, but retain a usable remainder when absorption would harm the layout or breach room limits.
 
@@ -133,6 +153,8 @@ Use a 60-second total initial search budget, display qualifying results progress
 
 Explore Concepts can change major zoning and circulation. Explore This Concept preserves the selected major zoning/circulation strategy and room program, including its included optionals, while varying local ordering, dimensions, services, K/D/L arrangement, and permitted mirroring. Both preserve Required overrides. If edits cannot fit the selected strategy, explain the conflict and offer broader exploration instead of silently changing it.
 
+**Release 1 exploration note (D60; supersedes the availability implied above):** Explore This Concept variants are deferred to Release 2. Release 1 generates concepts and lets the architect inspect stages 3-6 read-only; it does not expose graph editing, Required/Preferred override editing, or Apply to Brief. The engine data model still carries intent-graph strengths so the Release 2 controls do not require a model rework.
+
 Each concept explains its planning arrangement, actual room sizes against requested ranges, omitted optional spaces, unmet Preferred choices, circulation/flex areas, and observed ranking tradeoffs. No single user-facing composite score is needed. Do not claim a layout is optimal or an omission unavoidable without evidence.
 
 Distinguish proven infeasibility, exhausted/unsuccessful search, and valid candidates that fail qualification. A timeout is not proof of infeasibility. Duplicate candidates can reduce the number of distinct results; do not use them to fill slots. When nothing qualifies, explain the applicable category rather than present weak candidates as qualifying main results. The exact diagnostic vocabulary remains an engineering/copy detail.
@@ -145,6 +167,16 @@ Export dimensioned PDF, vector SVG, editable DXF, and the PlanLab project file. 
 
 **V1 exclusions.** Windows/window feasibility/frontage reservations; furniture, wardrobe, fixture and parked-car fit templates; freeform wall/room/zone editing and facade carving; multiple Masters; guest-specific room types or family; garage/entrance non-front overrides; native BIM/Revit export; automatic legal setbacks or a regulatory-compliance claim. The engine still must meet the agreed door and circulation requirements. There is no required AI service.
 
+**Release 1 scope (D60; supersedes the delivery timing in the preceding persistence/export paragraphs):** Release 1 includes:
+
+- entering the envelope and room list;
+- generation of up to six qualifying concepts;
+- read-only inspection of stages 3-6 using the auto-generated relationship graph;
+- SVG and DXF export; and
+- local project save.
+
+Release 2 defers graph editing and Required/Preferred override controls, Explore This Concept variants, Apply to Brief, and PDF export. D08, D14, D31, D36, and D40 remain the target design; only their delivery moves to Release 2.
+
 **Deferred calibration and engineering choices.** These are not silently assumed defaults. D52–D54 accept later calibration of presets, group semantics/proximity, and quality/diversity metrics. The proposed closeout treatment for the other open details is to settle them in the engineering specification before implementing the affected behavior, rather than extend this product interview.
 
 | Deferred area | Remaining work and status |
@@ -154,6 +186,9 @@ Export dimensioned PDF, vector SVG, editable DXF, and the PlanLab project file. 
 | Qualification evidence | Set quality floors, diversity metrics, representative example briefs, and architect acceptance cases (accepted calibration). Establish expected search performance empirically; six qualifying results in 60 seconds is not guaranteed. |
 | Engine and runtime | Select stack, solver, execution location, geometry representation, search allocation, longer-search behavior, seed/reproducibility policy, and detailed diagnostics (proposed engineering deferral). Saved exact geometry already has an accepted preservation requirement. |
 | App and files | Select local storage/autosave/recovery behavior, project schema/import handling, exact export presentation, and detailed interface styling/variant controls (proposed engineering deferral). Retain the accepted local-project and PDF/SVG/DXF/project-file scope. |
+| Future AI layout suggester | Not in v1 or Release 1. A future proposer may suggest stage 4 intent (zone arrangement and hallway shape) through the D50 structured-intent seam. The geometry engine and validator must still build and check every suggestion; invalid suggestions are rejected and never shown. D59 golden briefs and architect-reviewed plans would be its example set. Any paid provider or API key is a human money gate. Plain-sentence room-list filling and plain-language explanations are lower-priority future ideas; AI that draws whole plans directly was considered and is not recommended. D50 stands. |
+
+**Golden briefs (D59).** Convert the user's four dimensioned reference plans into a room list, sizes, and envelope. Use them to seed provisional room-size presets and to benchmark Stage 0/PL-20 for recognisably similar valid plans; they do not replace architect calibration. Example dimensions include Bed 3 at 3.2 x 2.8 m, Family at 3.4 x 3.4 m, Garage at 6.0 x 6.0 m, Bed 1 at 3.3 x 3.5 m, and Living/Dining at 3.9 x 7.1 m. The fourth reference plan contributes Master 3600 x 3330 mm, Bed 2 3100 x 3260 mm, Bed 3 3100 x 3260 mm, Family 3170 x 4680 mm, Dining 3000 x 4680 mm, Kitchen 2740 x 4160 mm, Garage 5670 x 5630 mm, and Alfresco 2510 x 4770 mm. It is a CF-01-style layout. The files are not yet supplied and must be saved in `knowledge/reference/` only when the user supplies them.
 
 No additional implementation defaults are approved by this document. A final confirmation approves the complete product baseline and explicitly listed deferrals. It does not authorize application implementation, installing dependencies, or deployment. _(Superseded 2026-10-05 — see the Resume checkpoint's Work authorization: the proposed engineering baseline in `ARCHITECTURE.md` §6 and Stage 0 work via the delegation board are authorized; deployment is not.)_
 
@@ -485,6 +520,84 @@ Only show concepts in the main results when they pass hard validity, the agreed 
 
 V1 is a single-user, local-first browser app with named local projects and exact saved concepts, plus import/export of the portable project file already required by D36. Accounts, cloud sync, sharing, and multi-user editing are deferred. Changing this hosting/storage model would require a later product decision. **Accepted.**
 
+## Accepted decisions - round 12
+
+### D56 - Default semantic zones follow the user's sketch (Q55)
+
+The default zone groups follow the user's step 3/4 sketch:
+
+| Zone | Default rooms |
+| --- | --- |
+| Bedrooms | normal Bedrooms |
+| Living (Family Core) | Kitchen, Dining, Living, and Pantry |
+| Master | Master, with its Ensuite/WIR when selected; its own group, not part of Bedrooms |
+| Garage | Garage only; its own group |
+
+Wet rooms are not a group. Each wet room has its own default relationship, with the strength still to be settled in PL-11: Shared Bathroom is Near the Bedrooms group by user default; WC is Near the Bedrooms group by user default; Laundry has no fixed attachment to the other wet rooms and may sit near the Kitchen, Bedrooms, or Garage, whichever fits. The reference plans show all of these placements, including laundry in the bedroom wing beside the bath, in a central core beside the pantry, at the rear beside the kitchen, and at the front between the ensuite and bedrooms.
+
+A group may split across the hallway. In stage 4, a group, typically Bedrooms, may be placed as two pieces on opposite sides of the hallway and still counts as one coherent group when both pieces open onto the same stretch of hallway. This refines D17's clustering test for PL-11.
+
+Pantry sits with Living. Alfresco, the extra Family/Living room, Study, Theatre, and custom rooms have no default group yet; record them as open items in PL-10/PL-11. Outdoor zoning is low priority. Groups are defaults: zones remain semantic rather than rigid containers under D17, and the architect can edit them.
+
+For UI work, the user is colorblind. Zones, flex, hallways, and stages must be identifiable by label, pattern, or outline, never by colour alone.
+
+**Accepted.**
+
+### D57 - The engine produces the inspectable stages (Q56)
+
+The generator works in the sketch's order and emits each stage's real intermediate result:
+
+1. Zone plus circulation layout (stage 4).
+2. Rooms inside zones (stage 5).
+3. Walls, doors, and hallway detail (stage 6).
+
+Stages 4-6 display these real intermediate results, not after-the-fact reconstructions. Feedback and retries between steps remain allowed under D20 and D47. Final geometry must stay traceable to the stage 4/5 layout shown.
+
+**Accepted.**
+
+### D58 - Hallways are planned first; Entry is automatic; minor storage is excluded (Q58: 4a/4b/4c)
+
+**a. Hallways first.** Stage 4 first chooses the hallway shape: a straight spine, an L, a T, or a central junction. Each CF pattern gets a default shape, to be defined in PL-12. Zones are then placed along that hallway. Add a short branch ("mini") hallway only when a zone has several rooms that cannot each open directly onto the main hallway; the sketch's B-U-B bedroom group is the example. Open-plan Living/Dining may carry circulation per D15, and the Master to Ensuite/WIR exception stands. The stage 4 view shows the hallway as a labelled Hallway strip. Hallway area is reported separately from room area under D49. Corridor width remains a provisional placeholder of approximately 1000 mm clear until calibrated.
+
+**b. Entry.** Every concept automatically includes an Entry at the front door, on the front edge, as the start of the main hallway. It is circulation space, not a catalog room the user selects.
+
+**c. Excluded spaces.** Built-in robes, linen cupboards, and the porch are excluded from v1 generation. The architect adds them in CAD, consistent with D19 and D37. The WIR remains a selectable Master option under D33.
+
+**Accepted.**
+
+### D59 - Golden briefs from the user's reference plans (Q57)
+
+Convert the user's dimensioned reference plans into golden briefs: a room list, sizes, and an envelope. Use them for provisional room-size presets, which remain uncalibrated placeholders under G-CALIBRATION, and for the Stage 0/PL-20 benchmark. The test is whether the engine can produce a recognisably similar valid plan from each brief.
+
+Example values visible in the sketch include Bed 3 at 3.2 x 2.8 m, Family at 3.4 x 3.4 m, Garage at 6.0 x 6.0 m, Bed 1 at 3.3 x 3.5 m, and Living/Dining at 3.9 x 7.1 m. A further reference plan shared on 2026-10-05 gives these clear sizes:
+
+| Room | Size (mm) |
+| --- | --- |
+| Master | 3600 x 3330 |
+| Bed 2 | 3100 x 3260 |
+| Bed 3 | 3100 x 3260 |
+| Family | 3170 x 4680 |
+| Dining | 3000 x 4680 |
+| Kitchen | 2740 x 4160 |
+| Garage | 5670 x 5630 |
+| Alfresco | 2510 x 4770 |
+
+That plan is a CF-01-style layout: Master front-left with a WIR leading to the Ensuite, a short hall from the Entry into the open plan, Bed 2/3 with Bath and WC at the rear-left, and Alfresco at the rear-right inside the envelope.
+
+Four reference plans exist so far. Save them in `knowledge/reference/` when the user supplies the files. This adds evidence to PL-13 and PL-20 and does not replace architect calibration in Stage 5/G-CALIBRATION.
+
+**Accepted.**
+
+### D60 - Release 1 scope cut (Q59)
+
+**Release 1:** enter the envelope and room list; generate; produce up to six qualifying concepts; inspect stages 3-6 read-only using the auto-generated relationship graph; export SVG and DXF; and save local projects.
+
+**Deferred to Release 2:** graph editing and Required/Preferred override controls; Explore This Concept variants; Apply to Brief; and PDF export.
+
+The product decisions D08, D14, D31, D36, and D40 remain the target design. Only their delivery moves to Release 2. The engine data model still carries intent-graph strengths so Release 2 does not need a model rework.
+
+**Accepted.**
+
 ## Verified repository context — 2026-10-03
 
 A read-only fact-finding subagent inspected the workspace under the grilling skill's fact-finding rule. There is no application implementation, package manifest, source tree, or solver in this checkout. `ARCHITECTURE.md`, `AGENTS.md`, `DELEGATION-PLAN.md`, `HANDOFF.md`, `knowledge/PROGRESS.md`, and `knowledge/BOARD.md` contain scaffold/placeholders rather than concrete product stack commitments. This living plan is the substantive design record; no existing solver/framework must be preserved based on current files. The AGENTS-mentioned `impeccable` skill was not found in the searched project/user skill and plugin locations; no installation attempted. No application files were changed and no tests/builds run.
@@ -569,3 +682,21 @@ The user accepted all five Q50–Q54 recommendations. Recorded D51–D55 and ass
 ### 2026-10-05 — design confirmed; engineering handoff
 
 The user gave final shared-understanding confirmation of the complete product design (D01–D55) and its explicit deferrals, replying "lets go with your suggestions" to the proposal to confirm and proceed. Work authorization is now: planning docs, the proposed engineering baseline, and drafting Stage 0. Running the Stage 0 spike and any further implementation proceed via the delegation board in `DELEGATION-PLAN.md` / `knowledge/BOARD.md`. `ARCHITECTURE.md`, `AGENTS.md`, `DELEGATION-PLAN.md`, `knowledge/BOARD.md`, `HANDOFF.md`, and `knowledge/PROGRESS.md` were filled. No product decision was changed.
+
+### 2026-10-05 — documentation plan and resume reconciled
+
+Updated the live board to the PL-00–53 plan and aligned the handoff, resume block and architecture contract index with the confirmed D01–D55 design, proposed engineering baseline and current `design/ui-mockups` checkout. PL-00/01/02 artifacts await fresh independent review; none is marked done. Existing UI mockups remain a separate, unreviewed exploration, unchanged and not treated as solver evidence. This request covered documentation only; no solver probe, production implementation, deployment, commit or merge is claimed. The next eligible authoring bucket after docs review is PL-10.
+
+### 2026-10-05 — PL-00/01/02 review passed; baton moved to PL-10
+
+Fresh independent reviewer `luna_workflow_review` returned PASS for PL-00/01/02. The board records the checks: 25 unique acyclic buckets; no future artifact marked complete; roster, Astra reports-only guard, manual DeepSeek fallback and inactive Claude; scoped human gates; generic templates; matching adapter copies and parseable settings JSON; and coherence with D01–D55, proposed baseline and actual checkout. Review was read-only, with no product tests/builds or Git mutations. The official skill `quick_validate` was not run; frontmatter was checked manually. PL-00/01/02 are done and the next baton is PL-10. No PL-10 drafting or product implementation was started.
+
+### 2026-10-05 - Round 12 accepted; D56-D60 recorded
+
+The user accepted all five Round 12 recommendations: Q55, Q56, Q57, Q58 (4a/4b/4c), and Q59. Recorded D56-D60 for default semantic zones, real stage 4/5/6 intermediates, hallway-first generation with automatic Entry and excluded minor storage, golden briefs, and the Release 1 scope cut. Added the future AI layout-suggester deferral through the D50 seam. Updated the complete-design annotations, `ARCHITECTURE.md` §3/§7, and the requested board rows. Reference images were not supplied, so `knowledge/reference/` was not created. This documentation pass made no code, spike, commit, merge, or deployment changes.
+
+### 2026-10-05 - Round 12 independent review passed
+
+Luna's in-run reviewer `Harvey` returned PASS after a read-only check. The review verified D56-D60, the Round 12 checkpoint and superseded Round 11 wording, affected sections 1-5, the architecture pipeline/default-zone/Release 1/AI notes, all eight requested board scope notes, the absence of `knowledge/reference/`, and retention of the D01-D55 decision headings. It ran no product tests, builds, staging, commits, or other Git mutations. It noted unrelated pre-existing stale references in `HANDOFF.md`, `knowledge/PROGRESS.md`, `AGENTS.md`, `DELEGATION-PLAN.md`, and the architecture current-status line; those were outside this brief's Round 12 additions and remain untouched.
+
+Separate independent review by a Claude Sonnet agent (not the author) on 2026-10-05: PASS on all nine checks (D56–D60 match the brief; no Outdoor zone; superseded text retained, no D01–D55 deletions; board notes on PL-10/11/12/13/20/40/41/50 match; no calibration, reference-image or code claims). Read-only; no Git mutations.

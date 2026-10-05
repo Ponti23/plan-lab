@@ -12,15 +12,13 @@ PlanLab generates dimensioned, architecturally sensible single-storey house conc
 
 ## Operating rules (read every session — the ones a cold clone forgets)
 
-- **Delegation.** Opus is brains-only: never write product code, run test/build suites, or edit
-  files as execution. Route per [delegation-playbook](knowledge/patterns/delegation-playbook.md):
-  code → Codex (Terra hard / Luna fast); commands / doc-edits / review / research → Sonnet
-  (Haiku for trivia). Opus decomposes, briefs, judges, merges. **Never ask the user to switch models.**
+- **Delegation.** Follow [the delegation playbook](knowledge/patterns/delegation-playbook.md):
+  Opus 5.5 orchestrates (plans, briefs, dispatches, judges, reports); Haiku/Sonnet/Luna execute
+  by difficulty; Sol for complex engineering. DeepSeek Flash is a manual external fallback only.
 - **Human hard-gates.** Money/payments and product/UX/copy decisions stop for the user. For this
   project that means: any paid provider/secret (none expected); product/UX/copy — stage UI, labels, explanation & failure-diagnostic wording; room-size preset values, Near thresholds, and quality/diversity thresholds (calibration against architect-reviewed examples); Stage 0 go/no-go; first deploy. Never merge those solo.
 - **Ponytail default** — laziest solution that actually works; YAGNI; stdlib/native before deps.
-- **Product LLM (pipeline)** — None — v1 is rule-driven; no LLM or AI service in the product (D50). (This is the *product's* API. The Opus/Sonnet/Codex
-  above refer to the *build agents*, unchanged.)
+- **Product LLM (pipeline)** — None — v1 is rule-driven; no LLM or AI service in the product (D50).
 - **Design work** goes through the `impeccable` skill.
 
 ## Repo facts (not folklore)

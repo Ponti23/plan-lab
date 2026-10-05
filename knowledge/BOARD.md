@@ -1,26 +1,56 @@
-# BOARD — what to work on next
+# PlanLab — work queue
 
-Shared work queue for this repo. **Opus plans + fills this board + delegates + verifies; Codex/Sonnet execute one bucket at a time.** Whichever agent you're driving, **start here.** Design lives in [`DELEGATION-PLAN.md`](../DELEGATION-PLAN.md); resume state in [`HANDOFF.md`](../HANDOFF.md); spec in [`ARCHITECTURE.md`](../ARCHITECTURE.md).
+The complete work breakdown, roles, gates and acceptance evidence live in [`DELEGATION-PLAN.md`](../DELEGATION-PLAN.md). This board is the live status ledger; product authority is [`plan-lab-astra-plan.md`](../plan-lab-astra-plan.md), and engineering reference is [`ARCHITECTURE.md`](../ARCHITECTURE.md).
 
-## How it works
-- **Claim before you start** — put your name in `Owner`, set `Status` to `in-progress`. Empty `Owner` = free. Never take a row someone already owns. The `in-progress` row is the current baton.
-- **One bucket = one branch** — record it in `Branch`; commit before you stop.
-- **When you stop** — update `Status` (clear `Owner` if handing back).
-- **Opus never executes code** — coding buckets go to Codex (Terra hard / Luna scoped); commands/verify to Sonnet.
-- **Codex solo limit** — Codex may pick up any unblocked `todo`, but must set `needs-human` (and not merge) for anything behind a **hard gate** (see AGENTS.md).
+## How to use this board
 
-`Status`: `todo` · `in-progress` · `needs-human` · `blocked` · `review` · `done`
-`Best agent`: `opus-plan` · `terra` · `luna` · `sonnet` · `either`
+- Claim one eligible bucket by setting `Owner` and `Status = in-progress`; preserve existing work in other branches and files.
+- A dependency marked `review` is not satisfied until its fresh independent review is recorded. Gate status is scoped to the work it controls; it does not reopen accepted decisions or require repeated permission questions.
+- Set `done` only after the artifact exists, its acceptance evidence is recorded, a fresh independent review passes, and applicable gates are satisfied. Record reviewer/evidence in the artifact or handoff record.
+- `Eligible` is derived from dependencies and gates: `after review` means the listed dependencies must pass review; `gated` means a specific gate or execution scope must also be satisfied. `todo` does not imply immediate eligibility.
+- Execution roles: `luna` routine work; `sol` complex engineering; `luna/Astra` means Luna persists Astra's reported judgment. Astra plans and judges in reports, not by editing files. See the [delegation playbook](patterns/delegation-playbook.md).
 
-## The session loop
-1. Opus fills/updates the buckets below.
-2. Delegate **one** bucket (Sonnet subagent, or paste to Codex — it works on the branch and pushes).
-3. Opus verifies the diff + Sonnet-run checks, marks `done`, merges.
-4. Repeat. Human gates need your explicit yes before merge.
+Statuses: `todo` · `in-progress` · `needs-human` · `blocked` · `review` · `done`.
 
 ## Buckets
 
-| # | Bucket | Best agent | Owner | Status | Branch |
-|---|--------|-----------|-------|--------|--------|
-| 0.1 | Headless solver spike (see DELEGATION-PLAN 0.1) | terra | — | todo | spike/solver |
-| 0.2 | Judge spike — go/no-go **(HARD GATE)** | opus-plan | — | blocked (on 0.1) | — |
+| ID | Work / role | Depends on | Gate / eligibility | Owner | Status | Artifact and acceptance evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| PL-00 | Operating kit and installed policy / Luna | — | G-DESIGN; review kit scope | — | done | `.ponti-kit` and installed AGENTS, patterns/index, run-stage/save-progress skills, templates and README. **Review PASS — `luna_workflow_review`, 2026-10-05:** checked roster, Astra reports-only guard, manual DeepSeek fallback, inactive Claude, scoped human gates, generic templates, matching adapter copies and parseable settings JSON. Official skill `quick_validate` not run; frontmatter checked manually. |
+| PL-01 | Persist plan, queue and contract index / Luna | PL-00 | G-DESIGN; after PL-00 review | — | done | `DELEGATION-PLAN.md`, `knowledge/BOARD.md`, `ARCHITECTURE.md`. **Review PASS — `luna_workflow_review`, 2026-10-05:** verified 25 unique buckets, acyclic dependencies, no future artifact marked complete, and coherence with confirmed D01–D55 and the proposed current engineering baseline. |
+| PL-02 | Align resume and continuation records / Luna | PL-01 | G-DESIGN; after PL-01 review | — | done | `HANDOFF.md`, `knowledge/PROGRESS.md` resume block, product-plan checkpoint/log. **Review PASS — `luna_workflow_review`, 2026-10-05:** verified the confirmed design, docs scope, PL-10 next baton, and actual checkout agree across entry points; history retained and UI mockups not treated as solver evidence. Review was read-only: no product tests/builds or Git mutations. |
+| PL-10 | Dimensions and brief contract / Luna | PL-01, PL-02 | G-DESIGN; eligible after docs review | — | todo | `knowledge/specs/dimensions-and-briefs.md`. Catalog matrix, consistent min/preferred/max, wall-aware examples; provisional values labeled; D44 flex starting criteria preserved; no code-compliance or fit claims. **Round 12 scope note (D56/D58/D59):** Entry is automatic circulation; robes, linen, and porch are excluded; seed provisional presets from golden briefs; record open default groups for Alfresco, extra Family/Living, Study, Theatre, and custom rooms. |
+| PL-11 | Relationship contract / Sol | PL-10 | G-DESIGN; eligible after PL-10 review | — | todo | `knowledge/specs/relationships.md`. Positive/negative/boundary/conflict examples; zone scope preserved; no all-pairs expansion or derived-edge promotion. **Round 12 scope note (D56):** use the default zones, wet-room defaults, hallway-split coherence rule, and open grouping items; exact strengths and Near behavior remain to be settled here. |
+| PL-12 | Families and variation contract / Sol | PL-11 | G-DESIGN; eligible after PL-11 review | — | todo | `knowledge/specs/families-and-variation.md`. Compatibility matrix, fixed front arrival, CF-01/03 distinctions and local locks; no family quota or label-only diversity. **Round 12 scope note (D58):** assign each CF pattern a provisional default hallway shape and define the branch/mini-hallway trigger; corridor width remains approximately 1000 mm clear until calibrated. |
+| PL-13 | Qualification benchmarks / Sol | PL-10, PL-11, PL-12 | G-DESIGN; draft is eligible after dependencies; G-CALIBRATION applies before adopting numerical thresholds in production | — | todo | `knowledge/specs/qualification-benchmarks.md`. Worked accept/reject and ranking cases per D48; duplicates and omission-only differences fail diversity; separate timeout, proof and below-quality outcomes. Numerical thresholds remain proposed pending calibration. **Round 12 scope note (D59):** use the golden-brief reference plans as the Stage 0/PL-20 benchmark and provisional-preset evidence, without replacing architect calibration. |
+| PL-14 | Engine/runtime contract / Sol | PL-10, PL-11, PL-12, PL-13 | G-DESIGN; eligible for assessment brief, no probe | — | todo | `knowledge/specs/engine-runtime.md`. Candidate baseline, seam, runtime/fallback options, fixtures, measurement and stop criteria; assumptions measured or limitations recorded; no executable probe in this bucket. |
+| PL-15 | Project data and exports contract / Sol | PL-10, PL-11, PL-14 | G-DESIGN; eligible after dependencies | — | todo | `knowledge/specs/project-data-and-exports.md`. Worked save/edit/reopen and portable roundtrip; exact saved geometry, stale brief, malformed/newer schema and wall/flex/unit mapping. |
+| PL-20 | Geometry/access feasibility spike / Sol | PL-10, PL-11, PL-12, PL-13, PL-14 | G-SPIKE; after contracts and explicit execution scope | — | todo | `spike/geometry-feasibility/`. Raw counts/timings and rendered cases; independently verify bounds, wall allowances, doors/routes, front arrival, dimensions and flex; fresh Sol review. **Round 12 scope note (D57/D59):** include the golden-brief benchmark and emit/inspect the real stage 4/5/6 intermediates, not reconstructed after-the-fact views. |
+| PL-21 | Search/runtime spike / Sol | PL-20, PL-13, PL-14 | G-SPIKE; after PL-20 review and execution scope | — | todo | `spike/search-runtime/`. Setup-inclusive timing, retained results at expiry, seed/environment, distinct counts and responsiveness; fresh Sol review. |
+| PL-22 | Evidence judgment and baseline decision / Luna persists Astra judgment | PL-20, PL-21, PL-15 | G-SPIKE and human go/no-go | — | todo | Update `knowledge/specs/engine-runtime.md` and `ARCHITECTURE.md` from raw evidence. Persist Astra pass/rework/no-go after fresh review; bring product compromises to user. |
+| PL-30 | Browser foundation and domain records / Luna | PL-15, PL-22 | G-BUILD | — | todo | Proposed `src/domain`, `src/app`. Starts in target environment; representative records serialize; invalid input rejected. |
+| PL-31 | Geometry/access validator / Sol | PL-30, PL-10, PL-11 | G-BUILD; affected G-CALIBRATION | — | todo | Proposed `src/geometry`, `src/validation`. Good/bad fixtures establish rules; independently check wall/area, arrival, private routes and trapped flex. |
+| PL-32 | Intent and strategy model / Sol | PL-30, PL-11, PL-12 | G-BUILD; affected G-CALIBRATION | — | todo | Proposed `src/intent`, `src/strategies`. Contracts yield valid intent or explicit incompatibility; no invented rooms; priorities and local locks preserved. |
+| PL-33 | Layout solver / Sol | PL-31, PL-32 | G-BUILD; affected G-CALIBRATION | — | todo | Proposed `src/solver`. Candidates pass independent validator; hard choices, D21–23/D48 tradeoffs and retries match contracts; invalid geometry excluded. |
+| PL-34 | Search, ranking and qualification / Sol | PL-33, PL-13, PL-14 | G-BUILD, G-CALIBRATION | — | todo | Proposed `src/search`, `src/qualification`. Benchmarks pass; duplicates excluded; fewer/zero results truthful; expiry retains results; no timeout-as-proof; limits recorded. |
+| PL-40 | Workflow/state/copy proposal / Luna persists Astra brief | PL-10, PL-11, PL-12, PL-13, PL-14, PL-15, PL-22 | Eligible as proposal after dependencies; G-UX applies before adopting genuinely new interface, copy or workflow choices | — | todo | Reviewable proposal for seven stages, graph, results/failures, variants, projects and handoff, informed by existing mockups. Map accepted workflow; isolate genuinely new choices for G-UX; proposal is not approved production UI. **Round 12 scope note (D56/D60):** Stage 4 must show a labelled Hallway and colour-independent zone labels; Release 1 is read-only for stages 3-6 and includes the release-scope cut. |
+| PL-41 | Brief and graph controls / Luna | PL-30, PL-32, PL-40 | G-BUILD, G-UX | — | todo | Proposed `src/ui/brief`, `src/ui/graph`. Counts/attachments and custom settings work; graph position distinct from floorplan position; invalidation and Apply to Brief work. **Round 12 scope note (D60):** graph view is read-only in Release 1; graph editing, Required/Preferred overrides, and Apply to Brief move to Release 2. |
+| PL-42 | Results and plan-view UI / Luna with Sol integration | PL-34, PL-41 | G-BUILD, G-UX | — | todo | Proposed `src/ui/results`, `src/ui/plan-view`. Display matches geometry; local locks hold; broad exploration for conflicts; failures, qualification and explanations truthful. |
+| PL-43 | Durable projects / Sol | PL-30, PL-15 | G-BUILD and applicable storage decisions | — | todo | Proposed `src/storage`, `src/project-file`. Save/edit/regenerate/reopen retains prior geometry; roundtrip preserves data/units; malformed input or storage failure preserves data. May proceed independently of PL-41/42 after domain stability. |
+| PL-50 | SVG/PDF exports / Luna | PL-42, PL-43, PL-15 | G-BUILD, G-UX | — | todo | Proposed `src/export/svg`, `src/export/pdf`. Rendered review agrees with saved geometry, units, dimensions and labels; flex identifiable; shared walls counted once. **Round 12 scope note (D60):** SVG stays in Release 1; PDF moves to Release 2. |
+| PL-51 | DXF export / Sol | PL-43, PL-50, PL-15 | G-BUILD | — | todo | Proposed `src/export/dxf`. Independent parser/CAD inspection; editable entities, scale/units and saved geometry traceability; no BIM claim. |
+| PL-52 | Integrated acceptance / independent Sol reviewer | PL-34, PL-41, PL-42, PL-43, PL-50, PL-51 | G-BUILD and affected calibration approval | — | todo | Integrated benchmark/report covers brief-to-export, variants, reopen, negative/timeout/zero-result cases, measured benchmarks and limits. |
+| PL-53 | Delivery and operating handoff / Luna | PL-52 | G-RELEASE only for actual deployment | — | todo | Run/export/recovery instructions; fresh session launches actual artifact and reopens exported project. State deployed URL/revision only after authorized deployment. |
+
+## Current baton
+
+PL-00/01/02 passed fresh independent review by `luna_workflow_review` on 2026-10-05; the evidence and validation limitation are recorded in their rows. PL-10 is the next eligible authoring bucket; no PL-10 work is started here. The TypeScript/integer-mm/slicing-tree/worker/Node baseline remains proposed pending Stage 0 evidence. Existing Drawing-Set Sheet mockups on `design/ui-mockups` are a separate, unreviewed UI exploration; they provide context for PL-40 only and are not solver or implementation evidence.
+
+## Branch / checkout record
+
+| Buckets | Planned branch | Actual checkout |
+| --- | --- | --- |
+| PL-00 | Reuse current checkout for project policy files; user-kit edits are outside Git | `design/ui-mockups`, shared working tree; kit and policy artifacts exist; no commit or merge claimed |
+| PL-01, PL-02 | Reuse current checkout for this authorized documentation pass | `design/ui-mockups`, shared working tree; documentation artifacts present; mockup files untouched; no commit or merge claimed |
+| Round 12 recording, orchestration roster | Reuse a docs branch | `docs/round12-orchestration` off `main`; committed 2026-10-05 |
+| PL-10–15, PL-20–22, PL-30–34, PL-40–43, PL-50–53 | One coherent branch per implementation/review bucket, selected at dispatch | Not started; no branch or checkout claimed |

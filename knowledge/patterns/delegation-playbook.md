@@ -5,61 +5,53 @@ tags: [pattern, delegation, workflow]
 
 # Delegation Playbook
 
-Our default way of splitting work across models and budgets. See [[README]] for the index.
-
-## The idea
-
-**One rule above all: Opus is the brain and never executes.** Opus thinks, decomposes, writes
-briefs, routes work, and judges results. Every keystroke of actual work goes to a cheaper model.
-Two budgets — Claude (Opus/Sonnet/Haiku) and OpenAI (Codex Terra/Luna) — and code is pushed to
-Codex to spare the Claude budget for orchestration + review.
+Canonical agent roles and routing for PlanLab. Project instructions and workflow skills point
+here; change this roster here first.
 
 ## Roster
 
-- **Opus** (Claude) — brain only: understand, decompose, write briefs, pick the executor, read
-  results and judge (pass/fail, bug/not, merge/no-merge), surface human gates, synthesize
-  reviews. Never writes product code, runs command suites, or edits files as execution.
-- **Codex Terra** (OpenAI) — heavy coder: hard/architectural code, tricky logic, concurrency,
-  big refactors.
-- **Codex Luna** (OpenAI) — fast coder: well-scoped buckets with a tight brief (copy, tests,
-  N+1, an index migration).
-- **Sonnet** (Claude) — Claude-side hands: run command sequences (git/tests/migrate) and report
-  raw results, edit docs/board/memory/handoff, review Codex's code (independence), integration
-  verification, codebase research.
-- **Haiku** (Claude) — trivia: status checks, one-line edits, lookups, formatting, gather-a-list.
+- **Opus 5.5 (Claude Code)** — orchestrator. Takes the user's task, plans it, splits it into
+  self-contained briefs, dispatches workers, judges their results and reports back. Makes small
+  edits itself (briefs, board notes, rule changes) when that is quicker than a dispatch.
+- **Haiku** — trivial mechanical work: lookups, file sweeps, renames, formatting, simple checks.
+- **Sonnet** — routine-to-moderate work: documentation, scoped code, tests, and reviews.
+- **Luna** — Codex worker (`gpt-5.6-luna`, effort max) for routine execution. Dispatch through the
+  `luna` agent (`.claude/agents/luna.md`) or `bash scripts/codex-worker.sh gpt-5.6-luna max < brief`.
+- **Sol** — complex engineering (solver/geometry, difficult debugging, large refactors) when
+  available; otherwise Opus or Sonnet takes it.
+- **Astra** — retired from the live loop (2026-10-05); Opus plans. Older records that say
+  "Astra" mean the planner role.
+- **DeepSeek Flash** — manual, portable external fallback when a native executor is unavailable.
+  The human or caller must invoke it and carry its response back.
 
-## Routing
+## Routing and review
 
-1. Thinking / deciding / judging → Opus only.
-2. Writing/changing product code → Codex (Terra if hard, Luna if well-scoped). Max offload; code
-   stays off the Claude budget.
-3. Running commands, editing docs/board/memory, codebase research → Sonnet (Haiku if trivial).
-4. Reviewing Codex's code → Claude/Sonnet, never Codex (the reviewer is never the author).
-5. Verification → the executor runs it and reports raw results; Opus judges.
+1. The user gives Opus a task. Opus plans it and writes a self-contained brief per bucket
+   (bucket, scope, allowed files, checks, return format).
+2. Route by difficulty: Haiku for trivial, Sonnet or Luna for routine, Sol (or Opus/Sonnet) for
+   complex engineering. Independent briefs may run in parallel.
+3. Review consequential changes with a fresh agent that did not author them (e.g. Luna authors,
+   Sonnet reviews). Self-checks are not independent review.
+4. Opus records the review outcome and evidence before marking a bucket done, and reports to the
+   user. Commits/merges only when the user asks.
+5. DeepSeek Flash is the manual fallback when the matching native worker cannot be dispatched.
 
-## The loop (once the human says "go")
+## Manual fallback brief checklist
 
-Opus briefs → Codex writes the whole bucket on a branch → Opus verifies (Sonnet-run checks +
-reading the diff) → Opus merges → repeat. The human is pinged only for a hard gate or a genuine
-blocker.
+- Exact bucket, requested outcome, scope, and allowed files.
+- Relevant specification and its revision/date.
+- Current diff or working-tree context, plus prior attempts and results.
+- Requested checks and the evidence to return.
+- Required response format, handoff destination, and stop conditions.
+- Invoke DeepSeek Flash manually; do not assume native dispatch or an API/model identifier.
 
-## Hard human gates (always need the human's explicit yes)
+## Human gates
 
-- Money / payments (Stripe, pricing, spending, any paid-provider or secret seam).
-- Product / UX / copy decisions (what to build, how it reads).
-
-Tune this list per project in `AGENTS.md` — those are the seams you never merge solo.
-
-## Not hard-gated, handled with extra care
-
-DB migrations / schema changes and auth / security-boundary merges go through the normal
-verify-then-merge loop (no blocking human gate), BUT Opus applies extra rigor: run the migration
-against a local DB plus the full security/DB test suite, confirm fully green, and post a heads-up
-before the prod merge (a notification, not a stop). Never merge on anything less than fully green.
+Apply the project-specific gates in `AGENTS.md`. A gate blocks only work that depends on that
+decision. Continue independent unblocked buckets. A planning report can clarify the decision
+needed; it does not authorize implementation or a gated action.
 
 ## Related
 
-- [[orchestrator-and-subagents]] — the Opus/Sonnet execution loop this playbook's routing rules
-  plug into.
+- [[orchestrator-and-subagents]] — bucket execution and handoff loop.
 - [[README]] — knowledge base home.
-

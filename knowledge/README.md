@@ -11,8 +11,8 @@ The **home note** for how we build this. Plain markdown in the repo (also openab
 ## How we work (patterns & playbooks)
 
 - [[BOARD]] — **the live work queue**: what to work on now, who owns it, and status.
-- [[orchestrator-and-subagents]] — Opus orchestrates, fresh Sonnet subagents execute each step.
-- [[delegation-playbook]] — who does what: Opus brains-only, Codex codes, Sonnet/Haiku the Claude-side hands.
+- [[orchestrator-and-subagents]] — how planned buckets are executed and reviewed.
+- [[delegation-playbook]] — canonical agent roster, routing, independence, and manual fallback rules.
 
 ## The project
 

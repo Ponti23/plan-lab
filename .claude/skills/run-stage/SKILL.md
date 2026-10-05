@@ -1,56 +1,46 @@
 ---
 name: run-stage
-description: Use to autonomously execute the active plan in this repo, one step at a time via fresh Sonnet subagents, until the stage is done or a step is blocked. Trigger with /run-stage, "run the stage", "continue the stage", "execute the plan till blocked".
+description: Execute the next unblocked PlanLab bucket through its required verification and independent review, stopping only affected work at a gate or blocker.
 ---
 
 # Run Stage
 
-Drive the active plan to completion as the **orchestrator** (stay on Opus). Each step runs in
-a **fresh Sonnet subagent** — that fresh context window is the "clear" we used to do by hand.
-Only stop when a step is BLOCKED (needs a human) or FAILED (needs reasoning).
+Drive authorized work through the active plan in dependency order. Use
+`knowledge/patterns/delegation-playbook.md` for agent roles and fallback.
 
-**Announce at start:** "Running the stage via subagent loop. Orchestrator on Opus, steps on Sonnet."
+**Astra entry guard:** when this skill runs in Astra, return only the next eligible bucket's
+self-contained brief/report in the response, then stop. The authorized executor persists it and
+executes the bucket; Astra does not continue the run loop.
 
-## Resume ritual (do this first, every time)
+## Resume
 
-1. Read `HANDOFF.md` → get the **active plan** path + the current bucket.
-2. Open the active plan (`DELEGATION-PLAN.md`) and `knowledge/BOARD.md` → list the unchecked
-   `- [ ]` steps / `todo` buckets, in order.
-3. `git log --oneline -5` → confirm the last committed checkpoint matches HANDOFF.
-4. If HANDOFF says "Blocked on …", surface that blocker and **stop** — don't dispatch. The
-   user must clear it (paste a secret, run an interactive command, provide a test fixture) first.
+1. Read `HANDOFF.md`, `DELEGATION-PLAN.md`, `knowledge/BOARD.md`, and
+   `knowledge/PROGRESS.md`. Inspect current Git state read-only.
+2. Select the first bucket whose dependencies are satisfied. Identify its scope, checks, review
+   requirement, and any human gate before dispatch.
+3. A gate blocks only rows that depend on it. Mark those `needs-human`; continue independent,
+   authorized buckets.
 
-## The loop
+## Execute one bucket at a time
 
-For each unchecked step, in order:
+1. For planning or judgment, request an Astra report or brief. Astra is read-only and returns
+   findings in its response; the executor records project state where authorized.
+2. Dispatch routine work to a fresh Luna and complex engineering/solver work to Sol. If native
+   dispatch is unavailable, use the manual DeepSeek Flash fallback described in the playbook.
+   Provide the full bucket, relevant specification, exact scope, verification, and result format.
+3. The author performs the bucket's requested checks and reports changed files, results, and
+   remaining issues. Do not treat an Astra report as execution or verification.
+4. Send consequential changes to a fresh independent reviewer who did not author them. Resolve
+   findings and record the review result before marking the bucket done. Do not self-review as
+   the independent reviewer.
+5. Update plan/queue/handoff/progress only within the task's authorization. Do not infer commit,
+   push, merge, install, or deployment permission from a completed bucket.
 
-1. **Dispatch one subagent** (`subagent_type: general-purpose`, **`model: sonnet`**) with a
-   self-contained prompt:
-   - The full step text from the plan (copy it — the subagent has no conversation context).
-   - Pointers to the files it touches, and the relevant spec section.
-   - Instruction: do the work, **run that step's verification**, and on success **commit**.
-   - Instruction: report back exactly one of — `DONE: <what + verification result + commit
-     hash>` / `BLOCKED: <exactly what's needed from the human>` / `FAILED: <error>`.
-2. **On DONE:** check the box in the plan + flip the BOARD bucket to `done` with the SHA,
-   update HANDOFF's "Next step", commit the bookkeeping. Continue.
-3. **On BLOCKED:** stop the loop. Leave the box unchecked, bucket `blocked`. Update HANDOFF
-   "Blocked on" with the exact ask. Tell the user precisely what you need, then end the turn.
-4. **On FAILED:** stop the loop. Report the error verbatim. Don't retry blindly — this is the
-   seam where the user may want Opus to debug it.
+## Stop and report
 
-When all boxes are checked: update HANDOFF to mark the stage complete + record any artifacts
-(URLs, IDs), commit, and report.
-
-## Rules
-
-- **One subagent per step** (max context freshness). Don't batch unless the user asks.
-- **Never paste secrets into the repo or a subagent prompt.** A step needing a key/URL is a
-  BLOCKED — ask the user, don't invent or hardcode values.
-- **Don't run interactive commands** (first `fly launch`/`deploy`, anything that opens a
-  browser or waits on a prompt). Those are BLOCKED → hand back with the exact command.
-- **Opus never writes product code.** Coding steps route to Codex (Terra hard / Luna scoped)
-  per `knowledge/patterns/delegation-playbook.md`; the subagent loop here is for Sonnet-side
-  hands. **Hard gates** (see AGENTS.md) stop for the user — never merge those solo.
-- HANDOFF + checkboxes + BOARD are the durable resume state — keep them accurate after every
-  step. A `/compact` mid-run is safe; all state lives in those files.
-
+- Missing human choice, secret, or interactive action: leave dependent work at `needs-human`,
+  state the exact requirement, and continue unrelated work.
+- Failed check or unresolved material review finding: leave the bucket open and report the
+  evidence and next fix needed.
+- All dependencies, checks, and independent review are satisfied: record the actual outcome and
+  proceed to the next unblocked bucket.

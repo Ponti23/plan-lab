@@ -1,18 +1,21 @@
 # HANDOFF — resume state
 
 **Active plan:** [`DELEGATION-PLAN.md`](./DELEGATION-PLAN.md) · **Live queue:** [`knowledge/BOARD.md`](./knowledge/BOARD.md) · **Resume:** [`knowledge/PROGRESS.md`](./knowledge/PROGRESS.md)
-**Status:** Product design confirmed 2026-10-05; planning docs filled; Stage 0.1 spike brief ready for Codex Terra.
+**Status:** Product design D01–D55 confirmed 2026-10-05. PL-00/01/02 passed fresh independent review by `luna_workflow_review` on 2026-10-05; evidence is recorded on the board. The next eligible authoring bucket is PL-10.
 
 ## Last checkpoint
-- docs/stage0-plan: planning docs filled (doc-only).
+- Current checkout: `design/ui-mockups` at the shared working tree; PL-00/01/02 docs are reviewed. No commit or merge is claimed.
+- Existing Drawing-Set Sheet mockups remain separate, unreviewed UI exploration. Their files were not changed in this docs pass and they provide no solver evidence.
+- Engineering baseline in `ARCHITECTURE.md` §6 is still proposed pending measured Stage 0 evidence.
 
 ## Next step (when you're back)
-1. Hand bucket 0.1 brief to Codex Terra on branch `spike/solver`.
-2. Opus + user judge 0.2.
+1. Round 12 (D56–D60) is recorded and independently reviewed (2026-10-05).
+2. Start PL-10: Opus briefs, Luna/Sonnet drafts `knowledge/specs/dimensions-and-briefs.md` per the board row and its Round 12 notes, then a separate reviewer checks it.
 
 ## Notes for the next session
-- Opus never executes code; route coding to Codex (Terra hard / Luna scoped), commands/verify to Sonnet.
-- Engine stack proposed, not final until 0.2 go.
+- Follow the [delegation playbook](knowledge/patterns/delegation-playbook.md): Opus orchestrates; Haiku/Sonnet/Luna execute by difficulty; Sol handles complex engineering. A blocked bucket does not stop independent authorized work.
+- Stage 0 execution scope is tracked by G-SPIKE in `DELEGATION-PLAN.md`; this docs request did not start a probe.
+- Do not report future `knowledge/specs/`, `spike/`, `engine/` or `src/` paths as existing artifacts.
 
-<!-- Blocked on: <exactly what's needed from the human> — /run-stage stops when this line is present -->
+No active blocker is recorded. Record any blocker against its specific board bucket and continue other eligible work.
 
