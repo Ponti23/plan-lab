@@ -22,6 +22,5 @@ Shared work queue for this repo. **Opus plans + fills this board + delegates + v
 
 | # | Bucket | Best agent | Owner | Status | Branch |
 |---|--------|-----------|-------|--------|--------|
-| 0.1 | {{first bucket}} | luna | — | todo | — |
-| 0.2 | {{judge / gate}} **(HARD GATE)** | opus-plan | — | todo | — |
-
+| 0.1 | Headless solver spike (see DELEGATION-PLAN 0.1) | terra | — | todo | spike/solver |
+| 0.2 | Judge spike — go/no-go **(HARD GATE)** | opus-plan | — | blocked (on 0.1) | — |

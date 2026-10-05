@@ -1,6 +1,6 @@
 # plan-lab — agent operating rules
 
-{{PROJECT_ONELINER}} See [ARCHITECTURE.md](ARCHITECTURE.md) for the full spec.
+PlanLab generates dimensioned, architecturally sensible single-storey house concepts (rooms, walls, doors, circulation) from a brief, for architects to refine in CAD. Product design: [plan-lab-astra-plan.md](plan-lab-astra-plan.md) (D01–D55, confirmed 2026-10-05). See [ARCHITECTURE.md](ARCHITECTURE.md) for the full spec.
 
 ## Current state — read these first when picking up a session
 
@@ -17,17 +17,17 @@
   code → Codex (Terra hard / Luna fast); commands / doc-edits / review / research → Sonnet
   (Haiku for trivia). Opus decomposes, briefs, judges, merges. **Never ask the user to switch models.**
 - **Human hard-gates.** Money/payments and product/UX/copy decisions stop for the user. For this
-  project that means: {{HARD_GATES}}. Never merge those solo.
+  project that means: any paid provider/secret (none expected); product/UX/copy — stage UI, labels, explanation & failure-diagnostic wording; room-size preset values, Near thresholds, and quality/diversity thresholds (calibration against architect-reviewed examples); Stage 0 go/no-go; first deploy. Never merge those solo.
 - **Ponytail default** — laziest solution that actually works; YAGNI; stdlib/native before deps.
-- **Product LLM (pipeline)** — {{PRODUCT_LLM}}. (This is the *product's* API. The Opus/Sonnet/Codex
+- **Product LLM (pipeline)** — None — v1 is rule-driven; no LLM or AI service in the product (D50). (This is the *product's* API. The Opus/Sonnet/Codex
   above refer to the *build agents*, unchanged.)
 - **Design work** goes through the `impeccable` skill.
 
 ## Repo facts (not folklore)
 
-- **Stack:** {{STACK}}
-- **Deploy:** {{DEPLOY}}
-- **Secrets** live in a local `.env` (never committed): {{SECRETS}}
+- **Stack:** TypeScript; zero-dependency engine runnable in Node and a browser Web Worker; integer-mm geometry; `node:test`. UI framework chosen at Stage 3. (Proposed, pending Stage 0 — see ARCHITECTURE.md §6)
+- **Deploy:** Not yet — static site host chosen at Stage 4 (no backend).
+- **Secrets** live in a local `.env` (never committed): none needed for v1
 
 ## Where operating memory lives
 

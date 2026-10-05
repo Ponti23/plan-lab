@@ -4,37 +4,37 @@ Living design record for the grilling session begun on 2026-10-03 (Australia/Per
 
 ## Resume checkpoint — 2026-10-05
 
-**Current position:** Round 11 is accepted. The user accepted all five Q50–Q54 recommendations, recorded as D51–D55. The interview rounds are complete. The consolidated product design below is presented for the user's final confirmation of shared understanding; that final confirmation has not yet been given.
+**Current position:** Round 11 is accepted. The user accepted all five Q50–Q54 recommendations, recorded as D51–D55. The interview rounds are complete. The consolidated product design below was presented for the user's final confirmation of shared understanding; that confirmation was **given on 2026-10-05** (the user replied "lets go with your suggestions" to the proposal to confirm the design and proceed).
 
 **Accepted record:** decisions D01–D55 below, applying the latest clarifications where earlier positions were superseded. Decision IDs (`D`) and question numbers (`Q`) are separate sequences. Q45–Q49 are accepted in D46–D50; Q50–Q54 are accepted in D51–D55.
 
-**Next action:** Obtain final confirmation of `Complete product design — awaiting final confirmation`, including its explicit deferrals. If the user corrects the design, update the same living document. Do not restart settled rounds or infer implementation authorization from design confirmation.
+**Next action:** Run the Stage 0 solver spike via the delegation board (`DELEGATION-PLAN.md`, `knowledge/BOARD.md`), then the Stage 0 go/no-go judgement. If the user corrects the design, update the same living document. Do not restart settled rounds.
 
-**Work authorization:** design discussion and maintaining this Markdown plan only. No application implementation, scaffolding, dependency installation, or deployment has been authorized. Final shared-understanding confirmation is still outstanding. The repository check recorded below was read-only and is dated; technical stack and solver choices remain open.
+**Work authorization (updated 2026-10-05):** final shared-understanding confirmation is given. Authorized now: planning docs, the proposed engineering baseline (see `ARCHITECTURE.md` section 6, pending the Stage 0 go/no-go), and drafting Stage 0. Running the Stage 0 spike and any further implementation proceed via the delegation board in `DELEGATION-PLAN.md` / `knowledge/BOARD.md`. Deployment is not authorized (first deploy is a hard gate). The repository check recorded below was read-only and is dated.
 
 **Continuation method:** continue the decision tree in rounds, asking independent questions whose prerequisites are settled. Give a concrete recommendation with each numbered question, wait for answers, then update accepted decisions and recompute the next round. Keep user-facing rounds to at most five questions. Research discoverable facts rather than asking the user to supply them; use read-only fact-finding subagents when available as directed by the grilling skill. Do not assume missing answers mean agreement. End the session only when the design branches are resolved or explicitly deferred and the user confirms shared understanding.
 
 **Communication preferences:** direct, concise, actionable; indicate the round/progress; end with one next action under two minutes. Preserve full technical evidence in the record. If the destination has the grilling skill, its original path on this machine is `C:\Users\ponti\.codex\skills\grilling\SKILL.md`; the method above also supports continuing in another chat without that local skill.
 
-**Remaining work:** final shared-understanding confirmation only for this product-design interview. Agreed calibration work and proposed engineering deferrals are listed explicitly in section 5 of the consolidated design. Numerical feasibility and performance have not been established; this is a product design, not a fully parameterized engineering specification.
+**Remaining work:** none for the product-design interview (confirmed 2026-10-05). Agreed calibration work and proposed engineering deferrals are listed explicitly in section 5 of the consolidated design. Numerical feasibility and performance have not been established; this is a product design, not a fully parameterized engineering specification.
 
 **Portable record:** the original attachments and example images informed the decisions, but the accepted decisions and pending round are recorded here. On another machine or in a chat without filesystem access, attach this file. Continue editing the same named living document; no other project files need modification to resume the interview.
 
 ## Status and authority
 
-- Product design assembled from 55 accepted decisions; final shared-understanding confirmation is pending. This is not implementation authorization or a fully parameterized engineering specification.
-- The user explicitly requested this Markdown record and updates each turn. Application code is not being changed.
+- Product design assembled from 55 accepted decisions; final shared-understanding confirmation given 2026-10-05. Deferrals listed in section 5 remain deferred. No implementation defaults are silently chosen beyond the proposed engineering baseline in `ARCHITECTURE.md`. This is still not a fully parameterized engineering specification.
+- The user explicitly requested this Markdown record and updates each turn. Application work now proceeds via the delegation board (see Resume checkpoint).
 - Record accepted decisions separately from interpretations, recommendations, and unanswered questions.
 - The supplied `PLANLAB_V1_SYSTEM_DESIGN.md` and workflow images are design references. Their stated "locked" decisions are not automatically reaffirmed by this session.
-- The complete product design and explicit limitations are assembled below for the user's final confirmation of shared understanding.
+- The complete product design and explicit limitations are assembled below and were confirmed by the user on 2026-10-05.
 
 ## Product intent
 
 Generate architecturally sensible single-storey residential concepts with meaningful variation. The illustrated workflow is: provide area → provide rooms → relationships → zones/areas → room placement → walls and hallways → architect refinement.
 
-## Complete product design — awaiting final confirmation
+## Complete product design — confirmed 2026-10-05
 
-This is the consolidated product design from accepted decisions D01–D55. The decision history below remains the detailed record. The product rules in sections 1–5 are accepted individually; final confirmation of the complete design is pending. Section 5 distinguishes agreed calibration work from remaining engineering choices proposed for deferral. No technical defaults have been silently selected.
+This is the consolidated product design from accepted decisions D01–D55. The decision history below remains the detailed record. The product rules in sections 1–5 are accepted individually, and the complete design was confirmed by the user on 2026-10-05. Deferrals remain deferred. Section 5 distinguishes agreed calibration work from remaining engineering choices proposed for deferral. No implementation defaults have been silently selected beyond the proposed engineering baseline in `ARCHITECTURE.md`.
 
 ### 1. Product, user, and workflow
 
@@ -491,7 +491,7 @@ A read-only fact-finding subagent inspected the workspace under the grilling ski
 
 ## Engineering follow-up record — no additional interview round
 
-The product decisions below are already settled where decision IDs are cited. Their unresolved numerical/technical details are covered by the explicit deferrals in the complete design. Final shared-understanding confirmation remains pending.
+The product decisions below are already settled where decision IDs are cited. Their unresolved numerical/technical details are covered by the explicit deferrals in the complete design. Final shared-understanding confirmation was given on 2026-10-05.
 
 - Family overlap can produce differently labeled duplicates.
 - Graph connectivity alone cannot establish usable door access or circulation.
@@ -565,3 +565,7 @@ The user accepted all five Q45–Q49 recommendations. Recorded D46–D50. Consol
 ### 2026-10-05 — Round 11 accepted; complete design presented for confirmation
 
 The user accepted all five Q50–Q54 recommendations. Recorded D51–D55 and assembled the complete product design from D01–D55 in this same file. Updated the resume checkpoint and current-state references so no interview question remains marked unanswered. Listed accepted calibration work and proposed engineering deferrals explicitly rather than inventing preset numbers, a solver, quality thresholds, or storage details. The interview rounds are complete; final confirmation of the consolidated design and deferrals is pending. No application implementation performed.
+
+### 2026-10-05 — design confirmed; engineering handoff
+
+The user gave final shared-understanding confirmation of the complete product design (D01–D55) and its explicit deferrals, replying "lets go with your suggestions" to the proposal to confirm and proceed. Work authorization is now: planning docs, the proposed engineering baseline, and drafting Stage 0. Running the Stage 0 spike and any further implementation proceed via the delegation board in `DELEGATION-PLAN.md` / `knowledge/BOARD.md`. `ARCHITECTURE.md`, `AGENTS.md`, `DELEGATION-PLAN.md`, `knowledge/BOARD.md`, `HANDOFF.md`, and `knowledge/PROGRESS.md` were filled. No product decision was changed.
