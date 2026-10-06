@@ -3,7 +3,8 @@
 **Bucket:** PL-10  
 **Author:** Luna  
 **Review:** PASS — Opus 5.5, 2026-10-05, after one rework round (GB-03 sum fixed; orientation-free rule added)  
-**Status:** proposed contract; no numeric value below is calibrated or final
+**Status:** proposed contract; no numeric value below is calibrated or final  
+**Change note 2026-10-06:** the section 5 rows for Master, Bedroom, Theatre, Study, Garage single, Garage double and Family Core were replaced with room sizes the user approved in chat on 2026-10-06 (sources: `room-size-evidence.md` section 6.3/8 and `external-research-2026-10-06.md`). Sections 5.1/5.2 were re-run; Fixture A/B and GB-01..03 prechecks are unchanged (all still PASS, no room out of range). Other rows are unchanged.
 
 This contract turns D51-D60 and the proposed engineering baseline into an
 engine-facing brief and dimension vocabulary. It is deliberately usable by
@@ -172,21 +173,27 @@ line makes a car-fit claim.
 
 | Catalog room | Minimum clear W × D / area | Preferred clear W × D / area | Maximum clear W × D / area | Aspect ratio limit | Provenance and status for every number in the row |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Master | `3000 × 3000 mm / 9.00 m²` | `3600 × 3500 mm / 12.60 m²` | `4500 × 4500 mm / 20.25 m²` | `1.00–1.50` | `D59`, `M-AIRA`, `M-AMIRA`; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Bedroom | `2700 × 2700 mm / 7.29 m²` | `3100 × 3000 mm / 9.30 m²` | `4000 × 4000 mm / 16.00 m²` | `1.00–1.40` | `D59`, `M-AIRA`, `M-AMIRA`; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Master Ensuite | `1800 × 2400 mm / 4.32 m²` | `2200 × 2800 mm / 6.16 m²` | `3000 × 3500 mm / 10.50 m²` | `1.00–1.80` | `D59`/Meticon occurrence evidence only; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Master WIR | `1800 × 2200 mm / 3.96 m²` | `2200 × 3000 mm / 6.60 m²` | `3000 × 4000 mm / 12.00 m²` | `1.00–2.00` | `D59`/D33 occurrence evidence only; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Shared Bathroom | `2000 × 2400 mm / 4.80 m²` | `2400 × 3000 mm / 7.20 m²` | `3000 × 3600 mm / 10.80 m²` | `1.00–1.80` | `D59`, `M-AIRA`, `M-AMIRA` occurrence evidence; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. |
-| WC | `1000 × 1800 mm / 1.80 m²` | `1200 × 2200 mm / 2.64 m²` | `1800 × 2600 mm / 4.68 m²` | `1.00–2.50` | `D59` occurrence evidence only; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Family Core (shared Kitchen/Dining/Living) | `5000 × 4000 mm / 20.00 m²` | `6500 × 5000 mm / 32.50 m²` | `9000 × 6000 mm / 54.00 m²` | `1.00–2.25` | `D59`, `M-AIRA`, `M-AMIRA`; component dimensions are source anchors; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Garage — single geometry preset | `3500 × 5500 mm / 19.25 m²` | `3600 × 6000 mm / 21.60 m²` | `4500 × 6500 mm / 29.25 m²` | `1.00–1.90` | `M-AIRA`; geometry placeholder around the listed single-garage sample; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Garage — double geometry preset | `5500 × 5500 mm / 30.25 m²` | `6000 × 6000 mm / 36.00 m²` | `7000 × 7000 mm / 49.00 m²` | `1.00–1.35` | `LEGACY`, `D59`, `M-AMIRA`; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Laundry | `1800 × 2000 mm / 3.60 m²` | `2200 × 2600 mm / 5.72 m²` | `3000 × 3500 mm / 10.50 m²` | `1.00–1.80` | `M-SVG` occurrence evidence; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Pantry | `1600 × 1800 mm / 2.88 m²` | `2000 × 2400 mm / 4.80 m²` | `2800 × 3200 mm / 8.96 m²` | `1.00–2.00` | `D56`, `M-SVG` occurrence evidence; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Study | `2200 × 2000 mm / 4.40 m²` | `3000 × 2400 mm / 7.20 m²` | `4000 × 3500 mm / 14.00 m²` | `1.00–2.00` | `M-AMIRA`, `M-ARTISAN`; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Theatre | `3500 × 4500 mm / 15.75 m²` | `4000 × 5500 mm / 22.00 m²` | `5000 × 8000 mm / 40.00 m²` | `1.00–2.25` | `M-ARTISAN`; two-storey source sample used only as a dimension seed; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Extra Family/Living | `3000 × 3000 mm / 9.00 m²` | `3500 × 4000 mm / 14.00 m²` | `5000 × 6000 mm / 30.00 m²` | `1.00–2.00` | `D34`, `D59`, `M-AMIRA` living-count evidence; **provisional — uncalibrated (G-CALIBRATION)**. |
-| Alfresco | `2500 × 3000 mm / 7.50 m²` | `3000 × 4500 mm / 13.50 m²` | `5000 × 7500 mm / 37.50 m²` | `1.00–3.00` | `D59`, `M-AMIRA`, `M-ARTISAN` outdoor-room samples; **provisional — uncalibrated (G-CALIBRATION)**. |
+| Master | `3000 × 3000 mm / 9.00 m²` | `3500 × 4000 mm / 14.00 m²` | `4300 × 5200 mm / 22.36 m²` | `1.00–1.50` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION). |
+| Bedroom | `2700 × 2700 mm / 7.29 m²` | `3000 × 3400 mm / 10.20 m²` | `4000 × 4000 mm / 16.00 m²` | `1.00–1.40` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION). |
+| Master Ensuite | `1800 × 2400 mm / 4.32 m²` | `2200 × 2800 mm / 6.16 m²` | `3000 × 3500 mm / 10.50 m²` | `1.00–1.80` | `D59`/Meticon occurrence evidence only; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| Master WIR | `1800 × 2200 mm / 3.96 m²` | `2200 × 3000 mm / 6.60 m²` | `3000 × 4000 mm / 12.00 m²` | `1.00–2.00` | `D59`/D33 occurrence evidence only; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| Shared Bathroom | `2000 × 2400 mm / 4.80 m²` | `2400 × 3000 mm / 7.20 m²` | `3000 × 3600 mm / 10.80 m²` | `1.00–1.80` | `D59`, `M-AIRA`, `M-AMIRA` occurrence evidence; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| WC | `1000 × 1800 mm / 1.80 m²` | `1200 × 2200 mm / 2.64 m²` | `1800 × 3200 mm / 5.76 m²` | `1.00–2.50` | `D59` occurrence evidence only; no source clear size; authoring placeholder; maximum long side raised 2600 to 3200 by user answer Q16 (2026-10-06) so a WC can share a strip depth with a Bedroom (at a 3200 long side the 2.50 aspect limit binds first: the short side must be at least 1280); **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| Family Core (shared Kitchen/Dining/Living) | `4000 × 5000 mm / 20.00 m²` | `5200 × 8400 mm / 43.68 m²` | `6500 × 9000 mm / 58.50 m²` | `1.00–2.25` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION). |
+| Garage — single geometry preset | `3500 × 5500 mm / 19.25 m²` | `3500 × 6000 mm / 21.00 m²` | `4500 × 6500 mm / 29.25 m²` | `1.00–1.90` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION); no car-fit claim. |
+| Garage — double geometry preset | `5500 × 5500 mm / 30.25 m²` | `5500 × 6000 mm / 33.00 m²` | `7000 × 7000 mm / 49.00 m²` | `1.00–1.35` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION); no car-fit claim. |
+| Laundry | `1800 × 2000 mm / 3.60 m²` | `2200 × 2600 mm / 5.72 m²` | `3000 × 3500 mm / 10.50 m²` | `1.00–1.80` | `M-SVG` occurrence evidence; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| Pantry | `1600 × 1800 mm / 2.88 m²` | `2000 × 2400 mm / 4.80 m²` | `2800 × 3200 mm / 8.96 m²` | `1.00–2.00` | `D56`, `M-SVG` occurrence evidence; no source clear size; authoring placeholder; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| Study | `2000 × 2200 mm / 4.40 m²` | `3000 × 3500 mm / 10.50 m²` | `3500 × 4000 mm / 14.00 m²` | `1.00–2.00` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION). |
+| Theatre | `3150 × 3500 mm / 11.03 m²` | `3600 × 4100 mm / 14.76 m²` | `4200 × 5200 mm / 21.84 m²` | `1.00–2.25` | user-approved 2026-10-06 from room-size-evidence.md + external research; provisional — uncalibrated (G-CALIBRATION); min lowered from 3500×4500 so it does not exceed the new preferred. |
+| Extra Family/Living | `3000 × 3000 mm / 9.00 m²` | `3500 × 4000 mm / 14.00 m²` | `5000 × 6000 mm / 30.00 m²` | `1.00–2.00` | `D34`, `D59`, `M-AMIRA` living-count evidence; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+| Alfresco | `2500 × 3000 mm / 7.50 m²` | `3000 × 4500 mm / 13.50 m²` | `5000 × 7500 mm / 37.50 m²` | `1.00–3.00` | `D59`, `M-AMIRA`, `M-ARTISAN` outdoor-room samples; **provisional — uncalibrated (G-CALIBRATION)**. Neither room-size-evidence.md nor the 2026-10-06 external research has data for this room; remains a design-rule placeholder. |
+
+Family Core note: from 2026-10-06 (user-approved, answer Q7 in
+`knowledge/specs/layout-templates.md`) the Family Core may be an L-shaped or
+stepped connected zone, not only a rectangle. The `4000 × 5000` / `5200 × 8400` /
+`6500 × 9000` figures are the bounding clear rectangle and area bound for that
+zone; composite-zone geometry rules are defined in the layout-templates spec.
 
 Custom rooms have no hidden preset. The brief supplies the name, clear
 minimum/preferred/maximum rectangle, derived areas, proportion interval, and
@@ -201,19 +208,19 @@ area equals its displayed sides.
 
 | Room | Minimum product ≤ preferred product ≤ maximum product | Result |
 | --- | --- | --- |
-| Master | `3000×3000=9.00 ≤ 3600×3500=12.60 ≤ 4500×4500=20.25 m²` | PASS |
-| Bedroom | `2700×2700=7.29 ≤ 3100×3000=9.30 ≤ 4000×4000=16.00 m²` | PASS |
+| Master | `3000×3000=9.00 ≤ 3500×4000=14.00 ≤ 4300×5200=22.36 m²` | PASS |
+| Bedroom | `2700×2700=7.29 ≤ 3000×3400=10.20 ≤ 4000×4000=16.00 m²` | PASS |
 | Master Ensuite | `1800×2400=4.32 ≤ 2200×2800=6.16 ≤ 3000×3500=10.50 m²` | PASS |
 | Master WIR | `1800×2200=3.96 ≤ 2200×3000=6.60 ≤ 3000×4000=12.00 m²` | PASS |
 | Shared Bathroom | `2000×2400=4.80 ≤ 2400×3000=7.20 ≤ 3000×3600=10.80 m²` | PASS |
-| WC | `1000×1800=1.80 ≤ 1200×2200=2.64 ≤ 1800×2600=4.68 m²` | PASS |
-| Family Core | `5000×4000=20.00 ≤ 6500×5000=32.50 ≤ 9000×6000=54.00 m²` | PASS |
-| Garage — single | `3500×5500=19.25 ≤ 3600×6000=21.60 ≤ 4500×6500=29.25 m²` | PASS |
-| Garage — double | `5500×5500=30.25 ≤ 6000×6000=36.00 ≤ 7000×7000=49.00 m²` | PASS |
+| WC | `1000×1800=1.80 ≤ 1200×2200=2.64 ≤ 1800×3200=5.76 m²` | PASS |
+| Family Core | `4000×5000=20.00 ≤ 5200×8400=43.68 ≤ 6500×9000=58.50 m²` | PASS |
+| Garage — single | `3500×5500=19.25 ≤ 3500×6000=21.00 ≤ 4500×6500=29.25 m²` | PASS |
+| Garage — double | `5500×5500=30.25 ≤ 5500×6000=33.00 ≤ 7000×7000=49.00 m²` | PASS |
 | Laundry | `1800×2000=3.60 ≤ 2200×2600=5.72 ≤ 3000×3500=10.50 m²` | PASS |
 | Pantry | `1600×1800=2.88 ≤ 2000×2400=4.80 ≤ 2800×3200=8.96 m²` | PASS |
-| Study | `2200×2000=4.40 ≤ 3000×2400=7.20 ≤ 4000×3500=14.00 m²` | PASS |
-| Theatre | `3500×4500=15.75 ≤ 4000×5500=22.00 ≤ 5000×8000=40.00 m²` | PASS |
+| Study | `2000×2200=4.40 ≤ 3000×3500=10.50 ≤ 3500×4000=14.00 m²` | PASS |
+| Theatre | `3150×3500=11.03 ≤ 3600×4100=14.76 ≤ 4200×5200=21.84 m²` | PASS |
 | Extra Family/Living | `3000×3000=9.00 ≤ 3500×4000=14.00 ≤ 5000×6000=30.00 m²` | PASS |
 | Alfresco | `2500×3000=7.50 ≤ 3000×4500=13.50 ≤ 5000×7500=37.50 m²` | PASS |
 
@@ -228,19 +235,19 @@ covered.
 
 | Room | Sorted sides | Result |
 | --- | --- | --- |
-| Catalog — Master | `3000×3000; 3500×3600; 4500×4500` | PASS — sides in range; aspect `1.00–1.03 ≤ 1.50` |
-| Catalog — Bedroom | `2700×2700; 3000×3100; 4000×4000` | PASS — sides in range; aspect `1.00–1.03 ≤ 1.40` |
+| Catalog — Master | `3000×3000; 3500×4000; 4300×5200` | PASS — sides in range; aspect `1.00–1.21 ≤ 1.50` |
+| Catalog — Bedroom | `2700×2700; 3000×3400; 4000×4000` | PASS — sides in range; aspect `1.00–1.14 ≤ 1.40` |
 | Catalog — Master Ensuite | `1800×2400; 2200×2800; 3000×3500` | PASS — sides in range; aspect `1.17–1.33 ≤ 1.80` |
 | Catalog — Master WIR | `1800×2200; 2200×3000; 3000×4000` | PASS — sides in range; aspect `1.22–1.36 ≤ 2.00` |
 | Catalog — Shared Bathroom | `2000×2400; 2400×3000; 3000×3600` | PASS — sides in range; aspect `1.20–1.25 ≤ 1.80` |
-| Catalog — WC | `1000×1800; 1200×2200; 1800×2600` | PASS — sides in range; aspect `1.44–1.83 ≤ 2.50` |
-| Catalog — Family Core | `4000×5000; 5000×6500; 6000×9000` | PASS — sides in range; aspect `1.25–1.50 ≤ 2.25` |
-| Catalog — Garage single | `3500×5500; 3600×6000; 4500×6500` | PASS — sides in range; aspect `1.44–1.67 ≤ 1.90` |
-| Catalog — Garage double | `5500×5500; 6000×6000; 7000×7000` | PASS — sides in range; aspect `1.00–1.00 ≤ 1.35` |
+| Catalog — WC | `1000×1800; 1200×2200; 1800×3200` | PASS — sides in range; aspect `1.78–1.83 ≤ 2.50` |
+| Catalog — Family Core | `4000×5000; 5200×8400; 6500×9000` | PASS — sides in range; aspect `1.25–1.62 ≤ 2.25` |
+| Catalog — Garage single | `3500×5500; 3500×6000; 4500×6500` | PASS — sides in range; aspect `1.44–1.71 ≤ 1.90` |
+| Catalog — Garage double | `5500×5500; 5500×6000; 7000×7000` | PASS — sides in range; aspect `1.00–1.09 ≤ 1.35` |
 | Catalog — Laundry | `1800×2000; 2200×2600; 3000×3500` | PASS — sides in range; aspect `1.11–1.18 ≤ 1.80` |
 | Catalog — Pantry | `1600×1800; 2000×2400; 2800×3200` | PASS — sides in range; aspect `1.13–1.20 ≤ 2.00` |
-| Catalog — Study | `2000×2200; 2400×3000; 3500×4000` | PASS — sides in range; aspect `1.10–1.25 ≤ 2.00` |
-| Catalog — Theatre | `3500×4500; 4000×5500; 5000×8000` | PASS — sides in range; aspect `1.29–1.60 ≤ 2.25` |
+| Catalog — Study | `2000×2200; 3000×3500; 3500×4000` | PASS — sides in range; aspect `1.10–1.17 ≤ 2.00` |
+| Catalog — Theatre | `3150×3500; 3600×4100; 4200×5200` | PASS — sides in range; aspect `1.11–1.24 ≤ 2.25` |
 | Catalog — Extra Family/Living | `3000×3000; 3500×4000; 5000×6000` | PASS — sides in range; aspect `1.00–1.20 ≤ 2.00` |
 | Catalog — Alfresco | `2500×3000; 3000×4500; 5000×7500` | PASS — sides in range; aspect `1.20–1.50 ≤ 3.00` |
 | GB-01 Master | `3330×3600` | PASS — sides in range; aspect `1.08 ≤ 1.50` |
@@ -274,8 +281,12 @@ covered.
 | GB-03 Laundry | `1800×2000` | PASS — sides in range; aspect `1.11 ≤ 1.80` |
 | GB-03 Pantry | `1600×1800` | PASS — sides in range; aspect `1.13 ≤ 2.00` |
 
-**Golden-brief range result: PASS.** No golden-brief room is outside its
-catalog range under the sorted-sides rule.
+**Golden-brief range result: PASS (re-run 2026-10-06 against the new
+rows).** No golden-brief room is outside its catalog range under the
+sorted-sides rule. Closest to a bound: GB-01 Family Core long side `9000` equals
+the new maximum long side `9000`; GB-02 Single Garage short side `3590` is
+above the `3500` minimum. Fixture A/B and all GB program areas use only
+unchanged minimums or golden-brief targets, so no section 7/8 arithmetic changed.
 
 ## 6. Footprint bounds and feasibility precheck
 

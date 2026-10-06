@@ -110,7 +110,7 @@ test('plain cells first: with the WHAT-IF WC override some valid layouts need no
   const { setWcMaxLong, CATALOG } = await import('./briefs.ts');
   const brief = BRIEFS['FIXTURE-A'];
   assert.ok(brief);
-  assert.equal(CATALOG.WC.max[1], 2600, 'default catalog is PL-10');
+  assert.equal(CATALOG.WC.max[1], 3200, 'default catalog is PL-10 (WC max long 3200 after Q16)');
   const prev = setWcMaxLong(2700);
   try {
     const rng = makeRng(4);
@@ -127,5 +127,5 @@ test('plain cells first: with the WHAT-IF WC override some valid layouts need no
   } finally {
     setWcMaxLong(prev);
   }
-  assert.equal(CATALOG.WC.max[1], 2600);
+  assert.equal(CATALOG.WC.max[1], 3200);
 });

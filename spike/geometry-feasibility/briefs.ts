@@ -26,15 +26,15 @@ function row(
 
 // min / preferred / maximum clear W x D as listed in PL-10 s5 (sorted here), aspect limit long/short.
 export const CATALOG: Record<CatKey, CatalogRow> = {
-  Master: row('Master', 'Master', [3000, 3000], [3600, 3500], [4500, 4500], 1.5),
-  Bedroom: row('Bedroom', 'Bedroom', [2700, 2700], [3100, 3000], [4000, 4000], 1.4),
+  Master: row('Master', 'Master', [3000, 3000], [3500, 4000], [4300, 5200], 1.5),
+  Bedroom: row('Bedroom', 'Bedroom', [2700, 2700], [3000, 3400], [4000, 4000], 1.4),
   Ensuite: row('Ensuite', 'Ensuite', [1800, 2400], [2200, 2800], [3000, 3500], 1.8),
   WIR: row('WIR', 'WIR', [1800, 2200], [2200, 3000], [3000, 4000], 2.0),
   Bathroom: row('Bathroom', 'Bathroom', [2000, 2400], [2400, 3000], [3000, 3600], 1.8),
-  WC: row('WC', 'WC', [1000, 1800], [1200, 2200], [1800, 2600], 2.5),
-  FamilyCore: row('FamilyCore', 'FamilyCore', [5000, 4000], [6500, 5000], [9000, 6000], 2.25),
-  GarageSingle: row('GarageSingle', 'Garage', [3500, 5500], [3600, 6000], [4500, 6500], 1.9),
-  GarageDouble: row('GarageDouble', 'Garage', [5500, 5500], [6000, 6000], [7000, 7000], 1.35),
+  WC: row('WC', 'WC', [1000, 1800], [1200, 2200], [1800, 3200], 2.5), // max long 3200: user answer Q16, 2026-10-06 (was 2600)
+  FamilyCore: row('FamilyCore', 'FamilyCore', [4000, 5000], [5200, 8400], [6500, 9000], 2.25),
+  GarageSingle: row('GarageSingle', 'Garage', [3500, 5500], [3500, 6000], [4500, 6500], 1.9),
+  GarageDouble: row('GarageDouble', 'Garage', [5500, 5500], [5500, 6000], [7000, 7000], 1.35),
   Laundry: row('Laundry', 'Laundry', [1800, 2000], [2200, 2600], [3000, 3500], 1.8),
   Pantry: row('Pantry', 'Pantry', [1600, 1800], [2000, 2400], [2800, 3200], 2.0),
   Alfresco: row('Alfresco', 'Alfresco', [2500, 3000], [3000, 4500], [5000, 7500], 3.0),

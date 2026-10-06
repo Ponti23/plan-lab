@@ -1,0 +1,4383 @@
+{
+  "meta": {
+    "source": "C:/Users/ponti/OneDrive/projects/floorplan-engine/data/normalized/all.json",
+    "totalRecords": 495,
+    "singleStorey3to4Bed": 387,
+    "metricon": 276,
+    "nonMetricon": 111,
+    "byBuilder": {
+      "blueprint-homes": 7,
+      "celebration-homes": 1,
+      "homebuyers-centre": 32,
+      "ideal-homes": 40,
+      "metricon": 276,
+      "simonds": 4,
+      "yourhome": 27
+    },
+    "plansWithAnyRoomDims": 269,
+    "roomsSeen": 2236,
+    "roomsMapped": 2144,
+    "roomsIgnored": 10,
+    "roomsBadDims": 2,
+    "roomsUnmapped": 80,
+    "unmappedShareOfRooms": 0.04,
+    "unmappedDistinctLabels": 77,
+    "uniquePlanKeys": 380,
+    "slugCollisions": [
+      "metricon/amira-20",
+      "metricon/amira-20-mel",
+      "metricon/amira-25",
+      "metricon/amira-25-mel",
+      "metricon/amira-25-nnsw",
+      "metricon/delta-24-nnsw",
+      "metricon/delta-25-nnsw"
+    ],
+    "metriconDesigns": 100
+  },
+  "types": {
+    "Master": {
+      "overall": {
+        "nRooms": 245,
+        "nPlans": 238,
+        "short": {
+          "n": 245,
+          "min": 2.8,
+          "p10": 3.2,
+          "median": 3.59,
+          "p90": 4.32,
+          "max": 5.4
+        },
+        "long": {
+          "n": 245,
+          "min": 3.06,
+          "p10": 3.46,
+          "median": 4.18,
+          "p90": 5.38,
+          "max": 6.67
+        },
+        "area": {
+          "n": 245,
+          "min": 8.9,
+          "p10": 11.1,
+          "median": 14.54,
+          "p90": 21.81,
+          "max": 30.91
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.32
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 236,
+          "nPlans": 229,
+          "short": {
+            "n": 236,
+            "min": 2.81,
+            "p10": 3.22,
+            "median": 3.59,
+            "p90": 4.32,
+            "max": 5.4
+          },
+          "long": {
+            "n": 236,
+            "min": 3.06,
+            "p10": 3.47,
+            "median": 4.27,
+            "p90": 5.38,
+            "max": 6.67
+          },
+          "area": {
+            "n": 236,
+            "min": 8.9,
+            "p10": 11.23,
+            "median": 15.36,
+            "p90": 21.87,
+            "max": 30.91
+          },
+          "ratio": {
+            "median": 1.09,
+            "p90": 1.32
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 236,
+        "nPlans": 229,
+        "short": {
+          "n": 236,
+          "min": 2.81,
+          "p10": 3.22,
+          "median": 3.59,
+          "p90": 4.32,
+          "max": 5.4
+        },
+        "long": {
+          "n": 236,
+          "min": 3.06,
+          "p10": 3.47,
+          "median": 4.27,
+          "p90": 5.38,
+          "max": 6.67
+        },
+        "area": {
+          "n": 236,
+          "min": 8.9,
+          "p10": 11.23,
+          "median": 15.36,
+          "p90": 21.87,
+          "max": 30.91
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.32
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 9,
+        "nPlans": 9,
+        "short": {
+          "n": 9,
+          "min": 2.8,
+          "p10": 2.8,
+          "median": 3.3,
+          "p90": 3.68,
+          "max": 4
+        },
+        "long": {
+          "n": 9,
+          "min": 3.2,
+          "p10": 3.36,
+          "median": 3.6,
+          "p90": 4.08,
+          "max": 4.4
+        },
+        "area": {
+          "n": 9,
+          "min": 9.6,
+          "p10": 9.98,
+          "median": 11.56,
+          "p90": 14.75,
+          "max": 17.6
+        },
+        "ratio": {
+          "median": 1.08,
+          "p90": 1.32
+        }
+      },
+      "perDesign": {
+        "nDesigns": 93,
+        "short": {
+          "n": 93,
+          "min": 2.8,
+          "p10": 3.12,
+          "median": 3.5,
+          "p90": 4.25,
+          "max": 5.15
+        },
+        "long": {
+          "n": 93,
+          "min": 3.18,
+          "p10": 3.38,
+          "median": 4.05,
+          "p90": 5.18,
+          "max": 6.11
+        },
+        "shareLongOver4_5": {
+          "count": 34,
+          "of": 93,
+          "share": 0.37
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 93,
+        "short": {
+          "n": 93,
+          "min": 2.8,
+          "p10": 3.1,
+          "median": 3.44,
+          "p90": 4.23,
+          "max": 5.15
+        },
+        "long": {
+          "n": 93,
+          "min": 3.18,
+          "p10": 3.35,
+          "median": 3.95,
+          "p90": 4.93,
+          "max": 6.67
+        },
+        "shareLongOver4_5": {
+          "count": 30,
+          "of": 93,
+          "share": 0.32
+        }
+      }
+    },
+    "Theatre": {
+      "overall": {
+        "nRooms": 28,
+        "nPlans": 28,
+        "short": {
+          "n": 28,
+          "min": 2.8,
+          "p10": 3,
+          "median": 3.55,
+          "p90": 4.14,
+          "max": 5.9
+        },
+        "long": {
+          "n": 28,
+          "min": 3.08,
+          "p10": 3.5,
+          "median": 4.03,
+          "p90": 5.05,
+          "max": 6.1
+        },
+        "area": {
+          "n": 28,
+          "min": 8.62,
+          "p10": 11.01,
+          "median": 14.48,
+          "p90": 20.34,
+          "max": 35.99
+        },
+        "ratio": {
+          "median": 1.12,
+          "p90": 1.27
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 21,
+          "nPlans": 21,
+          "short": {
+            "n": 21,
+            "min": 2.8,
+            "p10": 3,
+            "median": 3.56,
+            "p90": 4.13,
+            "max": 4.61
+          },
+          "long": {
+            "n": 21,
+            "min": 3.08,
+            "p10": 3.67,
+            "median": 4.05,
+            "p90": 4.9,
+            "max": 5.72
+          },
+          "area": {
+            "n": 21,
+            "min": 8.62,
+            "p10": 11.01,
+            "median": 15.3,
+            "p90": 19.5,
+            "max": 26.37
+          },
+          "ratio": {
+            "median": 1.12,
+            "p90": 1.28
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 21,
+        "nPlans": 21,
+        "short": {
+          "n": 21,
+          "min": 2.8,
+          "p10": 3,
+          "median": 3.56,
+          "p90": 4.13,
+          "max": 4.61
+        },
+        "long": {
+          "n": 21,
+          "min": 3.08,
+          "p10": 3.67,
+          "median": 4.05,
+          "p90": 4.9,
+          "max": 5.72
+        },
+        "area": {
+          "n": 21,
+          "min": 8.62,
+          "p10": 11.01,
+          "median": 15.3,
+          "p90": 19.5,
+          "max": 26.37
+        },
+        "ratio": {
+          "median": 1.12,
+          "p90": 1.28
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 7,
+        "nPlans": 7,
+        "short": {
+          "n": 7,
+          "min": 3.4,
+          "p10": 3.4,
+          "median": 3.5,
+          "p90": 4.64,
+          "max": 5.9
+        },
+        "long": {
+          "n": 7,
+          "min": 3.5,
+          "p10": 3.5,
+          "median": 4,
+          "p90": 5.08,
+          "max": 6.1
+        },
+        "area": {
+          "n": 7,
+          "min": 11.9,
+          "p10": 12.11,
+          "median": 14,
+          "p90": 24.43,
+          "max": 35.99
+        },
+        "ratio": {
+          "median": 1.11,
+          "p90": 1.2
+        }
+      },
+      "perDesign": {
+        "nDesigns": 19,
+        "short": {
+          "n": 19,
+          "min": 2.8,
+          "p10": 3.15,
+          "median": 3.56,
+          "p90": 4.23,
+          "max": 5.9
+        },
+        "long": {
+          "n": 19,
+          "min": 3.08,
+          "p10": 3.5,
+          "median": 4.1,
+          "p90": 5.46,
+          "max": 6.1
+        },
+        "shareLongOver4_5": {
+          "count": 4,
+          "of": 19,
+          "share": 0.21
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 19,
+        "short": {
+          "n": 19,
+          "min": 2.8,
+          "p10": 3.15,
+          "median": 3.54,
+          "p90": 4.23,
+          "max": 5.9
+        },
+        "long": {
+          "n": 19,
+          "min": 3.08,
+          "p10": 3.5,
+          "median": 4.05,
+          "p90": 5.46,
+          "max": 6.1
+        },
+        "shareLongOver4_5": {
+          "count": 5,
+          "of": 19,
+          "share": 0.26
+        }
+      }
+    },
+    "Bedroom": {
+      "overall": {
+        "nRooms": 720,
+        "nPlans": 257,
+        "short": {
+          "n": 720,
+          "min": 2.3,
+          "p10": 2.75,
+          "median": 3,
+          "p90": 3.49,
+          "max": 5.9
+        },
+        "long": {
+          "n": 720,
+          "min": 2.7,
+          "p10": 3,
+          "median": 3.31,
+          "p90": 3.89,
+          "max": 6.1
+        },
+        "area": {
+          "n": 720,
+          "min": 6.9,
+          "p10": 8.35,
+          "median": 9.95,
+          "p90": 13.07,
+          "max": 35.99
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.25
+        }
+      },
+      "byBuilder": {
+        "homebuyers-centre": {
+          "nRooms": 24,
+          "nPlans": 21,
+          "short": {
+            "n": 24,
+            "min": 2.5,
+            "p10": 2.5,
+            "median": 2.75,
+            "p90": 2.97,
+            "max": 3
+          },
+          "long": {
+            "n": 24,
+            "min": 2.8,
+            "p10": 3.3,
+            "median": 3.6,
+            "p90": 3.8,
+            "max": 3.9
+          },
+          "area": {
+            "n": 24,
+            "min": 7.56,
+            "p10": 8.54,
+            "median": 9.75,
+            "p90": 10.6,
+            "max": 10.73
+          },
+          "ratio": {
+            "median": 1.32,
+            "p90": 1.41
+          }
+        },
+        "metricon": {
+          "nRooms": 678,
+          "nPlans": 229,
+          "short": {
+            "n": 678,
+            "min": 2.67,
+            "p10": 2.75,
+            "median": 3,
+            "p90": 3.47,
+            "max": 4.22
+          },
+          "long": {
+            "n": 678,
+            "min": 2.7,
+            "p10": 3,
+            "median": 3.3,
+            "p90": 3.84,
+            "max": 4.92
+          },
+          "area": {
+            "n": 678,
+            "min": 7.29,
+            "p10": 8.33,
+            "median": 9.92,
+            "p90": 12.87,
+            "max": 20
+          },
+          "ratio": {
+            "median": 1.09,
+            "p90": 1.24
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 678,
+        "nPlans": 229,
+        "short": {
+          "n": 678,
+          "min": 2.67,
+          "p10": 2.75,
+          "median": 3,
+          "p90": 3.47,
+          "max": 4.22
+        },
+        "long": {
+          "n": 678,
+          "min": 2.7,
+          "p10": 3,
+          "median": 3.3,
+          "p90": 3.84,
+          "max": 4.92
+        },
+        "area": {
+          "n": 678,
+          "min": 7.29,
+          "p10": 8.33,
+          "median": 9.92,
+          "p90": 12.87,
+          "max": 20
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.24
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 42,
+        "nPlans": 28,
+        "short": {
+          "n": 42,
+          "min": 2.3,
+          "p10": 2.51,
+          "median": 2.8,
+          "p90": 3.78,
+          "max": 5.9
+        },
+        "long": {
+          "n": 42,
+          "min": 2.8,
+          "p10": 3.3,
+          "median": 3.7,
+          "p90": 4.4,
+          "max": 6.1
+        },
+        "area": {
+          "n": 42,
+          "min": 6.9,
+          "p10": 8.67,
+          "median": 10.4,
+          "p90": 16.7,
+          "max": 35.99
+        },
+        "ratio": {
+          "median": 1.25,
+          "p90": 1.42
+        }
+      },
+      "perDesign": {
+        "nDesigns": 112,
+        "short": {
+          "n": 112,
+          "min": 2.45,
+          "p10": 2.7,
+          "median": 2.97,
+          "p90": 3.42,
+          "max": 4.45
+        },
+        "long": {
+          "n": 112,
+          "min": 2.8,
+          "p10": 2.98,
+          "median": 3.4,
+          "p90": 3.89,
+          "max": 5.05
+        },
+        "shareLongOver4_5": {
+          "count": 2,
+          "of": 112,
+          "share": 0.02
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 112,
+        "short": {
+          "n": 112,
+          "min": 2.45,
+          "p10": 2.7,
+          "median": 2.9,
+          "p90": 3.22,
+          "max": 4.45
+        },
+        "long": {
+          "n": 112,
+          "min": 2.71,
+          "p10": 2.92,
+          "median": 3.36,
+          "p90": 3.89,
+          "max": 5.05
+        },
+        "shareLongOver4_5": {
+          "count": 2,
+          "of": 112,
+          "share": 0.02
+        }
+      }
+    },
+    "Living/Family": {
+      "overall": {
+        "nRooms": 327,
+        "nPlans": 235,
+        "short": {
+          "n": 327,
+          "min": 2.12,
+          "p10": 3.1,
+          "median": 3.72,
+          "p90": 4.44,
+          "max": 5.93
+        },
+        "long": {
+          "n": 327,
+          "min": 3.34,
+          "p10": 3.79,
+          "median": 4.67,
+          "p90": 5.51,
+          "max": 6.6
+        },
+        "area": {
+          "n": 327,
+          "min": 8.76,
+          "p10": 12.67,
+          "median": 17.2,
+          "p90": 22.22,
+          "max": 36.88
+        },
+        "ratio": {
+          "median": 1.21,
+          "p90": 1.49
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 322,
+          "nPlans": 230,
+          "short": {
+            "n": 322,
+            "min": 2.12,
+            "p10": 3.1,
+            "median": 3.72,
+            "p90": 4.45,
+            "max": 5.93
+          },
+          "long": {
+            "n": 322,
+            "min": 3.34,
+            "p10": 3.78,
+            "median": 4.7,
+            "p90": 5.54,
+            "max": 6.6
+          },
+          "area": {
+            "n": 322,
+            "min": 8.76,
+            "p10": 12.67,
+            "median": 17.22,
+            "p90": 22.22,
+            "max": 36.88
+          },
+          "ratio": {
+            "median": 1.22,
+            "p90": 1.49
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 322,
+        "nPlans": 230,
+        "short": {
+          "n": 322,
+          "min": 2.12,
+          "p10": 3.1,
+          "median": 3.72,
+          "p90": 4.45,
+          "max": 5.93
+        },
+        "long": {
+          "n": 322,
+          "min": 3.34,
+          "p10": 3.78,
+          "median": 4.7,
+          "p90": 5.54,
+          "max": 6.6
+        },
+        "area": {
+          "n": 322,
+          "min": 8.76,
+          "p10": 12.67,
+          "median": 17.22,
+          "p90": 22.22,
+          "max": 36.88
+        },
+        "ratio": {
+          "median": 1.22,
+          "p90": 1.49
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 5,
+        "nPlans": 5,
+        "short": {
+          "n": 5,
+          "min": 3,
+          "p10": 3.04,
+          "median": 3.5,
+          "p90": 3.92,
+          "max": 4
+        },
+        "long": {
+          "n": 5,
+          "min": 4.1,
+          "p10": 4.18,
+          "median": 4.4,
+          "p90": 4.46,
+          "max": 4.5
+        },
+        "area": {
+          "n": 5,
+          "min": 13.2,
+          "p10": 13.25,
+          "median": 14.35,
+          "p90": 17.49,
+          "max": 18
+        },
+        "ratio": {
+          "median": 1.17,
+          "p90": 1.43
+        }
+      },
+      "perDesign": {
+        "nDesigns": 89,
+        "short": {
+          "n": 89,
+          "min": 2.53,
+          "p10": 3.1,
+          "median": 3.73,
+          "p90": 4.3,
+          "max": 4.7
+        },
+        "long": {
+          "n": 89,
+          "min": 3.36,
+          "p10": 4.04,
+          "median": 4.6,
+          "p90": 5.32,
+          "max": 6.6
+        },
+        "shareLongOver4_5": {
+          "count": 50,
+          "of": 89,
+          "share": 0.56
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 89,
+        "short": {
+          "n": 89,
+          "min": 2.53,
+          "p10": 3.09,
+          "median": 3.73,
+          "p90": 4.32,
+          "max": 4.66
+        },
+        "long": {
+          "n": 89,
+          "min": 3.34,
+          "p10": 3.88,
+          "median": 4.47,
+          "p90": 5.35,
+          "max": 6.6
+        },
+        "shareLongOver4_5": {
+          "count": 43,
+          "of": 89,
+          "share": 0.48
+        }
+      }
+    },
+    "Dining": {
+      "overall": {
+        "nRooms": 213,
+        "nPlans": 210,
+        "short": {
+          "n": 213,
+          "min": 2.11,
+          "p10": 2.6,
+          "median": 3.34,
+          "p90": 3.89,
+          "max": 4.6
+        },
+        "long": {
+          "n": 213,
+          "min": 2.73,
+          "p10": 3.55,
+          "median": 4.46,
+          "p90": 5.29,
+          "max": 6.99
+        },
+        "area": {
+          "n": 213,
+          "min": 6.12,
+          "p10": 10.48,
+          "median": 14.42,
+          "p90": 19.85,
+          "max": 28.64
+        },
+        "ratio": {
+          "median": 1.36,
+          "p90": 1.75
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 204,
+          "nPlans": 201,
+          "short": {
+            "n": 204,
+            "min": 2.11,
+            "p10": 2.6,
+            "median": 3.36,
+            "p90": 3.9,
+            "max": 4.6
+          },
+          "long": {
+            "n": 204,
+            "min": 2.73,
+            "p10": 3.71,
+            "median": 4.53,
+            "p90": 5.3,
+            "max": 6.99
+          },
+          "area": {
+            "n": 204,
+            "min": 6.12,
+            "p10": 10.65,
+            "median": 14.64,
+            "p90": 20.33,
+            "max": 28.64
+          },
+          "ratio": {
+            "median": 1.36,
+            "p90": 1.78
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 204,
+        "nPlans": 201,
+        "short": {
+          "n": 204,
+          "min": 2.11,
+          "p10": 2.6,
+          "median": 3.36,
+          "p90": 3.9,
+          "max": 4.6
+        },
+        "long": {
+          "n": 204,
+          "min": 2.73,
+          "p10": 3.71,
+          "median": 4.53,
+          "p90": 5.3,
+          "max": 6.99
+        },
+        "area": {
+          "n": 204,
+          "min": 6.12,
+          "p10": 10.65,
+          "median": 14.64,
+          "p90": 20.33,
+          "max": 28.64
+        },
+        "ratio": {
+          "median": 1.36,
+          "p90": 1.78
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 9,
+        "nPlans": 9,
+        "short": {
+          "n": 9,
+          "min": 2.8,
+          "p10": 2.8,
+          "median": 3,
+          "p90": 3.32,
+          "max": 3.4
+        },
+        "long": {
+          "n": 9,
+          "min": 3.2,
+          "p10": 3.2,
+          "median": 3.5,
+          "p90": 4.4,
+          "max": 5.2
+        },
+        "area": {
+          "n": 9,
+          "min": 8.96,
+          "p10": 9.18,
+          "median": 11.31,
+          "p90": 14.04,
+          "max": 17.16
+        },
+        "ratio": {
+          "median": 1.15,
+          "p90": 1.47
+        }
+      },
+      "perDesign": {
+        "nDesigns": 88,
+        "short": {
+          "n": 88,
+          "min": 2.11,
+          "p10": 2.76,
+          "median": 3.3,
+          "p90": 3.9,
+          "max": 4.39
+        },
+        "long": {
+          "n": 88,
+          "min": 3.17,
+          "p10": 3.48,
+          "median": 4.33,
+          "p90": 5.17,
+          "max": 6.99
+        },
+        "shareLongOver4_5": {
+          "count": 38,
+          "of": 88,
+          "share": 0.43
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 88,
+        "short": {
+          "n": 88,
+          "min": 2.11,
+          "p10": 2.73,
+          "median": 3.24,
+          "p90": 3.84,
+          "max": 4.29
+        },
+        "long": {
+          "n": 88,
+          "min": 2.73,
+          "p10": 3.36,
+          "median": 4.27,
+          "p90": 5.13,
+          "max": 6.99
+        },
+        "shareLongOver4_5": {
+          "count": 35,
+          "of": 88,
+          "share": 0.4
+        }
+      }
+    },
+    "Alfresco": {
+      "overall": {
+        "nRooms": 136,
+        "nPlans": 131,
+        "short": {
+          "n": 136,
+          "min": 1.68,
+          "p10": 2.64,
+          "median": 3.24,
+          "p90": 3.96,
+          "max": 4.8
+        },
+        "long": {
+          "n": 136,
+          "min": 3,
+          "p10": 3.3,
+          "median": 4.2,
+          "p90": 5.46,
+          "max": 8.16
+        },
+        "area": {
+          "n": 136,
+          "min": 5.64,
+          "p10": 9.36,
+          "median": 13.26,
+          "p90": 20.65,
+          "max": 29
+        },
+        "ratio": {
+          "median": 1.3,
+          "p90": 1.91
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 131,
+          "nPlans": 126,
+          "short": {
+            "n": 131,
+            "min": 1.68,
+            "p10": 2.64,
+            "median": 3.24,
+            "p90": 3.96,
+            "max": 4.8
+          },
+          "long": {
+            "n": 131,
+            "min": 3,
+            "p10": 3.24,
+            "median": 4.2,
+            "p90": 5.52,
+            "max": 8.16
+          },
+          "area": {
+            "n": 131,
+            "min": 5.64,
+            "p10": 9.36,
+            "median": 13.31,
+            "p90": 20.74,
+            "max": 29
+          },
+          "ratio": {
+            "median": 1.3,
+            "p90": 1.91
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 131,
+        "nPlans": 126,
+        "short": {
+          "n": 131,
+          "min": 1.68,
+          "p10": 2.64,
+          "median": 3.24,
+          "p90": 3.96,
+          "max": 4.8
+        },
+        "long": {
+          "n": 131,
+          "min": 3,
+          "p10": 3.24,
+          "median": 4.2,
+          "p90": 5.52,
+          "max": 8.16
+        },
+        "area": {
+          "n": 131,
+          "min": 5.64,
+          "p10": 9.36,
+          "median": 13.31,
+          "p90": 20.74,
+          "max": 29
+        },
+        "ratio": {
+          "median": 1.3,
+          "p90": 1.91
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 5,
+        "nPlans": 5,
+        "short": {
+          "n": 5,
+          "min": 2.7,
+          "p10": 2.7,
+          "median": 3,
+          "p90": 3.5,
+          "max": 3.5
+        },
+        "long": {
+          "n": 5,
+          "min": 3.6,
+          "p10": 3.64,
+          "median": 4,
+          "p90": 4.1,
+          "max": 4.1
+        },
+        "area": {
+          "n": 5,
+          "min": 9.72,
+          "p10": 9.83,
+          "median": 12,
+          "p90": 14.35,
+          "max": 14.35
+        },
+        "ratio": {
+          "median": 1.33,
+          "p90": 1.36
+        }
+      },
+      "perDesign": {
+        "nDesigns": 49,
+        "short": {
+          "n": 49,
+          "min": 1.68,
+          "p10": 2.62,
+          "median": 3.24,
+          "p90": 3.96,
+          "max": 4.56
+        },
+        "long": {
+          "n": 49,
+          "min": 3,
+          "p10": 3.58,
+          "median": 4.32,
+          "p90": 5.3,
+          "max": 7.43
+        },
+        "shareLongOver4_5": {
+          "count": 23,
+          "of": 49,
+          "share": 0.47
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 49,
+        "short": {
+          "n": 49,
+          "min": 1.68,
+          "p10": 2.5,
+          "median": 3.24,
+          "p90": 3.86,
+          "max": 4.44
+        },
+        "long": {
+          "n": 49,
+          "min": 3,
+          "p10": 3.34,
+          "median": 4.1,
+          "p90": 5.27,
+          "max": 7.43
+        },
+        "shareLongOver4_5": {
+          "count": 17,
+          "of": 49,
+          "share": 0.35
+        }
+      }
+    },
+    "Study": {
+      "overall": {
+        "nRooms": 78,
+        "nPlans": 78,
+        "short": {
+          "n": 78,
+          "min": 1.18,
+          "p10": 1.67,
+          "median": 2.93,
+          "p90": 3.45,
+          "max": 3.57
+        },
+        "long": {
+          "n": 78,
+          "min": 2.42,
+          "p10": 2.9,
+          "median": 3.59,
+          "p90": 4.08,
+          "max": 4.32
+        },
+        "area": {
+          "n": 78,
+          "min": 3.32,
+          "p10": 4.99,
+          "median": 10.55,
+          "p90": 13.37,
+          "max": 14.26
+        },
+        "ratio": {
+          "median": 1.25,
+          "p90": 1.82
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 77,
+          "nPlans": 77,
+          "short": {
+            "n": 77,
+            "min": 1.18,
+            "p10": 1.67,
+            "median": 2.93,
+            "p90": 3.45,
+            "max": 3.57
+          },
+          "long": {
+            "n": 77,
+            "min": 2.42,
+            "p10": 2.9,
+            "median": 3.6,
+            "p90": 4.08,
+            "max": 4.32
+          },
+          "area": {
+            "n": 77,
+            "min": 3.32,
+            "p10": 4.98,
+            "median": 10.65,
+            "p90": 13.37,
+            "max": 14.26
+          },
+          "ratio": {
+            "median": 1.25,
+            "p90": 1.83
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 77,
+        "nPlans": 77,
+        "short": {
+          "n": 77,
+          "min": 1.18,
+          "p10": 1.67,
+          "median": 2.93,
+          "p90": 3.45,
+          "max": 3.57
+        },
+        "long": {
+          "n": 77,
+          "min": 2.42,
+          "p10": 2.9,
+          "median": 3.6,
+          "p90": 4.08,
+          "max": 4.32
+        },
+        "area": {
+          "n": 77,
+          "min": 3.32,
+          "p10": 4.98,
+          "median": 10.65,
+          "p90": 13.37,
+          "max": 14.26
+        },
+        "ratio": {
+          "median": 1.25,
+          "p90": 1.83
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 1,
+        "nPlans": 1,
+        "short": {
+          "n": 1,
+          "min": 2.8,
+          "p10": 2.8,
+          "median": 2.8,
+          "p90": 2.8,
+          "max": 2.8
+        },
+        "long": {
+          "n": 1,
+          "min": 3.4,
+          "p10": 3.4,
+          "median": 3.4,
+          "p90": 3.4,
+          "max": 3.4
+        },
+        "area": {
+          "n": 1,
+          "min": 9.52,
+          "p10": 9.52,
+          "median": 9.52,
+          "p90": 9.52,
+          "max": 9.52
+        },
+        "ratio": {
+          "median": 1.21,
+          "p90": 1.21
+        }
+      },
+      "perDesign": {
+        "nDesigns": 40,
+        "short": {
+          "n": 40,
+          "min": 1.27,
+          "p10": 1.58,
+          "median": 2.97,
+          "p90": 3.36,
+          "max": 3.5
+        },
+        "long": {
+          "n": 40,
+          "min": 2.6,
+          "p10": 3.08,
+          "median": 3.53,
+          "p90": 4,
+          "max": 4.32
+        },
+        "shareLongOver4_5": {
+          "count": 0,
+          "of": 40,
+          "share": 0
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 40,
+        "short": {
+          "n": 40,
+          "min": 1.31,
+          "p10": 1.57,
+          "median": 2.9,
+          "p90": 3.36,
+          "max": 3.5
+        },
+        "long": {
+          "n": 40,
+          "min": 2.6,
+          "p10": 3.03,
+          "median": 3.5,
+          "p90": 3.96,
+          "max": 4.32
+        },
+        "shareLongOver4_5": {
+          "count": 0,
+          "of": 40,
+          "share": 0
+        }
+      }
+    },
+    "Activity": {
+      "overall": {
+        "nRooms": 174,
+        "nPlans": 129,
+        "short": {
+          "n": 174,
+          "min": 2.12,
+          "p10": 3,
+          "median": 3.62,
+          "p90": 4.24,
+          "max": 5.63
+        },
+        "long": {
+          "n": 174,
+          "min": 2.99,
+          "p10": 3.35,
+          "median": 4.4,
+          "p90": 5.56,
+          "max": 8.49
+        },
+        "area": {
+          "n": 174,
+          "min": 6.91,
+          "p10": 10.35,
+          "median": 16.16,
+          "p90": 22.91,
+          "max": 47.8
+        },
+        "ratio": {
+          "median": 1.19,
+          "p90": 1.47
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 173,
+          "nPlans": 128,
+          "short": {
+            "n": 173,
+            "min": 2.12,
+            "p10": 3,
+            "median": 3.62,
+            "p90": 4.24,
+            "max": 5.63
+          },
+          "long": {
+            "n": 173,
+            "min": 2.99,
+            "p10": 3.35,
+            "median": 4.4,
+            "p90": 5.58,
+            "max": 8.49
+          },
+          "area": {
+            "n": 173,
+            "min": 6.91,
+            "p10": 10.35,
+            "median": 16.16,
+            "p90": 22.93,
+            "max": 47.8
+          },
+          "ratio": {
+            "median": 1.19,
+            "p90": 1.45
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 173,
+        "nPlans": 128,
+        "short": {
+          "n": 173,
+          "min": 2.12,
+          "p10": 3,
+          "median": 3.62,
+          "p90": 4.24,
+          "max": 5.63
+        },
+        "long": {
+          "n": 173,
+          "min": 2.99,
+          "p10": 3.35,
+          "median": 4.4,
+          "p90": 5.58,
+          "max": 8.49
+        },
+        "area": {
+          "n": 173,
+          "min": 6.91,
+          "p10": 10.35,
+          "median": 16.16,
+          "p90": 22.93,
+          "max": 47.8
+        },
+        "ratio": {
+          "median": 1.19,
+          "p90": 1.45
+        }
+      },
+      "nonMetricon": {
+        "nRooms": 1,
+        "nPlans": 1,
+        "short": {
+          "n": 1,
+          "min": 2.6,
+          "p10": 2.6,
+          "median": 2.6,
+          "p90": 2.6,
+          "max": 2.6
+        },
+        "long": {
+          "n": 1,
+          "min": 4,
+          "p10": 4,
+          "median": 4,
+          "p90": 4,
+          "max": 4
+        },
+        "area": {
+          "n": 1,
+          "min": 10.4,
+          "p10": 10.4,
+          "median": 10.4,
+          "p90": 10.4,
+          "max": 10.4
+        },
+        "ratio": {
+          "median": 1.54,
+          "p90": 1.54
+        }
+      },
+      "perDesign": {
+        "nDesigns": 57,
+        "short": {
+          "n": 57,
+          "min": 2.12,
+          "p10": 2.95,
+          "median": 3.44,
+          "p90": 4.13,
+          "max": 5.62
+        },
+        "long": {
+          "n": 57,
+          "min": 3,
+          "p10": 3.28,
+          "median": 4.02,
+          "p90": 5.27,
+          "max": 6.96
+        },
+        "shareLongOver4_5": {
+          "count": 16,
+          "of": 57,
+          "share": 0.28
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 57,
+        "short": {
+          "n": 57,
+          "min": 2.12,
+          "p10": 2.87,
+          "median": 3.38,
+          "p90": 4,
+          "max": 5.62
+        },
+        "long": {
+          "n": 57,
+          "min": 2.99,
+          "p10": 3.2,
+          "median": 3.95,
+          "p90": 4.96,
+          "max": 6.96
+        },
+        "shareLongOver4_5": {
+          "count": 13,
+          "of": 57,
+          "share": 0.23
+        }
+      }
+    },
+    "GarageSingle": {
+      "overall": {
+        "nRooms": 18,
+        "nPlans": 18,
+        "short": {
+          "n": 18,
+          "min": 3.23,
+          "p10": 3.29,
+          "median": 3.5,
+          "p90": 3.65,
+          "max": 4.23
+        },
+        "long": {
+          "n": 18,
+          "min": 5.99,
+          "p10": 6,
+          "median": 6,
+          "p90": 6,
+          "max": 6.01
+        },
+        "area": {
+          "n": 18,
+          "min": 19.38,
+          "p10": 19.74,
+          "median": 21,
+          "p90": 21.88,
+          "max": 25.38
+        },
+        "ratio": {
+          "median": 1.71,
+          "p90": 1.83
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 18,
+          "nPlans": 18,
+          "short": {
+            "n": 18,
+            "min": 3.23,
+            "p10": 3.29,
+            "median": 3.5,
+            "p90": 3.65,
+            "max": 4.23
+          },
+          "long": {
+            "n": 18,
+            "min": 5.99,
+            "p10": 6,
+            "median": 6,
+            "p90": 6,
+            "max": 6.01
+          },
+          "area": {
+            "n": 18,
+            "min": 19.38,
+            "p10": 19.74,
+            "median": 21,
+            "p90": 21.88,
+            "max": 25.38
+          },
+          "ratio": {
+            "median": 1.71,
+            "p90": 1.83
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 18,
+        "nPlans": 18,
+        "short": {
+          "n": 18,
+          "min": 3.23,
+          "p10": 3.29,
+          "median": 3.5,
+          "p90": 3.65,
+          "max": 4.23
+        },
+        "long": {
+          "n": 18,
+          "min": 5.99,
+          "p10": 6,
+          "median": 6,
+          "p90": 6,
+          "max": 6.01
+        },
+        "area": {
+          "n": 18,
+          "min": 19.38,
+          "p10": 19.74,
+          "median": 21,
+          "p90": 21.88,
+          "max": 25.38
+        },
+        "ratio": {
+          "median": 1.71,
+          "p90": 1.83
+        }
+      },
+      "nonMetricon": null,
+      "perDesign": {
+        "nDesigns": 13,
+        "short": {
+          "n": 13,
+          "min": 3.23,
+          "p10": 3.32,
+          "median": 3.51,
+          "p90": 3.69,
+          "max": 3.85
+        },
+        "long": {
+          "n": 13,
+          "min": 5.99,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.01,
+          "max": 6.01
+        },
+        "shareLongOver4_5": {
+          "count": 13,
+          "of": 13,
+          "share": 1
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 13,
+        "short": {
+          "n": 13,
+          "min": 3.23,
+          "p10": 3.32,
+          "median": 3.5,
+          "p90": 3.61,
+          "max": 3.71
+        },
+        "long": {
+          "n": 13,
+          "min": 5.99,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.01,
+          "max": 6.01
+        },
+        "shareLongOver4_5": {
+          "count": 13,
+          "of": 13,
+          "share": 1
+        }
+      }
+    },
+    "GarageDouble": {
+      "overall": {
+        "nRooms": 205,
+        "nPlans": 198,
+        "short": {
+          "n": 205,
+          "min": 5.49,
+          "p10": 5.51,
+          "median": 5.51,
+          "p90": 5.59,
+          "max": 5.87
+        },
+        "long": {
+          "n": 205,
+          "min": 5.76,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.12,
+          "max": 7.18
+        },
+        "area": {
+          "n": 205,
+          "min": 31.68,
+          "p10": 33.06,
+          "median": 33.06,
+          "p90": 34.53,
+          "max": 40.14
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.1
+        }
+      },
+      "byBuilder": {
+        "metricon": {
+          "nRooms": 205,
+          "nPlans": 198,
+          "short": {
+            "n": 205,
+            "min": 5.49,
+            "p10": 5.51,
+            "median": 5.51,
+            "p90": 5.59,
+            "max": 5.87
+          },
+          "long": {
+            "n": 205,
+            "min": 5.76,
+            "p10": 6,
+            "median": 6,
+            "p90": 6.12,
+            "max": 7.18
+          },
+          "area": {
+            "n": 205,
+            "min": 31.68,
+            "p10": 33.06,
+            "median": 33.06,
+            "p90": 34.53,
+            "max": 40.14
+          },
+          "ratio": {
+            "median": 1.09,
+            "p90": 1.1
+          }
+        }
+      },
+      "metricon": {
+        "nRooms": 205,
+        "nPlans": 198,
+        "short": {
+          "n": 205,
+          "min": 5.49,
+          "p10": 5.51,
+          "median": 5.51,
+          "p90": 5.59,
+          "max": 5.87
+        },
+        "long": {
+          "n": 205,
+          "min": 5.76,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.12,
+          "max": 7.18
+        },
+        "area": {
+          "n": 205,
+          "min": 31.68,
+          "p10": 33.06,
+          "median": 33.06,
+          "p90": 34.53,
+          "max": 40.14
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.1
+        }
+      },
+      "nonMetricon": null,
+      "perDesign": {
+        "nDesigns": 71,
+        "short": {
+          "n": 71,
+          "min": 5.5,
+          "p10": 5.51,
+          "median": 5.51,
+          "p90": 5.59,
+          "max": 5.83
+        },
+        "long": {
+          "n": 71,
+          "min": 5.88,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.24,
+          "max": 7.18
+        },
+        "shareLongOver4_5": {
+          "count": 71,
+          "of": 71,
+          "share": 1
+        }
+      },
+      "perDesignFirstVariant": {
+        "nDesigns": 71,
+        "short": {
+          "n": 71,
+          "min": 5.5,
+          "p10": 5.51,
+          "median": 5.51,
+          "p90": 5.59,
+          "max": 5.83
+        },
+        "long": {
+          "n": 71,
+          "min": 5.99,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.24,
+          "max": 7.18
+        },
+        "shareLongOver4_5": {
+          "count": 71,
+          "of": 71,
+          "share": 1
+        }
+      }
+    }
+  },
+  "subLabels": {
+    "Living/Family": {
+      "LIVING": {
+        "nRooms": 99,
+        "nPlans": 95,
+        "short": {
+          "n": 99,
+          "min": 2.95,
+          "p10": 3.09,
+          "median": 3.5,
+          "p90": 4.1,
+          "max": 4.84
+        },
+        "long": {
+          "n": 99,
+          "min": 3.39,
+          "p10": 3.62,
+          "median": 4.21,
+          "p90": 4.8,
+          "max": 5.65
+        },
+        "area": {
+          "n": 99,
+          "min": 10.41,
+          "p10": 11.66,
+          "median": 14.95,
+          "p90": 18.88,
+          "max": 25.51
+        },
+        "ratio": {
+          "median": 1.18,
+          "p90": 1.37
+        }
+      },
+      "FAMILY": {
+        "nRooms": 226,
+        "nPlans": 219,
+        "short": {
+          "n": 226,
+          "min": 2.12,
+          "p10": 3.24,
+          "median": 3.84,
+          "p90": 4.54,
+          "max": 5.93
+        },
+        "long": {
+          "n": 226,
+          "min": 3.34,
+          "p10": 4.08,
+          "median": 4.8,
+          "p90": 5.6,
+          "max": 6.6
+        },
+        "area": {
+          "n": 226,
+          "min": 8.76,
+          "p10": 14.02,
+          "median": 18.12,
+          "p90": 23.19,
+          "max": 36.88
+        },
+        "ratio": {
+          "median": 1.24,
+          "p90": 1.57
+        }
+      },
+      "FAMILYROOM": {
+        "nRooms": 2,
+        "nPlans": 2,
+        "short": {
+          "n": 2,
+          "min": 3.36,
+          "p10": 3.51,
+          "median": 4.09,
+          "p90": 4.66,
+          "max": 4.81
+        },
+        "long": {
+          "n": 2,
+          "min": 4.29,
+          "p10": 4.38,
+          "median": 4.72,
+          "p90": 5.06,
+          "max": 5.14
+        },
+        "area": {
+          "n": 2,
+          "min": 14.41,
+          "p10": 15.45,
+          "median": 19.57,
+          "p90": 23.69,
+          "max": 24.72
+        },
+        "ratio": {
+          "median": 1.17,
+          "p90": 1.26
+        }
+      }
+    },
+    "Activity": {
+      "ACTIVITY": {
+        "nRooms": 1,
+        "nPlans": 1,
+        "short": {
+          "n": 1,
+          "min": 2.6,
+          "p10": 2.6,
+          "median": 2.6,
+          "p90": 2.6,
+          "max": 2.6
+        },
+        "long": {
+          "n": 1,
+          "min": 4,
+          "p10": 4,
+          "median": 4,
+          "p90": 4,
+          "max": 4
+        },
+        "area": {
+          "n": 1,
+          "min": 10.4,
+          "p10": 10.4,
+          "median": 10.4,
+          "p90": 10.4,
+          "max": 10.4
+        },
+        "ratio": {
+          "median": 1.54,
+          "p90": 1.54
+        }
+      },
+      "LEISURE": {
+        "nRooms": 87,
+        "nPlans": 87,
+        "short": {
+          "n": 87,
+          "min": 2.12,
+          "p10": 2.95,
+          "median": 3.4,
+          "p90": 4.35,
+          "max": 5.63
+        },
+        "long": {
+          "n": 87,
+          "min": 2.99,
+          "p10": 3.2,
+          "median": 3.96,
+          "p90": 6.41,
+          "max": 8.49
+        },
+        "area": {
+          "n": 87,
+          "min": 6.91,
+          "p10": 9.21,
+          "median": 13.54,
+          "p90": 23.86,
+          "max": 47.8
+        },
+        "ratio": {
+          "median": 1.17,
+          "p90": 1.52
+        }
+      },
+      "SITTING": {
+        "nRooms": 37,
+        "nPlans": 37,
+        "short": {
+          "n": 37,
+          "min": 3.11,
+          "p10": 3.21,
+          "median": 3.44,
+          "p90": 4.07,
+          "max": 4.55
+        },
+        "long": {
+          "n": 37,
+          "min": 3.35,
+          "p10": 3.55,
+          "median": 4.32,
+          "p90": 4.78,
+          "max": 5.16
+        },
+        "area": {
+          "n": 37,
+          "min": 10.48,
+          "p10": 12.41,
+          "median": 15.12,
+          "p90": 18.93,
+          "max": 22.75
+        },
+        "ratio": {
+          "median": 1.19,
+          "p90": 1.34
+        }
+      },
+      "RUMPUS": {
+        "nRooms": 43,
+        "nPlans": 43,
+        "short": {
+          "n": 43,
+          "min": 3.35,
+          "p10": 3.53,
+          "median": 3.8,
+          "p90": 4.07,
+          "max": 4.55
+        },
+        "long": {
+          "n": 43,
+          "min": 3.78,
+          "p10": 4.31,
+          "median": 4.89,
+          "p90": 5.43,
+          "max": 6.1
+        },
+        "area": {
+          "n": 43,
+          "min": 13.23,
+          "p10": 16.16,
+          "median": 18.69,
+          "p90": 23.12,
+          "max": 25.56
+        },
+        "ratio": {
+          "median": 1.29,
+          "p90": 1.45
+        }
+      },
+      "LESIURE": {
+        "nRooms": 2,
+        "nPlans": 2,
+        "short": {
+          "n": 2,
+          "min": 3.84,
+          "p10": 3.84,
+          "median": 3.84,
+          "p90": 3.84,
+          "max": 3.84
+        },
+        "long": {
+          "n": 2,
+          "min": 4.4,
+          "p10": 4.4,
+          "median": 4.4,
+          "p90": 4.4,
+          "max": 4.4
+        },
+        "area": {
+          "n": 2,
+          "min": 16.9,
+          "p10": 16.9,
+          "median": 16.9,
+          "p90": 16.9,
+          "max": 16.9
+        },
+        "ratio": {
+          "median": 1.15,
+          "p90": 1.15
+        }
+      },
+      "RETREAT": {
+        "nRooms": 4,
+        "nPlans": 4,
+        "short": {
+          "n": 4,
+          "min": 2.97,
+          "p10": 3.06,
+          "median": 3.27,
+          "p90": 3.42,
+          "max": 3.49
+        },
+        "long": {
+          "n": 4,
+          "min": 3.44,
+          "p10": 3.44,
+          "median": 3.56,
+          "p90": 4.25,
+          "max": 4.5
+        },
+        "area": {
+          "n": 4,
+          "min": 10.9,
+          "p10": 11,
+          "median": 11.25,
+          "p90": 14.37,
+          "max": 15.71
+        },
+        "ratio": {
+          "median": 1.14,
+          "p90": 1.27
+        }
+      }
+    },
+    "Master": {
+      "BED1": {
+        "nRooms": 5,
+        "nPlans": 5,
+        "short": {
+          "n": 5,
+          "min": 2.8,
+          "p10": 2.8,
+          "median": 3,
+          "p90": 3.6,
+          "max": 4
+        },
+        "long": {
+          "n": 5,
+          "min": 3.2,
+          "p10": 3.36,
+          "median": 3.7,
+          "p90": 4.24,
+          "max": 4.4
+        },
+        "area": {
+          "n": 5,
+          "min": 9.6,
+          "p10": 9.79,
+          "median": 10.36,
+          "p90": 15.36,
+          "max": 17.6
+        },
+        "ratio": {
+          "median": 1.29,
+          "p90": 1.33
+        }
+      },
+      "PRIMARYBED": {
+        "nRooms": 4,
+        "nPlans": 4,
+        "short": {
+          "n": 4,
+          "min": 3.3,
+          "p10": 3.33,
+          "median": 3.45,
+          "p90": 3.57,
+          "max": 3.6
+        },
+        "long": {
+          "n": 4,
+          "min": 3.4,
+          "p10": 3.43,
+          "median": 3.5,
+          "p90": 3.78,
+          "max": 3.9
+        },
+        "area": {
+          "n": 4,
+          "min": 11.55,
+          "p10": 11.55,
+          "median": 11.91,
+          "p90": 13.5,
+          "max": 14.04
+        },
+        "ratio": {
+          "median": 1.03,
+          "p90": 1.08
+        }
+      },
+      "MAINBEDROOM": {
+        "nRooms": 235,
+        "nPlans": 228,
+        "short": {
+          "n": 235,
+          "min": 2.81,
+          "p10": 3.22,
+          "median": 3.59,
+          "p90": 4.32,
+          "max": 5.4
+        },
+        "long": {
+          "n": 235,
+          "min": 3.06,
+          "p10": 3.47,
+          "median": 4.29,
+          "p90": 5.38,
+          "max": 6.67
+        },
+        "area": {
+          "n": 235,
+          "min": 8.9,
+          "p10": 11.22,
+          "median": 15.41,
+          "p90": 21.88,
+          "max": 30.91
+        },
+        "ratio": {
+          "median": 1.1,
+          "p90": 1.32
+        }
+      },
+      "BEDROOM1": {
+        "nRooms": 1,
+        "nPlans": 1,
+        "short": {
+          "n": 1,
+          "min": 3.4,
+          "p10": 3.4,
+          "median": 3.4,
+          "p90": 3.4,
+          "max": 3.4
+        },
+        "long": {
+          "n": 1,
+          "min": 3.59,
+          "p10": 3.59,
+          "median": 3.59,
+          "p90": 3.59,
+          "max": 3.59
+        },
+        "area": {
+          "n": 1,
+          "min": 12.21,
+          "p10": 12.21,
+          "median": 12.21,
+          "p90": 12.21,
+          "max": 12.21
+        },
+        "ratio": {
+          "median": 1.06,
+          "p90": 1.06
+        }
+      }
+    },
+    "Bedroom": {
+      "BED2": {
+        "nRooms": 13,
+        "nPlans": 13,
+        "short": {
+          "n": 13,
+          "min": 2.6,
+          "p10": 2.64,
+          "median": 3,
+          "p90": 5.36,
+          "max": 5.9
+        },
+        "long": {
+          "n": 13,
+          "min": 3.4,
+          "p10": 3.42,
+          "median": 3.7,
+          "p90": 5.44,
+          "max": 6.1
+        },
+        "area": {
+          "n": 13,
+          "min": 9.52,
+          "p10": 9.62,
+          "median": 10.5,
+          "p90": 29.41,
+          "max": 35.99
+        },
+        "ratio": {
+          "median": 1.17,
+          "p90": 1.39
+        }
+      },
+      "BED3": {
+        "nRooms": 20,
+        "nPlans": 20,
+        "short": {
+          "n": 20,
+          "min": 2.3,
+          "p10": 2.5,
+          "median": 2.8,
+          "p90": 3.53,
+          "max": 4.2
+        },
+        "long": {
+          "n": 20,
+          "min": 2.8,
+          "p10": 3,
+          "median": 3.6,
+          "p90": 4.08,
+          "max": 4.9
+        },
+        "area": {
+          "n": 20,
+          "min": 6.9,
+          "p10": 8.18,
+          "median": 9.76,
+          "p90": 15.02,
+          "max": 20.58
+        },
+        "ratio": {
+          "median": 1.31,
+          "p90": 1.36
+        }
+      },
+      "BED4": {
+        "nRooms": 9,
+        "nPlans": 9,
+        "short": {
+          "n": 9,
+          "min": 2.5,
+          "p10": 2.5,
+          "median": 2.8,
+          "p90": 3.06,
+          "max": 3.3
+        },
+        "long": {
+          "n": 9,
+          "min": 3.6,
+          "p10": 3.6,
+          "median": 3.8,
+          "p90": 4,
+          "max": 4
+        },
+        "area": {
+          "n": 9,
+          "min": 9.72,
+          "p10": 9.74,
+          "median": 10.73,
+          "p90": 12.11,
+          "max": 12.54
+        },
+        "ratio": {
+          "median": 1.33,
+          "p90": 1.56
+        }
+      },
+      "BEDROOM2": {
+        "nRooms": 236,
+        "nPlans": 229,
+        "short": {
+          "n": 236,
+          "min": 2.7,
+          "p10": 2.75,
+          "median": 3,
+          "p90": 3.4,
+          "max": 4.02
+        },
+        "long": {
+          "n": 236,
+          "min": 2.77,
+          "p10": 3,
+          "median": 3.31,
+          "p90": 3.83,
+          "max": 4.92
+        },
+        "area": {
+          "n": 236,
+          "min": 7.56,
+          "p10": 8.47,
+          "median": 10.12,
+          "p90": 12.71,
+          "max": 18.42
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.26
+        }
+      },
+      "BEDROOM3": {
+        "nRooms": 236,
+        "nPlans": 229,
+        "short": {
+          "n": 236,
+          "min": 2.67,
+          "p10": 2.74,
+          "median": 3,
+          "p90": 3.4,
+          "max": 4
+        },
+        "long": {
+          "n": 236,
+          "min": 2.7,
+          "p10": 3,
+          "median": 3.28,
+          "p90": 3.75,
+          "max": 4.83
+        },
+        "area": {
+          "n": 236,
+          "min": 7.29,
+          "p10": 8.28,
+          "median": 9.73,
+          "p90": 12.4,
+          "max": 17.54
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.21
+        }
+      },
+      "BEDROOM4": {
+        "nRooms": 204,
+        "nPlans": 197,
+        "short": {
+          "n": 204,
+          "min": 2.67,
+          "p10": 2.78,
+          "median": 3,
+          "p90": 3.5,
+          "max": 4.22
+        },
+        "long": {
+          "n": 204,
+          "min": 2.71,
+          "p10": 3,
+          "median": 3.31,
+          "p90": 3.94,
+          "max": 4.74
+        },
+        "area": {
+          "n": 204,
+          "min": 7.32,
+          "p10": 8.56,
+          "median": 9.96,
+          "p90": 13.25,
+          "max": 20
+        },
+        "ratio": {
+          "median": 1.08,
+          "p90": 1.24
+        }
+      },
+      "GUESTROOM": {
+        "nRooms": 2,
+        "nPlans": 2,
+        "short": {
+          "n": 2,
+          "min": 3.07,
+          "p10": 3.11,
+          "median": 3.27,
+          "p90": 3.43,
+          "max": 3.47
+        },
+        "long": {
+          "n": 2,
+          "min": 3.46,
+          "p10": 3.5,
+          "median": 3.67,
+          "p90": 3.84,
+          "max": 3.88
+        },
+        "area": {
+          "n": 2,
+          "min": 10.62,
+          "p10": 10.91,
+          "median": 12.04,
+          "p90": 13.18,
+          "max": 13.46
+        },
+        "ratio": {
+          "median": 1.12,
+          "p90": 1.13
+        }
+      }
+    },
+    "GarageDouble": {
+      "label": {
+        "nRooms": 199,
+        "nPlans": 192,
+        "short": {
+          "n": 199,
+          "min": 5.49,
+          "p10": 5.51,
+          "median": 5.51,
+          "p90": 5.57,
+          "max": 5.87
+        },
+        "long": {
+          "n": 199,
+          "min": 5.76,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.14,
+          "max": 7.18
+        },
+        "area": {
+          "n": 199,
+          "min": 31.68,
+          "p10": 33.06,
+          "median": 33.06,
+          "p90": 34.63,
+          "max": 40.14
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.1
+        }
+      },
+      "carSpaces=2": {
+        "nRooms": 6,
+        "nPlans": 6,
+        "short": {
+          "n": 6,
+          "min": 5.51,
+          "p10": 5.51,
+          "median": 5.53,
+          "p90": 5.63,
+          "max": 5.63
+        },
+        "long": {
+          "n": 6,
+          "min": 6,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.01,
+          "max": 6.01
+        },
+        "area": {
+          "n": 6,
+          "min": 33.06,
+          "p10": 33.06,
+          "median": 33.21,
+          "p90": 33.78,
+          "max": 33.78
+        },
+        "ratio": {
+          "median": 1.09,
+          "p90": 1.09
+        }
+      }
+    },
+    "GarageSingle": {
+      "carSpaces=1": {
+        "nRooms": 3,
+        "nPlans": 3,
+        "short": {
+          "n": 3,
+          "min": 3.5,
+          "p10": 3.5,
+          "median": 3.5,
+          "p90": 3.57,
+          "max": 3.59
+        },
+        "long": {
+          "n": 3,
+          "min": 6,
+          "p10": 6,
+          "median": 6,
+          "p90": 6.01,
+          "max": 6.01
+        },
+        "area": {
+          "n": 3,
+          "min": 21,
+          "p10": 21,
+          "median": 21,
+          "p90": 21.46,
+          "max": 21.58
+        },
+        "ratio": {
+          "median": 1.71,
+          "p90": 1.71
+        }
+      },
+      "label": {
+        "nRooms": 15,
+        "nPlans": 15,
+        "short": {
+          "n": 15,
+          "min": 3.23,
+          "p10": 3.26,
+          "median": 3.5,
+          "p90": 3.67,
+          "max": 4.23
+        },
+        "long": {
+          "n": 15,
+          "min": 5.99,
+          "p10": 6,
+          "median": 6,
+          "p90": 6,
+          "max": 6.01
+        },
+        "area": {
+          "n": 15,
+          "min": 19.38,
+          "p10": 19.59,
+          "median": 21,
+          "p90": 22.04,
+          "max": 25.38
+        },
+        "ratio": {
+          "median": 1.71,
+          "p90": 1.84
+        }
+      }
+    },
+    "Alfresco": {
+      "ALFRESCO": {
+        "nRooms": 5,
+        "nPlans": 5,
+        "short": {
+          "n": 5,
+          "min": 2.7,
+          "p10": 2.7,
+          "median": 3,
+          "p90": 3.5,
+          "max": 3.5
+        },
+        "long": {
+          "n": 5,
+          "min": 3.6,
+          "p10": 3.64,
+          "median": 4,
+          "p90": 4.1,
+          "max": 4.1
+        },
+        "area": {
+          "n": 5,
+          "min": 9.72,
+          "p10": 9.83,
+          "median": 12,
+          "p90": 14.35,
+          "max": 14.35
+        },
+        "ratio": {
+          "median": 1.33,
+          "p90": 1.36
+        }
+      },
+      "OUTDOORROOM1": {
+        "nRooms": 68,
+        "nPlans": 65,
+        "short": {
+          "n": 68,
+          "min": 2.16,
+          "p10": 2.64,
+          "median": 3,
+          "p90": 3.88,
+          "max": 4.8
+        },
+        "long": {
+          "n": 68,
+          "min": 3,
+          "p10": 3.12,
+          "median": 4.44,
+          "p90": 5.56,
+          "max": 8.16
+        },
+        "area": {
+          "n": 68,
+          "min": 7.2,
+          "p10": 8.37,
+          "median": 13.49,
+          "p90": 20.44,
+          "max": 29
+        },
+        "ratio": {
+          "median": 1.33,
+          "p90": 1.91
+        }
+      },
+      "OUTDOORROOM": {
+        "nRooms": 63,
+        "nPlans": 62,
+        "short": {
+          "n": 63,
+          "min": 1.68,
+          "p10": 2.64,
+          "median": 3.24,
+          "p90": 4.06,
+          "max": 4.8
+        },
+        "long": {
+          "n": 63,
+          "min": 3.12,
+          "p10": 3.54,
+          "median": 4.08,
+          "p90": 5.28,
+          "max": 7.8
+        },
+        "area": {
+          "n": 63,
+          "min": 5.64,
+          "p10": 9.87,
+          "median": 12.44,
+          "p90": 20.91,
+          "max": 28.53
+        },
+        "ratio": {
+          "median": 1.26,
+          "p90": 1.91
+        }
+      }
+    }
+  },
+  "openZone": {
+    "method": "Family (room labelled FAMILY) area + Dining area, summed per plan. Kitchen is not listed by Metricon, so this is a lower bound on a Kitchen+Dining+Living zone; adjacency and overlap are unknown so no zone W x D is inferred.",
+    "nPlansFamilyPlusDining": 190,
+    "nPlansWithKitchenListed": 0,
+    "area": {
+      "n": 190,
+      "min": 17.47,
+      "p10": 26.44,
+      "median": 33.42,
+      "p90": 42.79,
+      "max": 56.11
+    },
+    "familyOnlyArea": {
+      "n": 190,
+      "min": 8.76,
+      "p10": 14.48,
+      "median": 17.98,
+      "p90": 23.92,
+      "max": 36.88
+    },
+    "areaWithKitchen": null,
+    "metricon": {
+      "n": 190,
+      "min": 17.47,
+      "p10": 26.44,
+      "median": 33.42,
+      "p90": 42.79,
+      "max": 56.11
+    },
+    "nonMetricon": null,
+    "nRecordsFamilyPlusDining": 193,
+    "note": "area table counts each plan key (slug) once; slug collisions merge two records, so records = nRecordsFamilyPlusDining"
+  },
+  "house": {
+    "metriconWidthXLength": {
+      "n": 276,
+      "width": {
+        "n": 276,
+        "min": 7.67,
+        "p10": 10.79,
+        "median": 12.23,
+        "p90": 15.23,
+        "max": 38.63
+      },
+      "length": {
+        "n": 276,
+        "min": 9.11,
+        "p10": 15.65,
+        "median": 21.71,
+        "p90": 24.65,
+        "max": 39.59
+      },
+      "short": {
+        "n": 276,
+        "min": 7.67,
+        "p10": 10.43,
+        "median": 12.23,
+        "p90": 14.87,
+        "max": 20.15
+      },
+      "long": {
+        "n": 276,
+        "min": 11.99,
+        "p10": 16.73,
+        "median": 21.95,
+        "p90": 24.89,
+        "max": 39.59
+      },
+      "area": {
+        "n": 276,
+        "min": 109.23,
+        "p10": 179.97,
+        "median": 264.98,
+        "p90": 359.99,
+        "max": 788.24
+      }
+    },
+    "note": "houseWidthM x houseLengthM as printed by Metricon (normalized from payload.json). Envelope definition (garage/porch/alfresco inclusion) not verified per plan.",
+    "nonMetriconHomeDepthN": 7,
+    "nonMetriconHomeDepth": {
+      "n": 7,
+      "min": 13.49,
+      "p10": 14.15,
+      "median": 20.77,
+      "p90": 24.85,
+      "max": 27.5
+    },
+    "totalAreaM2": {
+      "n": 378,
+      "min": 113.68,
+      "p10": 148.33,
+      "median": 226.19,
+      "p90": 356.34,
+      "max": 529.27
+    },
+    "houseAreaM2Metricon": {
+      "n": 276,
+      "min": 102.22,
+      "p10": 133.14,
+      "median": 192.1,
+      "p90": 324.67,
+      "max": 448.86
+    }
+  },
+  "unmapped": [
+    {
+      "label": "KITCHENPRIMARYBED",
+      "n": 2
+    },
+    {
+      "label": "LINENRECTHEATRE",
+      "n": 2
+    },
+    {
+      "label": "DININGBED4",
+      "n": 2
+    },
+    {
+      "label": "STOREPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "L'DRYBATHDOUBLEGARAGEBED2",
+      "n": 1
+    },
+    {
+      "label": "ENSWIRROBERECROBERECLINRECBED3",
+      "n": 1
+    },
+    {
+      "label": "KITCHENPTY",
+      "n": 1
+    },
+    {
+      "label": "LINENWIRL'DRYBED2",
+      "n": 1
+    },
+    {
+      "label": "KITCHENBATHENSPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "PORCHPLANTERBOXPTYROBERECROBERECCARPORT",
+      "n": 1
+    },
+    {
+      "label": "STKITCHENPTYBED3",
+      "n": 1
+    },
+    {
+      "label": "CLPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "BATHL'DRYLIVING",
+      "n": 1
+    },
+    {
+      "label": "PLANTERBOXPTYL'DRYKITCHENDININGPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "ENSLIVING",
+      "n": 1
+    },
+    {
+      "label": "OVERALLBATHBED2",
+      "n": 1
+    },
+    {
+      "label": "WIRLINENRECROBERECROBERECCARPORT",
+      "n": 1
+    },
+    {
+      "label": "PLANTERBOXWIPWIRROBERECROBERECROBEREC",
+      "n": 1
+    },
+    {
+      "label": "LIVINGDOUBLEGARAGEKITCHENBED2",
+      "n": 1
+    },
+    {
+      "label": "DININGPORCHL'DRYBATHLINENRECENSTHEATRE",
+      "n": 1
+    },
+    {
+      "label": "WIRENSBATHL'DRYBED2",
+      "n": 1
+    },
+    {
+      "label": "WILBED3",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEBATHALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "PORCHPLANTERBOXL'DRYKITCHENPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "ENSWIRLIVING",
+      "n": 1
+    },
+    {
+      "label": "WIRL'DRYBATHKITCHEN/DINING",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEPTYALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "L'DRYENSWCWCBED3",
+      "n": 1
+    },
+    {
+      "label": "ENTRYDOUBLEGARAGEWIPDINING",
+      "n": 1
+    },
+    {
+      "label": "KITCHENLIVING",
+      "n": 1
+    },
+    {
+      "label": "PORCHALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "BATHLINENRECROBERECROBERECBED2",
+      "n": 1
+    },
+    {
+      "label": "BERECROBERECWIPLINENRECLINENRECPLANTERBOX",
+      "n": 1
+    },
+    {
+      "label": "OVERALLBED2",
+      "n": 1
+    },
+    {
+      "label": "DRYLIVINGDININGDOUBLEGARAGEENSPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "KITCHENBED3",
+      "n": 1
+    },
+    {
+      "label": "BATHALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "OBERECROBERECROBERECWIRPLANTERBOXBATHBED2",
+      "n": 1
+    },
+    {
+      "label": "L'DRYSTUDYNOOKKITCHENBED3",
+      "n": 1
+    },
+    {
+      "label": "LINENRECENSPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "IPROBERECROBERECROBERECPLANTERBOXBATHBED2",
+      "n": 1
+    },
+    {
+      "label": "L'DRYLIVING",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEENSSTUDYNOOKKITCHENBED3",
+      "n": 1
+    },
+    {
+      "label": "PORCHPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "BATHWCPORCHENSALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "ECROBERECROBERECLINENRECL'DRYDININGLIVING",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEBED2",
+      "n": 1
+    },
+    {
+      "label": "KITCHENWIPLINENRECLINRECPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "WIRWIRENSBATHROBERECROBERECTHEATRE",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEDINING",
+      "n": 1
+    },
+    {
+      "label": "BATHLIVING",
+      "n": 1
+    },
+    {
+      "label": "L'DRYWIPROBERECROBERECENSWIR2WIR1ALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "WIRL'DRYENSBATHLIVING",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEPORCHPLANTERBOXPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "LINENRECBED4",
+      "n": 1
+    },
+    {
+      "label": "PANTRYWIRROBERECROBERECROBEREC",
+      "n": 1
+    },
+    {
+      "label": "LIVINGDOUBLEGARAGEL'DRYKITCHENBED2",
+      "n": 1
+    },
+    {
+      "label": "ENSBATHROBERECPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "LINENRECALFRESCO",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEL'DRYBED2",
+      "n": 1
+    },
+    {
+      "label": "BATHROBERECLINENRECKITCHENPTYDININGLIVING",
+      "n": 1
+    },
+    {
+      "label": "ROBERECENSWIRPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "DOUBLEGARAGEWIRPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "ENSL'DRYBED2",
+      "n": 1
+    },
+    {
+      "label": "BATHLIVINGWCWCKITCHENPTYDINING",
+      "n": 1
+    },
+    {
+      "label": "PORCHPLANTERBOXKITCHENPTY",
+      "n": 1
+    },
+    {
+      "label": "ENRECROBERECROBERECDOUBLEGARAGEPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "ENSBED2",
+      "n": 1
+    },
+    {
+      "label": "GEPORCHROBERECROBERECLIVINGPLANTERBOXBED2",
+      "n": 1
+    },
+    {
+      "label": "WIRKITCHENENSDININGWIR",
+      "n": 1
+    },
+    {
+      "label": "KITCHENDOUBLEGARAGEBATHPRIMARYBED",
+      "n": 1
+    },
+    {
+      "label": "WIRBED2",
+      "n": 1
+    },
+    {
+      "label": "PTYLIVING",
+      "n": 1
+    },
+    {
+      "label": "ENSPORCHPLANTERBOXL'DRYBED4",
+      "n": 1
+    },
+    {
+      "label": "First floor study",
+      "n": 1
+    },
+    {
+      "label": "Leisure Room",
+      "n": 1
+    }
+  ],
+  "ignored": [
+    {
+      "label": "AUTO SECTIONAL DOOR",
+      "n": 5
+    },
+    {
+      "label": "Double Garage and Workshop",
+      "n": 2
+    },
+    {
+      "label": "W'",
+      "n": 1
+    },
+    {
+      "label": "VITAL STATS",
+      "n": 1
+    },
+    {
+      "label": "Balcony",
+      "n": 1
+    }
+  ],
+  "answers": {
+    "masterLongOver4_5": {
+      "n": 245,
+      "count": 87,
+      "share": 0.36
+    },
+    "masterShortOver3_6": {
+      "n": 245,
+      "count": 114,
+      "share": 0.47
+    },
+    "doubleGarageWidthUnder5_5": {
+      "n": 205,
+      "count": 0,
+      "share": 0
+    },
+    "doubleGarageShortUnder5_5": {
+      "n": 205,
+      "count": 3,
+      "share": 0.01
+    },
+    "wcLongOver2_6": {
+      "n": 0,
+      "count": 0,
+      "share": null
+    },
+    "livingFamilyAreaOver32_5": {
+      "n": 327,
+      "count": 3,
+      "share": 0.01
+    }
+  },
+  "rejectedDims": [
+    "glendale-39-nnsw:Study:3.29x321",
+    "sovereign-49:Activity:36.5x4.09"
+  ],
+  "labelTable": {
+    "Master": [
+      "MAINBEDROOM",
+      "MAINBED",
+      "PRIMARYBED",
+      "PRIMARYBEDROOM",
+      "MASTER",
+      "MASTERBED",
+      "MASTERBEDROOM",
+      "MASTERSUITE",
+      "BED1",
+      "BEDROOM1",
+      "SUITE"
+    ],
+    "Bedroom": [
+      "BED2",
+      "BED3",
+      "BED4",
+      "BED5",
+      "BED6",
+      "BEDROOM2",
+      "BEDROOM3",
+      "BEDROOM4",
+      "BEDROOM5",
+      "BEDROOM6",
+      "GUESTBEDROOM",
+      "GUESTROOM",
+      "GUEST"
+    ],
+    "Study": [
+      "STUDY",
+      "STUDYNOOK",
+      "OFFICE",
+      "ITNOOK",
+      "GROUNDFLOORSTUDY"
+    ],
+    "Theatre": [
+      "THEATRE",
+      "HOMETHEATRE",
+      "MEDIA",
+      "MEDIAROOM",
+      "AUDIOVISUAL"
+    ],
+    "Kitchen": [
+      "KITCHEN",
+      "KITCHENPANTRY"
+    ],
+    "Dining": [
+      "DINING",
+      "DININGROOM"
+    ],
+    "Living/Family": [
+      "FAMILY",
+      "FAMILYROOM",
+      "LIVING",
+      "LIVINGROOM"
+    ],
+    "Activity": [
+      "ACTIVITY",
+      "LEISURE",
+      "LESIURE",
+      "RUMPUS",
+      "RETREAT",
+      "SITTING",
+      "SITTINGROOM"
+    ],
+    "Alfresco": [
+      "ALFRESCO",
+      "OUTDOORROOM",
+      "OUTDOORROOM1",
+      "OUTDOORROOM2"
+    ],
+    "Ensuite": [
+      "ENS",
+      "ENSUITE"
+    ],
+    "WIR": [
+      "WIR",
+      "WIP"
+    ],
+    "Bathroom": [
+      "BATH",
+      "BATHROOM"
+    ],
+    "WC": [
+      "WC",
+      "TOILET"
+    ],
+    "Laundry": [
+      "LAUNDRY",
+      "LDRY"
+    ],
+    "Pantry": [
+      "PANTRY",
+      "PTY",
+      "WALKINPANTRY"
+    ],
+    "Scullery": [
+      "SCULLERY"
+    ],
+    "Entry": [
+      "ENTRY",
+      "FOYER",
+      "PORCH"
+    ],
+    "GarageDouble": [
+      "DOUBLEGARAGE"
+    ],
+    "GarageSingle": [
+      "SINGLEGARAGE"
+    ],
+    "Garage(bare, via carSpaces)": [
+      "GARAGE"
+    ],
+    "ignored": [
+      "AUTOSECTIONALDOOR",
+      "VITALSTATS",
+      "W",
+      "BALCONY",
+      "DOUBLEGARAGEANDWORKSHOP"
+    ]
+  },
+  "catalogRank": {
+    "Master": {
+      "catalog": {
+        "name": "Master",
+        "min": [
+          3,
+          3
+        ],
+        "pref": [
+          3.5,
+          3.6
+        ],
+        "max": [
+          4.5,
+          4.5
+        ]
+      },
+      "n": 245,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 3,
+          "pref": 45,
+          "max": 93
+        },
+        "longSide": {
+          "min": 0,
+          "pref": 30,
+          "max": 64
+        }
+      }
+    },
+    "Bedroom": {
+      "catalog": {
+        "name": "Bedroom",
+        "min": [
+          2.7,
+          2.7
+        ],
+        "pref": [
+          3,
+          3.1
+        ],
+        "max": [
+          4,
+          4
+        ]
+      },
+      "n": 720,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 7,
+          "pref": 54,
+          "max": 99
+        },
+        "longSide": {
+          "min": 0,
+          "pref": 27,
+          "max": 94
+        }
+      }
+    },
+    "Ensuite": {
+      "catalog": {
+        "name": "Master Ensuite",
+        "min": [
+          1.8,
+          2.4
+        ],
+        "pref": [
+          2.2,
+          2.8
+        ],
+        "max": [
+          3,
+          3.5
+        ]
+      },
+      "n": 0
+    },
+    "WIR": {
+      "catalog": {
+        "name": "Master WIR",
+        "min": [
+          1.8,
+          2.2
+        ],
+        "pref": [
+          2.2,
+          3
+        ],
+        "max": [
+          3,
+          4
+        ]
+      },
+      "n": 0
+    },
+    "Bathroom": {
+      "catalog": {
+        "name": "Shared Bathroom",
+        "min": [
+          2,
+          2.4
+        ],
+        "pref": [
+          2.4,
+          3
+        ],
+        "max": [
+          3,
+          3.6
+        ]
+      },
+      "n": 0
+    },
+    "WC": {
+      "catalog": {
+        "name": "WC",
+        "min": [
+          1,
+          1.8
+        ],
+        "pref": [
+          1.2,
+          2.2
+        ],
+        "max": [
+          1.8,
+          2.6
+        ]
+      },
+      "n": 0
+    },
+    "GarageSingle": {
+      "catalog": {
+        "name": "Garage — single geometry preset",
+        "min": [
+          3.5,
+          5.5
+        ],
+        "pref": [
+          3.6,
+          6
+        ],
+        "max": [
+          4.5,
+          6.5
+        ]
+      },
+      "n": 18,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 61,
+          "pref": 83,
+          "max": 100
+        },
+        "longSide": {
+          "min": 0,
+          "pref": 89,
+          "max": 100
+        }
+      }
+    },
+    "GarageDouble": {
+      "catalog": {
+        "name": "Garage — double geometry preset",
+        "min": [
+          5.5,
+          5.5
+        ],
+        "pref": [
+          6,
+          6
+        ],
+        "max": [
+          7,
+          7
+        ]
+      },
+      "n": 205,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 5,
+          "pref": 100,
+          "max": 100
+        },
+        "longSide": {
+          "min": 0,
+          "pref": 86,
+          "max": 99
+        }
+      }
+    },
+    "Laundry": {
+      "catalog": {
+        "name": "Laundry",
+        "min": [
+          1.8,
+          2
+        ],
+        "pref": [
+          2.2,
+          2.6
+        ],
+        "max": [
+          3,
+          3.5
+        ]
+      },
+      "n": 0
+    },
+    "Pantry": {
+      "catalog": {
+        "name": "Pantry",
+        "min": [
+          1.6,
+          1.8
+        ],
+        "pref": [
+          2,
+          2.4
+        ],
+        "max": [
+          2.8,
+          3.2
+        ]
+      },
+      "n": 0
+    },
+    "Study": {
+      "catalog": {
+        "name": "Study",
+        "min": [
+          2,
+          2.2
+        ],
+        "pref": [
+          2.4,
+          3
+        ],
+        "max": [
+          3.5,
+          4
+        ]
+      },
+      "n": 78,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 14,
+          "pref": 23,
+          "max": 96
+        },
+        "longSide": {
+          "min": 0,
+          "pref": 12,
+          "max": 87
+        }
+      }
+    },
+    "Theatre": {
+      "catalog": {
+        "name": "Theatre",
+        "min": [
+          3.5,
+          4.5
+        ],
+        "pref": [
+          4,
+          5.5
+        ],
+        "max": [
+          5,
+          8
+        ]
+      },
+      "n": 28,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 46,
+          "pref": 86,
+          "max": 96
+        },
+        "longSide": {
+          "min": 79,
+          "pref": 93,
+          "max": 100
+        }
+      }
+    },
+    "Activity": {
+      "catalog": {
+        "name": "Extra Family/Living",
+        "min": [
+          3,
+          3
+        ],
+        "pref": [
+          3.5,
+          4
+        ],
+        "max": [
+          5,
+          6
+        ]
+      },
+      "n": 174,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 11,
+          "pref": 45,
+          "max": 98
+        },
+        "longSide": {
+          "min": 2,
+          "pref": 34,
+          "max": 94
+        }
+      }
+    },
+    "Alfresco": {
+      "catalog": {
+        "name": "Alfresco",
+        "min": [
+          2.5,
+          3
+        ],
+        "pref": [
+          3,
+          4.5
+        ],
+        "max": [
+          5,
+          7.5
+        ]
+      },
+      "n": 136,
+      "pctRankOfCatalog": {
+        "shortSide": {
+          "min": 7,
+          "pref": 43,
+          "max": 100
+        },
+        "longSide": {
+          "min": 3,
+          "pref": 60,
+          "max": 98
+        }
+      }
+    },
+    "FamilyCore": {
+      "catalog": {
+        "name": "Family Core (shared Kitchen/Dining/Living)",
+        "min": [
+          4,
+          5
+        ],
+        "pref": [
+          5,
+          6.5
+        ],
+        "max": [
+          6,
+          9
+        ]
+      },
+      "n": 190,
+      "areaPctRank": {
+        "min": 1,
+        "pref": 47,
+        "max": 99
+      },
+      "note": "compared against Family+Dining area lower bound"
+    }
+  },
+  "catalogParsed": {
+    "Master": {
+      "name": "Master",
+      "min": [
+        3,
+        3
+      ],
+      "pref": [
+        3.5,
+        3.6
+      ],
+      "max": [
+        4.5,
+        4.5
+      ]
+    },
+    "Bedroom": {
+      "name": "Bedroom",
+      "min": [
+        2.7,
+        2.7
+      ],
+      "pref": [
+        3,
+        3.1
+      ],
+      "max": [
+        4,
+        4
+      ]
+    },
+    "Ensuite": {
+      "name": "Master Ensuite",
+      "min": [
+        1.8,
+        2.4
+      ],
+      "pref": [
+        2.2,
+        2.8
+      ],
+      "max": [
+        3,
+        3.5
+      ]
+    },
+    "WIR": {
+      "name": "Master WIR",
+      "min": [
+        1.8,
+        2.2
+      ],
+      "pref": [
+        2.2,
+        3
+      ],
+      "max": [
+        3,
+        4
+      ]
+    },
+    "Bathroom": {
+      "name": "Shared Bathroom",
+      "min": [
+        2,
+        2.4
+      ],
+      "pref": [
+        2.4,
+        3
+      ],
+      "max": [
+        3,
+        3.6
+      ]
+    },
+    "WC": {
+      "name": "WC",
+      "min": [
+        1,
+        1.8
+      ],
+      "pref": [
+        1.2,
+        2.2
+      ],
+      "max": [
+        1.8,
+        2.6
+      ]
+    },
+    "Living/Family": {
+      "name": "Family Core (shared Kitchen/Dining/Living)",
+      "min": [
+        4,
+        5
+      ],
+      "pref": [
+        5,
+        6.5
+      ],
+      "max": [
+        6,
+        9
+      ]
+    },
+    "GarageSingle": {
+      "name": "Garage — single geometry preset",
+      "min": [
+        3.5,
+        5.5
+      ],
+      "pref": [
+        3.6,
+        6
+      ],
+      "max": [
+        4.5,
+        6.5
+      ]
+    },
+    "GarageDouble": {
+      "name": "Garage — double geometry preset",
+      "min": [
+        5.5,
+        5.5
+      ],
+      "pref": [
+        6,
+        6
+      ],
+      "max": [
+        7,
+        7
+      ]
+    },
+    "Laundry": {
+      "name": "Laundry",
+      "min": [
+        1.8,
+        2
+      ],
+      "pref": [
+        2.2,
+        2.6
+      ],
+      "max": [
+        3,
+        3.5
+      ]
+    },
+    "Pantry": {
+      "name": "Pantry",
+      "min": [
+        1.6,
+        1.8
+      ],
+      "pref": [
+        2,
+        2.4
+      ],
+      "max": [
+        2.8,
+        3.2
+      ]
+    },
+    "Study": {
+      "name": "Study",
+      "min": [
+        2,
+        2.2
+      ],
+      "pref": [
+        2.4,
+        3
+      ],
+      "max": [
+        3.5,
+        4
+      ]
+    },
+    "Theatre": {
+      "name": "Theatre",
+      "min": [
+        3.5,
+        4.5
+      ],
+      "pref": [
+        4,
+        5.5
+      ],
+      "max": [
+        5,
+        8
+      ]
+    },
+    "Activity": {
+      "name": "Extra Family/Living",
+      "min": [
+        3,
+        3
+      ],
+      "pref": [
+        3.5,
+        4
+      ],
+      "max": [
+        5,
+        6
+      ]
+    },
+    "Alfresco": {
+      "name": "Alfresco",
+      "min": [
+        2.5,
+        3
+      ],
+      "pref": [
+        3,
+        4.5
+      ],
+      "max": [
+        5,
+        7.5
+      ]
+    }
+  },
+  "proposal": {
+    "Master": {
+      "mechanicalPerDesign": {
+        "min": [
+          3.12,
+          3.38
+        ],
+        "pref": [
+          3.5,
+          4.05
+        ],
+        "max": [
+          4.25,
+          5.18
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          3.2,
+          3.46
+        ],
+        "pref": [
+          3.59,
+          4.18
+        ],
+        "max": [
+          4.32,
+          5.38
+        ]
+      },
+      "goldenFailures": [
+        "GB-02 long 3.35 < min 3.38"
+      ],
+      "adjusted": {
+        "min": [
+          3,
+          3
+        ],
+        "pref": [
+          3.5,
+          4.05
+        ],
+        "max": [
+          4.25,
+          5.18
+        ],
+        "rule": "min = min(p10, golden, catalog min); max = max(p90, golden), at least pref"
+      },
+      "catalog": {
+        "name": "Master",
+        "min": [
+          3,
+          3
+        ],
+        "pref": [
+          3.5,
+          3.6
+        ],
+        "max": [
+          4.5,
+          4.5
+        ]
+      }
+    },
+    "Bedroom": {
+      "mechanicalPerDesign": {
+        "min": [
+          2.7,
+          2.98
+        ],
+        "pref": [
+          2.97,
+          3.4
+        ],
+        "max": [
+          3.42,
+          3.89
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          2.75,
+          3
+        ],
+        "pref": [
+          3,
+          3.31
+        ],
+        "max": [
+          3.49,
+          3.89
+        ]
+      },
+      "goldenFailures": [
+        "GB-03 long 2.8 < min 2.98"
+      ],
+      "adjusted": {
+        "min": [
+          2.7,
+          2.7
+        ],
+        "pref": [
+          2.97,
+          3.4
+        ],
+        "max": [
+          3.42,
+          3.89
+        ],
+        "rule": "min = min(p10, golden, catalog min); max = max(p90, golden), at least pref"
+      },
+      "catalog": {
+        "name": "Bedroom",
+        "min": [
+          2.7,
+          2.7
+        ],
+        "pref": [
+          3,
+          3.1
+        ],
+        "max": [
+          4,
+          4
+        ]
+      }
+    },
+    "Study": {
+      "mechanicalPerDesign": {
+        "min": [
+          1.58,
+          3.08
+        ],
+        "pref": [
+          2.97,
+          3.53
+        ],
+        "max": [
+          3.36,
+          4
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          1.67,
+          2.9
+        ],
+        "pref": [
+          2.93,
+          3.59
+        ],
+        "max": [
+          3.45,
+          4.08
+        ]
+      },
+      "goldenFailures": [],
+      "adjusted": {
+        "min": [
+          1.58,
+          2.2
+        ],
+        "pref": [
+          2.97,
+          3.53
+        ],
+        "max": [
+          3.36,
+          4
+        ],
+        "rule": "min = min(p10, golden, catalog min); max = max(p90, golden), at least pref"
+      },
+      "catalog": {
+        "name": "Study",
+        "min": [
+          2,
+          2.2
+        ],
+        "pref": [
+          2.4,
+          3
+        ],
+        "max": [
+          3.5,
+          4
+        ]
+      }
+    },
+    "Theatre": {
+      "mechanicalPerDesign": {
+        "min": [
+          3.15,
+          3.5
+        ],
+        "pref": [
+          3.56,
+          4.1
+        ],
+        "max": [
+          4.23,
+          5.46
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          3,
+          3.5
+        ],
+        "pref": [
+          3.55,
+          4.03
+        ],
+        "max": [
+          4.14,
+          5.05
+        ]
+      },
+      "goldenFailures": [],
+      "adjusted": {
+        "min": [
+          3.15,
+          3.5
+        ],
+        "pref": [
+          3.56,
+          4.1
+        ],
+        "max": [
+          4.23,
+          5.46
+        ],
+        "rule": "min = min(p10, golden, catalog min); max = max(p90, golden), at least pref"
+      },
+      "catalog": {
+        "name": "Theatre",
+        "min": [
+          3.5,
+          4.5
+        ],
+        "pref": [
+          4,
+          5.5
+        ],
+        "max": [
+          5,
+          8
+        ]
+      }
+    },
+    "Activity": {
+      "mechanicalPerDesign": {
+        "min": [
+          2.95,
+          3.28
+        ],
+        "pref": [
+          3.44,
+          4.02
+        ],
+        "max": [
+          4.13,
+          5.27
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          3,
+          3.35
+        ],
+        "pref": [
+          3.62,
+          4.4
+        ],
+        "max": [
+          4.24,
+          5.56
+        ]
+      },
+      "goldenFailures": [],
+      "adjusted": {
+        "min": [
+          2.95,
+          3
+        ],
+        "pref": [
+          3.44,
+          4.02
+        ],
+        "max": [
+          4.13,
+          5.27
+        ],
+        "rule": "min = min(p10, golden, catalog min); max = max(p90, golden), at least pref"
+      },
+      "catalog": {
+        "name": "Extra Family/Living",
+        "min": [
+          3,
+          3
+        ],
+        "pref": [
+          3.5,
+          4
+        ],
+        "max": [
+          5,
+          6
+        ]
+      }
+    },
+    "Alfresco": {
+      "mechanicalPerDesign": {
+        "min": [
+          2.62,
+          3.58
+        ],
+        "pref": [
+          3.24,
+          4.32
+        ],
+        "max": [
+          3.96,
+          5.3
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          2.64,
+          3.3
+        ],
+        "pref": [
+          3.24,
+          4.2
+        ],
+        "max": [
+          3.96,
+          5.46
+        ]
+      },
+      "goldenFailures": [
+        "GB-01 short 2.51 < min 2.62"
+      ],
+      "adjusted": {
+        "min": [
+          2.5,
+          3
+        ],
+        "pref": [
+          3.24,
+          4.32
+        ],
+        "max": [
+          3.96,
+          5.3
+        ],
+        "rule": "min = min(p10, golden, catalog min); max = max(p90, golden), at least pref"
+      },
+      "catalog": {
+        "name": "Alfresco",
+        "min": [
+          2.5,
+          3
+        ],
+        "pref": [
+          3,
+          4.5
+        ],
+        "max": [
+          5,
+          7.5
+        ]
+      }
+    },
+    "GarageSingle": {
+      "mechanicalPerDesign": {
+        "min": [
+          3.32,
+          6
+        ],
+        "pref": [
+          3.51,
+          6
+        ],
+        "max": [
+          3.69,
+          6.01
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          3.29,
+          6
+        ],
+        "pref": [
+          3.5,
+          6
+        ],
+        "max": [
+          3.65,
+          6
+        ]
+      },
+      "goldenFailures": [],
+      "adjusted": {
+        "min": [
+          3.5,
+          5.5
+        ],
+        "pref": [
+          3.51,
+          6
+        ],
+        "max": [
+          4.5,
+          6.5
+        ],
+        "rule": "garage: keep catalog min/max, move only pref to per-design median"
+      },
+      "catalog": {
+        "name": "Garage — single geometry preset",
+        "min": [
+          3.5,
+          5.5
+        ],
+        "pref": [
+          3.6,
+          6
+        ],
+        "max": [
+          4.5,
+          6.5
+        ]
+      }
+    },
+    "GarageDouble": {
+      "mechanicalPerDesign": {
+        "min": [
+          5.51,
+          6
+        ],
+        "pref": [
+          5.51,
+          6
+        ],
+        "max": [
+          5.59,
+          6.24
+        ]
+      },
+      "mechanicalRoomLevel": {
+        "min": [
+          5.51,
+          6
+        ],
+        "pref": [
+          5.51,
+          6
+        ],
+        "max": [
+          5.59,
+          6.12
+        ]
+      },
+      "goldenFailures": [
+        "GB-01 long 5.67 < min 6.00",
+        "GB-01 short 5.63 > max 5.59"
+      ],
+      "adjusted": {
+        "min": [
+          5.5,
+          5.5
+        ],
+        "pref": [
+          5.51,
+          6
+        ],
+        "max": [
+          7,
+          7
+        ],
+        "rule": "garage: keep catalog min/max, move only pref to per-design median"
+      },
+      "catalog": {
+        "name": "Garage — double geometry preset",
+        "min": [
+          5.5,
+          5.5
+        ],
+        "pref": [
+          6,
+          6
+        ],
+        "max": [
+          7,
+          7
+        ]
+      }
+    }
+  }
+}
