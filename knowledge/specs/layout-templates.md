@@ -2,12 +2,14 @@
 
 **Bucket:** PL-23
 **Author:** Sonnet 5.5, standing in for Sol (Codex out of usage until 2026-10-10)
-**Status:** Review PASS-WITH-NOTES — 2026-10-06: independent read-only Sonnet reviewer, round 1 PASS-WITH-NOTES (D21/D23 conflicts, T2 front band and fit, T1 L-variant, slot assignment, chains, metric formulas), round 2 PASS-WITH-NOTES (nits only), nits applied. Proposal; nothing adopted; needs-human Q1–Q20. Every number is **provisional — uncalibrated (G-CALIBRATION)**; template choices, metric gates, preset and threshold numbers and all copy are human gates (section 8).
-**Depends on:** PL-10 (`knowledge/specs/dimensions-and-briefs.md`), PL-11 (`relationships.md`), PL-12 (`families-and-variation.md`), the accepted decisions D01-D60 (`plan-lab-astra-plan.md`)
+**Status:** Review PASS-WITH-NOTES — 2026-10-06: independent read-only Sonnet reviewer, round 1 PASS-WITH-NOTES (D21/D23 conflicts, T2 front band and fit, T1 L-variant, slot assignment, chains, metric formulas), round 2 PASS-WITH-NOTES (nits only), nits applied. Decisions adopted 2026-10-06 (D61–D64, the D21 amendment); the rest is a proposal; Q14 and Q20 still open. Every number is **provisional — uncalibrated (G-CALIBRATION)**; template choices, metric gates, preset and threshold numbers and all copy are human gates (section 8).
+**Depends on:** PL-10 (`knowledge/specs/dimensions-and-briefs.md`), PL-11 (`relationships.md`), PL-12 (`families-and-variation.md`), the accepted decisions D01-D64 (`plan-lab-astra-plan.md`)
 **Consumers:** PL-25 (spike v2 generator, stages 4-5), PL-31 (validator metrics), PL-13 (calibration evidence)
 **Evidence files:** `knowledge/reference/layout-stats/measure.mjs`, `stats.json`, `worked-examples.mjs`, `worked-examples-output.txt` (derived numbers only; no plan image or plan text is copied into the repo)
 
 **Reading order for a busy reader:** section 2 (the four templates, slot assignment 2.4, chains and hall records 2.5), section 7 (the six fits with arithmetic), section 6.3 (the conflicts list C1-C21), section 8 (the questions).
+
+**Decisions adopted 2026-10-06.** From the user's answers in the section 8 table: Q1, Q2, Q3, Q4, Q5 (amends D21), Q6, Q7 (D61), Q8, Q12 (D63), Q13, Q16, Q17, Q18 and Q19, the D62 size presets from the 2026-10-06 evidence (Q9/Q15) and the D64 ranking. Q10 and Q11 are moot (no Alfresco, D63). Still open: Q14 (GB-01 real width) and Q20 (double Garage minimum).
 
 ## 0. What this file is for
 
@@ -309,6 +311,8 @@ Pure integer arithmetic, no dependency. All thresholds named here are proposals 
 
 ### 4.1 Steps
 
+**Note 2026-10-06:** the D21 amendment (PL-23 Q5) supersedes the maximum-first steps below: each room aims for its typical (preferred) size and the footprint is the smallest that fits inside the supplied maximum bounds, as implemented in the PL-25 spike iteration 2; the steps below are kept as the pre-amendment method.
+
 1. **Screen.** Pick candidate templates (2.3 order; brief screens from PL-12 6.1). Skip a template if a required room has no accepting slot (for example Master with no suite block fit, or four Bedrooms plus Study on a template whose slots hold three).
 2. **Fix the depth chain** of each template (the "shared band depths"). Examples, with `Dg` the Garage depth:
    - T1: `Df = Dg` and Master block depth `Dm + 100 + Dr` must equal `Dg` (stretch the Garage up to its maximum, or the Master block up to its maximum). Wing depth `Dw = Σ room lengths + 100 × (n − 1)` and the Core takes `Dw` too. Footprint depth `Df_outside = 250 + Df + 100 + Dw + 250`.
@@ -433,21 +437,21 @@ Overlap between CF patterns is allowed (PL-12 section 2 note 4). D46 says CF-01 
 
 Catalog rooms and ranges, the sorted-sides rule and aspect limits (PL-10 section 5), allowances (section 4), Entry as automatic circulation, Family Core as one rectangle, optional-room retention (D23/D42), front edge and positions (PL-11 section 7), cased opening and door semantics (`W_door` 820, PL-11 G2), B-ENTRY, B-REACH, B-PRIV, group coherence with the D56 split (PL-11 section 6). New terms introduced here, all proposals: *band*, *column*, *slot*, *strip depth*, *wet row*, *lobby block*, *template*.
 
-### 6.3 Check against every accepted decision D01-D60, and conflicts left open
+### 6.3 Check against every accepted decision D01-D64, and conflicts left open
 
 Status: **OK** consistent; **Note** consistent with a caveat; **CONFLICT** the template approach contradicts the decision or a reviewed contract (listed in the table below this one, **not resolved**); **n/a** not touched.
 
 | Decision | Status | Note |
 | --- | --- | --- |
 | D01 handoff | OK | rectangles, walls, doors, circulation |
-| D02 max bounds | Note | 4.1 step 4 takes the widest fillable footprint within the envelope (D21) and so shrinks it when extra width would only exceed room limits (D02); a smaller-footprint preference is Q5 |
+| D02 max bounds | Note | 4.1 step 4 takes the widest fillable footprint within the envelope (D21) and so shrinks it when extra width would only exceed room limits (D02); the smaller-footprint preference is the D21 amendment (Q5, answered yes 2026-10-06) |
 | D03, D05, D08, D09, D10 | OK / n/a | graph and stage vocabulary unchanged |
 | D04, D25, D54 | Note | templates are provisional seeds, not diversity; mirrors are one identity |
 | D06 inside bounds | OK | Alfresco and Garage inside the footprint |
-| D07 rectangular rooms | **CONFLICT** C2 | L-shaped Core (ideal-2 and ideal-3, T2 variants); the template bands themselves are rectangles |
+| D07 rectangular rooms | **Note**; C2 settled for the Family Core (D61) | the L-shaped Core (ideal-2 and ideal-3, T2 variants) is now allowed; every other room and the template bands themselves stay rectangles |
 | D11, D52 presets | OK | PL-10 catalog; the ideals do not match it (C8) |
 | D12 required/optional | Note | residual filler policy C4 |
-| D13 usability before compactness | Note | **superseded by D21** (the plan says so); the grammar follows D21 and D22, not D13; the smaller-footprint preference is an amendment (Q5, C15) |
+| D13 usability before compactness | Note | **superseded by D21** (the plan says so); the grammar follows D21 and D22, not D13; the smaller-footprint preference is now the D21 amendment (Q5, answered yes 2026-10-06) |
 | D14, D28, D31, D35-D37, D40, D53, D55, D60 | OK / n/a | no template effect; D31 mirror used as a free variation |
 | D15 through-routes | Note | T3/T4 use the Core to reach the rear lobby (open plan carries circulation, allowed) |
 | D16 relationship meanings | OK | |
@@ -455,7 +459,7 @@ Status: **OK** consistent; **Note** consistent with a caveat; **CONFLICT** the t
 | D18 windows excluded | **CONFLICT** C3 | metric M1 (rooms on an exterior wall) |
 | D19 no furniture fit | OK | no car, bed or fixture checks used |
 | D20 failure states | OK | 4.4 keeps proven/budget/quality apart |
-| D21 maximum-first | resolved; first-draft conflict C15 recorded | 4.1 steps 3-4 are now maximum-first (start at maximum, reduce toward preferred, then toward minimum; `Wf*` the widest fillable footprint within the envelope). The earlier draft (min to preferred to maximum, smaller footprint on ties) contradicted D21: C15. Stretching the Garage and Master block to share a wall line is C11 |
+| D21 maximum-first | superseded 2026-10-06 by the D21 amendment (row below); first-draft conflict C15 recorded | 4.1 steps 3-4 are now maximum-first (start at maximum, reduce toward preferred, then toward minimum; `Wf*` the widest fillable footprint within the envelope). The earlier draft (min to preferred to maximum, smaller footprint on ties) contradicted D21: C15. Stretching the Garage and Master block to share a wall line is C11 |
 | D22 balanced reductions | OK | step C and F reduce in proportion to each room's range |
 | D23 optional before surplus growth | resolved; first-draft conflict C16 recorded | 4.1 steps A-E and 4.2 now keep a selected Optional room before any required room grows above preferred; the earlier draft grew required rooms to maximum first: C16 |
 | D24 wall-aware | OK | all arithmetic carries 250 and 100 |
@@ -476,10 +480,15 @@ Status: **OK** consistent; **Note** consistent with a caveat; **CONFLICT** the t
 | D51 catalog | **CONFLICT** C10 | Scullery, WIP, Activity, Study Nook, Office, Linen in the ideals |
 | D56 default zones | Note | Pantry with Living; Laundry no fixed attachment; split group across the hall used by T2 |
 | D57 stages | OK | stage 4 = hall + extents, stage 5 = rooms from the slot solve |
-| D58 hallways | **CONFLICT** C1, C5 | (a) mini-hall trigger and non-D58 shapes (C5); (c) porch, robes, linen (C1) |
+| D58 hallways | **CONFLICT** C5; C1 settled | (a) mini-hall trigger and non-D58 shapes (C5); (c) no Porch is drawn (D63) and no robes, linen or nooks are filled (Q6), so C1 is settled |
 | D59 golden briefs | **CONFLICT** C18 | the GB-01 fits deviate from the D59 sizes (7.1, 7.2) against D59's "recognisably similar" benchmark; GB-01 envelope is derived, width open |
+| D61 L-shaped Family Core | OK | resolves C2 for the Family Core only: one open zone of 2-3 rectangles whose shared boundaries are open, limits on the bounding box, area is the sum of the parts; every other room stays rectangular |
+| D62 room-size presets | OK | preset values from the 2026-10-06 evidence, recorded in `knowledge/specs/dimensions-and-briefs.md` section 5; the WC long side is 3200 (Q16), which closes the C6 cap question; numbers stay provisional (G-CALIBRATION) |
+| D63 no external areas | OK | no Porch and no Alfresco; settles the Porch part of C1 and makes C9 (wide sliding opening Core to Alfresco) moot; templates fill no Alfresco slot |
+| D21 amendment (2026-10-06) | OK | typical-first: rooms aim for preferred size and the footprint is the smallest that fits; supersedes the maximum-first steps 3-4 of 4.1; resolves C15 (Q5 answered yes) |
+| D64 templates and ranking | OK | templates replace the slicing tree for stages 4-5, as this file proposes; T2/T4 first, T1 only as a last resort, T3 the lowest priority; ranking is fewer omitted Optional rooms, then less Flex area, then M1 |
 
-Conflicts and open items. Each is listed with the evidence and **left for the user or the owning contract**; none is resolved here.
+Conflicts and open items. Each is listed with the evidence and **left for the user or the owning contract**. The 2026-10-06 decisions settle C1 (Porch, D63; fillers, Q6), C2 for the Family Core (D61), the WC cap in C6 (D62) and C15 (the D21 amendment), and make C9 moot; the other conflicts stay open.
 
 | ID | Template approach says | Accepted decision or reviewed contract says | Evidence |
 | --- | --- | --- | --- |
@@ -690,4 +699,4 @@ Single yes/no questions, each with a recommendation and, where it decides whethe
 - T3 was not fitted (no evidence beyond label positions). T2 was fitted twice on Fixture A, both times with WHAT-IF sizes (7.6, 7.7); an L-shaped Core and GB-01 on T2 were not fitted (7.8). T1 `L` was specified but not fitted (7.8).
 - The fits are hand-built and then checked by script; they prove the chains close in integers and that rooms are inside their catalog ranges, not that the 4.1 procedure finds them. Several have rooms between preferred and maximum for closure.
 - The T2 sketch is not to scale and the lobby bar is wider than the ideals' small lobby.
-- Reviewed twice by an independent read-only reviewer (round 1 and round 2, both PASS-WITH-NOTES; nits applied). Proposal only. User answers recorded in the section 8 table (2026-10-06); still open: Q20 (double Garage minimum) and Q14 (GB-01 real width, unknown). Treat the section 6.3 decision table as a first pass.
+- Reviewed twice by an independent read-only reviewer (round 1 and round 2, both PASS-WITH-NOTES; nits applied). Adopted 2026-10-06: D61–D64 and the D21 amendment; the rest of this file is a proposal. User answers recorded in the section 8 table (2026-10-06); still open: Q20 (double Garage minimum) and Q14 (GB-01 real width, unknown). Treat the section 6.3 decision table as a first pass.

@@ -6,7 +6,7 @@ Astra authored the decomposition on 2026-10-05. An executor persists it here. Th
 
 ## Dispatch and completion
 
-- Opus 5.5 plans, briefs, dispatches, reviews and persists the board (rows below that say "Astra" mean this planner/judge role). Codex Luna handles routine execution; Codex Sol handles complex geometry, solver and integration work; one writer per checkout. DeepSeek Flash is a manual external fallback.
+- Opus 5.5 plans, briefs, dispatches, reviews and persists the board (rows below that say "Astra" mean this planner/judge role). Codex Luna handles routine execution; Codex Sol handles complex geometry, solver and integration work; one writer per checkout. DeepSeek Flash (`deepseek-flash`, via `/e/local-ai/Scripts/cc-worker.sh`) is the first fallback when Codex is unavailable, Sonnet second.
 - Each bucket has bounded artifacts, prerequisites, gates and acceptance evidence. A fresh agent/session independently reviews an author's result. `done` requires the artifact, evidence, review and applicable approvals; naming a check is not a passing check.
 - Planned paths under `knowledge/specs/`, `spike/`, `engine/` and `src/` describe future artifacts; they are not present merely because this plan names them. Final module paths follow the measured baseline.
 - Use one coherent branch/review unit per implementation bucket. Preserve others' dirty work; do not switch branches, stage it, or claim its completion. A blocked report need not have a fabricated commit.
@@ -29,7 +29,7 @@ Gates record concrete scope and existing consent; they are not mandatory separat
 
 | ID / execution role | Dependencies | Artifact and bounded job | Acceptance evidence |
 | --- | --- | --- | --- |
-| PL-00 / luna | — | Update the reusable kit at `C:/Users/ponti/.ponti-kit` and installed model policy/skills: `AGENTS.md`, knowledge patterns/index, run-stage/save-progress copies, generic source templates and README. | Live routing uses Astra planning-only, Luna/Sol execution, independent review and a manual DeepSeek handoff. Source templates contain no PlanLab-specific IDs. Existing compatibility files/hooks are preserved. Fresh documentation review. |
+| PL-00 / luna | — | Update the reusable kit at `C:/Users/ponti/.ponti-kit` and installed model policy/skills: `AGENTS.md`, knowledge patterns/index, run-stage/save-progress copies, generic source templates and README. | Live routing uses Astra planning-only, Luna/Sol execution, independent review and a DeepSeek Flash handoff when Codex is unavailable, Sonnet second. Source templates contain no PlanLab-specific IDs. Existing compatibility files/hooks are preserved. Fresh documentation review. |
 | PL-01 / luna | PL-00 | Persist this plan and the complete queue in `knowledge/BOARD.md`; add the contract index to `ARCHITECTURE.md`. | Every ID/dependency/gate resolves, dependencies are acyclic, existing proposed baseline is preserved as proposed, and future artifacts/results are not marked complete. Fresh review against D01–D55. |
 | PL-02 / luna | PL-01 | Align `HANDOFF.md`, the resume block of `knowledge/PROGRESS.md`, and current continuation/authorization notes in the product plan. | Entry points agree on confirmed design, current docs scope, next eligible job and actual checkout. Historical timeline stays intact; UI work is preserved and not reported as solver evidence. |
 

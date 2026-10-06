@@ -6,6 +6,8 @@ The product decisions live in [plan-lab-astra-plan.md](plan-lab-astra-plan.md) (
 
 **Round 12 source update:** D56-D60 extend the confirmed product decisions with the default zones, inspectable intermediate stages, hallway-first generation, golden-brief evidence, and Release 1 scope. The D01-D55 scope wording above is retained as historical wording and superseded by the Round 12 record.
 
+**Round 13 source update (D61–D64, 2026-10-06):** the band templates replace the recursive slicing tree for stages 4-5 (T2 and T4 first, T3 lowest priority, T1 as a last resort only). D61 allows an L-shaped Family Core: one open zone of 2-3 rectangles, with the size limits applied to its bounding box. The D21 amendment replaces maximum-first sizing with typical (preferred) room sizes and the smallest footprint that fits them inside the supplied bounds. D63 removes the Porch and the Alfresco from v1. Candidates are ranked lexicographically: fewer omitted Optional rooms, then less Flex area, then more habitable rooms on an exterior wall (M1). The D01-D60 wording above is retained as historical wording and superseded by the Round 13 record.
+
 ## 2. Product summary
 
 - Single-user, local-first browser app with named local projects (D55); no accounts, cloud, or sharing in v1.
@@ -95,7 +97,7 @@ Any preset numbers in code (room sizes, wall/door/corridor dimensions, Near thre
 
 ## 9. Engineering contract index and current status
 
-The following are planned contract artifacts, not files created by this index. Stage 1 work may refine the proposed model above; preserve D01–D55 and the Round 12 additions D56-D60, and label unsettled numerical or technical choices as proposals.
+The following are planned contract artifacts, not files created by this index. Stage 1 work may refine the proposed model above; preserve D01–D55, the Round 12 additions D56-D60 and the Round 13 additions D61-D64, and label unsettled numerical or technical choices as proposals.
 
 | Bucket | Planned contract | Main questions |
 | --- | --- | --- |
