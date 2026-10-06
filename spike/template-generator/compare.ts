@@ -119,7 +119,7 @@ export function compareHtml(
         .join('\n');
       const iterFigs = iter
         .filter((r) => r.brief === brief)
-        .map((r) => `<div class="group"><h3>${esc(r.template)}: iteration 1 (max-first) vs iteration 2 (typical-first)</h3><div class="g">${iterFig(r.max, `${r.template} iteration 1`, 'max-first sizing')}${iterFig(r.typical, `${r.template} iteration 2`, 'typical-first sizing')}</div></div>`)
+        .map((r) => `<div class="group"><h3>${esc(r.template)}: iteration 1 (max-first) vs iteration 3 (typical-first, less-Flex ranking)</h3><div class="g">${iterFig(r.max, `${r.template} iteration 1`, 'max-first sizing')}${iterFig(r.typical, `${r.template} iteration 3`, 'typical-first sizing, less-Flex ranking')}</div></div>`)
         .join('\n');
       const title = brief === 'GB-01' ? 'GB-01 (run WITHOUT the Alfresco, D63)' : 'Fixture A (no Alfresco in the program, D63)';
       return `<section><h2>${esc(title)}</h2><div class="row"><div class="group"><h3>Ideals</h3><div class="g">${ideals}</div></div><div class="group"><h3>Old (PL-20)</h3><div class="g">${oldFig}</div></div><div class="group"><h3>New (PL-25 iteration 2, typical sizing, best per template; T1 only when T2 and T4 fail)</h3><div class="g">${news}</div></div></div><h3 class="sec">Iteration 1 (max-first) against iteration 2 (typical-first): best of each template</h3><div class="row">${iterFigs}</div><h3 class="sec">T1 fallback demo (for comparison only, not a chosen candidate)</h3><div class="row"><div class="group"><div class="g">${demoFigs}</div></div></div></section>`;

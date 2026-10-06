@@ -18,7 +18,7 @@ import { renderPresent } from '../geometry-feasibility/render-present.ts';
 import type { Brief, Stage4Record, Stage5Record, Stage6Record, ValidationResult } from '../geometry-feasibility/types.ts';
 import { validate } from '../geometry-feasibility/validate.ts';
 import { parseProgram } from './blocks.ts';
-import { isFail, isTypical, mirrorLayout, prng, setSizing } from './common.ts';
+import { cmpRank, isFail, isTypical, mirrorLayout, prng, rankHead, setSizing } from './common.ts';
 import type { Sizing } from './common.ts';
 import type { Fail, Layout } from './common.ts';
 import { emit } from './emit.ts';
@@ -215,8 +215,19 @@ function runOne2(briefId: string, t: TemplateName, width: number | null, root: s
     valid.push({ seed, e, v, m: computeMetrics(e.s6, v), mirrored: b.mirrored, cf: b.cf, variant: b.layout.variant, notes: b.layout.notes, omitted: b.layout.omitted });
   }
   const ms = performance.now() - t0;
-  // best first: most habitable rooms on an exterior wall, lowest hallway share, shortest spine ratio, lowest seed
-  valid.sort((a, b) => b.m.m1.share - a.m.m1.share || a.m.m3 - b.m.m3 || a.m.m13 - b.m.m13 || a.seed - b.seed);
+  // PL-25 iteration 3 (D64): best first = fewer omitted Optional rooms, then less Flex area (0.1 m2), then fewer habitable rooms off an
+  // exterior wall (M1), then the iteration-2 remainder (hallway share M3, spine ratio M13, seed). The head is shared with layoutScore (common.ts).
+  const rankKey = (c: Cand): number[] => [
+    ...rankHead(c.omitted.length, c.e.s6.flex.reduce((a, f) => a + f.rect.w * f.rect.h, 0), c.m.m1.habitable - c.m.m1.touching),
+    c.m.m3,
+    c.m.m13,
+    c.seed,
+  ];
+  // max mode keeps the iteration-1 order: applying the new order there WOULD change the winner (checked: GB-01 T1 best 9-0 -> 4-0, GB-01 T2
+  // WHAT-IF 13500/15000 best 1-0 -> 6-0), so out/iteration-1-max/ ("max") would no longer reproduce iteration 1. The brief allows this.
+  valid.sort((a, b) =>
+    isTypical() ? cmpRank(rankKey(a), rankKey(b)) : b.m.m1.share - a.m.m1.share || a.m.m3 - b.m.m3 || a.m.m13 - b.m.m13 || a.seed - b.seed,
+  );
   const keep = valid.slice(0, o.keep);
   const dirName = whatIf ? `${t}-${widthLabel}` : t;
   const dir = join(root, briefId, dirName);
@@ -416,7 +427,7 @@ function main(): void {
   );
 
   const summary = {
-    note: 'PL-25 spike v2 iteration 2 band-template generator (typical-first sizing, Q5). Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles. T1 is a last resort: it runs in the main set only when T2 and T4 both fail; out/T1-fallback-demo holds T1 for comparison.',
+    note: 'PL-25 spike v2 iteration 3 band-template generator (typical-first sizing, Q5; ranking: less Flex before M1, D64). Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles. T1 is a last resort: it runs in the main set only when T2 and T4 both fail; out/T1-fallback-demo holds T1 for comparison.',
     seedsPerRun: SEEDS,
     node: process.version,
     os: `${platform()} ${release()}`,

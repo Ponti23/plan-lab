@@ -4,12 +4,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BRIEFS } from '../geometry-feasibility/briefs.ts';
-import type { Brief, Stage6Record } from '../geometry-feasibility/types.ts';
+import type { Brief, CatKey, RoomKind, Stage6Record, ZoneType } from '../geometry-feasibility/types.ts';
 import { validate } from '../geometry-feasibility/validate.ts';
 import { renderPresent } from '../geometry-feasibility/render-present.ts';
 import { parseProgram } from './blocks.ts';
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
-import { bbox, fillRow, isFail, mirrorLayout, setSizing, sharedTotal } from './common.ts';
+import { bbox, chooser, cmpRank, fillRow, interiorHabitable, isFail, layoutScore, mirrorLayout, rankHead, setSizing, sharedTotal } from './common.ts';
 import type { Sizing } from './common.ts';
 import { needT1 } from './run.ts';
 import { execFileSync } from 'node:child_process';
@@ -292,6 +292,62 @@ test('run.ts: T1 stays out of the main output when T2/T4 yield valid candidates,
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+// ---------------------------------------------------------------- iteration 3: lexicographic ranking (user D64 2026-10-06)
+/** a synthetic Layout for the ranking tests: Wf=Df=10000, a room at x=250 touches the exterior wall, one at x=1000 does not */
+const SYN = (opts: { flex: [number, number][]; rooms: { kind: RoomKind; touches: boolean }[]; omitted?: string[] }): Layout => ({
+  template: 'T2',
+  variant: 'synthetic',
+  Wf: 10000,
+  Df: 10000,
+  rooms: opts.rooms.map((r, i) => ({
+    id: `r${i}`,
+    name: r.kind,
+    kind: r.kind,
+    cat: 'Bedroom' as CatKey,
+    parts: [r.touches ? { x: 250, y: 1000, w: 3000, h: 3000 } : { x: 1000, y: 1000, w: 3000, h: 3000 }],
+    zone: 'private' as ZoneType,
+    group: '',
+  })),
+  halls: [],
+  flex: opts.flex.map(([w, h], i) => ({ id: `f${i}`, rect: { x: i * 1000, y: 9000, w, h } })),
+  cased: [],
+  hallShape: 'spine',
+  omitted: opts.omitted ?? [],
+  notes: [],
+});
+const keyOf = (l: Layout): number[] => layoutScore(l, (k) => CATALOG[k].pref);
+
+test('iteration 3 ranking (a): a layout with less Flex and one habitable room off an exterior wall ranks ahead of one with more Flex and none', () => {
+  const lessFlex = SYN({ flex: [[1000, 1000]], rooms: [{ kind: 'Master', touches: false }] }); // 1.0 m2 Flex, Master interior (M1 0/1)
+  const moreFlex = SYN({ flex: [[2000, 1000]], rooms: [{ kind: 'Master', touches: true }] }); // 2.0 m2 Flex, Master on the wall (M1 1/1)
+  assert.equal(interiorHabitable(lessFlex), 1);
+  assert.equal(interiorHabitable(moreFlex), 0);
+  assert.ok(cmpRank(keyOf(lessFlex), keyOf(moreFlex)) < 0, 'less Flex wins even though its M1 is worse');
+  // and the ranking does not depend on the order the candidates were collected in
+  withSizing('typical', () => {
+    const p = chooser(40);
+    p.add(moreFlex);
+    p.add(lessFlex);
+    assert.equal(p.best(), lessFlex);
+  });
+});
+
+test('iteration 3 ranking (b): with equal Flex area, fewer habitable rooms off an exterior wall wins (M1 decides)', () => {
+  const onWall = SYN({ flex: [[1000, 1000]], rooms: [{ kind: 'Master', touches: true }, { kind: 'Bedroom', touches: true }] });
+  const offWall = SYN({ flex: [[1000, 1000]], rooms: [{ kind: 'Master', touches: false }, { kind: 'Bedroom', touches: true }] });
+  assert.equal(keyOf(onWall)[1], keyOf(offWall)[1], 'the two layouts have equal Flex area');
+  assert.ok(cmpRank(keyOf(onWall), keyOf(offWall)) < 0, 'equal Flex: the layout with the habitable room on the wall wins');
+});
+
+test('iteration 3 ranking: fewer omitted Optional rooms beats less Flex, and Flex is compared in 0.1 m2 steps', () => {
+  const omitted = SYN({ flex: [[1000, 1000]], rooms: [{ kind: 'Bedroom', touches: true }], omitted: ['pantry'] }); // 1.0 m2, one room dropped
+  const clean = SYN({ flex: [[2000, 2000]], rooms: [{ kind: 'Bedroom', touches: true }] }); // 4.0 m2, nothing dropped
+  assert.ok(cmpRank(keyOf(clean), keyOf(omitted)) < 0, 'the omission is the first thing compared, so the clean layout wins');
+  // 1.04 m2 and 1.00 m2 both round to 1.0 m2 (100000 mm2 steps): the Flex element of the key is equal
+  assert.equal(rankHead(0, 1_040_000, 0)[1], rankHead(0, 1_000_000, 0)[1]);
+  assert.equal(rankHead(0, 1_060_000, 0)[1], 11); // 1.06 m2 rounds up
 });
 
 // ---------------------------------------------------------------- iteration 2: known gaps 4a (Master on an exterior wall) and 4b (T2 with four Bedrooms)

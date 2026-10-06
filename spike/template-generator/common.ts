@@ -313,21 +313,52 @@ export function sharedTotal(rows: { items: Item[]; gap?: number }[], cap: number
   return t;
 }
 
-// ------------------------------------------------------------------ typical-first candidate choice
+// ------------------------------------------------------------------ candidate ranking (lexicographic, D64)
 
-/** catalog preferred deviation of a layout (mm, both sides) plus a footprint and a flex penalty: lower is better. Optional rooms omitted cost a lot. */
-export function layoutScore(l: Layout, catPref: (cat: CatKey) => [number, number]): number {
+/**
+ * PL-25 iteration 3 (user 2026-10-06, D64). Every place that compares candidates uses the same lexicographic order:
+ *   1. fewer omitted Optional rooms,
+ *   2. less total Flex area, rounded to 0.1 m2,
+ *   3. fewer habitable rooms (Master, Bedroom, Family Core) off an exterior wall - the M1 complement,
+ *   4. the caller's own remainder (layoutScore: size deviation + footprint term; run.ts: hallway share M3, spine ratio M13, seed).
+ * A key is an array of numbers, lower is better; `cmpRank` compares it element by element. The head (steps 1-3) is shared so the
+ * builders, run.ts and any cross-template choice cannot drift apart.
+ */
+export type RankKey = number[];
+
+/** total area of the Flex patches, mm2 */
+export const flexAreaOf = (l: Layout): number => l.flex.reduce((a, f) => a + f.rect.w * f.rect.h, 0);
+
+/** habitable rooms (Master, Bedroom, Family Core) that touch no exterior wall - the M1 complement (D64 step 3) */
+export function interiorHabitable(l: Layout): number {
+  const touches = (p: Rect): boolean => p.x === 250 || p.y === 250 || p.x + p.w === l.Wf - 250 || p.y + p.h === l.Df - 250;
+  return l.rooms.filter((r) => (r.kind === 'Master' || r.kind === 'Bedroom' || r.kind === 'FamilyCore') && !r.parts.some(touches)).length;
+}
+
+/** the shared head of every ranking key (D64 steps 1-3); `flexMm2` is rounded to 0.1 m2 (100000 mm2) */
+export const rankHead = (omitted: number, flexMm2: number, interior: number): RankKey => [omitted, Math.round(flexMm2 / 100000), interior];
+
+/** the head of a layout's ranking key (D64 steps 1-3) */
+export const layoutRankHead = (l: Layout): RankKey => rankHead(l.omitted.length, flexAreaOf(l), interiorHabitable(l));
+
+/** lexicographic compare of ranking keys, lower is better; a missing tail element counts as 0 */
+export const cmpRank = (a: RankKey, b: RankKey): number => {
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const d = (a[i] ?? 0) - (b[i] ?? 0);
+    if (d !== 0) return d;
+  }
+  return 0;
+};
+
+/** catalog preferred deviation of a layout (mm, both sides) plus the footprint term: the tail of the ranking key (D64 step 4). Lower is better. */
+export function layoutScore(l: Layout, catPref: (cat: CatKey) => [number, number]): RankKey {
   let dev = 0;
   for (const r of l.rooms) {
     const b = bbox(r.parts);
     const [ps, pl] = catPref(r.cat);
     dev += Math.abs(Math.min(b.w, b.h) - ps) + Math.abs(Math.max(b.w, b.h) - pl);
   }
-  const flexArea = l.flex.reduce((a, f) => a + f.rect.w * f.rect.h, 0);
-  // a habitable room (Master, Bedroom, Core) without an exterior wall costs 1500 (M1 report-only metric, but the ideals have every habitable room on an outside wall)
-  const touches = (p: Rect): boolean => p.x === 250 || p.y === 250 || p.x + p.w === l.Wf - 250 || p.y + p.h === l.Df - 250;
-  const interior = l.rooms.filter((r) => (r.kind === 'Master' || r.kind === 'Bedroom' || r.kind === 'FamilyCore') && !r.parts.some(touches)).length;
-  return dev + interior * 1500 + l.omitted.length * 2000 + (flexArea / 1e6) * 250 + ((l.Wf * l.Df) / 1e6) * 20;
+  return [...layoutRankHead(l), dev + ((l.Wf * l.Df) / 1e6) * 20];
 }
 
 /** order values by distance to a target (stable): nearest first */
@@ -407,24 +438,24 @@ export function prng(seed: number): () => number {
 
 /**
  * Candidate collector for the typical-first builders. 'max' mode returns the first feasible layout (iteration-1 behaviour); 'typical' collects up to
- * `cap` feasible layouts (the loops try values nearest the preferred first) and returns the lowest-scoring one (layoutScore). Deterministic.
+ * `cap` feasible layouts (the loops try values nearest the preferred first) and returns the one with the lowest ranking key (layoutScore, D64). Deterministic.
  */
 export function chooser(cap = 40, accept?: (l: Layout) => boolean): { add: (l: Layout) => boolean; best: () => Layout | null } {
   const c: Layout[] = [];
   return {
     add: (l) => {
-      // typical mode keeps only layouts the caller accepts (emit + validator pass), so the best-scoring one is never an invalid one; max mode is iteration 1
+      // typical mode keeps only layouts the caller accepts (emit + validator pass), so the best-ranked one is never an invalid one; max mode is iteration 1
       if (isTypical() && accept && !accept(l)) return false;
       c.push(l);
       return !isTypical() || c.length >= cap;
     },
     best: () => {
       let b: Layout | null = null;
-      let bs = Infinity;
+      let bk: RankKey | null = null;
       for (const l of c) {
-        const s = layoutScore(l, (k) => CATALOG[k].pref);
-        if (s < bs) {
-          bs = s;
+        const k = layoutScore(l, (k) => CATALOG[k].pref);
+        if (bk === null || cmpRank(k, bk) < 0) {
+          bk = k;
           b = l;
         }
       }

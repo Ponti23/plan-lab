@@ -1,16 +1,15 @@
 # HANDOFF — resume state
 
 **Active plan:** [`DELEGATION-PLAN.md`](./DELEGATION-PLAN.md) · **Live queue:** [`knowledge/BOARD.md`](./knowledge/BOARD.md) · **Resume:** [`knowledge/PROGRESS.md`](./knowledge/PROGRESS.md)
-**Status:** Plan B complete 2026-10-06: PL-00–02 and PL-10–15 done; PL-20 early spike in review. Remaining work is gated on the user (G-SPIKE for PL-21, calibration answers, PL-22 go/no-go).
+**Status:** 2026-10-06 evening. PL-25 iteration 3 (less Flex ranks above M1, D64) is done and reviewed. D61–D64 are in the product plan. The PL-24 look is approved. All of this is uncommitted on `work/plan-c-templates`.
 
 ## Last checkpoint
-- 2026-10-06 07:05, branch `work/plan-b` (on top of `docs/round12-orchestration`), pushed to `origin/work/plan-b`; not merged, no PR.
-- PL-10–15 done (reviewed). PL-20 early spike in review (user judges SVGs). See `knowledge/briefs/overnight-report.md`.
+- 2026-10-06, branch `work/plan-c-templates`. Last pushed commit `13d7932`; today's work is uncommitted.
 
 ## Next step (when you're back)
-1. Read `knowledge/briefs/overnight-report.md`; answer its top decisions (WC max 2700? real GB-01 width? spike useful?).
-2. Extend G-SPIKE for PL-21 if agreed; dispatch PL-21 to Sol (brief: `knowledge/specs/engine-runtime.md` §8).
-3. Decide whether to merge `work/plan-b`.
+1. Commit today's work. Push only if the user asks.
+2. Ask the user: merge plan-b/plan-c, PL-21 (G-SPIKE), or more template iterations.
+3. Open questions: Q14 (GB-01 real width) and Q20 (double Garage minimum).
 
 ## Notes for the next session
 - Follow the [delegation playbook](knowledge/patterns/delegation-playbook.md): Opus orchestrates; Codex Luna (routine) and Sol (complex) execute, one writer per checkout. A blocked bucket does not stop independent authorized work.

@@ -338,6 +338,8 @@ Retry room proportions, corridor branches, and zone arrangement within the same 
 
 ### D21 — Maximum-first sizing with bounded fallback
 
+**Superseded 2026-10-06 by the D21 amendment in round 13 (typical sizes, smallest footprint).**
+
 The user confirmed the proposed interpretation and specified: "max --> preferred --> whatever can reasonably fit when trying."
 
 Aim for room maximums first. Where these do not fit, reduce toward preferred sizes, then toward smaller feasible sizes within the agreed minimum dimensions and maximum areas. Preserve required rooms, required relationships, door access, circulation, and non-overlap throughout. "Whatever can reasonably fit" does not waive the previously agreed hard minimums.
@@ -595,6 +597,40 @@ Four reference plans exist so far. Save them in `knowledge/reference/` when the 
 **Deferred to Release 2:** graph editing and Required/Preferred override controls; Explore This Concept variants; Apply to Brief; and PDF export.
 
 The product decisions D08, D14, D31, D36, and D40 remain the target design. Only their delivery moves to Release 2. The engine data model still carries intent-graph strengths so Release 2 does not need a model rework.
+
+**Accepted.**
+
+## Accepted decisions - round 13 (template generator, 2026-10-06)
+
+Recorded from the user's answers to the PL-23 template-grammar questions and the PL-25 spike review. Numbers stay provisional until G-CALIBRATION.
+
+### D61 - L-shaped Family Core allowed (PL-23 Q7)
+
+The open Kitchen/Dining/Living zone (Family Core) may be L-shaped or stepped: one connected zone of 2-3 rectangles whose shared boundaries are open (no wall, no door). Size limits apply to its bounding box; its area is the sum of the parts. This amends D07 (rectangular rooms) and D34 for the Family Core only; every other room stays rectangular.
+
+**Accepted.**
+
+### D62 - Room-size presets from evidence (PL-23 Q9/Q15)
+
+The Master, Bedroom, Theatre, Study, single and double Garage, and Family Core presets are replaced by the values the user approved on 2026-10-06 from `knowledge/specs/room-size-evidence.md` plus the user's external research. They are recorded in `knowledge/specs/dimensions-and-briefs.md` section 5. The WC maximum long side is 3200 mm (PL-23 Q16). Presets remain editable and provisional (D11).
+
+**Accepted.**
+
+### D63 - No external areas in v1 (PL-23 Q12)
+
+No Porch and no Alfresco are generated or drawn. The user: "I don't need any external area." Templates must work without an Alfresco. This narrows D58c's exclusions; the Alfresco optional room is out of scope until the user reopens it.
+
+**Accepted.**
+
+### D21 amendment - Typical sizes and the smallest footprint (PL-23 Q5)
+
+Supersedes D21's maximum-first order: each room aims for its preferred (typical) size, and the footprint is the smallest that fits the rooms at those sizes within the supplied maximum bounds. Rooms grow above preferred only where a layout band must close. Leftover envelope stays outside the house. Pockets inside the house are not filled with robes, linen or nooks; they are labelled "Flex" (PL-23 Q6, keeps D58c). The D21 text above is retained as history.
+
+**Accepted.**
+
+### D64 - Layout templates and ranking (PL-23 Q1/Q17, PL-25)
+
+Stages 4-5 use the band templates (T2, T4; T1 only as a last resort when neither fits) instead of the recursive slicing tree. In T2, a rear-corner pocket the Core cannot cover stays a labelled Flex patch. When candidates are ranked, less Flex area counts for more than M1 (habitable rooms on an exterior wall).
 
 **Accepted.**
 
