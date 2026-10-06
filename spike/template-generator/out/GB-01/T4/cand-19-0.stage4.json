@@ -1,0 +1,159 @@
+{
+ "stage": 4,
+ "id": "19-0",
+ "briefId": "GB-01",
+ "seed": 19,
+ "attempt": 0,
+ "cfPattern": "T4-auto",
+ "hallShape": "two-hall-via-core",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 0,
+  "y": 2400,
+  "w": 12500,
+  "h": 18100
+ },
+ "inner": {
+  "x": 250,
+  "y": 2650,
+  "w": 12000,
+  "h": 17600
+ },
+ "zones": [
+  {
+   "id": "Z-master-suite",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 8120,
+    "y": 13250,
+    "w": 4130,
+    "h": 7000
+   },
+   "roomIds": [
+    "master",
+    "wir",
+    "ensuite"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Double Garage",
+   "type": "garage",
+   "rect": {
+    "x": 250,
+    "y": 13250,
+    "w": 6570,
+    "h": 7000
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-core",
+   "name": "Family Core",
+   "type": "living",
+   "rect": {
+    "x": 3370,
+    "y": 6650,
+    "w": 8880,
+    "h": 6500
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-bed2",
+   "name": "Bedroom 2",
+   "type": "bedrooms",
+   "rect": {
+    "x": 8690,
+    "y": 2650,
+    "w": 3560,
+    "h": 3900
+   },
+   "roomIds": [
+    "bed2"
+   ]
+  },
+  {
+   "id": "Z-wet",
+   "name": "Wet rooms",
+   "type": "wet",
+   "rect": {
+    "x": 3910,
+    "y": 2650,
+    "w": 4680,
+    "h": 2800
+   },
+   "roomIds": [
+    "bath",
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bed3",
+   "name": "Bedroom 3",
+   "type": "bedrooms",
+   "rect": {
+    "x": 250,
+    "y": 2650,
+    "w": 3560,
+    "h": 3900
+   },
+   "roomIds": [
+    "bed3"
+   ]
+  },
+  {
+   "id": "Z-flex-side",
+   "name": "Flex Space (labelled residual, D44)",
+   "type": "flex",
+   "rect": {
+    "x": 250,
+    "y": 6650,
+    "w": 3020,
+    "h": 6500
+   },
+   "roomIds": []
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 6920,
+    "y": 18950,
+    "w": 1100,
+    "h": 1300
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway",
+   "kind": "stem",
+   "rect": {
+    "x": 6920,
+    "y": 13250,
+    "w": 1100,
+    "h": 5700
+   }
+  },
+  {
+   "id": "H-rear",
+   "name": "Lobby",
+   "kind": "connector",
+   "rect": {
+    "x": 3910,
+    "y": 5550,
+    "w": 4680,
+    "h": 1000
+   }
+  }
+ ],
+ "omittedOptional": []
+}

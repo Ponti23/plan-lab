@@ -19,7 +19,18 @@ interface Space {
   id: string;
   cls: 'room' | 'flex' | 'hall';
   kind: string; // room kind, 'Flex', or hall kind
-  rect: Rect;
+  rect: Rect; // for a multi-part room: the bounding rectangle of `parts`
+  /** the clear rectangles of the space: [rect] for every ordinary space, 2-3 rectangles for an L-shaped / stepped Family Core (PL-25) */
+  parts: Rect[];
+}
+
+/** length of the shared boundary of two rectangles that touch with a gap of exactly 0 (0 when they do not touch edge to edge) */
+function sharedEdge(a: Rect, b: Rect): number {
+  const ovx = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+  const ovy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+  if (ovy > 0 && (a.x + a.w === b.x || b.x + b.w === a.x)) return ovy;
+  if (ovx > 0 && (a.y + a.h === b.y || b.y + b.h === a.y)) return ovx;
+  return 0;
 }
 
 /** Exact uncovered area of `target` given `covers`, plus the uncovered cells merged to boxes (for the report). */
@@ -75,9 +86,9 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
   const env = brief.envelope;
   const inner: Rect = { x: fp.x + EXTERIOR_WALL, y: fp.y + EXTERIOR_WALL, w: fp.w - 2 * EXTERIOR_WALL, h: fp.h - 2 * EXTERIOR_WALL };
   const spaces: Space[] = [
-    ...rec.rooms.map((r): Space => ({ id: r.id, cls: 'room', kind: r.kind, rect: r.rect })),
-    ...rec.flex.map((f): Space => ({ id: f.id, cls: 'flex', kind: 'Flex', rect: f.rect })),
-    ...rec.hallSegments.map((h): Space => ({ id: h.id, cls: 'hall', kind: h.kind, rect: h.rect })),
+    ...rec.rooms.map((r): Space => ({ id: r.id, cls: 'room', kind: r.kind, rect: r.rect, parts: r.parts && r.parts.length > 0 ? r.parts : [r.rect] })),
+    ...rec.flex.map((f): Space => ({ id: f.id, cls: 'flex', kind: 'Flex', rect: f.rect, parts: [f.rect] })),
+    ...rec.hallSegments.map((h): Space => ({ id: h.id, cls: 'hall', kind: h.kind, rect: h.rect, parts: [h.rect] })),
   ];
   const byId = new Map(spaces.map((s) => [s.id, s]));
 
@@ -90,7 +101,7 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
     if (fp.y + fp.h !== env.maxD) f.push(`footprint is not front-aligned (bottom ${fp.y + fp.h} != ${env.maxD})`);
     if (2 * fp.x + fp.w !== env.maxW) f.push('footprint is not horizontally centred in the envelope');
     if (fp.x < 0 || fp.y < 0) f.push('footprint outside envelope');
-    for (const s of spaces) if (!within(s.rect, inner)) f.push(`${s.id} ${fmt(s.rect)} is outside the inner (exterior-wall-inset) rectangle`);
+    for (const s of spaces) for (const p of s.parts) if (!within(p, inner)) f.push(`${s.id} ${fmt(p)} is outside the inner (exterior-wall-inset) rectangle`);
     add('bounds', f, 'footprint inside envelope, front-aligned and centred; every clear rectangle is 250 mm inside the outside face');
   }
 
@@ -102,9 +113,43 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
         const a = spaces[i] as Space;
         const b = spaces[j] as Space;
         if (a.cls === 'hall' && b.cls === 'hall') continue; // hallway segments may overlap; counted once in area
-        if (overlapArea(a.rect, b.rect) > 0) f.push(`${a.id} overlaps ${b.id}`);
+        if (a.parts.some((p) => b.parts.some((q) => overlapArea(p, q) > 0))) f.push(`${a.id} overlaps ${b.id}`);
       }
     add('non-overlap', f, 'no room, flex or hallway rectangle overlaps another room or flex rectangle');
+  }
+
+  // ---- multi-part rooms (PL-25, Q7/D61): an L-shaped or stepped Family Core is ONE room of 2-3 rectangles with open boundaries
+  {
+    const f: string[] = [];
+    let multi = 0;
+    for (const r of rec.rooms) {
+      if (!r.parts || r.parts.length === 0) continue;
+      multi++;
+      const ps = r.parts;
+      const tag = `${r.id} (${ps.length} parts)`;
+      if (r.kind !== 'FamilyCore') f.push(`${tag}: only the Family Core may be made of several rectangles`);
+      if (ps.length < 2 || ps.length > 3) f.push(`${tag}: a multi-part room has 2 or 3 rectangles`);
+      const minX = Math.min(...ps.map((p) => p.x));
+      const minY = Math.min(...ps.map((p) => p.y));
+      const maxX = Math.max(...ps.map((p) => p.x + p.w));
+      const maxY = Math.max(...ps.map((p) => p.y + p.h));
+      const bb: Rect = { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+      if (bb.x !== r.rect.x || bb.y !== r.rect.y || bb.w !== r.rect.w || bb.h !== r.rect.h) f.push(`${tag}: rect ${fmt(r.rect)} is not the bounding rectangle ${fmt(bb)} of the parts`);
+      for (let i = 0; i < ps.length; i++)
+        for (let j = i + 1; j < ps.length; j++) if (overlapArea(ps[i] as Rect, ps[j] as Rect) > 0) f.push(`${tag}: parts ${i} and ${j} overlap`);
+      for (const [i, p] of ps.entries()) if (Math.min(p.w, p.h) < FLEX_MIN_SHORT) f.push(`${tag}: part ${i} ${fmt(p)} has a short side under ${FLEX_MIN_SHORT} (sliver)`);
+      // connected: parts touch edge to edge (gap 0, so no wall band can lie between them) along at least a hallway width
+      const seen = new Set<number>([0]);
+      const q = [0];
+      while (q.length) {
+        const u = q.pop() as number;
+        for (let v = 0; v < ps.length; v++) if (!seen.has(v) && sharedEdge(ps[u] as Rect, ps[v] as Rect) >= HALL_CLEAR) (seen.add(v), q.push(v));
+      }
+      if (seen.size !== ps.length) f.push(`${tag}: parts are not one connected zone (each shared open boundary must be at least ${HALL_CLEAR} long, with no gap or wall between)`);
+      const sum = ps.reduce((a, p) => a + area(p), 0);
+      if (sum >= area(bb)) f.push(`${tag}: the parts fill their bounding rectangle, so this is a plain rectangle: use one rectangle`);
+    }
+    add('multi-part-rooms', f, multi ? `${multi} multi-part Family Core(s): 2-3 touching rectangles, open boundaries, connected, genuinely L-shaped/stepped` : 'no multi-part rooms');
   }
 
   // ---- required rooms present
@@ -137,7 +182,8 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
       if (short < c.min[0] || short > c.max[0]) f.push(`${tag}: short side ${short} outside ${c.min[0]}-${c.max[0]}`);
       if (long < c.min[1] || long > c.max[1]) f.push(`${tag}: long side ${long} outside ${c.min[1]}-${c.max[1]}`);
       if (long > c.aspect * short + 1e-6) f.push(`${tag}: aspect ${(long / short).toFixed(2)} > ${c.aspect}`);
-      const a = area(r.rect);
+      // a multi-part room: sides and aspect are taken on the bounding rectangle (r.rect, as before); the area is the sum of the parts
+      const a = r.parts && r.parts.length > 0 ? r.parts.reduce((x, p) => x + area(p), 0) : area(r.rect);
       if (a < c.min[0] * c.min[1] || a > c.max[0] * c.max[1]) f.push(`${tag}: area ${a} outside catalog area bounds`);
     }
     add('room-size', f, 'every room within catalog min/max (sorted sides) and aspect limit');
@@ -166,19 +212,22 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
       if (t !== want || w.thickness !== want) f.push(`wall ${w.id} thickness ${w.thickness}/${t} != ${want}`);
       if (w.kind === 'interior' && !within(w.rect, inner)) f.push(`interior wall ${w.id} leaves the inner rectangle`);
       if (w.kind === 'interior')
-        for (const s of spaces) if (overlapArea(w.rect, s.rect) > 0) f.push(`wall ${w.id} overlaps clear space ${s.id}`);
+        for (const s of spaces) if (s.parts.some((p) => overlapArea(w.rect, p) > 0)) f.push(`wall ${w.id} overlaps clear space ${s.id}`);
     }
     for (let i = 0; i < spaces.length; i++)
       for (let j = i + 1; j < spaces.length; j++) {
         const a = spaces[i] as Space;
         const b = spaces[j] as Space;
         if (a.cls === 'hall' && b.cls === 'hall') continue;
-        const gx = Math.max(b.rect.x - (a.rect.x + a.rect.w), a.rect.x - (b.rect.x + b.rect.w));
-        const gy = Math.max(b.rect.y - (a.rect.y + a.rect.h), a.rect.y - (b.rect.y + b.rect.h));
-        const ovx = Math.min(a.rect.x + a.rect.w, b.rect.x + b.rect.w) - Math.max(a.rect.x, b.rect.x);
-        const ovy = Math.min(a.rect.y + a.rect.h, b.rect.y + b.rect.h) - Math.max(a.rect.y, b.rect.y);
-        if (ovy > 0 && gx >= 0 && gx < INTERIOR_WALL) f.push(`${a.id}/${b.id} separated by ${gx} < wall ${INTERIOR_WALL}`);
-        if (ovx > 0 && gy >= 0 && gy < INTERIOR_WALL) f.push(`${a.id}/${b.id} separated by ${gy} < wall ${INTERIOR_WALL}`);
+        for (const pa of a.parts)
+          for (const pb of b.parts) {
+            const gx = Math.max(pb.x - (pa.x + pa.w), pa.x - (pb.x + pb.w));
+            const gy = Math.max(pb.y - (pa.y + pa.h), pa.y - (pb.y + pb.h));
+            const ovx = Math.min(pa.x + pa.w, pb.x + pb.w) - Math.max(pa.x, pb.x);
+            const ovy = Math.min(pa.y + pa.h, pb.y + pb.h) - Math.max(pa.y, pb.y);
+            if (ovy > 0 && gx >= 0 && gx < INTERIOR_WALL) f.push(`${a.id}/${b.id} separated by ${gx} < wall ${INTERIOR_WALL}`);
+            if (ovx > 0 && gy >= 0 && gy < INTERIOR_WALL) f.push(`${a.id}/${b.id} separated by ${gy} < wall ${INTERIOR_WALL}`);
+          }
       }
     add('wall-bands', f, 'exterior band 250, interior bands 100, clear rectangles separated by at least a wall thickness');
   }
@@ -186,7 +235,7 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
   // ---- no unaccounted space (trapped pockets / slivers)
   {
     const f: string[] = [];
-    const covers = [...spaces.map((s) => s.rect), ...rec.walls.filter((w) => w.kind === 'interior').map((w) => w.rect)];
+    const covers = [...spaces.flatMap((s) => s.parts), ...rec.walls.filter((w) => w.kind === 'interior').map((w) => w.rect)];
     const u = uncovered(inner, covers);
     if (u.area > 0) {
       const big = u.boxes.slice().sort((a, b) => area(b) - area(a)).slice(0, 3);
@@ -223,8 +272,14 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
           const r = d.rect;
           const hx = (p: Rect, q: Rect): boolean => p.x + p.w === r.x && q.x === r.x + r.w && r.y >= Math.max(p.y, q.y) && r.y + r.h <= Math.min(p.y + p.h, q.y + q.h);
           const hy = (p: Rect, q: Rect): boolean => p.y + p.h === r.y && q.y === r.y + r.h && r.x >= Math.max(p.x, q.x) && r.x + r.w <= Math.min(p.x + p.w, q.x + q.w);
-          const ok = hx(A.rect, B.rect) || hx(B.rect, A.rect) || hy(A.rect, B.rect) || hy(B.rect, A.rect);
+          const ok = A.parts.some((pa) => B.parts.some((pb) => hx(pa, pb) || hx(pb, pa) || hy(pa, pb) || hy(pb, pa)));
           if (!ok) bad.push(`opening does not span the wall between ${d.a} and ${d.b}`);
+          // PL-25: a cased (doorless) opening joins a hallway segment and the Family Core, nothing else
+          if (d.kind === 'cased') {
+            const hallSide = A.cls === 'hall' ? A : B.cls === 'hall' ? B : null;
+            const other = hallSide === A ? B : A;
+            if (!hallSide || other.kind !== 'FamilyCore') bad.push(`cased opening must join a hallway segment and the Family Core (joins ${A.kind} ${A.id} and ${B.kind} ${B.id})`);
+          }
         }
       }
       if (bad.length) f.push(`door ${d.id}: ${bad.join(', ')}`);
@@ -413,15 +468,24 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
       const ds = [...byComp.values()];
       if (ds.length < 2) continue;
       carried++;
-      const R = core.rect;
+      const coreSpace = byId.get(core.id) as Space;
+      const coreParts = coreSpace.parts;
       const inward = (d: DoorRec): { x: number; y: number } => {
         const cx = d.rect.x + d.rect.w / 2;
         const cy = d.rect.y + d.rect.h / 2;
+        // the part of the Core the opening lies against (an ordinary Core has one part: its rectangle)
+        const R =
+          coreParts.find((p) => {
+            const ovy = Math.min(d.rect.y + d.rect.h, p.y + p.h) - Math.max(d.rect.y, p.y);
+            const ovx = Math.min(d.rect.x + d.rect.w, p.x + p.w) - Math.max(d.rect.x, p.x);
+            return (ovy > 0 && (d.rect.x + d.rect.w <= p.x + 1 || d.rect.x >= p.x + p.w - 1)) || (ovx > 0 && (d.rect.y + d.rect.h <= p.y + 1 || d.rect.y >= p.y + p.h - 1));
+          }) ?? core.rect;
         if (d.rect.x + d.rect.w <= R.x + 1) return { x: R.x + 500, y: cy };
         if (d.rect.x >= R.x + R.w - 1) return { x: R.x + R.w - 500, y: cy };
         if (d.rect.y + d.rect.h <= R.y + 1) return { x: cx, y: R.y + 500 };
         return { x: cx, y: R.y + R.h - 500 };
       };
+      const inCore = (b: Rect): boolean => uncovered(b, coreParts).area === 0;
       const band = (p: { x: number; y: number }, q: { x: number; y: number }): Rect => ({
         x: Math.min(p.x, q.x) - 500,
         y: Math.min(p.y, q.y) - 500,
@@ -440,12 +504,31 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
           .map((d): Rect => ({ x: d.rect.x - DOOR_CLEAR, y: d.rect.y - DOOR_CLEAR, w: d.rect.w + 2 * DOOR_CLEAR, h: d.rect.h + 2 * DOOR_CLEAR }));
         const ok = corners.some((c) => {
           const rs = [band(pa, c), band(c, pb)];
-          return rs.every((b) => within(b, R) && !swings.some((s) => overlapArea(b, s) > 0));
+          return rs.every((b) => inCore(b) && !swings.some((s) => overlapArea(b, s) > 0));
         });
         if (!ok) f.push(`no 1000 mm clear band through ${core.id} between doors ${A.id} and ${B.id}`);
       }
     }
     add('core-route', f, carried ? `${carried} Family Core(s) carry circulation and keep a 1000 mm route` : 'no Family Core carries circulation between hallway pieces');
+  }
+
+  // ---- hallway form (PL-25, Q4): hallway pieces that are not directly joined may only be joined through the open Family Core
+  {
+    const f: string[] = [];
+    const compIds = [...new Set(halls.map((h) => comp.get(h.id) as string))];
+    let formNote = 'one connected hallway';
+    if (compIds.length > 1) {
+      const cores = rec.rooms.filter((r) => r.kind === 'FamilyCore');
+      const opensTo = (core: string, c: string): boolean =>
+        goodDoors.some((d) => d.b !== 'OUTSIDE' && ((d.a === core && comp.get(d.b) === c) || (d.b === core && comp.get(d.a) === c)));
+      const joined = cores.some((core) => compIds.every((c) => opensTo(core.id, c)));
+      // declared two-hall-via-core: the pieces must really meet through one Core. Pieces that meet through a Core without the
+      // declaration are an undeclared fifth form. Pieces joined by nothing are judged by reachability/private-routes, not here.
+      formNote = joined ? `${compIds.length} hallway pieces, each opening into one Family Core (Entry stem plus rear lobby/bar joined only through the Core), hallShape two-hall-via-core` : 'hallway pieces not joined through a Core: judged by reachability and private-routes';
+      if (rec.hallShape === 'two-hall-via-core' && !joined) f.push('hallShape two-hall-via-core, but no single Family Core is joined to every hallway piece by an opening');
+      if (rec.hallShape !== 'two-hall-via-core' && joined) f.push(`the hallway pieces meet only through the Family Core but hallShape is "${rec.hallShape}" (must declare two-hall-via-core)`);
+    }
+    add('hall-form', f, formNote);
   }
 
   // ---- hallway clear width
@@ -471,7 +554,7 @@ export function validate(rec: Stage6Record, brief: Brief): ValidationResult {
     add('flex', f, rec.flex.length ? `${rec.flex.length} flex patch(es) rectangular, >= 4 m2, >= 1500 short side, reachable` : 'no flex patches');
   }
 
-  const roomArea = rec.rooms.reduce((a, r) => a + area(r.rect), 0);
+  const roomArea = rec.rooms.reduce((a, r) => a + (r.parts && r.parts.length > 0 ? r.parts.reduce((x, p) => x + area(p), 0) : area(r.rect)), 0);
   const flexArea = rec.flex.reduce((a, r) => a + area(r.rect), 0);
   const metrics = {
     footprintMm2: area(fp),

@@ -1,0 +1,107 @@
+{
+ "valid": true,
+ "rules": [
+  {
+   "rule": "bounds",
+   "pass": true,
+   "detail": "footprint inside envelope, front-aligned and centred; every clear rectangle is 250 mm inside the outside face"
+  },
+  {
+   "rule": "non-overlap",
+   "pass": true,
+   "detail": "no room, flex or hallway rectangle overlaps another room or flex rectangle"
+  },
+  {
+   "rule": "multi-part-rooms",
+   "pass": true,
+   "detail": "1 multi-part Family Core(s): 2-3 touching rectangles, open boundaries, connected, genuinely L-shaped/stepped"
+  },
+  {
+   "rule": "program",
+   "pass": true,
+   "detail": "all 9 required rooms present; omissions disclosed: none"
+  },
+  {
+   "rule": "room-size",
+   "pass": true,
+   "detail": "every room within catalog min/max (sorted sides) and aspect limit"
+  },
+  {
+   "rule": "wall-bands",
+   "pass": true,
+   "detail": "exterior band 250, interior bands 100, clear rectangles separated by at least a wall thickness"
+  },
+  {
+   "rule": "no-voids",
+   "pass": true,
+   "detail": "every cell inside the exterior wall is a room, hallway, flex patch or wall band"
+  },
+  {
+   "rule": "doors",
+   "pass": true,
+   "detail": "13 openings, each >= 820 clear, inside a wall band and spanning the two spaces it joins"
+  },
+  {
+   "rule": "door-overlap",
+   "pass": true,
+   "detail": "no two openings overlap"
+  },
+  {
+   "rule": "door-tiers",
+   "pass": true,
+   "detail": "every door joins spaces the tiers permit (Bedroom/Bathroom/WC: hallway only; WIR: Master/Ensuite; Ensuite: WIR/Master; Pantry: Core; ...)"
+  },
+  {
+   "rule": "room-access",
+   "pass": true,
+   "detail": "every room and flex patch has a permitted door"
+  },
+  {
+   "rule": "wir-to-ensuite",
+   "pass": true,
+   "detail": "Ensuite is reached only through the WIR"
+  },
+  {
+   "rule": "front-edge",
+   "pass": true,
+   "detail": "Entry and Garage vehicle opening are on the front edge; front door present"
+  },
+  {
+   "rule": "reachability",
+   "pass": true,
+   "detail": "every room, flex patch and hallway segment is reachable from Entry"
+  },
+  {
+   "rule": "private-routes",
+   "pass": true,
+   "detail": "no private room (Master, Bedroom, Bathroom, WC, Garage, Ensuite, WIR) is a through-route except Master->Ensuite/WIR and WIR->Ensuite"
+  },
+  {
+   "rule": "core-route",
+   "pass": true,
+   "detail": "no Family Core carries circulation between hallway pieces"
+  },
+  {
+   "rule": "hall-form",
+   "pass": true,
+   "detail": "one connected hallway"
+  },
+  {
+   "rule": "hall-width",
+   "pass": true,
+   "detail": "every hallway segment is at least 1000 clear"
+  },
+  {
+   "rule": "flex",
+   "pass": true,
+   "detail": "2 flex patch(es) rectangular, >= 4 m2, >= 1500 short side, reachable"
+  }
+ ],
+ "metrics": {
+  "footprintMm2": 235500000,
+  "roomAreaMm2": 157409000,
+  "flexAreaMm2": 34096000,
+  "hallAreaMm2": 21192000,
+  "wallAreaMm2": 22953000
+ }
+}

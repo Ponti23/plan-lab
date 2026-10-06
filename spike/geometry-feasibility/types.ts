@@ -126,7 +126,12 @@ export interface RoomRec {
   name: string;
   kind: RoomKind;
   zoneId: string;
-  rect: Rect; // clear internal rectangle
+  rect: Rect; // clear internal rectangle; for a multi-part room (L-shaped / stepped Family Core) the bounding rectangle of `parts`
+  /**
+   * Optional (PL-25, user decision Q7/D61): the 2-3 clear rectangles of an L-shaped or stepped Family Core.
+   * They touch with open (wall-less, door-less) shared boundaries and together make ONE room. Absent for every ordinary room.
+   */
+  parts?: Rect[];
 }
 
 export interface FlexRec {
@@ -158,7 +163,8 @@ export interface WallRec {
 
 export interface DoorRec {
   id: string;
-  kind: 'door' | 'front' | 'vehicle';
+  /** 'cased' (PL-25): a doorless opening (no leaf, no swing) between a hallway segment and the Family Core */
+  kind: 'door' | 'front' | 'vehicle' | 'cased';
   /** space ids joined by the opening; 'OUTSIDE' for front door and vehicle opening */
   a: string;
   b: string;
