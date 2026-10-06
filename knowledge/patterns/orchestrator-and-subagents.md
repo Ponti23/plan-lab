@@ -19,7 +19,7 @@ fallback are in [[delegation-playbook]].
 4. Dispatch the bucket to a fresh Luna for routine work or Sol for complex engineering via
    `scripts/codex-worker.sh`, one writer per checkout. Include
    the bucket, scope, relevant spec, constraints, checks, and a requested result format. If Codex
-   is unavailable, use the manual DeepSeek Flash fallback in the playbook.
+   is unavailable, dispatch the same brief to DeepSeek Flash via the playbook's `cc-worker.sh` (Sonnet if that fails).
 5. Have the author report changes and raw verification results. Route consequential changes to a
    fresh, separate reviewer; never accept an author's own review as independent. Record review
    findings and verification evidence before marking the bucket `done`.

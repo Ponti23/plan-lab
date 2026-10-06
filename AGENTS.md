@@ -15,7 +15,7 @@ PlanLab generates dimensioned, architecturally sensible single-storey house conc
 - **Delegation.** Follow [the delegation playbook](knowledge/patterns/delegation-playbook.md):
   Opus 5.5 orchestrates (plans, briefs, dispatches, reviews, reports); Codex workers execute —
   Luna routine, Sol complex engineering — via `scripts/codex-worker.sh`, one writer per checkout.
-  DeepSeek Flash is a manual external fallback only.
+  DeepSeek Flash (`deepseek-flash`) is the first fallback when Codex is unavailable (Sonnet second), dispatched via `bash /e/local-ai/Scripts/cc-worker.sh deepseek <repo> [ro|write] < brief.md`.
 - **Human hard-gates.** Money/payments and product/UX/copy decisions stop for the user. For this
   project that means: any paid provider/secret (none expected); product/UX/copy — stage UI, labels, explanation & failure-diagnostic wording; room-size preset values, Near thresholds, and quality/diversity thresholds (calibration against architect-reviewed examples); Stage 0 go/no-go; first deploy. Never merge those solo.
 - **Ponytail default** — laziest solution that actually works; YAGNI; stdlib/native before deps.

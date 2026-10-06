@@ -22,7 +22,7 @@ Drive authorized work through the active plan in dependency order. Use
 1. Opus plans the bucket and writes its self-contained brief.
 2. Dispatch routine work to a fresh Luna and complex engineering/solver work to Sol with
    `scripts/codex-worker.sh` (one writer per checkout; see the playbook). If Codex
-   is unavailable, use the manual DeepSeek Flash fallback described in the playbook.
+   is unavailable, dispatch the same brief to DeepSeek Flash via the playbook's `cc-worker.sh` (Sonnet if that fails).
    Provide the full bucket, relevant specification, exact scope, verification, and result format.
 3. The author performs the bucket's requested checks and reports changed files, results, and
    remaining issues. Do not treat a plan as execution or verification.
