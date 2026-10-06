@@ -4,7 +4,7 @@
 **Status:** Plan B complete 2026-10-06: PL-00–02 and PL-10–15 done; PL-20 early spike in review. Remaining work is gated on the user (G-SPIKE for PL-21, calibration answers, PL-22 go/no-go).
 
 ## Last checkpoint
-- 2026-10-06 07:05, branch `work/plan-b` (on top of `docs/round12-orchestration`; not pushed, not merged).
+- 2026-10-06 07:05, branch `work/plan-b` (on top of `docs/round12-orchestration`), pushed to `origin/work/plan-b`; not merged, no PR.
 - PL-10–15 done (reviewed). PL-20 early spike in review (user judges SVGs). See `knowledge/briefs/overnight-report.md`.
 
 ## Next step (when you're back)

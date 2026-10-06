@@ -53,5 +53,5 @@ Statuses: `todo` · `in-progress` · `needs-human` · `blocked` · `review` · `
 | PL-00 | Reuse current checkout for project policy files; user-kit edits are outside Git | `design/ui-mockups`, shared working tree; kit and policy artifacts exist; no commit or merge claimed |
 | PL-01, PL-02 | Reuse current checkout for this authorized documentation pass | `design/ui-mockups`, shared working tree; documentation artifacts present; mockup files untouched; no commit or merge claimed |
 | Round 12 recording, orchestration roster | Reuse a docs branch | `docs/round12-orchestration` off `main`; committed 2026-10-05 |
-| PL-10–15, PL-20 (early) | `work/plan-b` (user-approved 2026-10-05), one commit per reviewed bucket | `work/plan-b`; not pushed or merged |
+| PL-10–15, PL-20 (early) | `work/plan-b` (user-approved 2026-10-05), one commit per reviewed bucket | `work/plan-b`, pushed to origin 2026-10-06; not merged |
 | PL-21–22, PL-30–34, PL-40–43, PL-50–53 | One coherent branch per bucket, selected at dispatch | Not started |
