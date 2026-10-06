@@ -1,5 +1,6 @@
-// PL-25 tests: the max-first fill, the three templates (valid candidates for both briefs), determinism, and one good + one bad case for each
-// new validator rule (multi-part rooms, cased openings, hall-form, area of a multi-part Core).
+// PL-25 tests: the max-first fill, the four templates (T1-T4, valid candidates for both briefs), the Q3 template search order by footprint aspect,
+// the Q18 Optional-room drop order, determinism, and one good + one bad case for each new validator rule (multi-part rooms, cased openings,
+// hall-form, area of a multi-part Core).
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -7,11 +8,11 @@ import { BRIEFS } from '../geometry-feasibility/briefs.ts';
 import type { Brief, CatKey, RoomKind, Stage6Record, ZoneType } from '../geometry-feasibility/types.ts';
 import { validate } from '../geometry-feasibility/validate.ts';
 import { renderPresent } from '../geometry-feasibility/render-present.ts';
-import { parseProgram } from './blocks.ts';
+import { keepFit, OPTIONAL_ROOM_ORDER, optionalPrio, parseProgram } from './blocks.ts';
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import { bbox, chooser, cmpRank, fillRow, interiorHabitable, isFail, layoutScore, mirrorLayout, rankHead, setSizing, sharedTotal } from './common.ts';
 import type { Sizing } from './common.ts';
-import { needT1 } from './run.ts';
+import { aspectOf, needT1, searchOrder } from './run.ts';
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, existsSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -20,6 +21,7 @@ import type { Layout } from './common.ts';
 import { emit } from './emit.ts';
 import { buildT1 } from './t1.ts';
 import { buildT2 } from './t2.ts';
+import { buildT3 } from './t3.ts';
 import { buildT4 } from './t4.ts';
 
 const noAlf = (id: string, width?: number): Brief => {
@@ -32,6 +34,7 @@ const prog = (b: Brief) => {
   return p;
 };
 const T1 = { wing: 'master' as const, hw: 1000, lobbyD: 1000, drowOrder: [2400, 2600, 2800] };
+const T3 = { hw: 1000, lobbyD: 1000, drowOrder: [2400, 2600, 2800] };
 const T4 = { hw: 1000, lobbyD: 1000, drowOrder: [2400, 2600, 2800], rear: 'auto' as const };
 
 function rec(l: Layout | { ok: false; reason: string }, b: Brief): Stage6Record {
@@ -73,11 +76,11 @@ test('fillRow (max mode, iteration 1): max-first, integers, omits the lowest-pri
   assert.ok(isFail(fillRow([{ id: 'a', lo: 3000, pref: 3000, hi: 3000 }], 2000)));
 }));
 
-test('T1, T2 and T4 each give a validator-valid layout for Fixture A and GB-01 (without the Alfresco); T2 needs a wider GB-01 envelope', () => {
+test('T1, T2, T3 and T4 each give a validator-valid layout for Fixture A and GB-01 (without the Alfresco); T2 needs a wider GB-01 envelope', () => {
   for (const id of ['FIXTURE-A', 'GB-01']) {
     const b = noAlf(id);
     const p = prog(b);
-    for (const l of [buildT1(b, p, T1), buildT4(b, p, T4)]) {
+    for (const l of [buildT1(b, p, T1), buildT3(b, p, T3), buildT4(b, p, T4)]) {
       const r = rec(l, b);
       assert.deepEqual(failed(r, b), [], `${id} ${(l as Layout).template}`);
       assert.ok(!r.rooms.some((x) => x.kind === 'Alfresco'));
@@ -89,6 +92,47 @@ test('T1, T2 and T4 each give a validator-valid layout for Fixture A and GB-01 (
   assert.ok(isFail(buildT2(gb, prog(gb), { hw: 1000, lobbyD: 1000 })), 'GB-01 T2 does not fit 12500 (contract 7.8)');
   const wide = noAlf('GB-01', 13500);
   assert.deepEqual(failed(rec(buildT2(wide, prog(wide), { hw: 1000, lobbyD: 1000 }), wide), wide), []);
+});
+
+// ---------------------------------------------------------------- iteration 4: T3, the rear-master wing column (2.2 CF-02)
+test('T3 rear-master: the Bedrooms fill the wing column in front of the Master suite on the rear wall, the spine reaches it, a mirror image validates', () => {
+  for (const id of ['FIXTURE-A', 'GB-01']) {
+    const b = noAlf(id);
+    const l = buildT3(b, prog(b), T3);
+    assert.ok(!isFail(l), `${id}: ${isFail(l) ? l.reason : ''}`);
+    const lay = l as Layout;
+    assert.deepEqual(failed(rec(lay, b), b), [], `${id} T3 valid`);
+    const part = (kind: RoomKind) => (lay.rooms.find((x) => x.kind === kind)?.parts[0] ?? { x: 0, y: 0, w: 0, h: 0 }) as { x: number; y: number; w: number; h: number };
+    const m = part('Master');
+    assert.equal(m.y + m.h, lay.Df - 250, `${id}: the Master suite takes the rear exterior wall`);
+    for (const bed of lay.rooms.filter((x) => x.kind === 'Bedroom')) {
+      const bp = bed.parts[0] as { x: number; y: number; h: number };
+      assert.equal(bp.x, 250, `${id}: Bedrooms sit in the wing column`);
+      assert.ok(bp.y + bp.h <= m.y, `${id}: Bedrooms in front of the Master suite`);
+    }
+    const stem = lay.halls.find((h) => h.id === 'H-stem') as { rect: { x: number; y: number; w: number; h: number } };
+    assert.equal(stem.rect.y + stem.rect.h, lay.Df - 250, `${id}: the spine runs rearward to the rear wall`);
+    // 2.2: the WIR | Ensuite row pins the wing column at W1 >= 3700, and the row spans that width exactly
+    assert.ok(stem.rect.x - 250 - 100 >= 3700, `${id}: wing column ${stem.rect.x - 350} >= 3700`);
+    const wir = part('WIR');
+    const ens = part('Ensuite');
+    assert.equal(wir.x, 250, `${id}: the WIR | Ensuite row starts at the wing column`);
+    assert.equal(wir.x + wir.w + 100 + ens.w, stem.rect.x - 100, `${id}: the WIR | Ensuite row spans the wing column exactly`);
+    assert.ok(lay.Wf <= b.envelope.maxW && lay.Df <= b.envelope.maxD, `${id}: inside the envelope`);
+    assert.deepEqual(failed(rec(mirrorLayout(lay), b), b), [], `${id} T3 mirrored valid`);
+  }
+});
+
+test('T3 fail reasons are documented: a fourth Bedroom is type C; max-first sizing (iteration 1, not used for T3) is a type A on Fixture A', () => {
+  const b = noAlf('FIXTURE-A');
+  const bed4 = b.rooms.find((r) => r.id === 'bed4') as Brief['rooms'][number];
+  const four: Brief = { ...b, rooms: [...b.rooms, { ...bed4, id: 'bed5', name: 'Bedroom 5' }] };
+  const f = buildT3(four, prog(four), T3);
+  assert.ok(isFail(f) && f.type === 'C' && /three Bedrooms/.test(f.reason), `four Bedrooms: ${isFail(f) ? `${f.type}: ${f.reason}` : 'built a layout'}`);
+  // max mode is kept only to reproduce out/iteration-1-max for T1/T2/T4 (run.ts MAX_TEMPLATES): Fixture A's wing column cannot reach it
+  const m = withSizing('max', () => buildT3(b, prog(b), T3));
+  assert.ok(isFail(m), 'T3 in max mode on Fixture A is a documented failure, not a crash');
+  assert.match(isFail(m) ? m.reason : '', /stack depths do not meet/);
 });
 
 test('same brief and options give identical output; a mirror image validates too; the Alfresco is refused (D63)', () => {
@@ -225,11 +269,13 @@ test('sharedTotal: typical = the longest preferred row (the smallest footprint t
 });
 
 test('typical sizing: footprint within the envelope and smaller than in max mode; rooms nearer their preferred sizes; the T1 Garage is exactly its preferred size', () => {
-  const cases: [string, number | undefined, 'T1' | 'T2' | 'T4'][] = [
+  const cases: [string, number | undefined, 'T1' | 'T2' | 'T3' | 'T4'][] = [
     ['FIXTURE-A', undefined, 'T1'],
     ['FIXTURE-A', undefined, 'T2'],
-    ['FIXTURE-A', undefined, 'T4'],
+    ['FIXTURE-A', undefined, 'T4'], // T3 has no max-mode candidate on Fixture A (documented type A); its typical run is covered below
+
     ['GB-01', undefined, 'T1'],
+    ['GB-01', undefined, 'T3'],
     ['GB-01', undefined, 'T4'],
     ['GB-01', 13500, 'T2'], // WHAT-IF width: T2 needs 12760 inner
   ];
@@ -237,7 +283,7 @@ test('typical sizing: footprint within the envelope and smaller than in max mode
     const b = noAlf(id, w);
     const p = prog(b);
     const build = (): Layout => {
-      const l = t === 'T1' ? buildT1(b, p, T1) : t === 'T2' ? buildT2(b, p, { hw: 1000, lobbyD: 1000, master: 'spine' }) : buildT4(b, p, T4);
+      const l = t === 'T1' ? buildT1(b, p, T1) : t === 'T2' ? buildT2(b, p, { hw: 1000, lobbyD: 1000, master: 'spine' }) : t === 'T3' ? buildT3(b, p, T3) : buildT4(b, p, T4);
       assert.ok(!isFail(l), `${id} ${t}`);
       return l as Layout;
     };
@@ -266,19 +312,64 @@ test('typical sizing is deterministic, and max mode is still available (it diffe
   assert.notEqual(JSON.stringify(m1), JSON.stringify(buildT4(b, p, T4)));
 });
 
-test('T1 is a last resort: needT1 is true only when no T2/T4 run was valid', () => {
+test('T1 is a last resort: needT1 is true only when no T2/T3/T4 run was valid', () => {
   assert.equal(needT1([{ valid: 0 }, { valid: 0 }]), true);
+  assert.equal(needT1([{ valid: 0 }, { valid: 0 }, { valid: 0 }]), true);
   assert.equal(needT1([{ valid: 0 }, { valid: 3 }]), false);
+  assert.equal(needT1([{ valid: 0 }, { valid: 0 }, { valid: 1 }]), false);
   assert.equal(needT1([{ valid: 5 }, { valid: 0 }]), false);
   assert.equal(needT1([{ valid: 5 }, { valid: 2 }]), false);
 });
 
-test('run.ts: T1 stays out of the main output when T2/T4 yield valid candidates, and appears in the separate T1-fallback-demo folder', () => {
+// ---------------------------------------------------------------- iteration 4: Q3 search order and Q18 Optional-room order
+test('Q3: the regular templates are ordered by footprint aspect (below 1.4: T4, T2; 1.4 and above: T2, T4; T3 always after them, T1 the fallback)', () => {
+  assert.equal(aspectOf({ maxW: 15000, maxD: 20000 }).toFixed(3), '1.333', 'Fixture A');
+  assert.equal(aspectOf({ maxW: 12500, maxD: 20500 }).toFixed(3), '1.640', 'GB-01');
+  assert.deepEqual(searchOrder({ maxW: 15000, maxD: 20000 }), ['T4', 'T2', 'T3'], 'below 1.4');
+  assert.deepEqual(searchOrder({ maxW: 12500, maxD: 20500 }), ['T2', 'T4', 'T3'], 'above 1.4');
+  assert.deepEqual(searchOrder({ maxW: 14000, maxD: 10000 }), ['T2', 'T4', 'T3'], 'exactly 1.4 counts as "1.4 and above"');
+  assert.deepEqual(searchOrder({ maxW: 10000, maxD: 13900 }), ['T4', 'T2', 'T3'], 'just below 1.4');
+  // the order is a preference, not a filter (D25): all three regular templates appear, T1 does not
+  for (const env of [{ maxW: 15000, maxD: 20000 }, { maxW: 12500, maxD: 20500 }]) {
+    assert.deepEqual([...searchOrder(env)].sort(), ['T2', 'T3', 'T4'], 'every regular template, none excluded');
+  }
+});
+
+test('Q18: one Optional-room order constant (Laundry, Pantry, Study, Theatre, extra Family/Living; no Alfresco, D63), shared by every drop site', () => {
+  assert.deepEqual([...OPTIONAL_ROOM_ORDER], ['Laundry', 'Pantry', 'Study', 'Theatre', 'Family', 'Living']);
+  assert.equal(optionalPrio('Laundry'), 1, 'first in the order = kept longest');
+  assert.equal(optionalPrio('Pantry'), 2);
+  assert.equal(optionalPrio('Living'), 6, 'last in the order = dropped first');
+  assert.ok(optionalPrio('Alfresco') > optionalPrio('Living'), 'a kind with no slot sorts last, so it is dropped first');
+  const b = noAlf('FIXTURE-A');
+  const lau = { ...(b.rooms.find((r) => r.kind === 'Laundry') as Brief['rooms'][number]), required: false };
+  const pan = b.rooms.find((r) => r.kind === 'Pantry') as Brief['rooms'][number];
+  // keepFit (blocks.ts): a column that holds only one of the pair holds the Laundry
+  const k = keepFit([lau, pan], (s) => s.length === 1 && s[0]!.kind === 'Laundry');
+  assert.deepEqual(k?.specs.map((s) => s.kind), ['Laundry']);
+  assert.deepEqual(k?.omitted, [pan.id]);
+  // a column that holds only the Pantry drops the Laundry first and the Pantry after it (lowest priority first), then falls back to flex
+  assert.deepEqual(keepFit([lau, pan], (s) => s.length === 1 && s[0]!.kind === 'Pantry')?.omitted, [pan.id, lau.id]);
+  // a required Optional room is never dropped
+  assert.equal(keepFit([{ ...lau, required: true }, { ...pan, required: true }], () => false), null);
+  // fillRow (common.ts) is the other drop site and uses the same numbers
+  const f = fillRow(
+    [
+      { id: 'laundry', lo: 1500, pref: 1800, hi: 2000, opt: true, prio: optionalPrio('Laundry') },
+      { id: 'pantry', lo: 1500, pref: 1800, hi: 2000, opt: true, prio: optionalPrio('Pantry') },
+    ],
+    1900,
+  );
+  assert.ok(!isFail(f), 'a Laundry alone still fits the row');
+  assert.deepEqual(f.omitted, ['pantry'], 'the Pantry goes before the Laundry');
+});
+
+test('run.ts: T1 stays out of the main output when T2/T3/T4 yield valid candidates, and appears in the separate T1-fallback-demo folder', () => {
   const dir = mkdtempSync(join(tmpdir(), 'pl25-'));
   try {
     execFileSync(process.execPath, [join(import.meta.dirname, 'run.ts'), '--seeds', '3', '--out', dir], { stdio: 'pipe' });
     const sum = JSON.parse(readFileSync(join(dir, 'summary.json'), 'utf8')) as {
-      runs: { template: string; group: string; valid: number }[];
+      runs: { template: string; group: string; valid: number; aspect: number; envelopeWidth: number }[];
       t1UsedAsFallback: string[];
       t1FallbackDemoRuns: { template: string; group: string; valid: number; dirRel: string }[];
       best: { template: string }[];
@@ -286,9 +377,12 @@ test('run.ts: T1 stays out of the main output when T2/T4 yield valid candidates,
     assert.ok(sum.runs.every((r) => r.template !== 'T1'), 'no T1 run in the main set');
     assert.deepEqual(sum.t1UsedAsFallback, []);
     assert.ok(sum.best.every((b) => b.template !== 'T1'));
+    assert.ok(sum.runs.some((r) => r.template === 'T3'), 'T3 runs in the main set (Q2: lowest-priority regular template)');
+    assert.ok(sum.runs.every((r) => Number.isFinite(r.aspect) && r.aspect >= 1), 'Q3: the footprint aspect is recorded per run');
+    assert.ok(sum.runs.filter((r) => r.envelopeWidth === 12500).every((r) => Math.abs(r.aspect - 20500 / 12500) < 1e-9), 'GB-01 aspect');
     assert.ok(sum.t1FallbackDemoRuns.length >= 2 && sum.t1FallbackDemoRuns.every((r) => r.group === 't1-fallback-demo' && r.dirRel.startsWith('T1-fallback-demo/')));
     assert.ok(existsSync(join(dir, 'T1-fallback-demo')) && existsSync(join(dir, 'compare.html')));
-    assert.match(readFileSync(join(dir, 'compare.html'), 'utf8'), /iteration 1 \(max-first\) against iteration 2/i);
+    assert.match(readFileSync(join(dir, 'compare.html'), 'utf8'), /iteration 1 \(max-first\) against iteration 4/i);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

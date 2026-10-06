@@ -1,0 +1,201 @@
+{
+ "stage": 4,
+ "id": "21-0",
+ "briefId": "FIXTURE-A",
+ "seed": 21,
+ "attempt": 0,
+ "cfPattern": "T3-rear-master",
+ "hallShape": "spine",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 1300,
+  "y": 1800,
+  "w": 12400,
+  "h": 18200
+ },
+ "inner": {
+  "x": 1550,
+  "y": 2050,
+  "w": 11900,
+  "h": 17700
+ },
+ "zones": [
+  {
+   "id": "Z-bed2",
+   "name": "Bedroom 2",
+   "type": "bedrooms",
+   "rect": {
+    "x": 1550,
+    "y": 17050,
+    "w": 3700,
+    "h": 2700
+   },
+   "roomIds": [
+    "bed2"
+   ]
+  },
+  {
+   "id": "Z-wet",
+   "name": "Wet rooms",
+   "type": "wet",
+   "rect": {
+    "x": 1550,
+    "y": 13450,
+    "w": 3700,
+    "h": 2400
+   },
+   "roomIds": [
+    "bath",
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bed3",
+   "name": "Bedroom 3",
+   "type": "bedrooms",
+   "rect": {
+    "x": 1550,
+    "y": 10650,
+    "w": 3700,
+    "h": 2700
+   },
+   "roomIds": [
+    "bed3"
+   ]
+  },
+  {
+   "id": "Z-bed4",
+   "name": "Bedroom 4",
+   "type": "bedrooms",
+   "rect": {
+    "x": 1550,
+    "y": 7850,
+    "w": 3700,
+    "h": 2700
+   },
+   "roomIds": [
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-master-suite",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 1550,
+    "y": 2050,
+    "w": 3700,
+    "h": 5700
+   },
+   "roomIds": [
+    "master",
+    "wir",
+    "ensuite"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Double Garage",
+   "type": "garage",
+   "rect": {
+    "x": 6450,
+    "y": 12750,
+    "w": 7000,
+    "h": 7000
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-core",
+   "name": "Family Core",
+   "type": "living",
+   "rect": {
+    "x": 6450,
+    "y": 6150,
+    "w": 4960,
+    "h": 6500
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 11510,
+    "y": 9350,
+    "w": 1940,
+    "h": 3300
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  },
+  {
+   "id": "Z-pantry",
+   "name": "Pantry",
+   "type": "living",
+   "rect": {
+    "x": 11510,
+    "y": 6150,
+    "w": 1940,
+    "h": 3100
+   },
+   "roomIds": [
+    "pantry"
+   ]
+  },
+  {
+   "id": "Z-flex-rear",
+   "name": "Flex (labelled residual, D44)",
+   "type": "flex",
+   "rect": {
+    "x": 6450,
+    "y": 2050,
+    "w": 7000,
+    "h": 4000
+   },
+   "roomIds": []
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 5350,
+    "y": 18450,
+    "w": 1000,
+    "h": 1300
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway",
+   "kind": "stem",
+   "rect": {
+    "x": 5350,
+    "y": 2050,
+    "w": 1000,
+    "h": 16400
+   }
+  },
+  {
+   "id": "H-lobby-wet",
+   "name": "Lobby",
+   "kind": "connector",
+   "rect": {
+    "x": 1550,
+    "y": 15950,
+    "w": 3700,
+    "h": 1000
+   }
+  }
+ ],
+ "omittedOptional": []
+}

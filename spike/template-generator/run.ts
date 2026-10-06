@@ -1,11 +1,14 @@
 // PL-25 runner: node spike/template-generator/run.ts [--seeds N] [--out DIR]
-// For Fixture A and GB-01 (WITHOUT the Alfresco, D63) x templates T1, T2, T4: build layouts from seeds, emit real stage 4/5/6 records, judge them with
-// the independent validator, keep up to 6 valid distinct candidates per brief and template, write JSON + debug SVG (render.ts) + present SVG
+// For Fixture A and GB-01 (WITHOUT the Alfresco, D63) x templates T1, T2, T3, T4: build layouts from seeds, emit real stage 4/5/6 records, judge them
+// with the independent validator, keep up to 6 valid distinct candidates per brief and template, write JSON + debug SVG (render.ts) + present SVG
 // (render-present.ts), summary.json and compare.html. A template that cannot fit the PL-10 envelope is re-run at labelled WHAT-IF widths 13500
 // and 15000. Everything is provisional - uncalibrated (G-CALIBRATION).
 // Iteration 2 (user 2026-10-06): sizing is typical-first (Q5); T2 and T4 run first and T1 only when neither yields a valid candidate (T1 is a last
 // resort); T1 is still produced in out/T1-fallback-demo for comparison; the iteration-1 max-first sizing is re-run into out/iteration-1-max for the
-// compare.html iteration 1 vs 2 row.
+// compare.html iteration 1 vs 4 row.
+// Iteration 4 (user 2026-10-06): T3 (rear-master wing column, 2.2 CF-02) joins as the lowest-priority regular template (Q2); the regular templates
+// run in Q3 order by footprint aspect (below 1.4: T4, T2, T3; at or above 1.4: T2, T4, T3 - section 2.3's "T1 first above 1.7" is overridden by
+// Q17), the aspect used is recorded per run in summary.json (see `aspect`); T1 stays the fallback and still needs every regular template to fail.
 
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -26,6 +29,7 @@ import { computeMetrics, IDEALS } from './metrics.ts';
 import type { Metrics } from './metrics.ts';
 import { buildT1 } from './t1.ts';
 import { buildT2 } from './t2.ts';
+import { buildT3 } from './t3.ts';
 import { buildT4 } from './t4.ts';
 import { compareHtml } from './compare.ts';
 
@@ -38,8 +42,23 @@ const SEEDS = Number(arg('seeds', '24'));
 const OUT = arg('out', join(here, 'out'));
 const WHATIF_WIDTHS = [13500, 15000];
 
-export type TemplateName = 'T1' | 'T2' | 'T4';
-const TEMPLATES: TemplateName[] = ['T1', 'T2', 'T4'];
+export type TemplateName = 'T1' | 'T2' | 'T3' | 'T4';
+/** every template shown in compare.html, in the iteration-1 column order */
+const TEMPLATES: TemplateName[] = ['T1', 'T2', 'T3', 'T4'];
+/** the templates iteration 1 (max-first) had: T3 is new in iteration 4, so it has no iteration-1 counterpart to reproduce */
+const MAX_TEMPLATES: TemplateName[] = ['T1', 'T2', 'T4'];
+
+/** footprint aspect Q3 orders by: the long side over the short side of the envelope */
+export const aspectOf = (env: { maxW: number; maxD: number }): number => Math.max(env.maxW, env.maxD) / Math.min(env.maxW, env.maxD);
+
+/**
+ * Q3 (user 2026-10-06): the order the regular templates are tried in, by footprint shape. Aspect = long side / short side of the envelope:
+ * below 1.4 the wide-plot templates come first (T4 then T2), at 1.4 and above the deep-plot ones (T2 then T4). T3 always comes after them and T1
+ * stays the last resort (the caller runs it only when none of these yields a validator-valid candidate, D25/Q2: no template is ever excluded).
+ */
+export function searchOrder(env: { maxW: number; maxD: number }): TemplateName[] {
+  return aspectOf(env) < 1.4 ? ['T4', 'T2', 'T3'] : ['T2', 'T4', 'T3'];
+}
 
 export interface Retained {
   id: string;
@@ -77,6 +96,8 @@ export interface RunSummary {
   template: TemplateName;
   widthLabel: string;
   envelopeWidth: number;
+  /** Q3 footprint aspect this run was ordered by: the envelope's long side over its short side */
+  aspect: number;
   whatIf: boolean;
   seeds: number;
   built: number;
@@ -105,7 +126,7 @@ function derive(id: string, width: number | null, single = false): Brief {
 function build(t: TemplateName, brief: Brief, seed: number): { layout: Layout; sig: string; mirrored: boolean; cf: string } | Fail {
   const prog = parseProgram(brief);
   if (isFail(prog)) return prog;
-  const r = prng(seed * 7919 + (t === 'T1' ? 1 : t === 'T2' ? 2 : 4));
+  const r = prng(seed * 7919 + (t === 'T1' ? 1 : t === 'T2' ? 2 : t === 'T3' ? 3 : 4));
   const hw = [1000, 1000, 1100, 1200][Math.floor(r() * 4)] as number;
   const lobbyD = [1000, 1200][Math.floor(r() * 2)] as number;
   const rot = Math.floor(r() * 3);
@@ -122,6 +143,10 @@ function build(t: TemplateName, brief: Brief, seed: number): { layout: Layout; s
     const master = isTypical() && seed % 2 === 0 ? 'outside' : 'spine';
     layout = buildT2(brief, prog, { hw, lobbyD, master });
     cf = isTypical() ? `T2-B-${master}` : 'T2-B'; // max mode keeps the iteration-1 label
+  } else if (t === 'T3') {
+    // masterBand = rear: the Master suite ends the wing column, the Bedrooms fill it in front (2.2 CF-02)
+    layout = buildT3(brief, prog, { hw, lobbyD, drowOrder });
+    cf = 'T3-rear-master';
   } else {
     const rear = seed % 3 === 2 ? 'bar' : 'auto';
     layout = buildT4(brief, prog, { hw, lobbyD, drowOrder, rear });
@@ -233,7 +258,7 @@ function runOne2(briefId: string, t: TemplateName, width: number | null, root: s
   const dir = join(root, briefId, dirName);
   rmSync(dir, { recursive: true, force: true });
   mkdirSync(dir, { recursive: true });
-  const groupTag = o.group === 't1-fallback-demo' ? ' | T1 FALLBACK DEMO (T1 is a last resort; T2/T4 were chosen)' : o.group === 'iteration-1-max' ? ' | ITERATION 1: max-first sizing (superseded)' : '';
+  const groupTag = o.group === 't1-fallback-demo' ? ' | T1 FALLBACK DEMO (T1 is a last resort; a regular template was chosen)' : o.group === 'iteration-1-max' ? ' | ITERATION 1: max-first sizing (superseded)' : '';
   const label = (c: Cand): string => `${briefLabelOf(brief)} | ${t} ${c.variant} | seed ${c.seed}${groupTag}${single ? ' | WHAT-IF single Garage, not the brief' : width !== null ? ` | WHAT-IF envelope width ${width}, not PL-10` : ''} | provisional`;
   const retained: Retained[] = keep.map((c) => {
     const w = writeCandidate(dir, c.e, c.v, brief, label(c), c.seed, c.cf);
@@ -255,7 +280,7 @@ function runOne2(briefId: string, t: TemplateName, width: number | null, root: s
       fpArea: c.e.s6.footprint.w * c.e.s6.footprint.h,
     };
   });
-  return { group: o.group, sizing: o.sizing, dirRel: relative(OUT, dir).split('\\').join('/'), brief: briefId, briefLabel: briefLabelOf(brief), template: t, widthLabel, envelopeWidth: brief.envelope.maxW, whatIf, seeds: SEEDS, built, valid: nValid, distinctValid: valid.length, failures, invalidRules, ms: Math.round(ms), msPerSeed: Math.round(ms / SEEDS), retained };
+  return { group: o.group, sizing: o.sizing, dirRel: relative(OUT, dir).split('\\').join('/'), brief: briefId, briefLabel: briefLabelOf(brief), template: t, widthLabel, envelopeWidth: brief.envelope.maxW, aspect: aspectOf(brief.envelope), whatIf, seeds: SEEDS, built, valid: nValid, distinctValid: valid.length, failures, invalidRules, ms: Math.round(ms), msPerSeed: Math.round(ms / SEEDS), retained };
 }
 
 // ---------------------------------------------------------------- the old PL-20 candidate for the same brief (a present SVG made from its stage-6 JSON)
@@ -307,19 +332,19 @@ function bestOf(runs: RunSummary[]): BestRun[] {
 
 export const imgOf = (b: BestRun): string => `${b.run.dirRel}/${b.cand.presentFile}`;
 
-/** T1 is a last resort (user 2026-10-06): it runs only when none of the T2/T4 runs at this width yielded a validator-valid candidate */
-export function needT1(t2t4: { valid: number }[]): boolean {
-  return t2t4.every((r) => r.valid === 0);
+/** T1 is a last resort (user 2026-10-06): it runs only when no T2/T3/T4 run at this width yielded a validator-valid candidate */
+export function needT1(regular: { valid: number }[]): boolean {
+  return regular.every((r) => r.valid === 0);
 }
 
-/** the main runs: T2 and T4 first for each brief and width; T1 only when neither yields a valid candidate at that width (T1 is a last resort) */
+/** the main runs: the templates in Q3 order (T3 last, T1 the fallback) for each brief and width */
 function mainRuns(): { runs: RunSummary[]; t1Used: string[] } {
   const runs: RunSummary[] = [];
   const t1Used: string[] = [];
   const opts: RunOpts = { sizing: 'typical', keep: 6, group: 'main' };
   for (const briefId of BRIEF_IDS) {
     const base: RunSummary[] = [];
-    for (const t of ['T2', 'T4'] as TemplateName[]) {
+    for (const t of searchOrder((BRIEFS[briefId] as Brief).envelope)) {
       const r = runOne(briefId, t, null, OUT, false, opts);
       base.push(r);
       runs.push(r);
@@ -379,12 +404,12 @@ function main(): void {
     log(s);
   }
 
-  // ---- iteration 1 (max-first sizing), all three templates as before, best candidate only, for the compare row
+  // ---- iteration 1 (max-first sizing), the templates iteration 1 had, best candidate only, for the compare row (T3 did not exist then)
   const maxRoot = join(OUT, 'iteration-1-max');
   const maxOpts: RunOpts = { sizing: 'max', keep: 1, group: 'iteration-1-max' };
   const maxRuns: RunSummary[] = [];
   for (const briefId of BRIEF_IDS)
-    for (const t of TEMPLATES) {
+    for (const t of MAX_TEMPLATES) {
       const base = runOne(briefId, t, null, maxRoot, false, maxOpts);
       maxRuns.push(base);
       log(base);
@@ -427,7 +452,7 @@ function main(): void {
   );
 
   const summary = {
-    note: 'PL-25 spike v2 iteration 3 band-template generator (typical-first sizing, Q5; ranking: less Flex before M1, D64). Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles. T1 is a last resort: it runs in the main set only when T2 and T4 both fail; out/T1-fallback-demo holds T1 for comparison.',
+    note: 'PL-25 spike v2 iteration 4 band-template generator (typical-first sizing, Q5; ranking: less Flex before M1, D64; Q18 Optional-room drop order; Q3 template order by footprint aspect, recorded per run as `aspect`). T3 (rear-master wing column) is new. Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles. T1 is a last resort: it runs in the main set only when T2, T3 and T4 all fail; out/T1-fallback-demo holds T1 for comparison.',
     seedsPerRun: SEEDS,
     node: process.version,
     os: `${platform()} ${release()}`,

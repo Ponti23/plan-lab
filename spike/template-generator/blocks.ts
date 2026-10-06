@@ -87,6 +87,41 @@ export function mkRoom(spec: RoomSpec, parts: Rect[]): LRoom {
 /** (row depth, suite variant) pairs to try: typical sizing tries both closing widths, max mode the Master-preferred one */
 export const suitePairs = (drows: number[]): [number, 'm' | 's' | 'l'][] => drows.flatMap((d) => (isTypical() ? [[d, 'm'], [d, 's'], [d, 'l']] : [[d, 'm']]) as [number, 'm' | 's' | 'l'][]);
 
+/**
+ * Q18 (user 2026-10-06): the order Optional rooms are considered in when a row or column cannot hold them all - Laundry, Pantry, Study, Theatre,
+ * extra Family/Living. Alfresco is out of scope for this run (D63). Earlier in the list = kept longer, so a full brief drops the last entry first.
+ */
+export const OPTIONAL_ROOM_ORDER = ['Laundry', 'Pantry', 'Study', 'Theatre', 'Family', 'Living'] as const;
+
+/**
+ * D42 priority of an Optional room: `fillRow` omits the HIGHEST number first, so position in OPTIONAL_ROOM_ORDER maps straight onto it (Laundry 1,
+ * Pantry 2). A kind the grammar has no slot for sorts last (dropped first). One constant, used everywhere Optional rooms are dropped.
+ */
+export const optionalPrio = (kind: string): number => {
+  const i = (OPTIONAL_ROOM_ORDER as readonly string[]).indexOf(kind);
+  return i < 0 ? OPTIONAL_ROOM_ORDER.length + 1 : i + 1;
+};
+
+/**
+ * D23 + Q18: which Optional rooms a side column keeps. `fits(specs)` says whether the given set can be stacked there; the loop drops the lowest
+ * priority room (the last entry of OPTIONAL_ROOM_ORDER is dropped first; on a tie the last one given) and retries, never dropping a required room.
+ * Returns null when only required rooms are left and they still do not fit; an empty `specs` means nothing fits at all and the caller may use a
+ * labelled flex patch instead (D44). One drop loop, shared by every template that drops Optional rooms.
+ */
+export function keepFit(specs: RoomSpec[], fits: (s: RoomSpec[]) => boolean): { specs: RoomSpec[]; omitted: string[] } | null {
+  let cur = specs;
+  const omitted: string[] = [];
+  for (;;) {
+    if (cur.length === 0) return { specs: cur, omitted };
+    if (fits(cur)) return { specs: cur, omitted };
+    let drop: RoomSpec | null = null;
+    for (const s of cur) if (!s.required && (!drop || optionalPrio(s.kind) >= optionalPrio(drop.kind))) drop = s;
+    if (!drop) return null;
+    omitted.push(drop.id);
+    cur = cur.filter((s) => s.id !== (drop as RoomSpec).id);
+  }
+}
+
 export const iv = (cat: CatKey, fixed: number): Iv | null => otherRange(cat, fixed);
 
 // ------------------------------------------------------------------ Master suite, MS-A (3.1): Master in front, a row WIR | Ensuite behind
@@ -104,7 +139,11 @@ export function suiteIv(p: Prog, Dm: number, Drow: number, variant: 'm' | 's' | 
   return r && variant === 'l' ? { ...r, pref: r.lo } : r;
 }
 
-export function placeSuite(p: Prog, x: number, v: number, W: number, Dm: number, Drow: number): LRoom[] | Fail {
+/**
+ * MS-A: Master (W x Dm) with a WIR | Ensuite row of depth Drow beside it. `masterRear` puts the Master at the REAR of the block and the row at the
+ * front (T3: the Master suite ends the wing column against the rear exterior wall); the block depth Dm + 100 + Drow is the same either way.
+ */
+export function placeSuite(p: Prog, x: number, v: number, W: number, Dm: number, Drow: number, masterRear = false): LRoom[] | Fail {
   const w = iv(p.wir.cat, Drow);
   const e = iv(p.ens.cat, Drow);
   if (!w || !e) return fail('A', 'WIR/Ensuite row depth outside the catalog');
@@ -117,16 +156,33 @@ export function placeSuite(p: Prog, x: number, v: number, W: number, Dm: number,
   );
   if (isFail(f)) return f;
   const [wa, wb] = f.sizes as [number, number];
+  const my = masterRear ? v + Drow + 100 : v;
+  const ry = masterRear ? v : v + Dm + 100;
   const rooms = [
-    mkRoom(p.master, [rect(x, v, W, Dm)]),
-    mkRoom(p.wir, [rect(x, v + Dm + 100, wa, Drow)]),
-    mkRoom(p.ens, [rect(x + wa + 100, v + Dm + 100, wb, Drow)]),
+    mkRoom(p.master, [rect(x, my, W, Dm)]),
+    mkRoom(p.wir, [rect(x, ry, wa, Drow)]),
+    mkRoom(p.ens, [rect(x + wa + 100, ry, wb, Drow)]),
   ];
   for (const r of rooms) {
     const pr = r.parts[0] as Rect;
     if (!dimsOk(r.cat, pr.w, pr.h)) return fail('A', `${r.id} ${pr.w}x${pr.h} outside the catalog`);
   }
   return rooms;
+}
+
+/**
+ * Depth interval of the MS-A block when the block width W is already fixed (T3: the wing column width): the Master depths at which the WIR | Ensuite
+ * row closes W exactly and the Master itself fits that width. The block depth is Drow + 100 + Master depth.
+ */
+export function suiteBlockIv(p: Prog, W: number, Drow: number): Iv | null {
+  const w = iv(p.wir.cat, Drow);
+  const e = iv(p.ens.cat, Drow);
+  if (!w || !e) return null;
+  const f = fillRow([{ id: 'wir', ...w }, { id: 'ens', ...e }], W);
+  if (isFail(f) || f.slack !== 0) return null;
+  const m = iv(p.master.cat, W);
+  if (!m) return null;
+  return { lo: Drow + 100 + m.lo, hi: Drow + 100 + m.hi, pref: Drow + 100 + m.pref };
 }
 
 // ------------------------------------------------------------------ wet pair (3.2)

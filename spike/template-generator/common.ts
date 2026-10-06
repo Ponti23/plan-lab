@@ -390,7 +390,7 @@ export interface LHall {
 }
 
 export interface Layout {
-  template: 'T1' | 'T2' | 'T4';
+  template: 'T1' | 'T2' | 'T3' | 'T4';
   variant: string;
   /** outside width and depth (footprint) */
   Wf: number;

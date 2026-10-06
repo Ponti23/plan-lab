@@ -60,8 +60,8 @@ function metricRows(m: Metrics, fp: { w: number; h: number }, extra: [string, st
 
 const flexRow = (count: number, areaMm2: number): [string, string] => ['flex patches (count, total area)', `${count}, ${(areaMm2 / 1e6).toFixed(1)} m2`];
 
-function iterFig(e: IterEntry | null, title: string, sizing: string): string {
-  if (!e) return `<figure><figcaption><b>${esc(title)}</b>: no valid candidate</figcaption></figure>`;
+function iterFig(e: IterEntry | null, title: string, sizing: string, missing = 'no valid candidate'): string {
+  if (!e) return `<figure><figcaption><b>${esc(title)}</b>: ${esc(missing)}</figcaption></figure>`;
   return `<figure><img src="${esc(e.present)}" alt="${esc(title)}"><figcaption><b>${esc(title)}</b> ${esc(sizing)}, ${esc(e.variant)}, seed ${e.seed}${e.whatIf ? ` <span class="w">WHAT-IF ${esc(e.widthLabel)}</span>` : ''}${e.group === 't1-fallback-demo' ? ' <span class="w">T1 FALLBACK DEMO</span>' : ''}</figcaption>${table(
     metricRows(e.metrics, e.footprint, [['Core', e.coreParts > 1 ? `L-shaped, ${e.coreParts} rectangles` : 'one rectangle'], flexRow(e.flexCount, e.flexAreaM2 * 1e6)]),
   )}</figure>`;
@@ -112,17 +112,20 @@ export function compareHtml(
         .filter((b) => b.brief === brief)
         .map(
           (b) =>
-            `<figure><img src="${esc(b.img)}" alt="T1 fallback demo"><figcaption><b>T1 FALLBACK DEMO</b> (${esc(b.cand.variant)}, seed ${b.cand.seed}): not chosen, T1 is a last resort and T2/T4 yielded valid candidates</figcaption>${table(
+            `<figure><img src="${esc(b.img)}" alt="T1 fallback demo"><figcaption><b>T1 FALLBACK DEMO</b> (${esc(b.cand.variant)}, seed ${b.cand.seed}): not chosen, T1 is a last resort and a regular template yielded valid candidates</figcaption>${table(
               metricRows(b.cand.metrics, b.cand.footprint, [['Core', b.cand.coreParts > 1 ? `L-shaped, ${b.cand.coreParts} rectangles` : 'one rectangle'], flexRow(b.cand.flexCount, b.cand.flexArea)]),
             )}</figure>`,
         )
         .join('\n');
       const iterFigs = iter
         .filter((r) => r.brief === brief)
-        .map((r) => `<div class="group"><h3>${esc(r.template)}: iteration 1 (max-first) vs iteration 3 (typical-first, less-Flex ranking)</h3><div class="g">${iterFig(r.max, `${r.template} iteration 1`, 'max-first sizing')}${iterFig(r.typical, `${r.template} iteration 3`, 'typical-first sizing, less-Flex ranking')}</div></div>`)
+        .map(
+          (r) =>
+            `<div class="group"><h3>${esc(r.template)}: iteration 1 (max-first) vs iteration 4 (typical-first, less-Flex ranking)</h3><div class="g">${iterFig(r.max, `${r.template} iteration 1`, 'max-first sizing', r.template === 'T3' ? 'T3 did not exist in iteration 1 (new in iteration 4)' : 'no valid candidate')}${iterFig(r.typical, `${r.template} iteration 4`, 'typical-first sizing, less-Flex ranking')}</div></div>`,
+        )
         .join('\n');
       const title = brief === 'GB-01' ? 'GB-01 (run WITHOUT the Alfresco, D63)' : 'Fixture A (no Alfresco in the program, D63)';
-      return `<section><h2>${esc(title)}</h2><div class="row"><div class="group"><h3>Ideals</h3><div class="g">${ideals}</div></div><div class="group"><h3>Old (PL-20)</h3><div class="g">${oldFig}</div></div><div class="group"><h3>New (PL-25 iteration 2, typical sizing, best per template; T1 only when T2 and T4 fail)</h3><div class="g">${news}</div></div></div><h3 class="sec">Iteration 1 (max-first) against iteration 2 (typical-first): best of each template</h3><div class="row">${iterFigs}</div><h3 class="sec">T1 fallback demo (for comparison only, not a chosen candidate)</h3><div class="row"><div class="group"><div class="g">${demoFigs}</div></div></div></section>`;
+      return `<section><h2>${esc(title)}</h2><div class="row"><div class="group"><h3>Ideals</h3><div class="g">${ideals}</div></div><div class="group"><h3>Old (PL-20)</h3><div class="g">${oldFig}</div></div><div class="group"><h3>New (PL-25 iteration 4, typical sizing, best per template; T1 only when T2, T3 and T4 fail)</h3><div class="g">${news}</div></div></div><h3 class="sec">Iteration 1 (max-first) against iteration 4 (typical-first): best of each template</h3><div class="row">${iterFigs}</div><h3 class="sec">T1 fallback demo (for comparison only, not a chosen candidate)</h3><div class="row"><div class="group"><div class="g">${demoFigs}</div></div></div></section>`;
     })
     .join('\n');
   return `<!doctype html>
@@ -139,7 +142,7 @@ table{border-collapse:collapse;width:100%;font-size:11px}th{text-align:left;font
 h3.sec{margin:18px 0 8px;font-size:13px}
 p.top{font-size:12px;max-width:900px;line-height:1.4}
 </style></head><body><h1>PlanLab spike v2: band templates against the ideals and the old slicing tree</h1>
-<p class="top">Every number is provisional - uncalibrated (G-CALIBRATION). Metrics are report-only (Q8); M1, M2, M3, M13 use the layout-templates.md 5.1 formulas. Ideal values are approximate, by eye. GB-01 is run without the Alfresco (D63); the old PL-20 plan has one. A boxed label marks a WHAT-IF width that is not the PL-10 envelope or a T1 fallback demo.${t1Used.length ? ` T1 was needed as a fallback for: ${esc(t1Used.join('; '))}.` : ' T1 was not needed: T2 or T4 gave a valid candidate for every brief at the PL-10 envelope.'} Iteration 2 sizes every room at its catalog preferred size where the template allows and builds the smallest footprint that closes the chains; leftover pockets are labelled Flex. No colour carries meaning: read the labels.</p>
+<p class="top">Every number is provisional - uncalibrated (G-CALIBRATION). Metrics are report-only (Q8); M1, M2, M3, M13 use the layout-templates.md 5.1 formulas. Ideal values are approximate, by eye. GB-01 is run without the Alfresco (D63); the old PL-20 plan has one. A boxed label marks a WHAT-IF width that is not the PL-10 envelope or a T1 fallback demo.${t1Used.length ? ` T1 was needed as a fallback for: ${esc(t1Used.join('; '))}.` : ' T1 was not needed: T2 or T4 gave a valid candidate for every brief at the PL-10 envelope.'} Iteration 4 sizes every room at its catalog preferred size where the template allows and builds the smallest footprint that closes the chains; leftover pockets are labelled Flex. The regular templates are tried in Q3 order by footprint aspect (below 1.4: T4, T2, T3; at or above 1.4: T2, T4, T3) and Optional rooms are dropped in the Q18 order (Laundry, Pantry, Study, Theatre, extra Family/Living). No colour carries meaning: read the labels.</p>
 ${sections}
 </body></html>
 `;

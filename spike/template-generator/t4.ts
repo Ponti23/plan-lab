@@ -8,12 +8,12 @@
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import type { Brief, RoomSpec } from '../geometry-feasibility/types.ts';
-import { mkRoom, placeLobbyBlock, placeSuite, suiteIv, suitePairs, wetWidthAt } from './blocks.ts';
+import { keepFit, mkRoom, placeLobbyBlock, placeSuite, suiteIv, suitePairs, wetWidthAt } from './blocks.ts';
 import type { Prog } from './blocks.ts';
 import { chooser, dimsOk, fail, fillRow, isFail, isTypical, nearest, otherRange, rect, runOf, sharedTotal, steps } from './common.ts';
 import { accepts } from './emit.ts';
 import type { Fail, Iv, Layout, LHall, LRoom } from './common.ts';
-import { stackRange } from './t1.ts';
+import { roomItem, stackRange } from './t1.ts';
 import type { Placed, SItem } from './t1.ts';
 
 export interface T4Opts {
@@ -23,12 +23,6 @@ export interface T4Opts {
   /** 'auto': lobby block for nb <= 2, bar for nb >= 3 (slot assignment 2.4) */
   rear: 'auto' | 'lobby' | 'bar';
 }
-
-const roomItem = (spec: RoomSpec, W: number): SItem | null => {
-  const i = otherRange(spec.cat, W);
-  if (!i) return null;
-  return { id: spec.id, iv: i, place: (x, v, w, d) => ({ rooms: [mkRoom(spec, [rect(x, v, w, d)])], halls: [], flex: [], omitted: [] }) };
-};
 
 interface Side {
   iv: Iv;
@@ -51,23 +45,17 @@ function sideFor(p: Prog, Dc: number): Side | null {
       2400,
     );
   const all = [...(p.laundry ? [p.laundry] : []), ...(p.pantry ? [p.pantry] : [])];
-  if (all.length === 0) {
+  const flex = (omitted: string[]): Side | null => {
     const iv = runOf(steps(1500, 3200, 10), (W) => W * Dc >= 4_000_000, 2400);
-    return iv ? { iv, mode: 'flex', specs: [], omitted: [] } : null;
-  }
-  const full = mk(all);
-  if (full) return { iv: full, mode: 'rooms', specs: all, omitted: [] };
-  // D23: a selected Optional room is dropped only when the column cannot hold it
-  const req = all.filter((s) => s.required);
-  if (req.length < all.length) {
-    if (req.length === 0) {
-      const iv = runOf(steps(1500, 3200, 10), (W) => W * Dc >= 4_000_000, 2400);
-      return iv ? { iv, mode: 'flex', specs: [], omitted: all.map((s) => s.id) } : null;
-    }
-    const r = mk(req);
-    if (r) return { iv: r, mode: 'rooms', specs: req, omitted: all.filter((s) => !s.required).map((s) => s.id) };
-  }
-  return null;
+    return iv ? { iv, mode: 'flex', specs: [], omitted } : null;
+  };
+  if (all.length === 0) return flex([]);
+  // D23 + Q18: a selected Optional room is dropped only when the column cannot hold it, lowest priority first (keepFit)
+  const k = keepFit(all, (s) => mk(s) !== null);
+  if (!k) return null;
+  if (k.specs.length === 0) return flex(k.omitted);
+  const iv = mk(k.specs);
+  return iv ? { iv, mode: 'rooms', specs: k.specs, omitted: k.omitted } : null;
 }
 
 export function buildT4(brief: Brief, p: Prog, o: T4Opts): Layout | Fail {

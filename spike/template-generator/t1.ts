@@ -8,11 +8,11 @@
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import type { Brief, Rect, RoomSpec } from '../geometry-feasibility/types.ts';
-import { mkRoom, placeLobbyBlock, placeSuite, suiteIv, suitePairs, wetRowIv, wetWidthRange } from './blocks.ts';
+import { mkRoom, optionalPrio, placeLobbyBlock, placeSuite, suiteIv, suitePairs, wetRowIv, wetWidthRange } from './blocks.ts';
 import type { Prog } from './blocks.ts';
 import { anyWidthRange, chooser, dimsOk, fail, fillRow, intersect, isFail, isTypical, nearest, otherRange, rect, runOf, sharedTotal, steps } from './common.ts';
 import { accepts } from './emit.ts';
-import type { Fail, Iv, Layout, LHall, LRoom } from './common.ts';
+import type { Fail, Item, Iv, Layout, LHall, LRoom } from './common.ts';
 
 export interface T1Opts {
   wing: 'master' | 'garage';
@@ -32,22 +32,19 @@ export interface Placed {
 export interface SItem {
   id: string;
   iv: Iv;
+  /** typical sizing: a flex patch carries `late` so leftover column depth does not inflate it first (see common.ts Item) */
+  late?: boolean;
   place: (x: number, v: number, w: number, d: number) => Placed | Fail;
 }
 
-const bedItem = (spec: RoomSpec, W: number): SItem | null => {
+/** one room filling its column width: the depth interval of the room at width W (shared by every template) */
+export const roomItem = (spec: RoomSpec, W: number): SItem | null => {
   const i = otherRange(spec.cat, W);
   if (!i) return null;
   return { id: spec.id, iv: i, place: (x, v, w, d) => ({ rooms: [mkRoom(spec, [rect(x, v, w, d)])], halls: [], flex: [], omitted: [] }) };
 };
 
-const coreItem = (spec: RoomSpec, W: number): SItem | null => {
-  const i = otherRange(spec.cat, W);
-  if (!i) return null;
-  return { id: spec.id, iv: i, place: (x, v, w, d) => ({ rooms: [mkRoom(spec, [rect(x, v, w, d)])], halls: [], flex: [], omitted: [] }) };
-};
-
-const wetBlockItem = (p: Prog, W: number, lobbyD: number, id: string): SItem | null => {
+export const wetBlockItem = (p: Prog, W: number, lobbyD: number, id: string): SItem | null => {
   const w = wetRowIv(p, W);
   if (!w) return null;
   return {
@@ -73,7 +70,7 @@ export function rowItem(specs: RoomSpec[], W: number, hallLeft: boolean, id: str
     for (const s of specs) {
       const w = otherRange(s.cat, D);
       if (!w) return fail('A', `${s.id} has no width at depth ${D}`);
-      its.push({ id: s.id, ...w, opt: !s.required, prio: s.kind === 'Laundry' ? 1 : 2 });
+      its.push({ id: s.id, ...w, opt: !s.required, prio: optionalPrio(s.kind) });
     }
     return fillRow(its, W);
   };
@@ -101,11 +98,17 @@ export function rowItem(specs: RoomSpec[], W: number, hallLeft: boolean, id: str
   };
 };
 
-export const flexItem = (W: number, id: string): SItem | null => {
+export const flexItem = (W: number, id: string, late = false): SItem | null => {
   const lo = Math.max(1500, Math.ceil(4_000_000 / W / 10) * 10);
   if (lo > 4000) return null;
-  return { id, iv: { lo, hi: 4000, pref: lo }, place: (x, v, w, d) => ({ rooms: [], halls: [], flex: [{ id, rect: rect(x, v, w, d) }], omitted: [] }) };
+  return { id, iv: { lo, hi: 4000, pref: lo }, late, place: (x, v, w, d) => ({ rooms: [], halls: [], flex: [{ id, rect: rect(x, v, w, d) }], omitted: [] }) };
 };
+
+/** one column sequence of Bedrooms and a wet block (2.4): `n` normal Bedrooms in the column => n Bedrooms with one wet block between the first and second */
+export const wingSeq = (n: number): ('bed' | 'wet')[] => (n <= 1 ? ['bed', 'wet'] : n === 2 ? ['bed', 'wet', 'bed'] : ['bed', 'wet', 'bed', 'bed']);
+
+/** the `fillRow` input of a stack: every item's depth interval, carrying the item's `late` marker */
+export const stackRow = (items: SItem[]): Item[] => items.map((i) => ({ id: i.id, ...i.iv, ...(i.late ? { late: true } : {}) }));
 
 /** place a stack of items front to rear from v0; every item takes the column width */
 export function placeStack(items: SItem[], depths: number[], x: number, v0: number, w: number): Placed | Fail {
@@ -138,7 +141,7 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
   const nb = p.nb;
   if (nb < 1) return fail('C', 'T1 needs at least one Bedroom (PL-12 S-DORMANT)');
   // 2.4 slot assignment for T1 (no Alfresco): wing sequence in M-C1 (+R-C1), the third and fourth Bedroom in R-C2
-  const seq: ('bed' | 'wet')[] = nb === 1 ? ['bed', 'wet'] : nb === 2 || nb === 3 ? ['bed', 'wet', 'bed'] : ['bed', 'wet', 'bed', 'bed'];
+  const seq = wingSeq(nb === 1 ? 1 : nb === 4 ? 3 : 2);
   const wingBedCount = seq.filter((t) => t === 'bed').length;
   const wingBeds = p.beds.slice(0, wingBedCount);
   const rearBeds = p.beds.slice(wingBedCount);
@@ -212,7 +215,7 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
       let bi = 0;
       let ok = true;
       for (const t of seq) {
-        const it = t === 'bed' ? bedItem(wingBeds[bi++] as RoomSpec, wingW) : wetBlockItem(p, wingW, o.lobbyD, 'wet');
+        const it = t === 'bed' ? roomItem(wingBeds[bi++] as RoomSpec, wingW) : wetBlockItem(p, wingW, o.lobbyD, 'wet');
         if (!it) {
           ok = false;
           break;
@@ -224,7 +227,7 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
         continue;
       }
       // ---- Core stack: Core, then the rear row (R-C2)
-      const core = coreItem(p.core, coreW);
+      const core = roomItem(p.core, coreW);
       if (!core) {
         note('A', `Family Core has no valid depth at column width ${coreW}`);
         continue;
@@ -255,15 +258,15 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
       }
       let T = Thi - (Thi % 10);
       if (isTypical()) {
-        const tt = sharedTotal([{ items: wingItems.map((i) => ({ id: i.id, ...i.iv })) }, { items: coreItems.map((i) => ({ id: i.id, ...i.iv })) }], envRem);
+        const tt = sharedTotal([{ items: stackRow(wingItems) }, { items: stackRow(coreItems) }], envRem);
         if (isFail(tt)) {
           note('A', tt.reason);
           continue;
         }
         T = tt;
       }
-      const wf = fillRow(wingItems.map((i) => ({ id: i.id, ...i.iv })), T);
-      const cf = fillRow(coreItems.map((i) => ({ id: i.id, ...i.iv })), T);
+      const wf = fillRow(stackRow(wingItems), T);
+      const cf = fillRow(stackRow(coreItems), T);
       if (isFail(wf) || isFail(cf) || wf.slack !== 0 || cf.slack !== 0) {
         note('A', 'stack fill failed');
         continue;
