@@ -1,0 +1,177 @@
+{
+ "stage": 4,
+ "id": "6-0",
+ "briefId": "FIXTURE-A",
+ "seed": 6,
+ "attempt": 0,
+ "cfPattern": "T1-wing-master",
+ "hallShape": "spine",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 2000,
+  "y": 1900,
+  "w": 11000,
+  "h": 18100
+ },
+ "inner": {
+  "x": 2250,
+  "y": 2150,
+  "w": 10500,
+  "h": 17600
+ },
+ "zones": [
+  {
+   "id": "Z-master-suite",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 2250,
+    "y": 13750,
+    "w": 3700,
+    "h": 6000
+   },
+   "roomIds": [
+    "master",
+    "wir",
+    "ensuite"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Double Garage",
+   "type": "garage",
+   "rect": {
+    "x": 7250,
+    "y": 13750,
+    "w": 5500,
+    "h": 6000
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-bed2",
+   "name": "Bedroom 2",
+   "type": "bedrooms",
+   "rect": {
+    "x": 2250,
+    "y": 9950,
+    "w": 3700,
+    "h": 3700
+   },
+   "roomIds": [
+    "bed2"
+   ]
+  },
+  {
+   "id": "Z-wet",
+   "name": "Wet rooms",
+   "type": "wet",
+   "rect": {
+    "x": 2250,
+    "y": 5950,
+    "w": 3700,
+    "h": 2800
+   },
+   "roomIds": [
+    "bath",
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bed3",
+   "name": "Bedroom 3",
+   "type": "bedrooms",
+   "rect": {
+    "x": 2250,
+    "y": 2150,
+    "w": 3700,
+    "h": 3700
+   },
+   "roomIds": [
+    "bed3"
+   ]
+  },
+  {
+   "id": "Z-core",
+   "name": "Family Core",
+   "type": "living",
+   "rect": {
+    "x": 7250,
+    "y": 5250,
+    "w": 5500,
+    "h": 8400
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-bed4",
+   "name": "Bedroom 4",
+   "type": "bedrooms",
+   "rect": {
+    "x": 7250,
+    "y": 2150,
+    "w": 3270,
+    "h": 3000
+   },
+   "roomIds": [
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 10620,
+    "y": 2150,
+    "w": 2130,
+    "h": 3000
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 6050,
+    "y": 18450,
+    "w": 1100,
+    "h": 1300
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway",
+   "kind": "stem",
+   "rect": {
+    "x": 6050,
+    "y": 2150,
+    "w": 1100,
+    "h": 16300
+   }
+  },
+  {
+   "id": "H-lobby-wet",
+   "name": "Lobby",
+   "kind": "connector",
+   "rect": {
+    "x": 2250,
+    "y": 8850,
+    "w": 3700,
+    "h": 1000
+   }
+  }
+ ],
+ "omittedOptional": [
+  "pantry"
+ ]
+}

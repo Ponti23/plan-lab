@@ -1,25 +1,21 @@
 ---
 name: save-progress
-description: Use to checkpoint state before a /clear — on a merge to main (with the MERGED banner) or when the user says "checkpoint"/"save progress"/"about to clear".
+description: Record a truthful PlanLab resume checkpoint before context compaction or when the user requests a checkpoint.
 ---
 
-# Save progress
+# Save Progress
 
-Keep the project resumable after a `/clear`. A fresh session reads `knowledge/PROGRESS.md`
-(AGENTS.md points there). Top = **"Resume here"** (current state); below = merge **timeline**.
+Keep the next session resumable. `knowledge/PROGRESS.md` is the canonical resume pointer; the
+board, handoff, and plan describe execution state. Follow their actual current state rather than
+inferring completion from a conversation summary.
 
-## Steps
+## Checkpoint
 
-1. **Rewrite the "Resume here" block** at the top of `knowledge/PROGRESS.md` to reflect NOW —
-   fields: `Current focus`, `Open threads / waiting on user`, `Next step`, `In-flight branches`,
-   `Deferred`. Use today's date. (This is the only judgment step; make it accurate enough to
-   resume from cold.)
-2. **Merge only** — append one timeline line under `## YYYY-MM-DD`:
-   `- <what shipped> — \`<sha>\` (PR #N) → next: <next step>`
-3. **Merge only** — confirm the `knowledge/BOARD.md` bucket is `done` with the SHA/PR#.
-4. Commit + push: `git add knowledge/PROGRESS.md knowledge/BOARD.md HANDOFF.md && git commit -m "docs(progress): checkpoint" && git push`
-5. **Merge only** — then emit the green `MERGED` banner.
-
-On-demand ("checkpoint" / pre-clear): do steps 1 + 4 only. Never append a timeline line without
-a real merge. Skip entirely for branch pushes / open PRs unless the user explicitly checkpoints.
-
+1. Read `knowledge/PROGRESS.md`, `knowledge/BOARD.md`, `HANDOFF.md`, and the active plan.
+2. Rewrite the `Resume here` block with current focus, open decisions/blockers, next action,
+   in-flight branches, and deferred work. Use the current date and preserve settled decisions.
+3. Append a timeline entry only when an actual merge occurred. Record its verified commit/PR and
+   next step. Update the board/handoff only to reflect verified current state.
+4. Report the files updated and the next action. Perform commit, push, or other Git actions only
+   when separately authorized; a checkpoint request alone authorizes documentation updates only.
+5. Emit a `MERGED` banner only when a merge has actually been verified.

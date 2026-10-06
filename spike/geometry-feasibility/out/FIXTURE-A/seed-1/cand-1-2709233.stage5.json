@@ -1,0 +1,295 @@
+{
+ "stage": 5,
+ "id": "1-2709233",
+ "from": {
+  "stage": 4,
+  "id": "1-2709233"
+ },
+ "briefId": "FIXTURE-A",
+ "footprint": {
+  "x": 1495,
+  "y": 5480,
+  "w": 12010,
+  "h": 14520
+ },
+ "inner": {
+  "x": 1745,
+  "y": 5730,
+  "w": 11510,
+  "h": 14020
+ },
+ "zones": [
+  {
+   "id": "Z-living",
+   "name": "Living (Family Core)",
+   "type": "living",
+   "rect": {
+    "x": 1745,
+    "y": 5730,
+    "w": 6920,
+    "h": 4000
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-master",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 1745,
+    "y": 9830,
+    "w": 6920,
+    "h": 4300
+   },
+   "roomIds": [
+    "ensuite",
+    "wir",
+    "master"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Garage",
+   "type": "garage",
+   "rect": {
+    "x": 1745,
+    "y": 14230,
+    "w": 6920,
+    "h": 5520
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-beds",
+   "name": "Bedrooms",
+   "type": "bedrooms",
+   "rect": {
+    "x": 9865,
+    "y": 5730,
+    "w": 3390,
+    "h": 8550
+   },
+   "roomIds": [
+    "bed2",
+    "bed3",
+    "bed4"
+   ]
+  },
+  {
+   "id": "Z-wc",
+   "name": "WC",
+   "type": "wet",
+   "rect": {
+    "x": 11105,
+    "y": 14380,
+    "w": 2150,
+    "h": 1030
+   },
+   "roomIds": [
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bath",
+   "name": "Shared Bathroom",
+   "type": "wet",
+   "rect": {
+    "x": 9865,
+    "y": 15510,
+    "w": 3390,
+    "h": 2010
+   },
+   "roomIds": [
+    "bath"
+   ]
+  },
+  {
+   "id": "Z-laundry",
+   "name": "Laundry",
+   "type": "laundry",
+   "rect": {
+    "x": 9865,
+    "y": 17620,
+    "w": 3390,
+    "h": 2130
+   },
+   "roomIds": [
+    "laundry"
+   ]
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-strip",
+   "name": "Hallway strip",
+   "kind": "strip",
+   "rect": {
+    "x": 8765,
+    "y": 5730,
+    "w": 1000,
+    "h": 12820
+   }
+  },
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 8765,
+    "y": 18550,
+    "w": 1000,
+    "h": 1200
+   }
+  },
+  {
+   "id": "H-bay1",
+   "name": "Hallway widening (slack)",
+   "kind": "bay",
+   "rect": {
+    "x": 9865,
+    "y": 14380,
+    "w": 1140,
+    "h": 1030
+   }
+  }
+ ],
+ "rooms": [
+  {
+   "id": "core",
+   "name": "Family Core",
+   "kind": "FamilyCore",
+   "zoneId": "Z-living",
+   "rect": {
+    "x": 1745,
+    "y": 5730,
+    "w": 6920,
+    "h": 4000
+   }
+  },
+  {
+   "id": "ensuite",
+   "name": "Ensuite",
+   "kind": "Ensuite",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 1745,
+    "y": 9830,
+    "w": 2980,
+    "h": 2400
+   }
+  },
+  {
+   "id": "wir",
+   "name": "WIR",
+   "kind": "WIR",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 1745,
+    "y": 12330,
+    "w": 2980,
+    "h": 1800
+   }
+  },
+  {
+   "id": "master",
+   "name": "Master",
+   "kind": "Master",
+   "zoneId": "Z-master",
+   "rect": {
+    "x": 4825,
+    "y": 9830,
+    "w": 3840,
+    "h": 4300
+   }
+  },
+  {
+   "id": "garage",
+   "name": "Double Garage",
+   "kind": "Garage",
+   "zoneId": "Z-garage",
+   "rect": {
+    "x": 1745,
+    "y": 14230,
+    "w": 6920,
+    "h": 5520
+   }
+  },
+  {
+   "id": "bed2",
+   "name": "Bedroom 2",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 9865,
+    "y": 5730,
+    "w": 3390,
+    "h": 2860
+   }
+  },
+  {
+   "id": "bed3",
+   "name": "Bedroom 3",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 9865,
+    "y": 8690,
+    "w": 3390,
+    "h": 2740
+   }
+  },
+  {
+   "id": "bed4",
+   "name": "Bedroom 4",
+   "kind": "Bedroom",
+   "zoneId": "Z-beds",
+   "rect": {
+    "x": 9865,
+    "y": 11530,
+    "w": 3390,
+    "h": 2750
+   }
+  },
+  {
+   "id": "wc",
+   "name": "WC",
+   "kind": "WC",
+   "zoneId": "Z-wc",
+   "rect": {
+    "x": 11105,
+    "y": 14380,
+    "w": 2150,
+    "h": 1030
+   }
+  },
+  {
+   "id": "bath",
+   "name": "Shared Bathroom",
+   "kind": "Bathroom",
+   "zoneId": "Z-bath",
+   "rect": {
+    "x": 9865,
+    "y": 15510,
+    "w": 3390,
+    "h": 2010
+   }
+  },
+  {
+   "id": "laundry",
+   "name": "Laundry",
+   "kind": "Laundry",
+   "zoneId": "Z-laundry",
+   "rect": {
+    "x": 9865,
+    "y": 17620,
+    "w": 3390,
+    "h": 2130
+   }
+  }
+ ],
+ "flex": []
+}

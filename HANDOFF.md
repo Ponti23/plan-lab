@@ -1,18 +1,20 @@
 # HANDOFF — resume state
 
 **Active plan:** [`DELEGATION-PLAN.md`](./DELEGATION-PLAN.md) · **Live queue:** [`knowledge/BOARD.md`](./knowledge/BOARD.md) · **Resume:** [`knowledge/PROGRESS.md`](./knowledge/PROGRESS.md)
-**Status:** Product design confirmed 2026-10-05; planning docs filled; Stage 0.1 spike brief ready for Codex Terra.
+**Status:** 2026-10-06 evening. PL-25 iteration 3 (less Flex ranks above M1, D64) is done and reviewed. D61–D64 are in the product plan. The PL-24 look is approved. All of this is uncommitted on `work/plan-c-templates`.
 
 ## Last checkpoint
-- docs/stage0-plan: planning docs filled (doc-only).
+- 2026-10-06, branch `work/plan-c-templates`. Last pushed commit `13d7932`; today's work is uncommitted.
 
 ## Next step (when you're back)
-1. Hand bucket 0.1 brief to Codex Terra on branch `spike/solver`.
-2. Opus + user judge 0.2.
+1. Commit today's work. Push only if the user asks.
+2. Ask the user: merge plan-b/plan-c, PL-21 (G-SPIKE), or more template iterations.
+3. Open questions: Q14 (GB-01 real width) and Q20 (double Garage minimum).
 
 ## Notes for the next session
-- Opus never executes code; route coding to Codex (Terra hard / Luna scoped), commands/verify to Sonnet.
-- Engine stack proposed, not final until 0.2 go.
+- Follow the [delegation playbook](knowledge/patterns/delegation-playbook.md): Opus orchestrates; Codex Luna (routine) and Sol (complex) execute, one writer per checkout. A blocked bucket does not stop independent authorized work.
+- Stage 0 execution scope is tracked by G-SPIKE in `DELEGATION-PLAN.md`; this docs request did not start a probe.
+- `knowledge/specs/` (PL-10–15) and `spike/geometry-feasibility/` exist; do not report future `spike/search-runtime/`, `engine/` or `src/` paths as existing artifacts.
 
-<!-- Blocked on: <exactly what's needed from the human> — /run-stage stops when this line is present -->
+No active blocker is recorded. Record any blocker against its specific board bucket and continue other eligible work.
 
