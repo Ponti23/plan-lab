@@ -1,15 +1,12 @@
 # HANDOFF — resume state
 
 **Active plan:** [`DELEGATION-PLAN.md`](./DELEGATION-PLAN.md) · **Live queue:** [`knowledge/BOARD.md`](./knowledge/BOARD.md) · **Resume:** [`knowledge/PROGRESS.md`](./knowledge/PROGRESS.md)
-**Status:** 2026-10-06 evening. PL-25 iteration 3 (less Flex ranks above M1, D64) is done and reviewed. D61–D64 are in the product plan. The PL-24 look is approved. All of this is uncommitted on `work/plan-c-templates`.
-
-## Last checkpoint
-- 2026-10-06, branch `work/plan-c-templates`. Last pushed commit `13d7932`; today's work is uncommitted.
+**Status:** 2026-10-06 night. `main` is at `baaf66c` (plan B + C merged). `work/overnight-1006` is pushed and not merged: docs sync plus PL-25 iteration 4 (T3), both reviewed.
 
 ## Next step (when you're back)
-1. Commit today's work. Push only if the user asks.
-2. Ask the user: merge plan-b/plan-c, PL-21 (G-SPIKE), or more template iterations.
-3. Open questions: Q14 (GB-01 real width) and Q20 (double Garage minimum).
+1. The user decides whether to merge `work/overnight-1006`.
+2. The user decides: improve T3, or start PL-21 (G-SPIKE).
+3. Open questions: Q14 (GB-01 width) and Q20 (double Garage minimum).
 
 ## Notes for the next session
 - Follow the [delegation playbook](knowledge/patterns/delegation-playbook.md): Opus orchestrates; Codex Luna (routine) and Sol (complex) execute, one writer per checkout. A blocked bucket does not stop independent authorized work.

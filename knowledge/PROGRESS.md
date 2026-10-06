@@ -7,37 +7,24 @@ tags: [progress, resume]
 
 ## Resume here
 
-- **Current focus (2026-10-06, evening):** plan C, the template generator, on branch `work/plan-c-templates`. The last pushed commit is `13d7932`. Today's work below is **uncommitted** in the working tree; commit is the next step. Not merged; no PR.
-- **Done today, after the user's answers:**
-  - **PL-25 iteration 3:** the T2 rear-corner pocket stays a labelled Flex patch, and candidates rank by fewer omitted rooms, then less Flex, then M1 (D64).
-    - DeepSeek Flash wrote it; Opus reviewed it: PASS, 55/55 tests.
-    - The iteration-1 max output is byte-identical.
-    - The GB-01 T2 and T4 winners changed: they now have less Flex.
-    - The compare page and summary are relabelled as iteration 3.
-  - **Product plan:** D61 (L-shaped Core), D62 (presets), D63 (no external areas), D64 (templates and ranking) and the D21 amendment (typical sizes, smallest footprint) were added to `plan-lab-astra-plan.md`.
-  - **PL-24:** the look is approved (G-UX), so the bucket is done.
-  - **PL-23 answers:**
-    - Q2: keep T3 at the lowest priority.
-    - Q3: yes.
-    - Q8: metrics report and rank only.
-    - Q10 and Q11: moot under D63.
-    - Q13: M1 ranks below Flex.
-    - Q18: use the proposed order.
-    - Q19: accepted as provisional.
-  - **Playbook:** the DeepSeek router paths are fixed. DeepSeek Flash is the first fallback while Codex is out, and Sonnet is second.
-- **Still open:**
-  - Q14: GB-01's real width is unknown. Working width 12,500, unconfirmed.
-  - Q20: the double Garage minimum. The user is unsure; the current minimum is kept.
-  - What comes next:
-    - merge `work/plan-b` and `work/plan-c-templates`, or
-    - PL-21 (needs G-SPIKE), or
-    - more template iterations (T3 is not built yet).
-- **Next:** commit today's work on `work/plan-c-templates` (push only if the user asks), then ask the user which of the open options to take.
-- **Workers:** Codex is out of usage until **2026-10-10 09:54**. Use DeepSeek Flash (`cc-worker.sh`), then Sonnet. Reviews go to a different agent than the author. Switch back to Codex after the reset.
+- **Current focus (2026-10-06, night):** `main` has everything up to plan C. Merged at `baaf66c` (user-approved) and pushed. Overnight work is on **`work/overnight-1006`**, pushed and **not merged**:
+  - `b15ba42`: docs sync. D61–D64 and the D21 amendment recorded in `ARCHITECTURE.md`, `DELEGATION-PLAN.md` and `layout-templates.md`. DeepSeek author, Opus review PASS.
+  - `3d88091`: PL-25 iteration 4.
+    - T3 built (Master in the rear row), plus the Q3 shape search order and the Q18 optional-room order. DeepSeek author.
+    - Opus review PASS-WITH-NOTES: 59/59 tests; T1, T2, T4 and iteration-1 outputs unchanged in content.
+    - T3 is valid on both briefs but never wins. It has a full-length spine corridor and a rear Flex pocket: 28.0 m² on Fixture A, 19.3 m² on GB-01.
+- **Ask the user:**
+  1. Merge `work/overnight-1006` into `main`?
+  2. Is T3 worth improving (a shorter spine), or leave it as the last regular choice?
+  3. Q14: GB-01's real width.
+  4. Q20: the double Garage minimum.
+  5. What next: PL-21 (needs G-SPIKE go-ahead), or more template work.
+- **Workers:** Codex is out of usage until **2026-10-10 09:54**. Use DeepSeek Flash (`cc-worker.sh`), then Sonnet. Note: `cc-worker.sh` write mode cannot run in a git worktree, because its lock lives under `.git/`; run writers sequentially in the main checkout. Switch back to Codex after the reset.
 - **Housekeeping:**
-  - `scripts/codex-worker.sh` worktree mode fails, so use a manual `git worktree`.
-  - Worktree `../plan-lab-pl24` is superseded and can be deleted.
-  - `.claude/launch.json` is local and untracked.
+  - The `codex-worker.sh` worktree mode fails.
+  - `../plan-lab-pl24` is superseded and can be deleted.
+  - `design/ui-mockups` is unmerged and unreviewed.
+  - `.claude/launch.json` is local.
 - **Remember:** the user is colourblind, so use labels, never colour. Builder plans stay local; commit derived numbers only.
 - **Deferred:** PL-21/22 (G-SPIKE, go/no-go); wet-room sizes; UI (PL-40+).
 
@@ -52,3 +39,4 @@ _(This block is rewritten by the `save-progress` skill. Everything below is the 
 
 ## 2026-10-06
 - Plan B complete on `work/plan-b` (pushed to origin, not merged): PL-10–15 reviewed contracts; PL-20 early spike in review. Next: user answers the overnight-report decisions (WC max, GB-01 width, spike usefulness, G-SPIKE for PL-21).
+- Merged `work/plan-c-templates` (plan B + plan C) into `main` at `baaf66c`, pushed (user-approved). Overnight branch `work/overnight-1006` pushed: docs sync D61–D64 + PL-25 iteration 4 (T3), both reviewed, not merged. Next: user decides merge of overnight branch.
