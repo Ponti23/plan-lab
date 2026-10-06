@@ -6,6 +6,19 @@
 import { CATALOG, EXTERIOR_WALL, INTERIOR_WALL } from '../geometry-feasibility/briefs.ts';
 import type { CatKey, HallShape, Rect, RoomKind, ZoneType } from '../geometry-feasibility/types.ts';
 
+// PL-25 iteration 2 (user Q5 YES, amends D21): 'typical' sizes every room at its catalog preferred rectangle and builds the SMALLEST footprint that closes
+// the template chains; 'max' is the iteration-1 max-first behaviour (D21/D22), kept for comparison. Module-level so the builders stay pure functions of
+// (brief, program, options); run.ts and the tests switch it with setSizing().
+export type Sizing = 'typical' | 'max';
+let SIZING: Sizing = 'typical';
+export const setSizing = (s: Sizing): Sizing => {
+  const p = SIZING;
+  SIZING = s;
+  return p;
+};
+export const getSizing = (): Sizing => SIZING;
+export const isTypical = (): boolean => SIZING === 'typical';
+
 export const EW = EXTERIOR_WALL;
 export const IW = INTERIOR_WALL;
 
@@ -137,6 +150,8 @@ export interface Item {
   opt?: boolean;
   /** D42 optional-room priority: LOWER number = kept longer; the highest number is omitted first */
   prio?: number;
+  /** typical sizing: a flex patch (D44) grows only after every other item in the row is at its maximum, so leftover length does not inflate a pocket first */
+  late?: boolean;
 }
 
 export interface FillOk {
@@ -176,6 +191,7 @@ function spread(amount: number, caps: number[], weights: number[]): number[] {
  * (highest priority number first, restarting), then required rooms go toward lo. `gap` separates neighbours.
  */
 export function fillRow(items: Item[], total: number, gap = IW): FillOk | Fail {
+  if (SIZING === 'typical') return fillRowTypical(items, total, gap);
   let cur = items.slice();
   const omitted: string[] = [];
   for (;;) {
@@ -218,6 +234,108 @@ export function fillRow(items: Item[], total: number, gap = IW): FillOk | Fail {
     return fail('B', `row infeasible: minimum ${cur.reduce((a, i) => a + i.lo, 0) + gaps} > ${total}`);
   }
 }
+
+/** grow `amount` over caps evenly (equal shares, capped, in 10 mm steps); requires amount <= sum(caps) */
+function growEvenly(amount: number, caps: number[]): number[] {
+  return spread(amount, caps, caps.map((c) => (c > 0 ? 1 : 0)));
+}
+
+/**
+ * The typical-first fill (Q5): every room starts at its preferred size. If the row is longer than that, rooms grow toward their maximum, the growth
+ * spread evenly (the D22 spirit, reversed). If it is shorter, selected Optional rooms shrink toward lo, then are omitted (D23), then required rooms
+ * shrink toward lo - shrinking happens only when the length is forced. Unused length stays as `slack` (callers choose the total so it is 0).
+ */
+function fillRowTypical(items: Item[], total: number, gap: number): FillOk | Fail {
+  let cur = items.slice();
+  const omitted: string[] = [];
+  for (;;) {
+    const n = cur.length;
+    if (n === 0) return fail('B', 'no items to fill');
+    const gaps = gap * (n - 1);
+    const sumPref = cur.reduce((a, i) => a + i.pref, 0);
+    const D = total - gaps - sumPref;
+    if (D >= 0) {
+      const caps = cur.map((i) => i.hi - i.pref);
+      const sumC = caps.reduce((a, b) => a + b, 0);
+      const early = caps.map((c, k) => ((cur[k] as Item).late ? 0 : c));
+      const sumE = early.reduce((a, b) => a + b, 0);
+      let add: number[];
+      if (D <= sumE) add = growEvenly(D, early);
+      else {
+        const lateCaps = caps.map((c, k) => ((cur[k] as Item).late ? c : 0));
+        const g2 = growEvenly(Math.min(D - sumE, sumC - sumE), lateCaps);
+        add = early.map((c, k) => c + (g2[k] as number));
+      }
+      return { ok: true, ids: cur.map((i) => i.id), sizes: cur.map((i, k) => i.pref + (add[k] as number)), omitted, slack: Math.max(0, D - sumC) };
+    }
+    const need = -D;
+    const capD = cur.map((i) => (i.opt ? i.pref - i.lo : 0));
+    const sumD = capD.reduce((a, b) => a + b, 0);
+    if (need <= sumD) {
+      const red = spread(need, capD, capD);
+      return { ok: true, ids: cur.map((i) => i.id), sizes: cur.map((i, k) => i.pref - (red[k] as number)), omitted, slack: 0 };
+    }
+    const optIdx = cur.map((i, k) => (i.opt ? k : -1)).filter((k) => k >= 0);
+    if (optIdx.length > 0) {
+      let drop = optIdx[0] as number;
+      for (const k of optIdx) if ((cur[k]?.prio ?? 0) > (cur[drop]?.prio ?? 0)) drop = k;
+      omitted.push((cur[drop] as Item).id);
+      cur = cur.filter((_, k) => k !== drop);
+      continue;
+    }
+    const capF = cur.map((i) => i.pref - i.lo);
+    const sumF = capF.reduce((a, b) => a + b, 0);
+    if (need <= sumF) {
+      const red = spread(need, capF, capF);
+      return { ok: true, ids: cur.map((i) => i.id), sizes: cur.map((i, k) => i.pref - (red[k] as number)), omitted, slack: 0 };
+    }
+    return fail('B', `row infeasible: minimum ${cur.reduce((a, i) => a + i.lo, 0) + gaps} > ${total}`);
+  }
+}
+
+/**
+ * The inner length shared by several rows (the footprint width, or a column depth). 'max': the longest every row can still fill, capped (iteration 1).
+ * 'typical': the SMALLEST that holds every row at its preferred sizes (the longest preferred sum), within the cap and within what every row can
+ * reach; if the cap is below that, rows shrink toward lo to fit it. Fails (type B) if the rows cannot meet.
+ */
+export function sharedTotal(rows: { items: Item[]; gap?: number }[], cap: number): number | Fail {
+  const sum = (r: { items: Item[]; gap?: number }, f: (i: Item) => number): number => r.items.reduce((a, i) => a + f(i), 0) + (r.gap ?? IW) * (r.items.length - 1);
+  const hi = Math.min(...rows.map((r) => sum(r, (i) => i.hi)));
+  const lo = Math.max(...rows.map((r) => sum(r, (i) => i.lo)));
+  if (SIZING === 'max') {
+    const t = Math.min(cap, hi);
+    return t < lo ? fail('B', `rows cannot meet: need at least ${lo}, at most ${t}`) : t;
+  }
+  const pref = Math.max(...rows.map((r) => sum(r, (i) => i.pref)));
+  // a row whose preferred sum is longer than what the shortest row can reach shrinks toward lo to meet it (forced by the chain)
+  const t = Math.min(pref, cap, hi);
+  if (t < lo) return fail('B', `rows cannot meet: need at least ${lo}, at most ${t}`);
+  return t;
+}
+
+// ------------------------------------------------------------------ typical-first candidate choice
+
+/** catalog preferred deviation of a layout (mm, both sides) plus a footprint and a flex penalty: lower is better. Optional rooms omitted cost a lot. */
+export function layoutScore(l: Layout, catPref: (cat: CatKey) => [number, number]): number {
+  let dev = 0;
+  for (const r of l.rooms) {
+    const b = bbox(r.parts);
+    const [ps, pl] = catPref(r.cat);
+    dev += Math.abs(Math.min(b.w, b.h) - ps) + Math.abs(Math.max(b.w, b.h) - pl);
+  }
+  const flexArea = l.flex.reduce((a, f) => a + f.rect.w * f.rect.h, 0);
+  // a habitable room (Master, Bedroom, Core) without an exterior wall costs 1500 (M1 report-only metric, but the ideals have every habitable room on an outside wall)
+  const touches = (p: Rect): boolean => p.x === 250 || p.y === 250 || p.x + p.w === l.Wf - 250 || p.y + p.h === l.Df - 250;
+  const interior = l.rooms.filter((r) => (r.kind === 'Master' || r.kind === 'Bedroom' || r.kind === 'FamilyCore') && !r.parts.some(touches)).length;
+  return dev + interior * 1500 + l.omitted.length * 2000 + (flexArea / 1e6) * 250 + ((l.Wf * l.Df) / 1e6) * 20;
+}
+
+/** order values by distance to a target (stable): nearest first */
+export const nearest = (vals: number[], want: number | number[]): number[] => {
+  const w = Array.isArray(want) ? want : [want];
+  const d = (v: number): number => Math.min(...w.map((x) => Math.abs(x - v)));
+  return vals.map((v, i) => ({ v, i })).sort((a, b) => d(a.v) - d(b.v) || a.i - b.i).map((x) => x.v);
+};
 
 // ------------------------------------------------------------------ layout record
 
@@ -284,5 +402,33 @@ export function prng(seed: number): () => number {
     t = Math.imul(t ^ (t >>> 15), t | 1);
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Candidate collector for the typical-first builders. 'max' mode returns the first feasible layout (iteration-1 behaviour); 'typical' collects up to
+ * `cap` feasible layouts (the loops try values nearest the preferred first) and returns the lowest-scoring one (layoutScore). Deterministic.
+ */
+export function chooser(cap = 40, accept?: (l: Layout) => boolean): { add: (l: Layout) => boolean; best: () => Layout | null } {
+  const c: Layout[] = [];
+  return {
+    add: (l) => {
+      // typical mode keeps only layouts the caller accepts (emit + validator pass), so the best-scoring one is never an invalid one; max mode is iteration 1
+      if (isTypical() && accept && !accept(l)) return false;
+      c.push(l);
+      return !isTypical() || c.length >= cap;
+    },
+    best: () => {
+      let b: Layout | null = null;
+      let bs = Infinity;
+      for (const l of c) {
+        const s = layoutScore(l, (k) => CATALOG[k].pref);
+        if (s < bs) {
+          bs = s;
+          b = l;
+        }
+      }
+      return b;
+    },
   };
 }

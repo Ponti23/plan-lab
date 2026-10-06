@@ -19,6 +19,7 @@ import type {
   WallRec,
   ZoneRec,
 } from '../geometry-feasibility/types.ts';
+import { validate } from '../geometry-feasibility/validate.ts';
 import { bbox } from './common.ts';
 import type { Layout } from './common.ts';
 import { buildConnectors, deriveInteriorWalls, facing, wallRecord } from './wallgen.ts';
@@ -45,6 +46,12 @@ function placer(l: Layout, env: { maxW: number; maxD: number }): { fp: Rect; pla
   if ((env.maxW - l.Wf) % 2 !== 0) return { ok: false, reason: `footprint width ${l.Wf} cannot be centred in envelope ${env.maxW} on integer mm` };
   const fp: Rect = { x: (env.maxW - l.Wf) / 2, y: env.maxD - l.Df, w: l.Wf, h: l.Df };
   return { fp, place: (r) => ({ x: fp.x + r.x, y: fp.y + l.Df - r.y - r.h, w: r.w, h: r.h }) };
+}
+
+/** true when the layout emits stage 6 and passes every validator rule: the typical-sizing builders keep only such layouts */
+export function accepts(l: Layout, brief: Brief): boolean {
+  const e = emit(l, brief, 0, 0, 'accept');
+  return e.ok && validate(e.s6, brief).valid;
 }
 
 export function emit(l: Layout, brief: Brief, seed: number, attempt: number, cfPattern: string): (Emitted & { ok: true }) | EmitFail {
@@ -74,7 +81,7 @@ export function emit(l: Layout, brief: Brief, seed: number, attempt: number, cfP
     groups.set(r.group, g);
   }
   for (const [key, g] of groups) zones.push({ id: `Z-${key}`, name: g.name, type: g.type, rect: bbox(g.rects), roomIds: g.ids });
-  for (const f of flex) zones.push({ id: f.zoneId, name: 'Flex Space (labelled residual, D44)', type: 'flex', rect: f.rect, roomIds: [] });
+  for (const f of flex) zones.push({ id: f.zoneId, name: 'Flex (labelled residual, D44)', type: 'flex', rect: f.rect, roomIds: [] });
 
   const s4: Stage4Record = {
     stage: 4,

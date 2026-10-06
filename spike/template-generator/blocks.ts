@@ -2,7 +2,7 @@
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import type { Brief, CatKey, Rect, RoomSpec, ZoneType } from '../geometry-feasibility/types.ts';
-import { dimsOk, fail, fillRow, intersect, isFail, otherRange, rect, runOf, steps } from './common.ts';
+import { dimsOk, fail, fillRow, intersect, isFail, isTypical, otherRange, rect, runOf, steps } from './common.ts';
 import type { Fail, Iv, LHall, LRoom } from './common.ts';
 
 export interface Prog {
@@ -84,17 +84,24 @@ export function mkRoom(spec: RoomSpec, parts: Rect[]): LRoom {
   return { id: spec.id, name: spec.name, kind: spec.kind, cat: spec.cat, parts, zone: z.zone, group: z.group };
 }
 
+/** (row depth, suite variant) pairs to try: typical sizing tries both closing widths, max mode the Master-preferred one */
+export const suitePairs = (drows: number[]): [number, 'm' | 's' | 'l'][] => drows.flatMap((d) => (isTypical() ? [[d, 'm'], [d, 's'], [d, 'l']] : [[d, 'm']]) as [number, 'm' | 's' | 'l'][]);
+
 export const iv = (cat: CatKey, fixed: number): Iv | null => otherRange(cat, fixed);
 
 // ------------------------------------------------------------------ Master suite, MS-A (3.1): Master in front, a row WIR | Ensuite behind
 
 /** width interval of the MS-A block for Master depth Dm and row depth Drow (width of the block = the Master width) */
-export function suiteIv(p: Prog, Dm: number, Drow: number): Iv | null {
+export function suiteIv(p: Prog, Dm: number, Drow: number, variant: 'm' | 's' | 'l' = 'm'): Iv | null {
   const m = iv(p.master.cat, Dm);
   const w = iv(p.wir.cat, Drow);
   const e = iv(p.ens.cat, Drow);
   if (!m || !w || !e) return null;
-  return intersect([m, { lo: w.lo + 100 + e.lo, hi: w.hi + 100 + e.hi, pref: w.pref + 100 + e.pref }]);
+  const sum = { lo: w.lo + 100 + e.lo, hi: w.hi + 100 + e.hi, pref: w.pref + 100 + e.pref };
+  // variant 'm': the block closes near the Master's preferred width (the WIR and Ensuite shrink to meet it); 's': at the width where the WIR and Ensuite
+  // stay at preferred (the Master grows to close it); 'l': the narrowest block (the WIR and Ensuite near their minimum). Typical sizing tries both and keeps the better layout; max mode uses 'm' only (iteration 1).
+  const r = variant === 's' ? intersect([sum, m]) : intersect([m, sum]);
+  return r && variant === 'l' ? { ...r, pref: r.lo } : r;
 }
 
 export function placeSuite(p: Prog, x: number, v: number, W: number, Dm: number, Drow: number): LRoom[] | Fail {
@@ -201,7 +208,7 @@ export const maxLong = (cat: CatKey): number => CATALOG[cat].max[1];
 // ------------------------------------------------------------------ Master suite, MS-B (3.1): Master beside the spine, WIR over Ensuite in a column on the exterior side
 
 /** Master (Wm x Dmb) next to a column (Wcol wide) of WIR (Dwir deep) over Ensuite (Dens deep); Dmb = Dwir + 100 + Dens; the Master is the spine side */
-export function placeSuiteB(p: Prog, x: number, v: number, W: number, Dmb: number, Dwir: number, Dens: number): LRoom[] | Fail {
+export function placeSuiteB(p: Prog, x: number, v: number, W: number, Dmb: number, Dwir: number, Dens: number, masterOutside = false): LRoom[] | Fail {
   if (Dwir + 100 + Dens !== Dmb) return fail('A', `MS-B column depth ${Dwir} + 100 + ${Dens} != Master depth ${Dmb}`);
   const m = iv(p.master.cat, Dmb);
   const w = iv(p.wir.cat, Dwir);
@@ -212,10 +219,13 @@ export function placeSuiteB(p: Prog, x: number, v: number, W: number, Dmb: numbe
   const f = fillRow([{ id: 'm', ...m }, { id: 'col', ...col }], W);
   if (isFail(f)) return f;
   const [wm, wc] = f.sizes as [number, number];
+  // masterOutside: the WIR over Ensuite column is on the spine side (x) and the Master on the far, exterior side
+  const mx = masterOutside ? x + wc + 100 : x;
+  const cx = masterOutside ? x : x + wm + 100;
   const rooms = [
-    mkRoom(p.master, [rect(x, v, wm, Dmb)]),
-    mkRoom(p.wir, [rect(x + wm + 100, v, wc, Dwir)]),
-    mkRoom(p.ens, [rect(x + wm + 100, v + Dwir + 100, wc, Dens)]),
+    mkRoom(p.master, [rect(mx, v, wm, Dmb)]),
+    mkRoom(p.wir, [rect(cx, v, wc, Dwir)]),
+    mkRoom(p.ens, [rect(cx, v + Dwir + 100, wc, Dens)]),
   ];
   for (const r of rooms) {
     const pr = r.parts[0] as Rect;

@@ -1,0 +1,159 @@
+{
+ "stage": 4,
+ "id": "6-0",
+ "briefId": "GB-01",
+ "seed": 6,
+ "attempt": 0,
+ "cfPattern": "T1-wing-master",
+ "hallShape": "spine",
+ "hallwayWidthMm": 1000,
+ "footprint": {
+  "x": 750,
+  "y": 3900,
+  "w": 11000,
+  "h": 16600
+ },
+ "inner": {
+  "x": 1000,
+  "y": 4150,
+  "w": 10500,
+  "h": 16100
+ },
+ "zones": [
+  {
+   "id": "Z-master-suite",
+   "name": "Master suite",
+   "type": "master",
+   "rect": {
+    "x": 1000,
+    "y": 14250,
+    "w": 3700,
+    "h": 6000
+   },
+   "roomIds": [
+    "master",
+    "wir",
+    "ensuite"
+   ]
+  },
+  {
+   "id": "Z-garage",
+   "name": "Double Garage",
+   "type": "garage",
+   "rect": {
+    "x": 6000,
+    "y": 14250,
+    "w": 5500,
+    "h": 6000
+   },
+   "roomIds": [
+    "garage"
+   ]
+  },
+  {
+   "id": "Z-bed2",
+   "name": "Bedroom 2",
+   "type": "bedrooms",
+   "rect": {
+    "x": 1000,
+    "y": 11110,
+    "w": 3700,
+    "h": 3040
+   },
+   "roomIds": [
+    "bed2"
+   ]
+  },
+  {
+   "id": "Z-wet",
+   "name": "Wet rooms",
+   "type": "wet",
+   "rect": {
+    "x": 1000,
+    "y": 7280,
+    "w": 3700,
+    "h": 2630
+   },
+   "roomIds": [
+    "bath",
+    "wc"
+   ]
+  },
+  {
+   "id": "Z-bed3",
+   "name": "Bedroom 3",
+   "type": "bedrooms",
+   "rect": {
+    "x": 1000,
+    "y": 4150,
+    "w": 3700,
+    "h": 3030
+   },
+   "roomIds": [
+    "bed3"
+   ]
+  },
+  {
+   "id": "Z-core",
+   "name": "Family Core",
+   "type": "living",
+   "rect": {
+    "x": 6000,
+    "y": 5750,
+    "w": 5500,
+    "h": 8400
+   },
+   "roomIds": [
+    "core"
+   ]
+  },
+  {
+   "id": "Z-flex-rear",
+   "name": "Flex (labelled residual, D44)",
+   "type": "flex",
+   "rect": {
+    "x": 6000,
+    "y": 4150,
+    "w": 5500,
+    "h": 1500
+   },
+   "roomIds": []
+  }
+ ],
+ "halls": [
+  {
+   "id": "H-entry",
+   "name": "Entry",
+   "kind": "entry",
+   "rect": {
+    "x": 4800,
+    "y": 18950,
+    "w": 1100,
+    "h": 1300
+   }
+  },
+  {
+   "id": "H-stem",
+   "name": "Hallway",
+   "kind": "stem",
+   "rect": {
+    "x": 4800,
+    "y": 4150,
+    "w": 1100,
+    "h": 14800
+   }
+  },
+  {
+   "id": "H-lobby-wet",
+   "name": "Lobby",
+   "kind": "connector",
+   "rect": {
+    "x": 1000,
+    "y": 10010,
+    "w": 3700,
+    "h": 1000
+   }
+  }
+ ],
+ "omittedOptional": []
+}

@@ -3,6 +3,9 @@
 // the independent validator, keep up to 6 valid distinct candidates per brief and template, write JSON + debug SVG (render.ts) + present SVG
 // (render-present.ts), summary.json and compare.html. A template that cannot fit the PL-10 envelope is re-run at labelled WHAT-IF widths 13500
 // and 15000. Everything is provisional - uncalibrated (G-CALIBRATION).
+// Iteration 2 (user 2026-10-06): sizing is typical-first (Q5); T2 and T4 run first and T1 only when neither yields a valid candidate (T1 is a last
+// resort); T1 is still produced in out/T1-fallback-demo for comparison; the iteration-1 max-first sizing is re-run into out/iteration-1-max for the
+// compare.html iteration 1 vs 2 row.
 
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -15,7 +18,8 @@ import { renderPresent } from '../geometry-feasibility/render-present.ts';
 import type { Brief, Stage4Record, Stage5Record, Stage6Record, ValidationResult } from '../geometry-feasibility/types.ts';
 import { validate } from '../geometry-feasibility/validate.ts';
 import { parseProgram } from './blocks.ts';
-import { isFail, mirrorLayout, prng } from './common.ts';
+import { isFail, isTypical, mirrorLayout, prng, setSizing } from './common.ts';
+import type { Sizing } from './common.ts';
 import type { Fail, Layout } from './common.ts';
 import { emit } from './emit.ts';
 import { computeMetrics, IDEALS } from './metrics.ts';
@@ -50,9 +54,24 @@ export interface Retained {
   footprint: { w: number; h: number };
   coreParts: number;
   flexCount: number;
+  /** total area of the flex patches, mm2 */
+  flexArea: number;
+  /** footprint area, mm2 */
+  fpArea: number;
+}
+
+export interface RunOpts {
+  sizing: Sizing;
+  keep: number;
+  /** which output group this run belongs to */
+  group: 'main' | 't1-fallback-demo' | 'iteration-1-max';
 }
 
 export interface RunSummary {
+  group: RunOpts['group'];
+  sizing: Sizing;
+  /** output directory relative to the out root */
+  dirRel: string;
   brief: string;
   briefLabel: string;
   template: TemplateName;
@@ -99,8 +118,10 @@ function build(t: TemplateName, brief: Brief, seed: number): { layout: Layout; s
     layout = buildT1(brief, prog, { wing, hw, lobbyD, drowOrder });
     cf = `T1-wing-${wing}`;
   } else if (t === 'T2') {
-    layout = buildT2(brief, prog, { hw, lobbyD });
-    cf = 'T2-B';
+    // iteration 2: even seeds put the Master on the exterior wall (Core anchored right), odd seeds keep it beside the spine (known gap 4a)
+    const master = isTypical() && seed % 2 === 0 ? 'outside' : 'spine';
+    layout = buildT2(brief, prog, { hw, lobbyD, master });
+    cf = isTypical() ? `T2-B-${master}` : 'T2-B'; // max mode keeps the iteration-1 label
   } else {
     const rear = seed % 3 === 2 ? 'bar' : 'auto';
     layout = buildT4(brief, prog, { hw, lobbyD, drowOrder, rear });
@@ -138,7 +159,16 @@ function writeCandidate(dir: string, e: { s4: Stage4Record; s5: Stage5Record; s6
   return { files, presentFile };
 }
 
-function runOne(briefId: string, t: TemplateName, width: number | null, root: string, single = false): RunSummary {
+function runOne(briefId: string, t: TemplateName, width: number | null, root: string, single = false, o: RunOpts = { sizing: 'typical', keep: 6, group: 'main' }): RunSummary {
+  const prevSizing = setSizing(o.sizing);
+  try {
+    return runOne2(briefId, t, width, root, single, o);
+  } finally {
+    setSizing(prevSizing);
+  }
+}
+
+function runOne2(briefId: string, t: TemplateName, width: number | null, root: string, single: boolean, o: RunOpts): RunSummary {
   const brief = derive(briefId, width, single);
   const whatIf = width !== null || single;
   const widthLabel = single ? 'WHATIF-single-garage' : width !== null ? `WHATIF-w${width}` : `PL10-w${brief.envelope.maxW}`;
@@ -187,11 +217,13 @@ function runOne(briefId: string, t: TemplateName, width: number | null, root: st
   const ms = performance.now() - t0;
   // best first: most habitable rooms on an exterior wall, lowest hallway share, shortest spine ratio, lowest seed
   valid.sort((a, b) => b.m.m1.share - a.m.m1.share || a.m.m3 - b.m.m3 || a.m.m13 - b.m.m13 || a.seed - b.seed);
-  const keep = valid.slice(0, 6);
-  const dir = join(root, briefId, whatIf ? `${t}-${widthLabel}` : t);
+  const keep = valid.slice(0, o.keep);
+  const dirName = whatIf ? `${t}-${widthLabel}` : t;
+  const dir = join(root, briefId, dirName);
   rmSync(dir, { recursive: true, force: true });
   mkdirSync(dir, { recursive: true });
-  const label = (c: Cand): string => `${briefLabelOf(brief)} | ${t} ${c.variant} | seed ${c.seed}${single ? ' | WHAT-IF single Garage, not the brief' : width !== null ? ` | WHAT-IF envelope width ${width}, not PL-10` : ''} | provisional`;
+  const groupTag = o.group === 't1-fallback-demo' ? ' | T1 FALLBACK DEMO (T1 is a last resort; T2/T4 were chosen)' : o.group === 'iteration-1-max' ? ' | ITERATION 1: max-first sizing (superseded)' : '';
+  const label = (c: Cand): string => `${briefLabelOf(brief)} | ${t} ${c.variant} | seed ${c.seed}${groupTag}${single ? ' | WHAT-IF single Garage, not the brief' : width !== null ? ` | WHAT-IF envelope width ${width}, not PL-10` : ''} | provisional`;
   const retained: Retained[] = keep.map((c) => {
     const w = writeCandidate(dir, c.e, c.v, brief, label(c), c.seed, c.cf);
     const core = c.e.s6.rooms.find((r) => r.kind === 'FamilyCore');
@@ -208,9 +240,11 @@ function runOne(briefId: string, t: TemplateName, width: number | null, root: st
       footprint: { w: c.e.s6.footprint.w, h: c.e.s6.footprint.h },
       coreParts: core?.parts?.length ?? 1,
       flexCount: c.e.s6.flex.length,
+      flexArea: c.e.s6.flex.reduce((a, f) => a + f.rect.w * f.rect.h, 0),
+      fpArea: c.e.s6.footprint.w * c.e.s6.footprint.h,
     };
   });
-  return { brief: briefId, briefLabel: briefLabelOf(brief), template: t, widthLabel, envelopeWidth: brief.envelope.maxW, whatIf, seeds: SEEDS, built, valid: nValid, distinctValid: valid.length, failures, invalidRules, ms: Math.round(ms), msPerSeed: Math.round(ms / SEEDS), retained };
+  return { group: o.group, sizing: o.sizing, dirRel: relative(OUT, dir).split('\\').join('/'), brief: briefId, briefLabel: briefLabelOf(brief), template: t, widthLabel, envelopeWidth: brief.envelope.maxW, whatIf, seeds: SEEDS, built, valid: nValid, distinctValid: valid.length, failures, invalidRules, ms: Math.round(ms), msPerSeed: Math.round(ms / SEEDS), retained };
 }
 
 // ---------------------------------------------------------------- the old PL-20 candidate for the same brief (a present SVG made from its stage-6 JSON)
@@ -238,56 +272,180 @@ function oldPl20(briefId: string, root: string): { file: string; metrics: Metric
   return null;
 }
 
-function main(): void {
-  const t0 = performance.now();
-  mkdirSync(OUT, { recursive: true });
-  const runs: RunSummary[] = [];
-  for (const briefId of ['FIXTURE-A', 'GB-01']) {
-    for (const t of TEMPLATES) {
-      const base = runOne(briefId, t, null, OUT);
-      runs.push(base);
-      console.log(`${briefId} ${t} ${base.widthLabel}: valid ${base.valid}/${SEEDS} (${base.distinctValid} distinct) ${base.ms} ms`);
-      if (base.valid === 0) {
-        for (const w of WHATIF_WIDTHS) {
-          const r = runOne(briefId, t, w, OUT);
-          runs.push(r);
-          console.log(`${briefId} ${t} ${r.widthLabel}: valid ${r.valid}/${SEEDS} (${r.distinctValid} distinct) ${r.ms} ms`);
-        }
-      }
-    }
-  }
-  // T1 wingColumn = garage cannot take a double Garage (the wing would be 5500+ wide, a Bedroom is at most 4000): show it with a single Garage
-  for (const briefId of ['FIXTURE-A', 'GB-01']) {
-    const r = runOne(briefId, 'T1', null, OUT, true);
-    runs.push(r);
-    console.log(`${briefId} T1 ${r.widthLabel}: valid ${r.valid}/${SEEDS} (${r.distinctValid} distinct) ${r.ms} ms`);
-  }
-  const olds: Record<string, { file: string; metrics: Metrics; label: string } | null> = {};
-  for (const id of ['FIXTURE-A', 'GB-01']) olds[id] = oldPl20(id, OUT);
+const BRIEF_IDS = ['FIXTURE-A', 'GB-01'];
+const log = (r: RunSummary): void => console.log(`[${r.group}] ${r.brief} ${r.template} ${r.widthLabel}: valid ${r.valid}/${SEEDS} (${r.distinctValid} distinct) ${r.ms} ms`);
 
-  // best candidate per brief x template (PL-10 width first; else a WHAT-IF run)
-  const best: { brief: string; template: TemplateName; run: RunSummary; cand: Retained }[] = [];
-  for (const briefId of ['FIXTURE-A', 'GB-01'])
+export interface BestRun {
+  brief: string;
+  template: TemplateName;
+  run: RunSummary;
+  cand: Retained;
+}
+
+/** best candidate per brief x template from a set of runs (PL-10 width first; else a WHAT-IF run) */
+function bestOf(runs: RunSummary[]): BestRun[] {
+  const out: BestRun[] = [];
+  for (const briefId of BRIEF_IDS)
     for (const t of TEMPLATES) {
       const rs = runs.filter((r) => r.brief === briefId && r.template === t && r.retained.length > 0);
       const pick = rs.find((r) => !r.whatIf) ?? rs[0];
-      if (pick) best.push({ brief: briefId, template: t, run: pick, cand: pick.retained[0] as Retained });
+      if (pick) out.push({ brief: briefId, template: t, run: pick, cand: pick.retained[0] as Retained });
     }
+  return out;
+}
+
+export const imgOf = (b: BestRun): string => `${b.run.dirRel}/${b.cand.presentFile}`;
+
+/** T1 is a last resort (user 2026-10-06): it runs only when none of the T2/T4 runs at this width yielded a validator-valid candidate */
+export function needT1(t2t4: { valid: number }[]): boolean {
+  return t2t4.every((r) => r.valid === 0);
+}
+
+/** the main runs: T2 and T4 first for each brief and width; T1 only when neither yields a valid candidate at that width (T1 is a last resort) */
+function mainRuns(): { runs: RunSummary[]; t1Used: string[] } {
+  const runs: RunSummary[] = [];
+  const t1Used: string[] = [];
+  const opts: RunOpts = { sizing: 'typical', keep: 6, group: 'main' };
+  for (const briefId of BRIEF_IDS) {
+    const base: RunSummary[] = [];
+    for (const t of ['T2', 'T4'] as TemplateName[]) {
+      const r = runOne(briefId, t, null, OUT, false, opts);
+      base.push(r);
+      runs.push(r);
+      log(r);
+    }
+    if (needT1(base)) {
+      const r = runOne(briefId, 'T1', null, OUT, false, opts);
+      runs.push(r);
+      t1Used.push(`${briefId} ${r.widthLabel}`);
+      log(r);
+    }
+    // WHAT-IF widths only for a template that has no valid candidate at the PL-10 envelope
+    const satisfied = new Set<string>(base.filter((r) => r.valid > 0).map((r) => r.template));
+    for (const w of WHATIF_WIDTHS) {
+      const need = base.filter((r) => !satisfied.has(r.template)).map((r) => r.template);
+      if (need.length === 0) break;
+      const here2: RunSummary[] = [];
+      for (const t of need) {
+        const r = runOne(briefId, t, w, OUT, false, opts);
+        here2.push(r);
+        if (r.valid > 0) satisfied.add(t);
+        runs.push(r);
+        log(r);
+      }
+      if (needT1([...base, ...here2])) {
+        const r = runOne(briefId, 'T1', w, OUT, false, opts);
+        runs.push(r);
+        t1Used.push(`${briefId} ${r.widthLabel}`);
+        log(r);
+      }
+    }
+  }
+  return { runs, t1Used };
+}
+
+function main(): void {
+  const t0 = performance.now();
+  mkdirSync(OUT, { recursive: true });
+  for (const d of ['FIXTURE-A', 'GB-01']) rmSync(join(OUT, d), { recursive: true, force: true });
+  rmSync(join(OUT, 'T1-fallback-demo'), { recursive: true, force: true });
+  rmSync(join(OUT, 'iteration-1-max'), { recursive: true, force: true });
+
+  // ---- iteration 2 (typical sizing): T2 and T4 first, T1 only if both fail
+  const { runs, t1Used } = mainRuns();
+
+  // ---- T1 fallback demo: T1 is still produced for comparison, in its own clearly labelled folder (never in the main best list)
+  const demoRoot = join(OUT, 'T1-fallback-demo');
+  const demoOpts: RunOpts = { sizing: 'typical', keep: 3, group: 't1-fallback-demo' };
+  const demo: RunSummary[] = [];
+  for (const briefId of BRIEF_IDS) {
+    const r = runOne(briefId, 'T1', null, demoRoot, false, demoOpts);
+    demo.push(r);
+    log(r);
+    // T1 wingColumn = garage cannot take a double Garage (the wing would be 5500+ wide, a Bedroom is at most 4000): show it with a single Garage
+    const s = runOne(briefId, 'T1', null, demoRoot, true, demoOpts);
+    demo.push(s);
+    log(s);
+  }
+
+  // ---- iteration 1 (max-first sizing), all three templates as before, best candidate only, for the compare row
+  const maxRoot = join(OUT, 'iteration-1-max');
+  const maxOpts: RunOpts = { sizing: 'max', keep: 1, group: 'iteration-1-max' };
+  const maxRuns: RunSummary[] = [];
+  for (const briefId of BRIEF_IDS)
+    for (const t of TEMPLATES) {
+      const base = runOne(briefId, t, null, maxRoot, false, maxOpts);
+      maxRuns.push(base);
+      log(base);
+      if (base.valid === 0)
+        for (const w of WHATIF_WIDTHS) {
+          const r = runOne(briefId, t, w, maxRoot, false, maxOpts);
+          maxRuns.push(r);
+          log(r);
+        }
+    }
+
+  const olds: Record<string, { file: string; metrics: Metrics; label: string } | null> = {};
+  for (const id of BRIEF_IDS) olds[id] = oldPl20(id, OUT);
+
+  const best = bestOf(runs);
+  const bestDemo = bestOf(demo.filter((r) => r.widthLabel.startsWith('PL10')));
+  const bestMax = bestOf(maxRuns);
+  // typical-sizing best per template for the iteration row: the main best, or (T1 only) the demo best
+  const typBest = (brief: string, t: TemplateName): BestRun | undefined => best.find((b) => b.brief === brief && b.template === t) ?? bestDemo.find((b) => b.brief === brief && b.template === t);
+  const entry = (b: BestRun | undefined) =>
+    b
+      ? {
+          group: b.run.group,
+          widthLabel: b.run.widthLabel,
+          whatIf: b.run.whatIf,
+          id: b.cand.id,
+          present: imgOf(b),
+          variant: b.cand.variant,
+          seed: b.cand.seed,
+          footprint: b.cand.footprint,
+          footprintAreaM2: b.cand.fpArea / 1e6,
+          flexCount: b.cand.flexCount,
+          flexAreaM2: b.cand.flexArea / 1e6,
+          coreParts: b.cand.coreParts,
+          metrics: b.cand.metrics,
+        }
+      : null;
+  const iteration = BRIEF_IDS.flatMap((brief) =>
+    TEMPLATES.map((t) => ({ brief, template: t, max: entry(bestMax.find((b) => b.brief === brief && b.template === t)), typical: entry(typBest(brief, t)) })),
+  );
+
   const summary = {
-    note: 'PL-25 spike v2 band-template generator. Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles.',
+    note: 'PL-25 spike v2 iteration 2 band-template generator (typical-first sizing, Q5). Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles. T1 is a last resort: it runs in the main set only when T2 and T4 both fail; out/T1-fallback-demo holds T1 for comparison.',
     seedsPerRun: SEEDS,
     node: process.version,
     os: `${platform()} ${release()}`,
     cpu: `${cpus()[0]?.model ?? 'unknown'} x${cpus().length}`,
     totalMs: Math.round(performance.now() - t0),
+    t1UsedAsFallback: t1Used,
     runs: runs.map((r) => ({ ...r, retained: r.retained.map((c) => ({ ...c, files: undefined })) })),
-    best: best.map((b) => ({ brief: b.brief, template: b.template, widthLabel: b.run.widthLabel, id: b.cand.id, dir: `${b.brief}/${b.run.whatIf ? `${b.template}-${b.run.widthLabel}` : b.template}`, present: b.cand.presentFile, metrics: b.cand.metrics, footprint: b.cand.footprint, coreParts: b.cand.coreParts })),
+    t1FallbackDemoRuns: demo.map((r) => ({ ...r, retained: r.retained.map((c) => ({ ...c, files: undefined })) })),
+    iteration1MaxRuns: maxRuns.map((r) => ({ ...r, retained: r.retained.map((c) => ({ ...c, files: undefined })) })),
+    best: best.map((b) => ({ brief: b.brief, template: b.template, widthLabel: b.run.widthLabel, id: b.cand.id, dir: b.run.dirRel, present: b.cand.presentFile, metrics: b.cand.metrics, footprint: b.cand.footprint, footprintAreaM2: b.cand.fpArea / 1e6, flexCount: b.cand.flexCount, flexAreaM2: b.cand.flexArea / 1e6, coreParts: b.cand.coreParts })),
+    iteration,
     oldPl20: Object.fromEntries(Object.entries(olds).map(([k, v]) => [k, v ? { file: v.file, metrics: v.metrics } : null])),
     ideals: IDEALS,
   };
   writeFileSync(join(OUT, 'summary.json'), JSON.stringify(summary, null, 1));
-  writeFileSync(join(OUT, 'compare.html'), compareHtml(best.map((b) => ({ brief: b.brief, template: b.template, whatIf: b.run.whatIf, widthLabel: b.run.widthLabel, img: `${b.brief}/${b.run.whatIf ? `${b.template}-${b.run.widthLabel}` : b.template}/${b.cand.presentFile}`, cand: b.cand })), olds, relative(OUT, join(here, '..', '..', 'knowledge', 'reference', 'ideal')).split('\\').join('/')));
+  const idealRel = relative(OUT, join(here, '..', '..', 'knowledge', 'reference', 'ideal')).split('\\').join('/');
+  const toBest = (b: BestRun) => ({ brief: b.brief, template: b.template, whatIf: b.run.whatIf, widthLabel: b.run.widthLabel, img: imgOf(b), cand: b.cand });
+  writeFileSync(
+    join(OUT, 'compare.html'),
+    compareHtml(
+      best.map(toBest),
+      bestDemo.map(toBest),
+      iteration.map((i) => ({ brief: i.brief, template: i.template, max: i.max, typical: i.typical })),
+      olds,
+      idealRel,
+      t1Used,
+    ),
+  );
   console.log(`done in ${Math.round(performance.now() - t0)} ms -> ${OUT}`);
 }
 
-main();
+if (import.meta.main) main();

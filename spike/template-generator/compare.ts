@@ -21,10 +21,33 @@ function table(rows: [string, string][]): string {
   return `<table>${rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}</table>`;
 }
 
+export interface IterEntry {
+  group: string;
+  widthLabel: string;
+  whatIf: boolean;
+  id: string;
+  present: string;
+  variant: string;
+  seed: number;
+  footprint: { w: number; h: number };
+  footprintAreaM2: number;
+  flexCount: number;
+  flexAreaM2: number;
+  coreParts: number;
+  metrics: Metrics;
+}
+export interface IterRow {
+  brief: string;
+  template: string;
+  max: IterEntry | null;
+  typical: IterEntry | null;
+}
+
 function metricRows(m: Metrics, fp: { w: number; h: number }, extra: [string, string][] = []): [string, string][] {
   return [
     ['validator', m.validity.valid ? 'VALID (all rules pass)' : `INVALID: ${m.validity.failed.join(', ')}`],
     ['footprint', `${(fp.w / 1000).toFixed(2)} x ${(fp.h / 1000).toFixed(2)} m`],
+    ['footprint area', fp.w > 0 ? `${((fp.w * fp.h) / 1e6).toFixed(1)} m2` : 'not shown'],
     ['M1 habitable rooms on an exterior wall', `${m.m1.touching} of ${m.m1.habitable} (${pct(m.m1.share)})`],
     ['M2 wall lines per item', `${m.m2.perItem.toFixed(2)} (x ${m.m2.nx}, y ${m.m2.ny}, ${m.m2.items} items)`],
     ['M3 hallway share of floor', pct(m.m3)],
@@ -35,7 +58,23 @@ function metricRows(m: Metrics, fp: { w: number; h: number }, extra: [string, st
   ];
 }
 
-export function compareHtml(bests: Best[], olds: Record<string, { file: string; metrics: Metrics; label: string } | null>, idealRel: string): string {
+const flexRow = (count: number, areaMm2: number): [string, string] => ['flex patches (count, total area)', `${count}, ${(areaMm2 / 1e6).toFixed(1)} m2`];
+
+function iterFig(e: IterEntry | null, title: string, sizing: string): string {
+  if (!e) return `<figure><figcaption><b>${esc(title)}</b>: no valid candidate</figcaption></figure>`;
+  return `<figure><img src="${esc(e.present)}" alt="${esc(title)}"><figcaption><b>${esc(title)}</b> ${esc(sizing)}, ${esc(e.variant)}, seed ${e.seed}${e.whatIf ? ` <span class="w">WHAT-IF ${esc(e.widthLabel)}</span>` : ''}${e.group === 't1-fallback-demo' ? ' <span class="w">T1 FALLBACK DEMO</span>' : ''}</figcaption>${table(
+    metricRows(e.metrics, e.footprint, [['Core', e.coreParts > 1 ? `L-shaped, ${e.coreParts} rectangles` : 'one rectangle'], flexRow(e.flexCount, e.flexAreaM2 * 1e6)]),
+  )}</figure>`;
+}
+
+export function compareHtml(
+  bests: Best[],
+  demo: Best[],
+  iter: IterRow[],
+  olds: Record<string, { file: string; metrics: Metrics; label: string } | null>,
+  idealRel: string,
+  t1Used: string[],
+): string {
   const briefs = [...new Set(bests.map((b) => b.brief))];
   const sections = briefs
     .map((brief) => {
@@ -63,14 +102,27 @@ export function compareHtml(bests: Best[], olds: Record<string, { file: string; 
             `<figure><img src="${esc(b.img)}" alt="${esc(b.template)} ${esc(b.brief)}"><figcaption><b>${esc(b.template)}</b> ${esc(b.cand.variant)}, seed ${b.cand.seed}${b.cand.mirrored ? ', mirrored' : ''}${b.whatIf ? ` <span class="w">WHAT-IF ${esc(b.widthLabel)} (not the PL-10 envelope)</span>` : ''}</figcaption>${table(
               metricRows(b.cand.metrics, b.cand.footprint, [
                 ['Core', b.cand.coreParts > 1 ? `L-shaped, ${b.cand.coreParts} rectangles` : 'one rectangle'],
-                ['flex patches', String(b.cand.flexCount)],
+                flexRow(b.cand.flexCount, b.cand.flexArea),
                 ['optional rooms omitted', b.cand.omittedOptional.join(', ') || 'none'],
               ]),
             )}<p class="n">${esc(b.cand.notes.join(' | '))}</p></figure>`,
         )
         .join('\n');
+      const demoFigs = demo
+        .filter((b) => b.brief === brief)
+        .map(
+          (b) =>
+            `<figure><img src="${esc(b.img)}" alt="T1 fallback demo"><figcaption><b>T1 FALLBACK DEMO</b> (${esc(b.cand.variant)}, seed ${b.cand.seed}): not chosen, T1 is a last resort and T2/T4 yielded valid candidates</figcaption>${table(
+              metricRows(b.cand.metrics, b.cand.footprint, [['Core', b.cand.coreParts > 1 ? `L-shaped, ${b.cand.coreParts} rectangles` : 'one rectangle'], flexRow(b.cand.flexCount, b.cand.flexArea)]),
+            )}</figure>`,
+        )
+        .join('\n');
+      const iterFigs = iter
+        .filter((r) => r.brief === brief)
+        .map((r) => `<div class="group"><h3>${esc(r.template)}: iteration 1 (max-first) vs iteration 2 (typical-first)</h3><div class="g">${iterFig(r.max, `${r.template} iteration 1`, 'max-first sizing')}${iterFig(r.typical, `${r.template} iteration 2`, 'typical-first sizing')}</div></div>`)
+        .join('\n');
       const title = brief === 'GB-01' ? 'GB-01 (run WITHOUT the Alfresco, D63)' : 'Fixture A (no Alfresco in the program, D63)';
-      return `<section><h2>${esc(title)}</h2><div class="row"><div class="group"><h3>Ideals</h3><div class="g">${ideals}</div></div><div class="group"><h3>Old (PL-20)</h3><div class="g">${oldFig}</div></div><div class="group"><h3>New (PL-25 templates, best per template)</h3><div class="g">${news}</div></div></div></section>`;
+      return `<section><h2>${esc(title)}</h2><div class="row"><div class="group"><h3>Ideals</h3><div class="g">${ideals}</div></div><div class="group"><h3>Old (PL-20)</h3><div class="g">${oldFig}</div></div><div class="group"><h3>New (PL-25 iteration 2, typical sizing, best per template; T1 only when T2 and T4 fail)</h3><div class="g">${news}</div></div></div><h3 class="sec">Iteration 1 (max-first) against iteration 2 (typical-first): best of each template</h3><div class="row">${iterFigs}</div><h3 class="sec">T1 fallback demo (for comparison only, not a chosen candidate)</h3><div class="row"><div class="group"><div class="g">${demoFigs}</div></div></div></section>`;
     })
     .join('\n');
   return `<!doctype html>
@@ -84,9 +136,10 @@ img{display:block;width:100%;height:auto;background:#fff}
 figcaption{font-size:12px;line-height:1.35;margin:6px 0}
 table{border-collapse:collapse;width:100%;font-size:11px}th{text-align:left;font-weight:600;padding:2px 4px 2px 0;border-top:1px solid #c9ccca;vertical-align:top;width:52%}td{padding:2px 0;border-top:1px solid #c9ccca}
 .n{font-size:10px;color:#3d4240;margin:4px 0 0}.w{border:1.5px solid #111312;padding:0 3px;font-weight:700}
+h3.sec{margin:18px 0 8px;font-size:13px}
 p.top{font-size:12px;max-width:900px;line-height:1.4}
 </style></head><body><h1>PlanLab spike v2: band templates against the ideals and the old slicing tree</h1>
-<p class="top">Every number is provisional - uncalibrated (G-CALIBRATION). Metrics are report-only (Q8); M1, M2, M3, M13 use the layout-templates.md 5.1 formulas. Ideal values are approximate, by eye. GB-01 is run without the Alfresco (D63); the old PL-20 plan has one. A boxed label marks a WHAT-IF width that is not the PL-10 envelope. No colour carries meaning: read the labels.</p>
+<p class="top">Every number is provisional - uncalibrated (G-CALIBRATION). Metrics are report-only (Q8); M1, M2, M3, M13 use the layout-templates.md 5.1 formulas. Ideal values are approximate, by eye. GB-01 is run without the Alfresco (D63); the old PL-20 plan has one. A boxed label marks a WHAT-IF width that is not the PL-10 envelope or a T1 fallback demo.${t1Used.length ? ` T1 was needed as a fallback for: ${esc(t1Used.join('; '))}.` : ' T1 was not needed: T2 or T4 gave a valid candidate for every brief at the PL-10 envelope.'} Iteration 2 sizes every room at its catalog preferred size where the template allows and builds the smallest footprint that closes the chains; leftover pockets are labelled Flex. No colour carries meaning: read the labels.</p>
 ${sections}
 </body></html>
 `;

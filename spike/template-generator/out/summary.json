@@ -1,12 +1,1632 @@
 {
- "note": "PL-25 spike v2 band-template generator. Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles.",
+ "note": "PL-25 spike v2 iteration 2 band-template generator (typical-first sizing, Q5). Everything provisional - uncalibrated (G-CALIBRATION). GB-01 is run WITHOUT the Alfresco (D63). WHAT-IF runs are labelled in names and titles. T1 is a last resort: it runs in the main set only when T2 and T4 both fail; out/T1-fallback-demo holds T1 for comparison.",
  "seedsPerRun": 24,
  "node": "v24.21.0",
  "os": "win32 10.0.26300",
  "cpu": "AMD Ryzen 5 9500F 6-Core Processor              x12",
- "totalMs": 2022,
+ "totalMs": 19072,
+ "t1UsedAsFallback": [],
  "runs": [
   {
+   "group": "main",
+   "sizing": "typical",
+   "dirRel": "FIXTURE-A/T2",
+   "brief": "FIXTURE-A",
+   "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
+   "template": "T2",
+   "widthLabel": "PL10-w15000",
+   "envelopeWidth": 15000,
+   "whatIf": false,
+   "seeds": 24,
+   "built": 12,
+   "valid": 12,
+   "distinctValid": 3,
+   "failures": {
+    "A: a left-block room has no valid width at its row depth": 12
+   },
+   "invalidRules": {},
+   "ms": 1013,
+   "msPerSeed": 42,
+   "retained": [
+    {
+     "id": "1-0",
+     "seed": 1,
+     "variant": "B-no-alfresco",
+     "mirrored": false,
+     "presentFile": "cand-1-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 5,
+       "share": 0.8
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 15,
+       "perItem": 1.8666666666666667
+      },
+      "m3": 0.08007604343693292,
+      "m4": true,
+      "m9": 0.15842382694357232,
+      "m13": 0.6912751677852349,
+      "hallAreaM2": 16.68,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13980,
+      "h": 14900
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 17520000,
+     "fpArea": 208302000
+    },
+    {
+     "id": "21-0",
+     "seed": 21,
+     "variant": "B-no-alfresco",
+     "mirrored": false,
+     "presentFile": "cand-21-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 5,
+       "share": 0.8
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 15,
+       "perItem": 1.8666666666666667
+      },
+      "m3": 0.08441694630872483,
+      "m4": true,
+      "m9": 0.1572986577181208,
+      "m13": 0.6912751677852349,
+      "hallAreaM2": 17.71,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 14080,
+      "h": 14900
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 17920000,
+     "fpArea": 209792000
+    },
+    {
+     "id": "9-0",
+     "seed": 9,
+     "variant": "B-no-alfresco",
+     "mirrored": true,
+     "presentFile": "cand-9-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 5,
+       "share": 0.8
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 15,
+       "perItem": 1.8666666666666667
+      },
+      "m3": 0.08620176474541771,
+      "m4": true,
+      "m9": 0.15842382694357232,
+      "m13": 0.6912751677852349,
+      "hallAreaM2": 17.956,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13980,
+      "h": 14900
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 17520000,
+     "fpArea": 208302000
+    }
+   ]
+  },
+  {
+   "group": "main",
+   "sizing": "typical",
+   "dirRel": "FIXTURE-A/T4",
+   "brief": "FIXTURE-A",
+   "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
+   "template": "T4",
+   "widthLabel": "PL10-w15000",
+   "envelopeWidth": 15000,
+   "whatIf": false,
+   "seeds": 24,
+   "built": 24,
+   "valid": 24,
+   "distinctValid": 8,
+   "failures": {},
+   "invalidRules": {},
+   "ms": 1307,
+   "msPerSeed": 54,
+   "retained": [
+    {
+     "id": "4-0",
+     "seed": 4,
+     "variant": "rear-bar",
+     "mirrored": false,
+     "presentFile": "cand-4-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 18,
+       "ny": 12,
+       "items": 14,
+       "perItem": 2.142857142857143
+      },
+      "m3": 0.09468129139072848,
+      "m4": true,
+      "m9": 0.1831539735099338,
+      "m13": 0.3973509933774834,
+      "hallAreaM2": 18.3,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 12800,
+      "h": 15100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 193280000
+    },
+    {
+     "id": "9-0",
+     "seed": 9,
+     "variant": "rear-bar",
+     "mirrored": false,
+     "presentFile": "cand-9-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 18,
+       "ny": 12,
+       "items": 14,
+       "perItem": 2.142857142857143
+      },
+      "m3": 0.09468129139072848,
+      "m4": true,
+      "m9": 0.19557119205298013,
+      "m13": 0.3973509933774834,
+      "hallAreaM2": 18.3,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 12800,
+      "h": 15100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 193280000
+    },
+    {
+     "id": "5-0",
+     "seed": 5,
+     "variant": "rear-bar",
+     "mirrored": true,
+     "presentFile": "cand-5-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 18,
+       "ny": 12,
+       "items": 14,
+       "perItem": 2.142857142857143
+      },
+      "m3": 0.09778559602649006,
+      "m4": true,
+      "m9": 0.18004966887417218,
+      "m13": 0.3973509933774834,
+      "hallAreaM2": 18.9,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 12800,
+      "h": 15100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 193280000
+    },
+    {
+     "id": "22-0",
+     "seed": 22,
+     "variant": "rear-bar",
+     "mirrored": false,
+     "presentFile": "cand-22-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 18,
+       "ny": 12,
+       "items": 14,
+       "perItem": 2.142857142857143
+      },
+      "m3": 0.09778559602649006,
+      "m4": true,
+      "m9": 0.19401903973509935,
+      "m13": 0.3973509933774834,
+      "hallAreaM2": 18.9,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 12800,
+      "h": 15100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 193280000
+    },
+    {
+     "id": "8-0",
+     "seed": 8,
+     "variant": "rear-bar",
+     "mirrored": false,
+     "presentFile": "cand-8-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 18,
+       "ny": 12,
+       "items": 14,
+       "perItem": 2.142857142857143
+      },
+      "m3": 0.10088990066225166,
+      "m4": true,
+      "m9": 0.19246688741721854,
+      "m13": 0.3973509933774834,
+      "hallAreaM2": 19.5,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 12800,
+      "h": 15100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 193280000
+    },
+    {
+     "id": "1-0",
+     "seed": 1,
+     "variant": "rear-bar",
+     "mirrored": false,
+     "presentFile": "cand-1-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 18,
+       "ny": 12,
+       "items": 14,
+       "perItem": 2.142857142857143
+      },
+      "m3": 0.10600490196078431,
+      "m4": true,
+      "m9": 0.19301470588235295,
+      "m13": 0.39215686274509803,
+      "hallAreaM2": 20.76,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 12800,
+      "h": 15300
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 195840000
+    }
+   ]
+  },
+  {
+   "group": "main",
+   "sizing": "typical",
+   "dirRel": "GB-01/T2",
+   "brief": "GB-01",
+   "briefLabel": "GB-01 without Alfresco (D63)",
+   "template": "T2",
+   "widthLabel": "PL10-w12500",
+   "envelopeWidth": 12500,
+   "whatIf": false,
+   "seeds": 24,
+   "built": 0,
+   "valid": 0,
+   "distinctValid": 0,
+   "failures": {
+    "B: front row: rows cannot meet: need at least 12760, at most 12000": 16,
+    "B: front row: rows cannot meet: need at least 12860, at most 12000": 6,
+    "B: front row: rows cannot meet: need at least 12960, at most 12000": 2
+   },
+   "invalidRules": {},
+   "ms": 102,
+   "msPerSeed": 4,
+   "retained": []
+  },
+  {
+   "group": "main",
+   "sizing": "typical",
+   "dirRel": "GB-01/T4",
+   "brief": "GB-01",
+   "briefLabel": "GB-01 without Alfresco (D63)",
+   "template": "T4",
+   "widthLabel": "PL10-w12500",
+   "envelopeWidth": 12500,
+   "whatIf": false,
+   "seeds": 24,
+   "built": 24,
+   "valid": 24,
+   "distinctValid": 12,
+   "failures": {},
+   "invalidRules": {},
+   "ms": 784,
+   "msPerSeed": 33,
+   "retained": [
+    {
+     "id": "4-0",
+     "seed": 4,
+     "variant": "rear-lobby",
+     "mirrored": false,
+     "presentFile": "cand-4-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 16,
+       "ny": 10,
+       "items": 12,
+       "perItem": 2.1666666666666665
+      },
+      "m3": 0.060180890538033396,
+      "m4": true,
+      "m9": 0.1913265306122449,
+      "m13": 0.38961038961038963,
+      "hallAreaM2": 10.38,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
+      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11200,
+      "h": 15400
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8320000,
+     "fpArea": 172480000
+    },
+    {
+     "id": "9-0",
+     "seed": 9,
+     "variant": "rear-lobby",
+     "mirrored": false,
+     "presentFile": "cand-9-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 16,
+       "ny": 10,
+       "items": 12,
+       "perItem": 2.1666666666666665
+      },
+      "m3": 0.060180890538033396,
+      "m4": true,
+      "m9": 0.1913265306122449,
+      "m13": 0.38961038961038963,
+      "hallAreaM2": 10.38,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
+      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11200,
+      "h": 15400
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8320000,
+     "fpArea": 172480000
+    },
+    {
+     "id": "19-0",
+     "seed": 19,
+     "variant": "rear-lobby",
+     "mirrored": true,
+     "presentFile": "cand-19-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 16,
+       "ny": 10,
+       "items": 12,
+       "perItem": 2.1666666666666665
+      },
+      "m3": 0.06434474616292798,
+      "m4": true,
+      "m9": 0.19480519480519481,
+      "m13": 0.38961038961038963,
+      "hallAreaM2": 10.9,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
+      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11000,
+      "h": 15400
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 7800000,
+     "fpArea": 169400000
+    },
+    {
+     "id": "22-0",
+     "seed": 22,
+     "variant": "rear-lobby",
+     "mirrored": false,
+     "presentFile": "cand-22-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 16,
+       "ny": 10,
+       "items": 12,
+       "perItem": 2.1666666666666665
+      },
+      "m3": 0.06434474616292798,
+      "m4": true,
+      "m9": 0.19480519480519481,
+      "m13": 0.38961038961038963,
+      "hallAreaM2": 10.9,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
+      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11000,
+      "h": 15400
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 7800000,
+     "fpArea": 169400000
+    },
+    {
+     "id": "1-0",
+     "seed": 1,
+     "variant": "rear-lobby",
+     "mirrored": false,
+     "presentFile": "cand-1-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 16,
+       "ny": 10,
+       "items": 12,
+       "perItem": 2.1666666666666665
+      },
+      "m3": 0.06442307692307692,
+      "m4": true,
+      "m9": 0.18887362637362637,
+      "m13": 0.38461538461538464,
+      "hallAreaM2": 11.256,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
+      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11200,
+      "h": 15600
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8320000,
+     "fpArea": 174720000
+    },
+    {
+     "id": "10-0",
+     "seed": 10,
+     "variant": "rear-lobby",
+     "mirrored": true,
+     "presentFile": "cand-10-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 16,
+       "ny": 10,
+       "items": 12,
+       "perItem": 2.1666666666666665
+      },
+      "m3": 0.06442307692307692,
+      "m4": true,
+      "m9": 0.18887362637362637,
+      "m13": 0.38461538461538464,
+      "hallAreaM2": 11.256,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
+      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11200,
+      "h": 15600
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8320000,
+     "fpArea": 174720000
+    }
+   ]
+  },
+  {
+   "group": "main",
+   "sizing": "typical",
+   "dirRel": "GB-01/T2-WHATIF-w13500",
+   "brief": "GB-01",
+   "briefLabel": "GB-01 without Alfresco (D63)",
+   "template": "T2",
+   "widthLabel": "WHATIF-w13500",
+   "envelopeWidth": 13500,
+   "whatIf": true,
+   "seeds": 24,
+   "built": 24,
+   "valid": 24,
+   "distinctValid": 9,
+   "failures": {},
+   "invalidRules": {},
+   "ms": 308,
+   "msPerSeed": 13,
+   "retained": [
+    {
+     "id": "16-0",
+     "seed": 16,
+     "variant": "B-no-alfresco-master-outside",
+     "mirrored": true,
+     "presentFile": "cand-16-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 14,
+       "perItem": 2
+      },
+      "m3": 0.07628249367379802,
+      "m4": true,
+      "m9": 0.14221302047389003,
+      "m13": 0.639751552795031,
+      "hallAreaM2": 16.58,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B mirrored: WIR over Ensuite on the spine side, Master on the exterior wall with its door on the Core (tiers allow Master-Core); the Core is anchored to the right wall",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13500,
+      "h": 16100
+     },
+     "coreParts": 1,
+     "flexCount": 3,
+     "flexArea": 44688000,
+     "fpArea": 217350000
+    },
+    {
+     "id": "2-0",
+     "seed": 2,
+     "variant": "B-no-alfresco-master-outside",
+     "mirrored": false,
+     "presentFile": "cand-2-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 14,
+       "perItem": 2
+      },
+      "m3": 0.08083735909822866,
+      "m4": true,
+      "m9": 0.14069473199907984,
+      "m13": 0.639751552795031,
+      "hallAreaM2": 17.57,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B mirrored: WIR over Ensuite on the spine side, Master on the exterior wall with its door on the Core (tiers allow Master-Core); the Core is anchored to the right wall",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13500,
+      "h": 16100
+     },
+     "coreParts": 1,
+     "flexCount": 3,
+     "flexArea": 44464000,
+     "fpArea": 217350000
+    },
+    {
+     "id": "8-0",
+     "seed": 8,
+     "variant": "B-no-alfresco-master-outside",
+     "mirrored": false,
+     "presentFile": "cand-8-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 12,
+       "items": 14,
+       "perItem": 1.8571428571428572
+      },
+      "m3": 0.08206119162640901,
+      "m4": true,
+      "m9": 0.14221302047389003,
+      "m13": 0.639751552795031,
+      "hallAreaM2": 17.836,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B mirrored: WIR over Ensuite on the spine side, Master on the exterior wall with its door on the Core (tiers allow Master-Core); the Core is anchored to the right wall",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13500,
+      "h": 16100
+     },
+     "coreParts": 1,
+     "flexCount": 3,
+     "flexArea": 43452000,
+     "fpArea": 217350000
+    },
+    {
+     "id": "6-0",
+     "seed": 6,
+     "variant": "B-no-alfresco-master-outside",
+     "mirrored": false,
+     "presentFile": "cand-6-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 14,
+       "perItem": 2
+      },
+      "m3": 0.08516218081435473,
+      "m4": true,
+      "m9": 0.1404416839199448,
+      "m13": 0.639751552795031,
+      "hallAreaM2": 18.51,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B mirrored: WIR over Ensuite on the spine side, Master on the exterior wall with its door on the Core (tiers allow Master-Core); the Core is anchored to the right wall",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13500,
+      "h": 16100
+     },
+     "coreParts": 1,
+     "flexCount": 3,
+     "flexArea": 44864000,
+     "fpArea": 217350000
+    },
+    {
+     "id": "4-0",
+     "seed": 4,
+     "variant": "B-no-alfresco-master-outside",
+     "mirrored": false,
+     "presentFile": "cand-4-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 12,
+       "items": 14,
+       "perItem": 1.8571428571428572
+      },
+      "m3": 0.08657925005751092,
+      "m4": true,
+      "m9": 0.14069473199907984,
+      "m13": 0.639751552795031,
+      "hallAreaM2": 18.818,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B mirrored: WIR over Ensuite on the spine side, Master on the exterior wall with its door on the Core (tiers allow Master-Core); the Core is anchored to the right wall",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13500,
+      "h": 16100
+     },
+     "coreParts": 1,
+     "flexCount": 3,
+     "flexArea": 43236000,
+     "fpArea": 217350000
+    },
+    {
+     "id": "22-0",
+     "seed": 22,
+     "variant": "B-no-alfresco-master-outside",
+     "mirrored": false,
+     "presentFile": "cand-22-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 14,
+       "ny": 14,
+       "items": 14,
+       "perItem": 2
+      },
+      "m3": 0.09082125603864734,
+      "m4": true,
+      "m9": 0.1404416839199448,
+      "m13": 0.639751552795031,
+      "hallAreaM2": 19.74,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
+      "rectangular Core",
+      "Master suite MS-B mirrored: WIR over Ensuite on the spine side, Master on the exterior wall with its door on the Core (tiers allow Master-Core); the Core is anchored to the right wall",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 13500,
+      "h": 16100
+     },
+     "coreParts": 1,
+     "flexCount": 3,
+     "flexArea": 43654000,
+     "fpArea": 217350000
+    }
+   ]
+  }
+ ],
+ "t1FallbackDemoRuns": [
+  {
+   "group": "t1-fallback-demo",
+   "sizing": "typical",
+   "dirRel": "T1-fallback-demo/FIXTURE-A/T1",
+   "brief": "FIXTURE-A",
+   "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
+   "template": "T1",
+   "widthLabel": "PL10-w15000",
+   "envelopeWidth": 15000,
+   "whatIf": false,
+   "seeds": 24,
+   "built": 18,
+   "valid": 18,
+   "distinctValid": 6,
+   "failures": {
+    "A: column widths: Core column (Master block 3700-5200) or the wing column (Garage 5500-7000) has no common width with the rooms stacked in it": 5,
+    "A: column widths: Core column (Master block 3700-4300) or the wing column (Garage 5500-7000) has no common width with the rooms stacked in it": 1
+   },
+   "invalidRules": {},
+   "ms": 5139,
+   "msPerSeed": 214,
+   "retained": [
+    {
+     "id": "9-0",
+     "seed": 9,
+     "variant": "wing-master",
+     "mirrored": true,
+     "presentFile": "cand-9-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 12,
+       "ny": 14,
+       "items": 13,
+       "perItem": 2
+      },
+      "m3": 0.10846976532008717,
+      "m4": true,
+      "m9": 0.16726646054032135,
+      "m13": 0.9723756906077348,
+      "hallAreaM2": 21.4,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [
+      "pantry"
+     ],
+     "footprint": {
+      "w": 10900,
+      "h": 18100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 197290000
+    },
+    {
+     "id": "1-0",
+     "seed": 1,
+     "variant": "wing-master",
+     "mirrored": true,
+     "presentFile": "cand-1-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 12,
+       "ny": 14,
+       "items": 13,
+       "perItem": 2
+      },
+      "m3": 0.11232196259313701,
+      "m4": true,
+      "m9": 0.16726646054032135,
+      "m13": 0.9723756906077348,
+      "hallAreaM2": 22.16,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [
+      "pantry"
+     ],
+     "footprint": {
+      "w": 10900,
+      "h": 18100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 197290000
+    },
+    {
+     "id": "6-0",
+     "seed": 6,
+     "variant": "wing-master",
+     "mirrored": false,
+     "presentFile": "cand-6-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 12,
+       "ny": 14,
+       "items": 13,
+       "perItem": 2
+      },
+      "m3": 0.11632345554997489,
+      "m4": true,
+      "m9": 0.16574585635359115,
+      "m13": 0.9723756906077348,
+      "hallAreaM2": 23.16,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [
+      "pantry"
+     ],
+     "footprint": {
+      "w": 11000,
+      "h": 18100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 199100000
+    }
+   ]
+  },
+  {
+   "group": "t1-fallback-demo",
+   "sizing": "typical",
+   "dirRel": "T1-fallback-demo/FIXTURE-A/T1-WHATIF-single-garage",
+   "brief": "FIXTURE-A",
+   "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
+   "template": "T1",
+   "widthLabel": "WHATIF-single-garage",
+   "envelopeWidth": 15000,
+   "whatIf": true,
+   "seeds": 24,
+   "built": 6,
+   "valid": 6,
+   "distinctValid": 5,
+   "failures": {
+    "C: rear row rooms cannot share a depth at width 4000": 18
+   },
+   "invalidRules": {},
+   "ms": 3279,
+   "msPerSeed": 137,
+   "retained": [
+    {
+     "id": "7-0",
+     "seed": 7,
+     "variant": "wing-garage",
+     "mirrored": false,
+     "presentFile": "cand-7-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 12,
+       "ny": 14,
+       "items": 13,
+       "perItem": 2
+      },
+      "m3": 0.11262218444538886,
+      "m4": true,
+      "m9": 0.11155971100722482,
+      "m13": 0.9723756906077348,
+      "hallAreaM2": 21.2,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [
+      "pantry"
+     ],
+     "footprint": {
+      "w": 10400,
+      "h": 18100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 188240000
+    },
+    {
+     "id": "3-0",
+     "seed": 3,
+     "variant": "wing-garage",
+     "mirrored": false,
+     "presentFile": "cand-3-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 12,
+       "ny": 14,
+       "items": 13,
+       "perItem": 2
+      },
+      "m3": 0.11644708882277943,
+      "m4": true,
+      "m9": 0.11155971100722482,
+      "m13": 0.9723756906077348,
+      "hallAreaM2": 21.92,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [
+      "pantry"
+     ],
+     "footprint": {
+      "w": 10400,
+      "h": 18100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 188240000
+    },
+    {
+     "id": "15-0",
+     "seed": 15,
+     "variant": "wing-garage",
+     "mirrored": true,
+     "presentFile": "cand-15-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 5,
+       "habitable": 5,
+       "share": 1
+      },
+      "m2": {
+       "nx": 12,
+       "ny": 14,
+       "items": 13,
+       "perItem": 2
+      },
+      "m3": 0.12081031307550645,
+      "m4": true,
+      "m9": 0.11049723756906077,
+      "m13": 0.9723756906077348,
+      "hallAreaM2": 22.96,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [
+      "pantry"
+     ],
+     "footprint": {
+      "w": 10500,
+      "h": 18100
+     },
+     "coreParts": 1,
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 190050000
+    }
+   ]
+  },
+  {
+   "group": "t1-fallback-demo",
+   "sizing": "typical",
+   "dirRel": "T1-fallback-demo/GB-01/T1",
+   "brief": "GB-01",
+   "briefLabel": "GB-01 without Alfresco (D63)",
+   "template": "T1",
+   "widthLabel": "PL10-w12500",
+   "envelopeWidth": 12500,
+   "whatIf": false,
+   "seeds": 24,
+   "built": 18,
+   "valid": 18,
+   "distinctValid": 6,
+   "failures": {
+    "A: column widths: Core column (Master block 3700-5200) or the wing column (Garage 5500-7000) has no common width with the rooms stacked in it": 5,
+    "A: column widths: Core column (Master block 3700-4300) or the wing column (Garage 5500-7000) has no common width with the rooms stacked in it": 1
+   },
+   "invalidRules": {},
+   "ms": 3676,
+   "msPerSeed": 153,
+   "retained": [
+    {
+     "id": "9-0",
+     "seed": 9,
+     "variant": "wing-master",
+     "mirrored": true,
+     "presentFile": "cand-9-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 10,
+       "ny": 14,
+       "items": 12,
+       "perItem": 2
+      },
+      "m3": 0.10998120924063226,
+      "m4": true,
+      "m9": 0.18238089974577207,
+      "m13": 0.9698795180722891,
+      "hallAreaM2": 19.9,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 10900,
+      "h": 16600
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8250000,
+     "fpArea": 180940000
+    },
+    {
+     "id": "1-0",
+     "seed": 1,
+     "variant": "wing-master",
+     "mirrored": true,
+     "presentFile": "cand-1-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 10,
+       "ny": 14,
+       "items": 12,
+       "perItem": 2
+      },
+      "m3": 0.11404713508762292,
+      "m4": true,
+      "m9": 0.1812887985496896,
+      "m13": 0.9700598802395209,
+      "hallAreaM2": 20.76,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 10900,
+      "h": 16700
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8525000,
+     "fpArea": 182030000
+    },
+    {
+     "id": "6-0",
+     "seed": 6,
+     "variant": "wing-master",
+     "mirrored": false,
+     "presentFile": "cand-6-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 10,
+       "ny": 14,
+       "items": 12,
+       "perItem": 2
+      },
+      "m3": 0.11779846659364732,
+      "m4": true,
+      "m9": 0.18072289156626506,
+      "m13": 0.9698795180722891,
+      "hallAreaM2": 21.51,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 11000,
+      "h": 16600
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 8250000,
+     "fpArea": 182600000
+    }
+   ]
+  },
+  {
+   "group": "t1-fallback-demo",
+   "sizing": "typical",
+   "dirRel": "T1-fallback-demo/GB-01/T1-WHATIF-single-garage",
+   "brief": "GB-01",
+   "briefLabel": "GB-01 without Alfresco (D63)",
+   "template": "T1",
+   "widthLabel": "WHATIF-single-garage",
+   "envelopeWidth": 12500,
+   "whatIf": true,
+   "seeds": 24,
+   "built": 24,
+   "valid": 24,
+   "distinctValid": 11,
+   "failures": {},
+   "invalidRules": {},
+   "ms": 2506,
+   "msPerSeed": 104,
+   "retained": [
+    {
+     "id": "7-0",
+     "seed": 7,
+     "variant": "wing-garage",
+     "mirrored": false,
+     "presentFile": "cand-7-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 10,
+       "ny": 14,
+       "items": 12,
+       "perItem": 2
+      },
+      "m3": 0.12234505030431002,
+      "m4": true,
+      "m9": 0.1304185815426655,
+      "m13": 0.9698795180722891,
+      "hallAreaM2": 19.7,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 9700,
+      "h": 16600
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 6750000,
+     "fpArea": 161020000
+    },
+    {
+     "id": "3-0",
+     "seed": 3,
+     "variant": "wing-garage",
+     "mirrored": false,
+     "presentFile": "cand-3-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 10,
+       "ny": 14,
+       "items": 12,
+       "perItem": 2
+      },
+      "m3": 0.1266744860793876,
+      "m4": true,
+      "m9": 0.12963763195258968,
+      "m13": 0.9700598802395209,
+      "hallAreaM2": 20.52,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 9700,
+      "h": 16700
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 6975000,
+     "fpArea": 161990000
+    },
+    {
+     "id": "9-0",
+     "seed": 9,
+     "variant": "wing-master",
+     "mirrored": true,
+     "presentFile": "cand-9-0.stage6.present.svg",
+     "metrics": {
+      "m1": {
+       "touching": 4,
+       "habitable": 4,
+       "share": 1
+      },
+      "m2": {
+       "nx": 10,
+       "ny": 14,
+       "items": 12,
+       "perItem": 2
+      },
+      "m3": 0.12753140220456294,
+      "m4": true,
+      "m9": 0.15380671622660858,
+      "m13": 0.9698795180722891,
+      "hallAreaM2": 19.9,
+      "validity": {
+       "valid": true,
+       "failed": []
+      }
+     },
+     "notes": [
+      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
+      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
+     ],
+     "omittedOptional": [],
+     "footprint": {
+      "w": 9400,
+      "h": 16600
+     },
+     "coreParts": 1,
+     "flexCount": 1,
+     "flexArea": 6000000,
+     "fpArea": 156040000
+    }
+   ]
+  }
+ ],
+ "iteration1MaxRuns": [
+  {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/FIXTURE-A/T1",
    "brief": "FIXTURE-A",
    "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
    "template": "T1",
@@ -21,8 +1641,8 @@
     "A: column widths: Core column (Master block 3700-4500) or the wing column (Garage 5500-7000) has no common width with the rooms stacked in it": 6
    },
    "invalidRules": {},
-   "ms": 380,
-   "msPerSeed": 16,
+   "ms": 304,
+   "msPerSeed": 13,
    "retained": [
     {
      "id": "9-0",
@@ -62,211 +1682,16 @@
       "h": 17400
      },
      "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "21-0",
-     "seed": 21,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-21-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.09503122454520771,
-      "m4": true,
-      "m9": 0.221739523938818,
-      "m13": 0.9712643678160919,
-      "hallAreaM2": 21,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12700,
-      "h": 17400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "1-0",
-     "seed": 1,
-     "variant": "wing-master",
-     "mirrored": true,
-     "presentFile": "cand-1-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.09874196759887773,
-      "m4": true,
-      "m9": 0.221739523938818,
-      "m13": 0.9712643678160919,
-      "hallAreaM2": 21.82,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12700,
-      "h": 17400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "2-0",
-     "seed": 2,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-2-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.09874196759887773,
-      "m4": true,
-      "m9": 0.221739523938818,
-      "m13": 0.9712643678160919,
-      "hallAreaM2": 21.82,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12700,
-      "h": 17400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "6-0",
-     "seed": 6,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-6-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.10187679597701149,
-      "m4": true,
-      "m9": 0.22000718390804597,
-      "m13": 0.9712643678160919,
-      "hallAreaM2": 22.69,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12800,
-      "h": 17400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "13-0",
-     "seed": 13,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-13-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.10187679597701149,
-      "m4": true,
-      "m9": 0.22000718390804597,
-      "m13": 0.9712643678160919,
-      "hallAreaM2": 22.69,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12800,
-      "h": 17400
-     },
-     "coreParts": 1,
-     "flexCount": 0
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 220980000
     }
    ]
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/FIXTURE-A/T2",
    "brief": "FIXTURE-A",
    "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
    "template": "T2",
@@ -279,8 +1704,8 @@
    "distinctValid": 6,
    "failures": {},
    "invalidRules": {},
-   "ms": 93,
-   "msPerSeed": 4,
+   "ms": 116,
+   "msPerSeed": 5,
    "retained": [
     {
      "id": "1-0",
@@ -313,7 +1738,8 @@
      "notes": [
       "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
       "rectangular Core",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
+      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
      ],
      "omittedOptional": [],
      "footprint": {
@@ -321,216 +1747,16 @@
       "h": 17900
      },
      "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "2-0",
-     "seed": 2,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-2-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 5,
-       "share": 0.8
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 15,
-       "perItem": 1.8666666666666667
-      },
-      "m3": 0.06923649906890131,
-      "m4": true,
-      "m9": 0.13744506517690874,
-      "m13": 0.6033519553072626,
-      "hallAreaM2": 18.59,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "rectangular Core",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 17900
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "8-0",
-     "seed": 8,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-8-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 5,
-       "share": 0.8
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 15,
-       "perItem": 1.8666666666666667
-      },
-      "m3": 0.07048250460405156,
-      "m4": true,
-      "m9": 0.14142173112338857,
-      "m13": 0.6077348066298343,
-      "hallAreaM2": 19.136,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "rectangular Core",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 18100
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "6-0",
-     "seed": 6,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-6-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 5,
-       "share": 0.8
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 15,
-       "perItem": 1.8666666666666667
-      },
-      "m3": 0.07310986964618249,
-      "m4": true,
-      "m9": 0.13619366852886405,
-      "m13": 0.6033519553072626,
-      "hallAreaM2": 19.63,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "rectangular Core",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 17900
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "4-0",
-     "seed": 4,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-4-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 5,
-       "share": 0.8
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 15,
-       "perItem": 1.8666666666666667
-      },
-      "m3": 0.07444567219152855,
-      "m4": true,
-      "m9": 0.13971270718232046,
-      "m13": 0.6077348066298343,
-      "hallAreaM2": 20.212,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "rectangular Core",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 18100
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "22-0",
-     "seed": 22,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-22-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 5,
-       "share": 0.8
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 15,
-       "perItem": 1.8666666666666667
-      },
-      "m3": 0.0783646408839779,
-      "m4": true,
-      "m9": 0.1382173112338858,
-      "m13": 0.6077348066298343,
-      "hallAreaM2": 21.276,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "rectangular Core",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 18100
-     },
-     "coreParts": 1,
-     "flexCount": 1
+     "flexCount": 1,
+     "flexArea": 35100000,
+     "fpArea": 268500000
     }
    ]
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/FIXTURE-A/T4",
    "brief": "FIXTURE-A",
    "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
    "template": "T4",
@@ -543,7 +1769,7 @@
    "distinctValid": 8,
    "failures": {},
    "invalidRules": {},
-   "ms": 20,
+   "ms": 19,
    "msPerSeed": 1,
    "retained": [
     {
@@ -583,206 +1809,16 @@
       "h": 18500
      },
      "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "9-0",
-     "seed": 9,
-     "variant": "rear-bar",
-     "mirrored": false,
-     "presentFile": "cand-9-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 18,
-       "ny": 12,
-       "items": 14,
-       "perItem": 2.142857142857143
-      },
-      "m3": 0.08238884045335658,
-      "m4": true,
-      "m9": 0.19071490845684394,
-      "m13": 0.3783783783783784,
-      "hallAreaM2": 18.9,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12400,
-      "h": 18500
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "5-0",
-     "seed": 5,
-     "variant": "rear-bar",
-     "mirrored": true,
-     "presentFile": "cand-5-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 18,
-       "ny": 12,
-       "items": 14,
-       "perItem": 2.142857142857143
-      },
-      "m3": 0.08544027898866609,
-      "m4": true,
-      "m9": 0.1983435047951177,
-      "m13": 0.3783783783783784,
-      "hallAreaM2": 19.6,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12400,
-      "h": 18500
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "22-0",
-     "seed": 22,
-     "variant": "rear-bar",
-     "mirrored": false,
-     "presentFile": "cand-22-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 18,
-       "ny": 12,
-       "items": 14,
-       "perItem": 2.142857142857143
-      },
-      "m3": 0.08544027898866609,
-      "m4": true,
-      "m9": 0.1891891891891892,
-      "m13": 0.3783783783783784,
-      "hallAreaM2": 19.6,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12400,
-      "h": 18500
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "8-0",
-     "seed": 8,
-     "variant": "rear-bar",
-     "mirrored": false,
-     "presentFile": "cand-8-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 18,
-       "ny": 12,
-       "items": 14,
-       "perItem": 2.142857142857143
-      },
-      "m3": 0.08849171752397558,
-      "m4": true,
-      "m9": 0.18766346992153443,
-      "m13": 0.3783783783783784,
-      "hallAreaM2": 20.3,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12400,
-      "h": 18500
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "1-0",
-     "seed": 1,
-     "variant": "rear-bar",
-     "mirrored": false,
-     "presentFile": "cand-1-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 18,
-       "ny": 12,
-       "items": 14,
-       "perItem": 2.142857142857143
-      },
-      "m3": 0.09177160600310505,
-      "m4": true,
-      "m9": 0.1886751768155943,
-      "m13": 0.37433155080213903,
-      "hallAreaM2": 21.28,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 full-width rear bar; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12400,
-      "h": 18700
-     },
-     "coreParts": 1,
-     "flexCount": 0
+     "flexCount": 0,
+     "flexArea": 0,
+     "fpArea": 229400000
     }
    ]
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/GB-01/T1",
    "brief": "GB-01",
    "briefLabel": "GB-01 without Alfresco (D63)",
    "template": "T1",
@@ -797,8 +1833,8 @@
     "A: column widths: Core column (Master block 3700-4500) or the wing column (Garage 5500-7000) has no common width with the rooms stacked in it": 6
    },
    "invalidRules": {},
-   "ms": 311,
-   "msPerSeed": 13,
+   "ms": 292,
+   "msPerSeed": 12,
    "retained": [
     {
      "id": "9-0",
@@ -838,211 +1874,16 @@
       "h": 18200
      },
      "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "21-0",
-     "seed": 21,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-21-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.09569230769230769,
-      "m4": true,
-      "m9": 0.21015384615384616,
-      "m13": 0.9725274725274725,
-      "hallAreaM2": 21.77,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "1-0",
-     "seed": 1,
-     "variant": "wing-master",
-     "mirrored": true,
-     "presentFile": "cand-1-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.09927032967032967,
-      "m4": true,
-      "m9": 0.21015384615384616,
-      "m13": 0.9725274725274725,
-      "hallAreaM2": 22.584,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "2-0",
-     "seed": 2,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-2-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.09927032967032967,
-      "m4": true,
-      "m9": 0.21015384615384616,
-      "m13": 0.9725274725274725,
-      "hallAreaM2": 22.584,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "6-0",
-     "seed": 6,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-6-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.10338461538461538,
-      "m4": true,
-      "m9": 0.2076923076923077,
-      "m13": 0.9725274725274725,
-      "hallAreaM2": 23.52,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "13-0",
-     "seed": 13,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-13-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.10338461538461538,
-      "m4": true,
-      "m9": 0.2076923076923077,
-      "m13": 0.9725274725274725,
-      "hallAreaM2": 23.52,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
+     "flexCount": 1,
+     "flexArea": 27320000,
+     "fpArea": 227500000
     }
    ]
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/GB-01/T2",
    "brief": "GB-01",
    "briefLabel": "GB-01 without Alfresco (D63)",
    "template": "T2",
@@ -1054,16 +1895,19 @@
    "valid": 0,
    "distinctValid": 0,
    "failures": {
-    "B: front row: row infeasible: minimum 12600 > 12000": 16,
-    "B: front row: row infeasible: minimum 12700 > 12000": 6,
-    "B: front row: row infeasible: minimum 12800 > 12000": 2
+    "B: front row: rows cannot meet: need at least 12600, at most 12000": 16,
+    "B: front row: rows cannot meet: need at least 12700, at most 12000": 6,
+    "B: front row: rows cannot meet: need at least 12800, at most 12000": 2
    },
    "invalidRules": {},
-   "ms": 107,
+   "ms": 89,
    "msPerSeed": 4,
    "retained": []
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/GB-01/T2-WHATIF-w13500",
    "brief": "GB-01",
    "briefLabel": "GB-01 without Alfresco (D63)",
    "template": "T2",
@@ -1076,7 +1920,7 @@
    "distinctValid": 6,
    "failures": {},
    "invalidRules": {},
-   "ms": 9,
+   "ms": 6,
    "msPerSeed": 0,
    "retained": [
     {
@@ -1110,7 +1954,8 @@
      "notes": [
       "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
       "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
+      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
      ],
      "omittedOptional": [],
      "footprint": {
@@ -1118,216 +1963,16 @@
       "h": 15400
      },
      "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "8-0",
-     "seed": 8,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-8-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08727445394112061,
-      "m4": true,
-      "m9": 0.1436372269705603,
-      "m13": 0.6858974358974359,
-      "hallAreaM2": 18.38,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 13500,
-      "h": 15600
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "2-0",
-     "seed": 2,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-2-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08859455481972038,
-      "m4": true,
-      "m9": 0.14866323276919302,
-      "m13": 0.7086092715231788,
-      "hallAreaM2": 18.06,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 13500,
-      "h": 15100
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "4-0",
-     "seed": 4,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-4-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 12,
-       "items": 14,
-       "perItem": 1.8571428571428572
-      },
-      "m3": 0.09352699104333091,
-      "m4": true,
-      "m9": 0.14671992253691601,
-      "m13": 0.6993464052287581,
-      "hallAreaM2": 19.318,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 13500,
-      "h": 15300
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "6-0",
-     "seed": 6,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-6-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.09465572955505841,
-      "m4": true,
-      "m9": 0.15038528461347253,
-      "m13": 0.7181208053691275,
-      "hallAreaM2": 19.04,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 13500,
-      "h": 14900
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "22-0",
-     "seed": 22,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-22-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.09948491537895511,
-      "m4": true,
-      "m9": 0.1483934265391219,
-      "m13": 0.7086092715231788,
-      "hallAreaM2": 20.28,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 13500,
-      "h": 15100
-     },
-     "coreParts": 2,
-     "flexCount": 2
+     "flexCount": 2,
+     "flexArea": 24856000,
+     "fpArea": 207900000
     }
    ]
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/GB-01/T2-WHATIF-w15000",
    "brief": "GB-01",
    "briefLabel": "GB-01 without Alfresco (D63)",
    "template": "T2",
@@ -1340,7 +1985,7 @@
    "distinctValid": 6,
    "failures": {},
    "invalidRules": {},
-   "ms": 7,
+   "ms": 9,
    "msPerSeed": 0,
    "retained": [
     {
@@ -1374,7 +2019,8 @@
      "notes": [
       "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
       "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
+      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)",
+      "cells of one column share one width (wall alignment): a Laundry or Pantry takes the width the Bedrooms and the wet row need, so it can sit above its preferred size; the Core depth is the least-cost trade between its deviation from preferred and the corner flex area (a shallower Core leaves a smaller pocket), it is not forced by the chain"
      ],
      "omittedOptional": [],
      "footprint": {
@@ -1382,216 +2028,16 @@
       "h": 15500
      },
      "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "2-0",
-     "seed": 2,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-2-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08086021505376344,
-      "m4": true,
-      "m9": 0.1483225806451613,
-      "m13": 0.6903225806451613,
-      "hallAreaM2": 18.8,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 15500
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "8-0",
-     "seed": 8,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-8-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08156263269639066,
-      "m4": true,
-      "m9": 0.14736730360934183,
-      "m13": 0.6815286624203821,
-      "hallAreaM2": 19.208,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 15700
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "6-0",
-     "seed": 6,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-6-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08516129032258064,
-      "m4": true,
-      "m9": 0.14761290322580645,
-      "m13": 0.6903225806451613,
-      "hallAreaM2": 19.8,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 15500
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "4-0",
-     "seed": 4,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-4-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08580042462845011,
-      "m4": true,
-      "m9": 0.14643312101910827,
-      "m13": 0.6815286624203821,
-      "hallAreaM2": 20.206,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 15700
-     },
-     "coreParts": 2,
-     "flexCount": 2
-    },
-    {
-     "id": "22-0",
-     "seed": 22,
-     "variant": "B-no-alfresco",
-     "mirrored": false,
-     "presentFile": "cand-22-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 3,
-       "habitable": 4,
-       "share": 0.75
-      },
-      "m2": {
-       "nx": 14,
-       "ny": 14,
-       "items": 14,
-       "perItem": 2
-      },
-      "m3": 0.08998726114649681,
-      "m4": true,
-      "m9": 0.14573248407643313,
-      "m13": 0.6815286624203821,
-      "hallAreaM2": 21.192,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T2 variant B without an Alfresco (D63): the corner Alfresco slot is a labelled flex patch (Q6 default), the Core takes the rest of the rear band",
-      "L-shaped Core: it reaches down into an empty top cell of the left block (Q7/D61)",
-      "Master suite MS-B: Master beside the spine, WIR over Ensuite on the exterior side (Master has no exterior wall: C19)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 15000,
-      "h": 15700
-     },
-     "coreParts": 2,
-     "flexCount": 2
+     "flexCount": 2,
+     "flexArea": 33272000,
+     "fpArea": 232500000
     }
    ]
   },
   {
+   "group": "iteration-1-max",
+   "sizing": "max",
+   "dirRel": "iteration-1-max/GB-01/T4",
    "brief": "GB-01",
    "briefLabel": "GB-01 without Alfresco (D63)",
    "template": "T4",
@@ -1604,7 +2050,7 @@
    "distinctValid": 12,
    "failures": {},
    "invalidRules": {},
-   "ms": 10,
+   "ms": 5,
    "msPerSeed": 0,
    "retained": [
     {
@@ -1645,735 +2091,14 @@
       "h": 18100
      },
      "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "9-0",
-     "seed": 9,
-     "variant": "rear-lobby",
-     "mirrored": false,
-     "presentFile": "cand-9-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 16,
-       "ny": 10,
-       "items": 12,
-       "perItem": 2.1666666666666665
-      },
-      "m3": 0.05162430939226519,
-      "m4": true,
-      "m9": 0.1949171270718232,
-      "m13": 0.3867403314917127,
-      "hallAreaM2": 11.68,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
-      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18100
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "19-0",
-     "seed": 19,
-     "variant": "rear-lobby",
-     "mirrored": true,
-     "presentFile": "cand-19-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 16,
-       "ny": 10,
-       "items": 12,
-       "perItem": 2.1666666666666665
-      },
-      "m3": 0.05471823204419889,
-      "m4": true,
-      "m9": 0.2032707182320442,
-      "m13": 0.3867403314917127,
-      "hallAreaM2": 12.38,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
-      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18100
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "22-0",
-     "seed": 22,
-     "variant": "rear-lobby",
-     "mirrored": false,
-     "presentFile": "cand-22-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 16,
-       "ny": 10,
-       "items": 12,
-       "perItem": 2.1666666666666665
-      },
-      "m3": 0.05471823204419889,
-      "m4": true,
-      "m9": 0.19337016574585636,
-      "m13": 0.3867403314917127,
-      "hallAreaM2": 12.38,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
-      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18100
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "1-0",
-     "seed": 1,
-     "variant": "rear-lobby",
-     "mirrored": false,
-     "presentFile": "cand-1-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 16,
-       "ny": 10,
-       "items": 12,
-       "perItem": 2.1666666666666665
-      },
-      "m3": 0.055454945054945054,
-      "m4": true,
-      "m9": 0.19384615384615383,
-      "m13": 0.38461538461538464,
-      "hallAreaM2": 12.616,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
-      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "10-0",
-     "seed": 10,
-     "variant": "rear-lobby",
-     "mirrored": true,
-     "presentFile": "cand-10-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 16,
-       "ny": 10,
-       "items": 12,
-       "perItem": 2.1666666666666665
-      },
-      "m3": 0.055454945054945054,
-      "m4": true,
-      "m9": 0.2043076923076923,
-      "m13": 0.38461538461538464,
-      "hallAreaM2": 12.616,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T4 rear lobby block; hallway = Entry stem + rear piece joined only through the Core (Q4 YES)",
-      "M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 12500,
-      "h": 18200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    }
-   ]
-  },
-  {
-   "brief": "FIXTURE-A",
-   "briefLabel": "FIXTURE-A (no Alfresco in the program, D63)",
-   "template": "T1",
-   "widthLabel": "WHATIF-single-garage",
-   "envelopeWidth": 15000,
-   "whatIf": true,
-   "seeds": 24,
-   "built": 6,
-   "valid": 6,
-   "distinctValid": 5,
-   "failures": {
-    "C: rear row rooms cannot share a depth at width 4500": 18
-   },
-   "invalidRules": {},
-   "ms": 897,
-   "msPerSeed": 37,
-   "retained": [
-    {
-     "id": "7-0",
-     "seed": 7,
-     "variant": "wing-garage",
-     "mirrored": false,
-     "presentFile": "cand-7-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 12,
-       "ny": 14,
-       "items": 13,
-       "perItem": 2
-      },
-      "m3": 0.10894495412844037,
-      "m4": true,
-      "m9": 0.1242354740061162,
-      "m13": 0.9739583333333334,
-      "hallAreaM2": 22.8,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [
-      "pantry"
-     ],
-     "footprint": {
-      "w": 10900,
-      "h": 19200
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "3-0",
-     "seed": 3,
-     "variant": "wing-garage",
-     "mirrored": false,
-     "presentFile": "cand-3-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 12,
-       "ny": 14,
-       "items": 13,
-       "perItem": 2
-      },
-      "m3": 0.11264541757306347,
-      "m4": true,
-      "m9": 0.12295469592357892,
-      "m13": 0.9742268041237113,
-      "hallAreaM2": 23.82,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [
-      "pantry"
-     ],
-     "footprint": {
-      "w": 10900,
-      "h": 19400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "15-0",
-     "seed": 15,
-     "variant": "wing-garage",
-     "mirrored": true,
-     "presentFile": "cand-15-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 12,
-       "ny": 14,
-       "items": 13,
-       "perItem": 2
-      },
-      "m3": 0.11680871212121212,
-      "m4": true,
-      "m9": 0.12310606060606061,
-      "m13": 0.9739583333333334,
-      "hallAreaM2": 24.67,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [
-      "pantry"
-     ],
-     "footprint": {
-      "w": 11000,
-      "h": 19200
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "23-0",
-     "seed": 23,
-     "variant": "wing-garage",
-     "mirrored": false,
-     "presentFile": "cand-23-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 12,
-       "ny": 14,
-       "items": 13,
-       "perItem": 2
-      },
-      "m3": 0.12047797563261481,
-      "m4": true,
-      "m9": 0.1218369259606373,
-      "m13": 0.9742268041237113,
-      "hallAreaM2": 25.71,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [
-      "pantry"
-     ],
-     "footprint": {
-      "w": 11000,
-      "h": 19400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    },
-    {
-     "id": "11-0",
-     "seed": 11,
-     "variant": "wing-garage",
-     "mirrored": false,
-     "presentFile": "cand-11-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 5,
-       "habitable": 5,
-       "share": 1
-      },
-      "m2": {
-       "nx": 12,
-       "ny": 14,
-       "items": 13,
-       "perItem": 2
-      },
-      "m3": 0.12816940651992198,
-      "m4": true,
-      "m9": 0.12073929599702796,
-      "m13": 0.9742268041237113,
-      "hallAreaM2": 27.6,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [
-      "pantry"
-     ],
-     "footprint": {
-      "w": 11100,
-      "h": 19400
-     },
-     "coreParts": 1,
-     "flexCount": 0
-    }
-   ]
-  },
-  {
-   "brief": "GB-01",
-   "briefLabel": "GB-01 without Alfresco (D63)",
-   "template": "T1",
-   "widthLabel": "WHATIF-single-garage",
-   "envelopeWidth": 12500,
-   "whatIf": true,
-   "seeds": 24,
-   "built": 24,
-   "valid": 24,
-   "distinctValid": 20,
-   "failures": {},
-   "invalidRules": {},
-   "ms": 34,
-   "msPerSeed": 1,
-   "retained": [
-    {
-     "id": "7-0",
-     "seed": 7,
-     "variant": "wing-garage",
-     "mirrored": false,
-     "presentFile": "cand-7-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.10894495412844037,
-      "m4": true,
-      "m9": 0.1242354740061162,
-      "m13": 0.9739583333333334,
-      "hallAreaM2": 22.8,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 10900,
-      "h": 19200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "3-0",
-     "seed": 3,
-     "variant": "wing-garage",
-     "mirrored": false,
-     "presentFile": "cand-3-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.11264541757306347,
-      "m4": true,
-      "m9": 0.12295469592357892,
-      "m13": 0.9742268041237113,
-      "hallAreaM2": 23.82,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 10900,
-      "h": 19400
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "9-0",
-     "seed": 9,
-     "variant": "wing-master",
-     "mirrored": true,
-     "presentFile": "cand-9-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.11642156862745098,
-      "m4": true,
-      "m9": 0.14935661764705882,
-      "m13": 0.9739583333333334,
-      "hallAreaM2": 22.8,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 10200,
-      "h": 19200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "21-0",
-     "seed": 21,
-     "variant": "wing-master",
-     "mirrored": false,
-     "presentFile": "cand-21-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.11642156862745098,
-      "m4": true,
-      "m9": 0.14935661764705882,
-      "m13": 0.9739583333333334,
-      "hallAreaM2": 22.8,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 10200,
-      "h": 19200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "15-0",
-     "seed": 15,
-     "variant": "wing-garage",
-     "mirrored": true,
-     "presentFile": "cand-15-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.11680871212121212,
-      "m4": true,
-      "m9": 0.12310606060606061,
-      "m13": 0.9739583333333334,
-      "hallAreaM2": 24.67,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 garage-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1000 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 11000,
-      "h": 19200
-     },
-     "coreParts": 1,
-     "flexCount": 1
-    },
-    {
-     "id": "1-0",
-     "seed": 1,
-     "variant": "wing-master",
-     "mirrored": true,
-     "presentFile": "cand-1-0.stage6.present.svg",
-     "metrics": {
-      "m1": {
-       "touching": 4,
-       "habitable": 4,
-       "share": 1
-      },
-      "m2": {
-       "nx": 10,
-       "ny": 14,
-       "items": 12,
-       "perItem": 2
-      },
-      "m3": 0.12037598544572468,
-      "m4": true,
-      "m9": 0.1478168587022438,
-      "m13": 0.9742268041237113,
-      "hallAreaM2": 23.82,
-      "validity": {
-       "valid": true,
-       "failed": []
-      }
-     },
-     "notes": [
-      "T1 master-wing; hall = spine (L variant not implemented, Q17)",
-      "wet block = lobby 1200 + wet row (WET-B): WET-A cannot put both doors on the hall"
-     ],
-     "omittedOptional": [],
-     "footprint": {
-      "w": 10200,
-      "h": 19400
-     },
-     "coreParts": 1,
-     "flexCount": 1
+     "flexCount": 1,
+     "flexArea": 19630000,
+     "fpArea": 226250000
     }
    ]
   }
  ],
  "best": [
-  {
-   "brief": "FIXTURE-A",
-   "template": "T1",
-   "widthLabel": "PL10-w15000",
-   "id": "9-0",
-   "dir": "FIXTURE-A/T1",
-   "present": "cand-9-0.stage6.present.svg",
-   "metrics": {
-    "m1": {
-     "touching": 5,
-     "habitable": 5,
-     "share": 1
-    },
-    "m2": {
-     "nx": 14,
-     "ny": 14,
-     "items": 14,
-     "perItem": 2
-    },
-    "m3": 0.09503122454520771,
-    "m4": true,
-    "m9": 0.221739523938818,
-    "m13": 0.9712643678160919,
-    "hallAreaM2": 21,
-    "validity": {
-     "valid": true,
-     "failed": []
-    }
-   },
-   "footprint": {
-    "w": 12700,
-    "h": 17400
-   },
-   "coreParts": 1
-  },
   {
    "brief": "FIXTURE-A",
    "template": "T2",
@@ -2393,20 +2118,23 @@
      "items": 15,
      "perItem": 1.8666666666666667
     },
-    "m3": 0.06532588454376163,
+    "m3": 0.08007604343693292,
     "m4": true,
-    "m9": 0.1389050279329609,
-    "m13": 0.6033519553072626,
-    "hallAreaM2": 17.54,
+    "m9": 0.15842382694357232,
+    "m13": 0.6912751677852349,
+    "hallAreaM2": 16.68,
     "validity": {
      "valid": true,
      "failed": []
     }
    },
    "footprint": {
-    "w": 15000,
-    "h": 17900
+    "w": 13980,
+    "h": 14900
    },
+   "footprintAreaM2": 208.302,
+   "flexCount": 1,
+   "flexAreaM2": 17.52,
    "coreParts": 1
   },
   {
@@ -2428,29 +2156,32 @@
      "items": 14,
      "perItem": 2.142857142857143
     },
-    "m3": 0.08238884045335658,
+    "m3": 0.09468129139072848,
     "m4": true,
-    "m9": 0.20047951176983436,
-    "m13": 0.3783783783783784,
-    "hallAreaM2": 18.9,
+    "m9": 0.1831539735099338,
+    "m13": 0.3973509933774834,
+    "hallAreaM2": 18.3,
     "validity": {
      "valid": true,
      "failed": []
     }
    },
    "footprint": {
-    "w": 12400,
-    "h": 18500
+    "w": 12800,
+    "h": 15100
    },
+   "footprintAreaM2": 193.28,
+   "flexCount": 0,
+   "flexAreaM2": 0,
    "coreParts": 1
   },
   {
    "brief": "GB-01",
-   "template": "T1",
-   "widthLabel": "PL10-w12500",
-   "id": "9-0",
-   "dir": "GB-01/T1",
-   "present": "cand-9-0.stage6.present.svg",
+   "template": "T2",
+   "widthLabel": "WHATIF-w13500",
+   "id": "16-0",
+   "dir": "GB-01/T2-WHATIF-w13500",
+   "present": "cand-16-0.stage6.present.svg",
    "metrics": {
     "m1": {
      "touching": 4,
@@ -2458,51 +2189,16 @@
      "share": 1
     },
     "m2": {
-     "nx": 10,
+     "nx": 14,
      "ny": 14,
-     "items": 12,
+     "items": 14,
      "perItem": 2
     },
-    "m3": 0.09569230769230769,
+    "m3": 0.07628249367379802,
     "m4": true,
-    "m9": 0.21015384615384616,
-    "m13": 0.9725274725274725,
-    "hallAreaM2": 21.77,
-    "validity": {
-     "valid": true,
-     "failed": []
-    }
-   },
-   "footprint": {
-    "w": 12500,
-    "h": 18200
-   },
-   "coreParts": 1
-  },
-  {
-   "brief": "GB-01",
-   "template": "T2",
-   "widthLabel": "WHATIF-w13500",
-   "id": "1-0",
-   "dir": "GB-01/T2-WHATIF-w13500",
-   "present": "cand-1-0.stage6.present.svg",
-   "metrics": {
-    "m1": {
-     "touching": 3,
-     "habitable": 4,
-     "share": 0.75
-    },
-    "m2": {
-     "nx": 14,
-     "ny": 13,
-     "items": 14,
-     "perItem": 1.9285714285714286
-    },
-    "m3": 0.08225108225108226,
-    "m4": true,
-    "m9": 0.1455026455026455,
-    "m13": 0.6948051948051948,
-    "hallAreaM2": 17.1,
+    "m9": 0.14221302047389003,
+    "m13": 0.639751552795031,
+    "hallAreaM2": 16.58,
     "validity": {
      "valid": true,
      "failed": []
@@ -2510,9 +2206,12 @@
    },
    "footprint": {
     "w": 13500,
-    "h": 15400
+    "h": 16100
    },
-   "coreParts": 2
+   "footprintAreaM2": 217.35,
+   "flexCount": 3,
+   "flexAreaM2": 44.688,
+   "coreParts": 1
   },
   {
    "brief": "GB-01",
@@ -2533,21 +2232,518 @@
      "items": 12,
      "perItem": 2.1666666666666665
     },
-    "m3": 0.05162430939226519,
+    "m3": 0.060180890538033396,
     "m4": true,
-    "m9": 0.2054364640883978,
-    "m13": 0.3867403314917127,
-    "hallAreaM2": 11.68,
+    "m9": 0.1913265306122449,
+    "m13": 0.38961038961038963,
+    "hallAreaM2": 10.38,
     "validity": {
      "valid": true,
      "failed": []
     }
    },
    "footprint": {
-    "w": 12500,
-    "h": 18100
+    "w": 11200,
+    "h": 15400
    },
+   "footprintAreaM2": 172.48,
+   "flexCount": 1,
+   "flexAreaM2": 8.32,
    "coreParts": 1
+  }
+ ],
+ "iteration": [
+  {
+   "brief": "FIXTURE-A",
+   "template": "T1",
+   "max": {
+    "group": "iteration-1-max",
+    "widthLabel": "PL10-w15000",
+    "whatIf": false,
+    "id": "9-0",
+    "present": "iteration-1-max/FIXTURE-A/T1/cand-9-0.stage6.present.svg",
+    "variant": "wing-master",
+    "seed": 9,
+    "footprint": {
+     "w": 12700,
+     "h": 17400
+    },
+    "footprintAreaM2": 220.98,
+    "flexCount": 0,
+    "flexAreaM2": 0,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 5,
+      "habitable": 5,
+      "share": 1
+     },
+     "m2": {
+      "nx": 14,
+      "ny": 14,
+      "items": 14,
+      "perItem": 2
+     },
+     "m3": 0.09503122454520771,
+     "m4": true,
+     "m9": 0.221739523938818,
+     "m13": 0.9712643678160919,
+     "hallAreaM2": 21,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   },
+   "typical": {
+    "group": "t1-fallback-demo",
+    "widthLabel": "PL10-w15000",
+    "whatIf": false,
+    "id": "9-0",
+    "present": "T1-fallback-demo/FIXTURE-A/T1/cand-9-0.stage6.present.svg",
+    "variant": "wing-master",
+    "seed": 9,
+    "footprint": {
+     "w": 10900,
+     "h": 18100
+    },
+    "footprintAreaM2": 197.29,
+    "flexCount": 0,
+    "flexAreaM2": 0,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 5,
+      "habitable": 5,
+      "share": 1
+     },
+     "m2": {
+      "nx": 12,
+      "ny": 14,
+      "items": 13,
+      "perItem": 2
+     },
+     "m3": 0.10846976532008717,
+     "m4": true,
+     "m9": 0.16726646054032135,
+     "m13": 0.9723756906077348,
+     "hallAreaM2": 21.4,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   }
+  },
+  {
+   "brief": "FIXTURE-A",
+   "template": "T2",
+   "max": {
+    "group": "iteration-1-max",
+    "widthLabel": "PL10-w15000",
+    "whatIf": false,
+    "id": "1-0",
+    "present": "iteration-1-max/FIXTURE-A/T2/cand-1-0.stage6.present.svg",
+    "variant": "B-no-alfresco",
+    "seed": 1,
+    "footprint": {
+     "w": 15000,
+     "h": 17900
+    },
+    "footprintAreaM2": 268.5,
+    "flexCount": 1,
+    "flexAreaM2": 35.1,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 5,
+      "share": 0.8
+     },
+     "m2": {
+      "nx": 14,
+      "ny": 14,
+      "items": 15,
+      "perItem": 1.8666666666666667
+     },
+     "m3": 0.06532588454376163,
+     "m4": true,
+     "m9": 0.1389050279329609,
+     "m13": 0.6033519553072626,
+     "hallAreaM2": 17.54,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   },
+   "typical": {
+    "group": "main",
+    "widthLabel": "PL10-w15000",
+    "whatIf": false,
+    "id": "1-0",
+    "present": "FIXTURE-A/T2/cand-1-0.stage6.present.svg",
+    "variant": "B-no-alfresco",
+    "seed": 1,
+    "footprint": {
+     "w": 13980,
+     "h": 14900
+    },
+    "footprintAreaM2": 208.302,
+    "flexCount": 1,
+    "flexAreaM2": 17.52,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 5,
+      "share": 0.8
+     },
+     "m2": {
+      "nx": 14,
+      "ny": 14,
+      "items": 15,
+      "perItem": 1.8666666666666667
+     },
+     "m3": 0.08007604343693292,
+     "m4": true,
+     "m9": 0.15842382694357232,
+     "m13": 0.6912751677852349,
+     "hallAreaM2": 16.68,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   }
+  },
+  {
+   "brief": "FIXTURE-A",
+   "template": "T4",
+   "max": {
+    "group": "iteration-1-max",
+    "widthLabel": "PL10-w15000",
+    "whatIf": false,
+    "id": "4-0",
+    "present": "iteration-1-max/FIXTURE-A/T4/cand-4-0.stage6.present.svg",
+    "variant": "rear-bar",
+    "seed": 4,
+    "footprint": {
+     "w": 12400,
+     "h": 18500
+    },
+    "footprintAreaM2": 229.4,
+    "flexCount": 0,
+    "flexAreaM2": 0,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 5,
+      "habitable": 5,
+      "share": 1
+     },
+     "m2": {
+      "nx": 18,
+      "ny": 12,
+      "items": 14,
+      "perItem": 2.142857142857143
+     },
+     "m3": 0.08238884045335658,
+     "m4": true,
+     "m9": 0.20047951176983436,
+     "m13": 0.3783783783783784,
+     "hallAreaM2": 18.9,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   },
+   "typical": {
+    "group": "main",
+    "widthLabel": "PL10-w15000",
+    "whatIf": false,
+    "id": "4-0",
+    "present": "FIXTURE-A/T4/cand-4-0.stage6.present.svg",
+    "variant": "rear-bar",
+    "seed": 4,
+    "footprint": {
+     "w": 12800,
+     "h": 15100
+    },
+    "footprintAreaM2": 193.28,
+    "flexCount": 0,
+    "flexAreaM2": 0,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 5,
+      "habitable": 5,
+      "share": 1
+     },
+     "m2": {
+      "nx": 18,
+      "ny": 12,
+      "items": 14,
+      "perItem": 2.142857142857143
+     },
+     "m3": 0.09468129139072848,
+     "m4": true,
+     "m9": 0.1831539735099338,
+     "m13": 0.3973509933774834,
+     "hallAreaM2": 18.3,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   }
+  },
+  {
+   "brief": "GB-01",
+   "template": "T1",
+   "max": {
+    "group": "iteration-1-max",
+    "widthLabel": "PL10-w12500",
+    "whatIf": false,
+    "id": "9-0",
+    "present": "iteration-1-max/GB-01/T1/cand-9-0.stage6.present.svg",
+    "variant": "wing-master",
+    "seed": 9,
+    "footprint": {
+     "w": 12500,
+     "h": 18200
+    },
+    "footprintAreaM2": 227.5,
+    "flexCount": 1,
+    "flexAreaM2": 27.32,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 4,
+      "share": 1
+     },
+     "m2": {
+      "nx": 10,
+      "ny": 14,
+      "items": 12,
+      "perItem": 2
+     },
+     "m3": 0.09569230769230769,
+     "m4": true,
+     "m9": 0.21015384615384616,
+     "m13": 0.9725274725274725,
+     "hallAreaM2": 21.77,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   },
+   "typical": {
+    "group": "t1-fallback-demo",
+    "widthLabel": "PL10-w12500",
+    "whatIf": false,
+    "id": "9-0",
+    "present": "T1-fallback-demo/GB-01/T1/cand-9-0.stage6.present.svg",
+    "variant": "wing-master",
+    "seed": 9,
+    "footprint": {
+     "w": 10900,
+     "h": 16600
+    },
+    "footprintAreaM2": 180.94,
+    "flexCount": 1,
+    "flexAreaM2": 8.25,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 4,
+      "share": 1
+     },
+     "m2": {
+      "nx": 10,
+      "ny": 14,
+      "items": 12,
+      "perItem": 2
+     },
+     "m3": 0.10998120924063226,
+     "m4": true,
+     "m9": 0.18238089974577207,
+     "m13": 0.9698795180722891,
+     "hallAreaM2": 19.9,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   }
+  },
+  {
+   "brief": "GB-01",
+   "template": "T2",
+   "max": {
+    "group": "iteration-1-max",
+    "widthLabel": "WHATIF-w13500",
+    "whatIf": true,
+    "id": "1-0",
+    "present": "iteration-1-max/GB-01/T2-WHATIF-w13500/cand-1-0.stage6.present.svg",
+    "variant": "B-no-alfresco",
+    "seed": 1,
+    "footprint": {
+     "w": 13500,
+     "h": 15400
+    },
+    "footprintAreaM2": 207.9,
+    "flexCount": 2,
+    "flexAreaM2": 24.856,
+    "coreParts": 2,
+    "metrics": {
+     "m1": {
+      "touching": 3,
+      "habitable": 4,
+      "share": 0.75
+     },
+     "m2": {
+      "nx": 14,
+      "ny": 13,
+      "items": 14,
+      "perItem": 1.9285714285714286
+     },
+     "m3": 0.08225108225108226,
+     "m4": true,
+     "m9": 0.1455026455026455,
+     "m13": 0.6948051948051948,
+     "hallAreaM2": 17.1,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   },
+   "typical": {
+    "group": "main",
+    "widthLabel": "WHATIF-w13500",
+    "whatIf": true,
+    "id": "16-0",
+    "present": "GB-01/T2-WHATIF-w13500/cand-16-0.stage6.present.svg",
+    "variant": "B-no-alfresco-master-outside",
+    "seed": 16,
+    "footprint": {
+     "w": 13500,
+     "h": 16100
+    },
+    "footprintAreaM2": 217.35,
+    "flexCount": 3,
+    "flexAreaM2": 44.688,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 4,
+      "share": 1
+     },
+     "m2": {
+      "nx": 14,
+      "ny": 14,
+      "items": 14,
+      "perItem": 2
+     },
+     "m3": 0.07628249367379802,
+     "m4": true,
+     "m9": 0.14221302047389003,
+     "m13": 0.639751552795031,
+     "hallAreaM2": 16.58,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   }
+  },
+  {
+   "brief": "GB-01",
+   "template": "T4",
+   "max": {
+    "group": "iteration-1-max",
+    "widthLabel": "PL10-w12500",
+    "whatIf": false,
+    "id": "4-0",
+    "present": "iteration-1-max/GB-01/T4/cand-4-0.stage6.present.svg",
+    "variant": "rear-lobby",
+    "seed": 4,
+    "footprint": {
+     "w": 12500,
+     "h": 18100
+    },
+    "footprintAreaM2": 226.25,
+    "flexCount": 1,
+    "flexAreaM2": 19.63,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 4,
+      "share": 1
+     },
+     "m2": {
+      "nx": 16,
+      "ny": 10,
+      "items": 12,
+      "perItem": 2.1666666666666665
+     },
+     "m3": 0.05162430939226519,
+     "m4": true,
+     "m9": 0.2054364640883978,
+     "m13": 0.3867403314917127,
+     "hallAreaM2": 11.68,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   },
+   "typical": {
+    "group": "main",
+    "widthLabel": "PL10-w12500",
+    "whatIf": false,
+    "id": "4-0",
+    "present": "GB-01/T4/cand-4-0.stage6.present.svg",
+    "variant": "rear-lobby",
+    "seed": 4,
+    "footprint": {
+     "w": 11200,
+     "h": 15400
+    },
+    "footprintAreaM2": 172.48,
+    "flexCount": 1,
+    "flexAreaM2": 8.32,
+    "coreParts": 1,
+    "metrics": {
+     "m1": {
+      "touching": 4,
+      "habitable": 4,
+      "share": 1
+     },
+     "m2": {
+      "nx": 16,
+      "ny": 10,
+      "items": 12,
+      "perItem": 2.1666666666666665
+     },
+     "m3": 0.060180890538033396,
+     "m4": true,
+     "m9": 0.1913265306122449,
+     "m13": 0.38961038961038963,
+     "hallAreaM2": 10.38,
+     "validity": {
+      "valid": true,
+      "failed": []
+     }
+    }
+   }
   }
  ],
  "oldPl20": {

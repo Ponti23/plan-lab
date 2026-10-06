@@ -3,13 +3,15 @@
 //   front row: Master suite (MS-A) | Entry | Garage, Master block and Garage on one wall line (depth Dg)
 //   wingColumn master : wing stack behind the Master suite, Core (+ rear row) behind the Garage
 //   wingColumn garage : Core (+ rear row) behind the Master suite, wing stack behind the Garage
-// Sizing: max-first (4.1): Dg then the footprint width start at their maximum; the stacks close at the longest total both can reach.
+// Sizing: typical-first (Q5, default): every room aims for its catalog preferred size; the footprint is the smallest that closes the front row and both
+// stacks; rooms grow above preferred only to close them. 'max' (setSizing) is the iteration-1 max-first behaviour.
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import type { Brief, Rect, RoomSpec } from '../geometry-feasibility/types.ts';
-import { mkRoom, placeLobbyBlock, placeSuite, suiteIv, wetRowIv, wetWidthRange } from './blocks.ts';
+import { mkRoom, placeLobbyBlock, placeSuite, suiteIv, suitePairs, wetRowIv, wetWidthRange } from './blocks.ts';
 import type { Prog } from './blocks.ts';
-import { anyWidthRange, dimsOk, fail, fillRow, intersect, isFail, otherRange, rect, runOf, steps } from './common.ts';
+import { anyWidthRange, chooser, dimsOk, fail, fillRow, intersect, isFail, isTypical, nearest, otherRange, rect, runOf, sharedTotal, steps } from './common.ts';
+import { accepts } from './emit.ts';
 import type { Fail, Iv, Layout, LHall, LRoom } from './common.ts';
 
 export interface T1Opts {
@@ -155,10 +157,12 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
     }
   };
 
-  for (const Dg of steps(gcat.max[1], gcat.min[1], -100)) {
+  const pick = chooser(200, (l) => accepts(l, brief));
+  const dgs = steps(gcat.max[1], gcat.min[1], -100);
+  for (const Dg of isTypical() ? nearest(dgs, gcat.pref[1]) : dgs) {
     const gar = otherRange(p.garage.cat, Dg);
     if (!gar) continue;
-    for (const Drow of o.drowOrder) {
+    for (const [Drow, sv] of suitePairs(o.drowOrder)) {
       stage = 0;
       const Dm = Dg - 100 - Drow;
       if (Dm < 3000) {
@@ -166,7 +170,7 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
         continue;
       }
       stage = 1;
-      let mb = suiteIv(p, Dm, Drow);
+      let mb = suiteIv(p, Dm, Drow, sv);
       if (!mb) {
         note('A', `no Master suite width for Dm ${Dm}, row ${Drow}`);
         continue;
@@ -182,16 +186,19 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
       }
       mb = mbCol;
       // ---- width: one row, Master block | hall | Garage, maximum-first (4.1 step 4)
-      const Wf = Math.min(We, 500 + mb.hi + 100 + Hw + 100 + garCol.hi);
-      if (Wf % 2 !== We % 2) continue;
-      const fr = fillRow(
-        [
-          { id: 'mb', ...mb },
-          { id: 'hall', lo: Hw, hi: Hw, pref: Hw },
-          { id: 'gar', ...garCol },
-        ],
-        Wf - 500,
-      );
+      const frow = [
+        { id: 'mb', ...mb },
+        { id: 'hall', lo: Hw, hi: Hw, pref: Hw },
+        { id: 'gar', ...garCol },
+      ];
+      const Win = sharedTotal([{ items: frow }], We - 500);
+      if (isFail(Win)) {
+        note('B', Win.reason);
+        continue;
+      }
+      const Wf = Win + 500;
+      if ((We - Wf) % 2 !== 0) continue;
+      const fr = fillRow(frow, Win);
       if (isFail(fr) || fr.slack !== 0) {
         note('B', isFail(fr) ? fr.reason : 'front row slack');
         continue;
@@ -232,7 +239,7 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
       const envRem = Dmax - 500 - Dg - 100;
       const wr = stackRange(wingItems);
       let cr = stackRange(coreItems);
-      if (cr.hi < wr.lo) {
+      if (cr.hi < (isTypical() ? Math.max(wr.lo, wingItems.reduce((a, i) => a + i.iv.pref, 0) + 100 * (wingItems.length - 1)) : wr.lo)) {
         // the Core column is too short: a labelled flex patch at the rear (D44, Q6 default)
         const fx = flexItem(coreW, 'flex-rear');
         if (fx) {
@@ -246,7 +253,15 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
         note('A', `stack depths do not meet: wing ${wr.lo}-${wr.hi}, Core column ${cr.lo}-${cr.hi}, envelope ${envRem}`);
         continue;
       }
-      const T = Thi - (Thi % 10);
+      let T = Thi - (Thi % 10);
+      if (isTypical()) {
+        const tt = sharedTotal([{ items: wingItems.map((i) => ({ id: i.id, ...i.iv })) }, { items: coreItems.map((i) => ({ id: i.id, ...i.iv })) }], envRem);
+        if (isFail(tt)) {
+          note('A', tt.reason);
+          continue;
+        }
+        T = tt;
+      }
       const wf = fillRow(wingItems.map((i) => ({ id: i.id, ...i.iv })), T);
       const cf = fillRow(coreItems.map((i) => ({ id: i.id, ...i.iv })), T);
       if (isFail(wf) || isFail(cf) || wf.slack !== 0 || cf.slack !== 0) {
@@ -300,8 +315,8 @@ export function buildT1(brief: Brief, p: Prog, o: T1Opts): Layout | Fail {
         omitted,
         notes: [`T1 ${o.wing}-wing; hall = spine (L variant not implemented, Q17)`, `wet block = lobby ${o.lobbyD} + wet row (WET-B): WET-A cannot put both doors on the hall`],
       };
-      return layout;
+      if (pick.add(layout)) return pick.best() as Layout;
     }
   }
-  return fail(lastType, lastReason);
+  return pick.best() ?? fail(lastType, lastReason);
 }

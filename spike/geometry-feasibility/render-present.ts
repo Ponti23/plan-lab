@@ -297,7 +297,7 @@ export function renderPresent(rec: Stage6Record, options: PresentRenderOptions =
     const cx = f.x(item.rect.x + item.rect.w / 2);
     const cy = f.y(item.rect.y + item.rect.h / 2);
     const detail = `${(Math.max(item.rect.w, item.rect.h) / 1000).toFixed(1)} x ${(Math.min(item.rect.w, item.rect.h) / 1000).toFixed(1)}`;
-    body += `<g class="flex-label" data-flex-id="${esc(item.id)}"><text x="${px(cx)}" y="${px(cy - 2)}" font-size="9" font-weight="500" text-anchor="middle" fill="${INK}">Flex Space</text><text x="${px(cx)}" y="${px(cy + 9)}" font-size="8" text-anchor="middle" fill="${INK}">${detail}</text></g>`;
+    body += `<g class="flex-label" data-flex-id="${esc(item.id)}"><text x="${px(cx)}" y="${px(cy - 2)}" font-size="9" font-weight="500" text-anchor="middle" fill="${INK}">Flex</text><text x="${px(cx)}" y="${px(cy + 9)}" font-size="8" text-anchor="middle" fill="${INK}">${detail}</text></g>`;
   }
   body += `<text x="${px(f.width / 2)}" y="20" font-size="13" font-weight="600" text-anchor="middle" fill="${INK}">${esc(title)}</text>`;
   body += `<text x="${px(f.width / 2)}" y="${px(f.y(rec.footprint.y + rec.footprint.h) + 18)}" font-size="9" letter-spacing="1.2" text-anchor="middle" fill="${INK}">FRONT</text>`;

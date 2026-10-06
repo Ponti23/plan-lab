@@ -8,9 +8,10 @@
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import type { Brief, RoomSpec } from '../geometry-feasibility/types.ts';
-import { mkRoom, placeLobbyBlock, placeSuite, suiteIv, wetWidthAt } from './blocks.ts';
+import { mkRoom, placeLobbyBlock, placeSuite, suiteIv, suitePairs, wetWidthAt } from './blocks.ts';
 import type { Prog } from './blocks.ts';
-import { dimsOk, fail, fillRow, isFail, otherRange, rect, runOf, steps } from './common.ts';
+import { chooser, dimsOk, fail, fillRow, isFail, isTypical, nearest, otherRange, rect, runOf, sharedTotal, steps } from './common.ts';
+import { accepts } from './emit.ts';
 import type { Fail, Iv, Layout, LHall, LRoom } from './common.ts';
 import { stackRange } from './t1.ts';
 import type { Placed, SItem } from './t1.ts';
@@ -92,15 +93,17 @@ export function buildT4(brief: Brief, p: Prog, o: T4Opts): Layout | Fail {
     }
   };
 
-  for (const Dg of steps(gcat.max[1], gcat.min[1], -100)) {
+  const pick = chooser(300, (l) => accepts(l, brief));
+  const near = (vals: number[], want: number | number[]): number[] => (isTypical() ? nearest(vals, want) : vals);
+  for (const Dg of near(steps(gcat.max[1], gcat.min[1], -100), gcat.pref[1])) {
     const gar = otherRange(p.garage.cat, Dg);
     if (!gar) continue;
-    for (const Drow of o.drowOrder) {
+    for (const [Drow, sv] of suitePairs(o.drowOrder)) {
       const Dm = Dg - 100 - Drow;
       if (Dm < 3000) continue;
-      const mb = suiteIv(p, Dm, Drow);
+      const mb = suiteIv(p, Dm, Drow, sv);
       if (!mb) continue;
-      for (const Dc of steps(Math.min(coreMax[0], 6500), 4000, -100)) {
+      for (const Dc of near(steps(Math.min(coreMax[0], 6500), 4000, -100), CATALOG[p.core.cat].pref[0])) {
         stage = 0;
         const coreIv = otherRange(p.core.cat, Dc);
         if (!coreIv) continue;
@@ -111,7 +114,7 @@ export function buildT4(brief: Brief, p: Prog, o: T4Opts): Layout | Fail {
         }
         stage = 1;
         // rear row depths, maximum first
-        const drs = useBar ? steps(4000, 2700, -100) : steps(2800, 2400, -100);
+        const drs = near(useBar ? steps(4000, 2700, -100) : steps(2800, 2400, -100), useBar ? [CATALOG[p.beds[0]?.cat ?? 'Bedroom'].pref[0], CATALOG[p.beds[0]?.cat ?? 'Bedroom'].pref[1]] : 2600);
         for (const Dx of drs) {
           stage = 1;
           const Dr = o.lobbyD + 100 + Dx; // rear band depth
@@ -161,32 +164,53 @@ export function buildT4(brief: Brief, p: Prog, o: T4Opts): Layout | Fail {
           }
           seq = seq.slice();
           stage = 2;
-          // ---- widths: the three rows share one inner width Win; Wf is the widest footprint every row can still fill (max-first)
-          const fHi = mb.hi + 100 + Hw + 100 + gar.hi;
-          const mHi = coreIv.hi + 100 + side.iv.hi;
-          const rHi = seq.reduce((a, i) => a + i.iv.hi, 0) + 100 * (seq.length - 1);
-          const Wf = Math.min(We, 500 + Math.min(fHi, mHi, rHi));
-          if (Wf % 2 !== We % 2) continue;
-          const Win = Wf - 500;
-          const fr = fillRow([{ id: 'mb', ...mb }, { id: 'hall', lo: Hw, hi: Hw, pref: Hw }, { id: 'gar', ...gar }], Win);
-          if (isFail(fr) || fr.slack !== 0) {
-            note('B', isFail(fr) ? `F row: ${fr.reason}` : 'F row slack');
-            continue;
+          // ---- widths: the three rows share one inner width Win (smallest that holds every row at its preferred sizes; max mode: the widest every row can fill)
+          const frow = [{ id: 'mb', ...mb }, { id: 'hall', lo: Hw, hi: Hw, pref: Hw }, { id: 'gar', ...gar }];
+          const mrow = (coreLo: number) => [{ id: 'core', lo: coreLo, hi: coreIv.hi, pref: Math.max(coreLo, coreIv.pref) }, { id: 'side', ...side.iv, ...(isTypical() && side.mode === 'flex' ? { pref: side.iv.lo, late: true } : {}) }];
+          const rrow = seq.map((i) => ({ id: i.id, ...i.iv }));
+          // the Core must stand over the whole stem top (cased opening): Core width >= W1 + 100 + Hw, and W1 depends on Win: iterate to a fixed point
+          let coreLo = coreIv.lo;
+          let Win = 0;
+          let fr: ReturnType<typeof fillRow> = fail('B', 'F row');
+          let stable = false;
+          let bad = false;
+          for (let pass = 0; pass < 5 && !stable; pass++) {
+            if (coreLo > coreIv.hi) {
+              note('B', 'Core cannot cover the stem top');
+              bad = true;
+              break;
+            }
+            const tot = sharedTotal([{ items: frow }, { items: mrow(coreLo) }, { items: rrow }], We - 500);
+            if (isFail(tot)) {
+              note('B', tot.reason);
+              bad = true;
+              break;
+            }
+            Win = tot;
+            fr = fillRow(frow, Win);
+            if (isFail(fr) || fr.slack !== 0) {
+              note('B', isFail(fr) ? `F row: ${fr.reason}` : 'F row slack');
+              bad = true;
+              break;
+            }
+            const need = Math.max(coreIv.lo, (fr.sizes[0] as number) + 100 + Hw);
+            if (!isTypical()) {
+              coreLo = need; // iteration 1: one pass
+              stable = true;
+            } else if (need <= coreLo) stable = true;
+            else coreLo = need;
           }
+          if (bad || !stable || isFail(fr)) continue;
+          const Wf = Win + 500;
+          if ((We - Wf) % 2 !== 0) continue;
           const [W1, , W2] = fr.sizes as [number, number, number];
-          // the Core must stand over the whole stem top (cased opening): Core width >= W1 + 100 + Hw
-          const coreLo = Math.max(coreIv.lo, W1 + 100 + Hw);
-          if (coreLo > coreIv.hi) {
-            note('B', 'Core cannot cover the stem top');
-            continue;
-          }
-          const mr = fillRow([{ id: 'core', lo: coreLo, hi: coreIv.hi, pref: Math.max(coreLo, coreIv.pref) }, { id: 'side', ...side.iv }], Win);
+          const mr = fillRow(mrow(coreLo), Win);
           if (isFail(mr) || mr.slack !== 0) {
             note('B', isFail(mr) ? `M row: ${mr.reason}` : 'M row slack');
             continue;
           }
           const [Wc, Ws] = mr.sizes as [number, number];
-          const rr = fillRow(seq.map((i) => ({ id: i.id, ...i.iv })), Win);
+          const rr = fillRow(rrow, Win);
           if (isFail(rr) || rr.slack !== 0) {
             note('B', isFail(rr) ? `R row: ${rr.reason}` : 'R row slack');
             continue;
@@ -246,7 +270,7 @@ export function buildT4(brief: Brief, p: Prog, o: T4Opts): Layout | Fail {
           ];
           let x = 250;
           let rearHall = 'H-rear';
-          let bad = false;
+          bad = false;
           rr.ids.forEach((rid, k) => {
             const w = rr.sizes[k] as number;
             const it = seq.find((s) => s.id === rid) as RItem;
@@ -296,10 +320,10 @@ export function buildT4(brief: Brief, p: Prog, o: T4Opts): Layout | Fail {
               ...(side.mode === 'flex' ? ['M side column is a labelled flex patch: the brief has no Laundry/Pantry and the Core maximum 9000 cannot span the width (4.2, Q6 default)'] : []),
             ],
           };
-          return layout;
+          if (pick.add(layout)) return pick.best() as Layout;
         }
       }
     }
   }
-  return fail(lastType, lastReason);
+  return pick.best() ?? fail(lastType, lastReason);
 }

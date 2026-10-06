@@ -4,20 +4,20 @@
  "briefId": "GB-01",
  "seed": 22,
  "attempt": 0,
- "cfPattern": "T2-B",
+ "cfPattern": "T2-B-outside",
  "hallShape": "T",
  "hallwayWidthMm": 1000,
  "footprint": {
   "x": 0,
-  "y": 5400,
+  "y": 4400,
   "w": 13500,
-  "h": 15100
+  "h": 16100
  },
  "inner": {
   "x": 250,
-  "y": 5650,
+  "y": 4650,
   "w": 13000,
-  "h": 14600
+  "h": 15600
  },
  "zones": [
   {
@@ -26,9 +26,9 @@
    "type": "bedrooms",
    "rect": {
     "x": 250,
-    "y": 16250,
-    "w": 2860,
-    "h": 4000
+    "y": 16850,
+    "w": 2730,
+    "h": 3400
    },
    "roomIds": [
     "bed2"
@@ -39,10 +39,10 @@
    "name": "Bedroom 3",
    "type": "bedrooms",
    "rect": {
-    "x": 3210,
-    "y": 16250,
-    "w": 3140,
-    "h": 4000
+    "x": 3080,
+    "y": 16850,
+    "w": 3220,
+    "h": 3400
    },
    "roomIds": [
     "bed3"
@@ -53,10 +53,10 @@
    "name": "Wet rooms",
    "type": "wet",
    "rect": {
-    "x": 3210,
-    "y": 12250,
-    "w": 3140,
-    "h": 2600
+    "x": 3080,
+    "y": 12650,
+    "w": 3220,
+    "h": 2800
    },
    "roomIds": [
     "bath",
@@ -68,9 +68,9 @@
    "name": "Double Garage",
    "type": "garage",
    "rect": {
-    "x": 7750,
+    "x": 7700,
     "y": 14750,
-    "w": 5500,
+    "w": 5550,
     "h": 5500
    },
    "roomIds": [
@@ -82,10 +82,10 @@
    "name": "Master suite",
    "type": "master",
    "rect": {
-    "x": 7750,
-    "y": 9550,
-    "w": 5500,
-    "h": 5100
+    "x": 7700,
+    "y": 9950,
+    "w": 5550,
+    "h": 4700
    },
    "roomIds": [
     "master",
@@ -98,10 +98,10 @@
    "name": "Family Core",
    "type": "living",
    "rect": {
-    "x": 250,
-    "y": 5650,
+    "x": 4250,
+    "y": 4650,
     "w": 9000,
-    "h": 6500
+    "h": 5200
    },
    "roomIds": [
     "core"
@@ -109,25 +109,37 @@
   },
   {
    "id": "Z-flex-cell",
-   "name": "Flex Space (labelled residual, D44)",
+   "name": "Flex (labelled residual, D44)",
    "type": "flex",
    "rect": {
     "x": 250,
-    "y": 12250,
-    "w": 2860,
+    "y": 12650,
+    "w": 2730,
+    "h": 2800
+   },
+   "roomIds": []
+  },
+  {
+   "id": "Z-flex-arm",
+   "name": "Flex (labelled residual, D44)",
+   "type": "flex",
+   "rect": {
+    "x": 250,
+    "y": 9950,
+    "w": 6050,
     "h": 2600
    },
    "roomIds": []
   },
   {
    "id": "Z-flex-corner",
-   "name": "Flex Space (labelled residual, D44)",
+   "name": "Flex (labelled residual, D44)",
    "type": "flex",
    "rect": {
-    "x": 9350,
-    "y": 5650,
+    "x": 250,
+    "y": 4650,
     "w": 3900,
-    "h": 3800
+    "h": 5200
    },
    "roomIds": []
   }
@@ -138,7 +150,7 @@
    "name": "Entry",
    "kind": "entry",
    "rect": {
-    "x": 6450,
+    "x": 6400,
     "y": 18950,
     "w": 1200,
     "h": 1300
@@ -149,10 +161,10 @@
    "name": "Hallway",
    "kind": "stem",
    "rect": {
-    "x": 6450,
-    "y": 9550,
+    "x": 6400,
+    "y": 9950,
     "w": 1200,
-    "h": 9400
+    "h": 9000
    }
   },
   {
@@ -161,8 +173,8 @@
    "kind": "connector",
    "rect": {
     "x": 250,
-    "y": 14950,
-    "w": 6100,
+    "y": 15550,
+    "w": 6050,
     "h": 1200
    }
   }
