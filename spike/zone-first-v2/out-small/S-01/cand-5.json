@@ -1,6 +1,6 @@
 {
   "role": "option 5",
-  "rank": 89,
+  "rank": 93,
   "briefId": "S-01",
   "optionId": "L|midW|block|m:middle/block|wet:block|rr:FBFB|fw|v0",
   "options": {
@@ -40,8 +40,8 @@
     "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.21641975308641975,
-    "circulationShare": 0.10395061728395062,
+    "flexShare": 0.13290123456790123,
+    "circulationShare": 0.1397530864197531,
     "coreShare": 0.23333333333333334,
     "bedroomSpread": 4500,
     "spreadNorm": 0.22360679774997894,
@@ -49,12 +49,12 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 16.84,
+    "circulationM2": 22.64,
     "slivers": 0,
     "spineRatio": 0.3333333333333333,
     "longestFlexRatio": 0.32222222222222224,
     "flexStrips": 0,
-    "score": 23.34,
+    "score": 22.86,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -68,21 +68,34 @@
     "Bed 2 shrank in width to 3300 mm (preferred 3400 mm)",
     "Bed 3 shrank in width to 3300 mm (preferred 3400 mm)",
     "Core shrank in depth to 4200 mm (preferred 4900 mm)",
-    "Master shrank in depth to 5000 mm (preferred 5800 mm)"
+    "Master shrank in depth to 5000 mm (preferred 5800 mm)",
+    "carved from Flex: Theatre 3.3 x 4.1"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 5200,
-  "circulationArea": 16840000,
+  "circulationArea": 22640000,
   "flexArea": {
-    "Flex · circulation": 3400000,
-    "Flex · room": 24940000,
-    "Flex · storage": 6720000,
+    "Flex · circulation": 9200000,
+    "Flex · room": 0,
+    "Flex · storage": 12330000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Theatre",
+      "label": "Theatre 3.3 x 4.1",
+      "rect": {
+        "x": 5700,
+        "y": 12200,
+        "w": 3300,
+        "h": 4100
+      }
+    }
+  ],
   "zones": [
     {
       "id": "bedroom-1",
@@ -171,6 +184,18 @@
         "w": 3100,
         "h": 1800
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Theatre",
+      "rect": {
+        "x": 5700,
+        "y": 12200,
+        "w": 3300,
+        "h": 4100
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -233,10 +258,20 @@
       "rect": {
         "x": 4700,
         "y": 12200,
-        "w": 4300,
+        "w": 1000,
         "h": 5800
       },
-      "cls": "Flex · room"
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-5",
+      "rect": {
+        "x": 5700,
+        "y": 16300,
+        "w": 3300,
+        "h": 1700
+      },
+      "cls": "Flex · storage"
     }
   ]
 }

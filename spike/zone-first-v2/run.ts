@@ -12,6 +12,7 @@ import { BRIEFS } from './briefs.ts';
 import { GOLDEN, profileFor } from './golden.ts';
 import { runBrief, type BriefResult } from './pipeline.ts';
 import { QUALITY_WEIGHTS } from './quality.ts';
+import { carvedLabel, carvedLine } from './carve.ts';
 import { renderSVG } from './render.ts';
 import type { Candidate, FlexClass } from './types.ts';
 
@@ -83,6 +84,7 @@ function writeBrief(r: BriefResult, kept: Kept[]): void {
       extensionArea: c.extensionArea,
       extensions: c.extensions,
       slivers: c.slivers,
+      carved: c.carved?.map((z) => ({ name: z.name, label: carvedLabel(z), rect: z.rect })),
       zones: c.zones,
       spine: c.spine,
       flexWalls: c.zones.filter((z) => z.kind === 'flexwall'),
@@ -105,7 +107,7 @@ function card(r: BriefResult, k: Kept): string {
     ? ` <span class="badge">${k.hits.map((h) => (h === 'target' ? 'TARGET MATCH' : 'ALT TARGET MATCH')).join(' + ')}</span>`
     : '';
   return `<figure${k.hits.length ? ' class="match"' : ''}>
-  <figcaption><b>${esc(k.role)}</b> (rank ${k.rank} of ${r.ranked.length})${badge}<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'}${clo === null ? '' : ` · closeness to the user's layout ${pct(clo)}`} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
+  <figcaption><b>${esc(k.role)}</b> (rank ${k.rank} of ${r.ranked.length})${badge}<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · ${carvedLine(c) ? carvedLine(c) + ' · ' : ''}circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'}${clo === null ? '' : ` · closeness to the user's layout ${pct(clo)}`} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
   <img src="${r.brief.id}/${k.file}.svg" alt="${r.brief.id} ${esc(k.role)}">
 </figure>`;
 }
@@ -183,7 +185,7 @@ ${rows}
 function main(): void {
   const t0 = Date.now();
   mkdirSync(OUT, { recursive: true });
-  const results = BRIEFS.map(runBrief);
+  const results = BRIEFS.map((b) => runBrief(b, { carve: !process.argv.includes('--no-carve') })); // --no-carve reproduces the pre-carve output
   const kepts = results.map(keptFor);
   results.forEach((r, i) => writeBrief(r, kepts[i]));
 

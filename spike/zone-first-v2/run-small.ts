@@ -15,6 +15,7 @@ import { SMALL_BRIEFS } from './briefs-small.ts';
 import { MEDIUM_BRIEFS } from './briefs-medium.ts';
 import { LARGE_BRIEFS } from './briefs-large.ts';
 import { OVERLAP_LIMIT, runBrief, type BriefResult } from './pipeline.ts';
+import { carvedLabel, carvedLine } from './carve.ts';
 import { renderSVG } from './render.ts';
 import type { Brief, Candidate, FlexClass } from './types.ts';
 
@@ -88,6 +89,7 @@ function jsonOf(r: BriefResult, c: Candidate, i: number): unknown {
     extensionArea: c.extensionArea,
     extensions: c.extensions,
     slivers: c.slivers,
+    carved: c.carved?.map((z) => ({ name: z.name, label: carvedLabel(z), rect: z.rect })),
     zones: c.zones,
     spine: c.spine,
     flexWalls: c.zones.filter((z) => z.kind === 'flexwall'),
@@ -113,7 +115,7 @@ function card(r: BriefResult, c: Candidate, i: number): string {
   const q = c.quality;
   const flex = CLASSES.map((x) => `${x.replace('Flex · ', '')} ${m2(c.flexArea[x])}`).join(' · ');
   return `<figure>
-  <figcaption><b>option ${i + 1}</b> (rank ${rankOf(r, c)} of ${r.ranked.length})<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
+  <figcaption><b>option ${i + 1}</b> (rank ${rankOf(r, c)} of ${r.ranked.length})<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · ${carvedLine(c) ? carvedLine(c) + ' · ' : ''}circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
   <img src="${r.brief.id}/cand-${i + 1}.svg" alt="${r.brief.id} option ${i + 1}">
 </figure>`;
 }
@@ -155,7 +157,7 @@ ${rows}
 }
 
 function main(): void {
-  const name = process.argv[2] ?? 'small';
+  const name = process.argv.slice(2).find((a) => !a.startsWith('--')) ?? 'small';
   const set = SETS[name];
   if (!set) {
     console.error(`unknown set "${name}"\nusage: node spike/zone-first-v2/run-small.ts [${Object.keys(SETS).join('|')}]`);
@@ -165,7 +167,7 @@ function main(): void {
 
   const t0 = Date.now();
   mkdirSync(OUT, { recursive: true });
-  const results = set.briefs.map((b) => runBrief(b, { top: TOP }));
+  const results = set.briefs.map((b) => runBrief(b, { top: TOP, carve: !process.argv.includes('--no-carve') }));
   for (const r of results) writeBrief(r);
 
   const summary = {
@@ -197,6 +199,7 @@ function main(): void {
         flexArea: c.flexArea,
         extensionArea: c.extensionArea,
         slivers: c.slivers,
+        carved: c.carved?.map((z) => carvedLabel(z)),
         signature: c.signature,
       })),
     })),

@@ -1,6 +1,6 @@
 {
   "role": "option 2",
-  "rank": 17,
+  "rank": 19,
   "briefId": "M-03",
   "optionId": "L|midG|split|m:rear/block|wet:block|rr:FM|nofw|v2",
   "options": {
@@ -36,8 +36,8 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.28619433198380567,
-    "circulationShare": 0.05392712550607288,
+    "flexShare": 0.15611336032388665,
+    "circulationShare": 0.12323886639676114,
     "coreShare": 0.22975708502024292,
     "bedroomSpread": 8000,
     "spreadNorm": 0.2890045919356118,
@@ -45,12 +45,12 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 13.32,
+    "circulationM2": 30.44,
     "slivers": 0,
     "spineRatio": 0.23076923076923078,
-    "longestFlexRatio": 0.25769230769230766,
+    "longestFlexRatio": 0.23846153846153847,
     "flexStrips": 0,
-    "score": 12.32,
+    "score": 11.52,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -60,20 +60,54 @@
       "spreadNorm": 2.78
     }
   },
-  "notes": [],
+  "notes": [
+    "carved from Flex: Theatre 4.1 x 3.3, Guest bed 3.0 x 3.4, Study 3.0 x 2.8"
+  ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 13320000,
+  "circulationArea": 30440000,
   "flexArea": {
-    "Flex · circulation": 6120000,
-    "Flex · room": 60430000,
+    "Flex · circulation": 23240000,
+    "Flex · room": 11180000,
     "Flex · storage": 4140000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Theatre",
+      "label": "Theatre 4.1 x 3.3",
+      "rect": {
+        "x": 2600,
+        "y": 15700,
+        "w": 4100,
+        "h": 3300
+      }
+    },
+    {
+      "name": "Guest bed",
+      "label": "Guest bed 3.0 x 3.4",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 3000,
+        "h": 3400
+      }
+    },
+    {
+      "name": "Study",
+      "label": "Study 3.0 x 2.8",
+      "rect": {
+        "x": 0,
+        "y": 3400,
+        "w": 3000,
+        "h": 2800
+      }
+    }
+  ],
   "zones": [
     {
       "id": "master-1",
@@ -173,6 +207,42 @@
         "w": 2800,
         "h": 4000
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Theatre",
+      "rect": {
+        "x": 2600,
+        "y": 15700,
+        "w": 4100,
+        "h": 3300
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Guest bed",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 3000,
+        "h": 3400
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-3",
+      "kind": "carved",
+      "name": "Study",
+      "rect": {
+        "x": 0,
+        "y": 3400,
+        "w": 3000,
+        "h": 2800
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -191,12 +261,12 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 0,
+        "x": 3000,
         "y": 0,
-        "w": 5100,
+        "w": 2100,
         "h": 6200
       },
-      "cls": "Flex · room"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-2",
@@ -223,10 +293,20 @@
       "rect": {
         "x": 0,
         "y": 15700,
-        "w": 6700,
+        "w": 2600,
         "h": 4300
       },
       "cls": "Flex · room"
+    },
+    {
+      "id": "flex-5",
+      "rect": {
+        "x": 2600,
+        "y": 19000,
+        "w": 4100,
+        "h": 1000
+      },
+      "cls": "Flex · circulation"
     }
   ]
 }

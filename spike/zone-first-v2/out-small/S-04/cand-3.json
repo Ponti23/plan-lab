@@ -1,8 +1,8 @@
 {
   "role": "option 3",
-  "rank": 19,
+  "rank": 17,
   "briefId": "S-04",
-  "optionId": "L|midG|block|m:rear/split|wet:split|rr:FM|fw|v3",
+  "optionId": "L|midG|block|m:rear/split|wet:split|rr:MF|fw|v3",
   "options": {
     "garageSide": "L",
     "corePos": "middle",
@@ -11,8 +11,8 @@
     "masterForm": "split",
     "wetForm": "split",
     "rearPlan": [
-      "F",
-      "M"
+      "M",
+      "F"
     ],
     "flexWall": true,
     "coreLane": "G",
@@ -27,9 +27,9 @@
     "corePos": "middle",
     "coreForm": "block",
     "rearRow": [
-      "flex",
       "master",
-      "ensuite"
+      "ensuite",
+      "flex"
     ],
     "masterPos": "rear",
     "masterForm": "split",
@@ -37,7 +37,7 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.2894736842105263,
+    "flexShare": 0.11697368421052631,
     "circulationShare": 0.12144736842105264,
     "coreShare": 0.1700657894736842,
     "bedroomSpread": 0,
@@ -51,7 +51,7 @@
     "spineRatio": 0.375,
     "longestFlexRatio": 0.34375,
     "flexStrips": 0,
-    "score": 17.5,
+    "score": 15.77,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -62,7 +62,8 @@
     }
   },
   "notes": [
-    "Core shrank in depth to 5500 mm (preferred 9000 mm)"
+    "Core shrank in depth to 5500 mm (preferred 9000 mm)",
+    "carved from Flex: Theatre 3.8 x 4.1, Guest bed 3.8 x 2.8"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
@@ -70,20 +71,42 @@
   "circulationArea": 18460000,
   "flexArea": {
     "Flex · circulation": 5500000,
-    "Flex · room": 27740000,
-    "Flex · storage": 10760000,
+    "Flex · room": 0,
+    "Flex · storage": 12280000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Theatre",
+      "label": "Theatre 3.8 x 4.1",
+      "rect": {
+        "x": 5700,
+        "y": 1600,
+        "w": 3800,
+        "h": 4100
+      }
+    },
+    {
+      "name": "Guest bed",
+      "label": "Guest bed 3.8 x 2.8",
+      "rect": {
+        "x": 5700,
+        "y": 13200,
+        "w": 3800,
+        "h": 2800
+      }
+    }
+  ],
   "zones": [
     {
       "id": "master-1",
       "kind": "master",
       "name": "Master + WIR",
       "rect": {
-        "x": 3800,
+        "x": 0,
         "y": 0,
         "w": 3500,
         "h": 4500
@@ -94,7 +117,7 @@
       "kind": "ensuite",
       "name": "Ensuite",
       "rect": {
-        "x": 7300,
+        "x": 3500,
         "y": 0,
         "w": 2200,
         "h": 3500
@@ -176,6 +199,30 @@
         "w": 3800,
         "h": 2700
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Theatre",
+      "rect": {
+        "x": 5700,
+        "y": 1600,
+        "w": 3800,
+        "h": 4100
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Guest bed",
+      "rect": {
+        "x": 5700,
+        "y": 13200,
+        "w": 3800,
+        "h": 2800
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -206,20 +253,20 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 0,
+        "x": 5700,
         "y": 0,
         "w": 3800,
-        "h": 4500
+        "h": 1600
       },
-      "cls": "Flex · room"
+      "cls": "Flex · storage"
     },
     {
       "id": "flex-2",
       "rect": {
-        "x": 7300,
+        "x": 3500,
         "y": 3500,
         "w": 2200,
-        "h": 2200
+        "h": 1000
       },
       "cls": "Flex · storage"
     },
@@ -228,7 +275,7 @@
       "rect": {
         "x": 4700,
         "y": 4500,
-        "w": 2600,
+        "w": 1000,
         "h": 1200
       },
       "cls": "Flex · storage"
@@ -262,16 +309,6 @@
         "h": 5500
       },
       "cls": "Flex · circulation"
-    },
-    {
-      "id": "flex-7",
-      "rect": {
-        "x": 5700,
-        "y": 13200,
-        "w": 3800,
-        "h": 2800
-      },
-      "cls": "Flex · room"
     }
   ]
 }

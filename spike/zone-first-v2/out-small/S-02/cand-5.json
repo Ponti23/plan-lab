@@ -37,8 +37,8 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.1744047619047619,
-    "circulationShare": 0.04285714285714286,
+    "flexShare": 0.06726190476190476,
+    "circulationShare": 0.07857142857142857,
     "coreShare": 0.19940476190476192,
     "bedroomSpread": 3050,
     "spreadNorm": 0.15937163300331506,
@@ -46,12 +46,12 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 7.2,
+    "circulationM2": 13.2,
     "slivers": 0,
     "spineRatio": 0.375,
     "longestFlexRatio": 0.3125,
     "flexStrips": 0,
-    "score": 29.06,
+    "score": 28.35,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -62,21 +62,34 @@
     }
   },
   "notes": [
-    "Core shrank in depth to 5000 mm (preferred 6500 mm)"
+    "Core shrank in depth to 5000 mm (preferred 6500 mm)",
+    "carved from Flex: Theatre 3.6 x 5.0"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 7200000,
+  "circulationArea": 13200000,
   "flexArea": {
-    "Flex · circulation": 0,
-    "Flex · room": 24000000,
+    "Flex · circulation": 6000000,
+    "Flex · room": 0,
     "Flex · storage": 5300000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Theatre",
+      "label": "Theatre 3.6 x 5.0",
+      "rect": {
+        "x": 1200,
+        "y": 0,
+        "w": 3600,
+        "h": 5000
+      }
+    }
+  ],
   "zones": [
     {
       "id": "master-1",
@@ -165,6 +178,18 @@
         "w": 3800,
         "h": 3000
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Theatre",
+      "rect": {
+        "x": 1200,
+        "y": 0,
+        "w": 3600,
+        "h": 5000
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -185,10 +210,10 @@
       "rect": {
         "x": 0,
         "y": 0,
-        "w": 4800,
+        "w": 1200,
         "h": 5000
       },
-      "cls": "Flex · room"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-2",

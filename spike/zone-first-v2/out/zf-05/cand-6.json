@@ -1,6 +1,6 @@
 {
   "role": "target match (regression)",
-  "rank": 263,
+  "rank": 311,
   "briefId": "zf-05",
   "optionId": "L|midR|block|m:front/block|wet:split|rr:BBF|fw|v3",
   "options": {
@@ -42,7 +42,7 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.28934400140484895,
+    "flexShare": 0.1399405947275077,
     "circulationShare": 0.16335027200655597,
     "coreShare": 0.1971910338444203,
     "bedroomSpread": 11227,
@@ -56,7 +56,7 @@
     "spineRatio": 0.2877379371403276,
     "longestFlexRatio": 0.2877379371403276,
     "flexStrips": 1,
-    "score": 23.2,
+    "score": 21.71,
     "outside": {
       "flexShare": 0,
       "circulationShare": 1.79,
@@ -71,7 +71,8 @@
     "Master shrank in width to 4190 mm (preferred 4400 mm)",
     "Bed 2 grew to 3400 x 3200 (lot surplus; was 3400 x 3000)",
     "Bed 3 grew to 4000 x 3000 (lot surplus; was 3400 x 3000)",
-    "Bed 4 grew to 4000 x 3000 (lot surplus; was 4000 x 2700)"
+    "Bed 4 grew to 4000 x 3000 (lot surplus; was 4000 x 2700)",
+    "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.5 x 3.0, Study 4.0 x 2.9"
   ],
   "spineLength": 6500,
   "longestRun": 6500,
@@ -79,13 +80,45 @@
   "circulationArea": 40185000,
   "flexArea": {
     "Flex · circulation": 24585000,
-    "Flex · room": 44075100,
-    "Flex · storage": 2520000,
+    "Flex · room": 0,
+    "Flex · storage": 9841100,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Theatre",
+      "label": "Theatre 3.6 x 4.1",
+      "rect": {
+        "x": 7290,
+        "y": 12000,
+        "w": 3600,
+        "h": 4090
+      }
+    },
+    {
+      "name": "Guest bed",
+      "label": "Guest bed 3.5 x 3.0",
+      "rect": {
+        "x": 7400,
+        "y": 0,
+        "w": 3490,
+        "h": 3000
+      }
+    },
+    {
+      "name": "Study",
+      "label": "Study 4.0 x 2.9",
+      "rect": {
+        "x": 0,
+        "y": 13700,
+        "w": 4000,
+        "h": 2890
+      }
+    }
+  ],
   "zones": [
     {
       "id": "bedroom-1",
@@ -196,6 +229,42 @@
         "w": 4190,
         "h": 6500
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Theatre",
+      "rect": {
+        "x": 7290,
+        "y": 12000,
+        "w": 3600,
+        "h": 4090
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Guest bed",
+      "rect": {
+        "x": 7400,
+        "y": 0,
+        "w": 3490,
+        "h": 3000
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-3",
+      "kind": "carved",
+      "name": "Study",
+      "rect": {
+        "x": 0,
+        "y": 13700,
+        "w": 4000,
+        "h": 2890
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -226,16 +295,6 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 7400,
-        "y": 0,
-        "w": 3490,
-        "h": 3000
-      },
-      "cls": "Flex · room"
-    },
-    {
-      "id": "flex-2",
-      "rect": {
         "x": 3400,
         "y": 3000,
         "w": 2100,
@@ -244,7 +303,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-3",
+      "id": "flex-2",
       "rect": {
         "x": 0,
         "y": 3200,
@@ -254,7 +313,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-4",
+      "id": "flex-3",
       "rect": {
         "x": 3600,
         "y": 4200,
@@ -264,7 +323,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-5",
+      "id": "flex-4",
       "rect": {
         "x": 4000,
         "y": 10700,
@@ -274,24 +333,14 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-6",
+      "id": "flex-5",
       "rect": {
         "x": 5500,
         "y": 12000,
-        "w": 5390,
+        "w": 1790,
         "h": 4090
       },
-      "cls": "Flex · room"
-    },
-    {
-      "id": "flex-7",
-      "rect": {
-        "x": 0,
-        "y": 13700,
-        "w": 4000,
-        "h": 2890
-      },
-      "cls": "Flex · room"
+      "cls": "Flex · storage"
     }
   ]
 }

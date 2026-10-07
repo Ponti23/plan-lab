@@ -36,8 +36,8 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.15503030303030302,
-    "circulationShare": 0.07127272727272728,
+    "flexShare": 0.05551515151515152,
+    "circulationShare": 0.08824242424242425,
     "coreShare": 0.26096969696969696,
     "bedroomSpread": 4000,
     "spreadNorm": 0.17209276148700725,
@@ -45,12 +45,12 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 11.76,
+    "circulationM2": 14.56,
     "slivers": 0,
     "spineRatio": 0.2727272727272727,
-    "longestFlexRatio": 0.2818181818181818,
+    "longestFlexRatio": 0.17272727272727273,
     "flexStrips": 0,
-    "score": 24.55,
+    "score": 22.63,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -60,20 +60,44 @@
       "spreadNorm": 14.47
     }
   },
-  "notes": [],
+  "notes": [
+    "carved from Flex: Guest bed 3.1 x 3.4, Study 2.1 x 2.8"
+  ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 11760000,
+  "circulationArea": 14560000,
   "flexArea": {
-    "Flex · circulation": 4560000,
-    "Flex · room": 19220000,
+    "Flex · circulation": 7360000,
+    "Flex · room": 0,
     "Flex · storage": 1800000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Guest bed",
+      "label": "Guest bed 3.1 x 3.4",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 3100,
+        "h": 3400
+      }
+    },
+    {
+      "name": "Study",
+      "label": "Study 2.1 x 2.8",
+      "rect": {
+        "x": 1000,
+        "y": 3400,
+        "w": 2100,
+        "h": 2800
+      }
+    }
+  ],
   "zones": [
     {
       "id": "master-1",
@@ -162,6 +186,30 @@
         "w": 2800,
         "h": 4000
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Guest bed",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 3100,
+        "h": 3400
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Study",
+      "rect": {
+        "x": 1000,
+        "y": 3400,
+        "w": 2100,
+        "h": 2800
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -181,11 +229,11 @@
       "id": "flex-1",
       "rect": {
         "x": 0,
-        "y": 0,
-        "w": 3100,
-        "h": 6200
+        "y": 3400,
+        "w": 1000,
+        "h": 2800
       },
-      "cls": "Flex · room"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-2",

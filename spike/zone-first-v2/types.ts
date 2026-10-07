@@ -24,6 +24,7 @@ export type ZoneKind =
   | 'laundry'
   | 'core'
   | 'flexwall'
+  | 'carved'
   | 'spine';
 
 export interface ZoneRec {
@@ -31,6 +32,8 @@ export interface ZoneRec {
   kind: ZoneKind;
   name: string;
   rect: Rect;
+  /** a room carved out of Flex by the carve pass (carve.ts); kind is then 'carved' */
+  carved?: true;
 }
 
 export type FlexClass = 'Flex · circulation' | 'Flex · room' | 'Flex · storage' | 'sliver';
@@ -158,4 +161,6 @@ export interface Candidate {
   slivers: number;
   signature: PlanSignature;
   quality: Quality;
+  /** the rooms the carve pass made out of Flex (also in `zones`); undefined when the pass did not run */
+  carved?: ZoneRec[];
 }

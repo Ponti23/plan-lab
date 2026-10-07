@@ -181,3 +181,32 @@ export function fitRoom(spec: RoomSpec, w: number, areaMax?: number): Fit | null
 }
 
 export { SLIVER_MIN_SIDE };
+
+// ------------------------------------------------------------------ carve pass (round 5)
+
+/**
+ * Rooms the carve pass makes out of big Flex, in fill order (user decision 2026-10-07: Theatre, Guest bed,
+ * Activity, Study). Sizes are the PROVISIONAL "what the tool uses" rows of knowledge/reference/room-sizes/
+ * room-size-guide.md (Theatre / media room, Activity / rumpus room, Study); the Guest bed is the CATALOG Bedroom
+ * row. They are deliberately NOT added to spike/geometry-feasibility CATALOG.
+ */
+export interface CarveSpec {
+  name: string;
+  s: Rng;
+  l: Rng;
+  /** must touch the envelope (R7: windows) */
+  needsEnvelope: boolean;
+  /** prefers a piece with no envelope edge: a tie-break, never a reason to fail */
+  prefersInterior: boolean;
+}
+
+export const CARVE_SPECS: CarveSpec[] = [
+  { name: 'Theatre', s: rng(3150, 3600, 4200), l: rng(3500, 4100, 5200), needsEnvelope: false, prefersInterior: true },
+  { name: 'Guest bed', s: bed.s, l: bed.l, needsEnvelope: true, prefersInterior: false },
+  { name: 'Activity', s: rng(3000, 3500, 5000), l: rng(3000, 4000, 6000), needsEnvelope: false, prefersInterior: false },
+  { name: 'Study', s: rng(2000, 3000, 3500), l: rng(2200, 3500, 4000), needsEnvelope: false, prefersInterior: false },
+];
+
+/** a hall carved to reach a walk-through node: 1000-1200 wide, never longer than 4000 */
+export const HALL_WIDTHS = [1200, 1000];
+export const HALL_MAX_LEN = 4000;

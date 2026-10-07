@@ -2,6 +2,7 @@
 // diverse top 5 -> blind test and closeness against the user's own zoning (diagnostics) -> target check (regression).
 // Pure (no file output) so run.ts and the tests share it.
 
+import { carveCandidate } from './carve.ts';
 import { goldenById, goldenRects, profileFor, type GoldenPlan } from './golden.ts';
 import { closeness, groupedRects, sameKindOverlap, scoreOf, type Group, type Metrics, type Profile } from './quality.ts';
 import { enumerateOptions, generate, mismatches, optionAimsAt } from './zones.ts';
@@ -21,7 +22,7 @@ const rectKey = (kind: string, r: Rect): string => `${kind}:${r.x},${r.y},${r.w}
 /** zones + spine only: Flex is computed from them (and its decomposition is not mirror-symmetric) */
 export function layoutKey(c: Candidate, mirror: boolean): string {
   const m = (r: Rect): Rect => (mirror ? { x: c.envelope.w - r.x - r.w, y: r.y, w: r.w, h: r.h } : r);
-  return [...c.zones.map((z) => rectKey(z.kind, m(z.rect))), rectKey('spine', m(c.spine.rect))].sort().join('|');
+  return [...c.zones.filter((z) => !z.carved).map((z) => rectKey(z.kind, m(z.rect))), rectKey('spine', m(c.spine.rect))].sort().join('|');
 }
 
 export const candidateRects = (c: Candidate): { g: Group; r: Rect }[] =>
@@ -80,7 +81,7 @@ export interface BriefResult {
   closenessOf: Map<Candidate, number>;
 }
 
-export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number } = {}): BriefResult {
+export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; carve?: boolean } = {}): BriefResult {
   const top = opts.top ?? 5;
   const options = enumerateOptions(brief);
   // the profile (leave-one-out for a golden brief) also gives the Flex ceiling the grow pass works against
@@ -91,7 +92,8 @@ export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number } = 
   const failedBy = new Map<Options, string>();
   for (const o of options) {
     const res = generate(brief, o, ceiling);
-    if (res.ok) valid.push(res.candidate);
+    // round 5: big Flex becomes named rooms before anything is scored (carve: false reproduces the earlier output)
+    if (res.ok) valid.push(opts.carve === false ? res.candidate : carveCandidate(res.candidate));
     else {
       failures.set(res.reason, (failures.get(res.reason) ?? 0) + 1);
       failedBy.set(o, res.reason);

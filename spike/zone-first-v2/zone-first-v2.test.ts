@@ -8,8 +8,9 @@ import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
-import { overlap, sharedEdge } from '../zone-first/flex.ts';
+import { classifyPiece, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { BRIEFS } from './briefs.ts';
+import { carveCandidate, carvedLine, carveRooms, envelopeEdges } from './carve.ts';
 import { checkConnectivity } from './connect.ts';
 import { distribute } from './layout.ts';
 import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, runBrief, type BriefResult } from './pipeline.ts';
@@ -17,7 +18,7 @@ import { GOLDEN, goldenById, profileFor } from './golden.ts';
 import { BAND_METRICS, buildProfile, closeness, groupedRects, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
 import { renderSVG } from './render.ts';
-import { CORE_AREA_MAX, CORE_AREA_MIN, SPECS, SPINE_W, withinGarage, withinSpec } from './sizes.ts';
+import { CARVE_SPECS, CORE_AREA_MAX, CORE_AREA_MIN, SPECS, SPINE_W, withinGarage, withinSpec } from './sizes.ts';
 import type { Brief, Candidate, Rect, ZoneRec } from './types.ts';
 import { allRects, enumerateOptions, longestRun, mismatches, RUN_EXTRA, spineStopsAtCore, touchesBoundary } from './zones.ts';
 
@@ -444,7 +445,7 @@ test('the 8.8 m lot now produces valid layouts (rooms behind the garage, Core ab
   assert.ok(r.valid.length > 0, 'no valid layout');
   for (const c of r.valid) {
     assert.ok(c.zones.filter((z) => z.kind === 'bedroom').length === 3);
-    const beyond = c.zones.filter((z) => z.rect.x >= c.spine.rect.x + c.spine.rect.w && c.options.garageSide === 'L');
+    const beyond = c.zones.filter((z) => !z.carved && z.rect.x >= c.spine.rect.x + c.spine.rect.w && c.options.garageSide === 'L');
     for (const z of beyond) assert.ok(['wet', 'wc', 'laundry', 'flexwall'].includes(z.kind), `${c.optionId}: ${z.name} beyond the spine`);
   }
 });
@@ -579,12 +580,12 @@ test('grow pass: only above the Flex ceiling; spine, slivers, CATALOG max and th
   let unchangedUnderCeiling = 0;
   for (const id of ['zf-04', 'zf-07', 'SAMPLE-15x27']) {
     const r = RESULTS.find((x) => x.brief.id === id)!;
-    const before = runBrief(r.brief, { grow: false });
+    const before = runBrief(r.brief, { grow: false, carve: false });
     const ceiling = r.profile.flexShare.max;
     const byId = new Map(before.valid.map((c) => [c.optionId, c]));
     for (const c of r.valid) {
       const b = byId.get(c.optionId)!;
-      const same = JSON.stringify(c.zones) === JSON.stringify(b.zones);
+      const same = JSON.stringify(c.zones.filter((z) => !z.carved)) === JSON.stringify(b.zones); // generation only: carved rooms come later
       if (b.quality.flexShare <= ceiling) {
         assert.ok(same, `${id} ${c.optionId}: changed although its Flex share was within the ceiling`);
         unchangedUnderCeiling++;
@@ -639,4 +640,116 @@ test('v1 is untouched: its own tests still pass', () => {
   const v1 = join(import.meta.dirname!, '..', 'zone-first', 'zone-first.test.ts');
   const res = spawnSync(process.execPath, ['--test', v1], { encoding: 'utf8' });
   assert.equal(res.status, 0, `${res.stdout}\n${res.stderr}`.slice(-2000));
+});
+
+// ------------------------------------------------------------------ round 5: the carve pass (big Flex becomes rooms)
+
+const CARVE_ORDER = ['Theatre', 'Guest bed', 'Activity', 'Study'];
+const CARVED: { brief: Brief; c: Candidate }[] = ALL.filter((x) => x.c.carved && x.c.carved.length > 0);
+
+test('carve: a big block yields Theatre first, then Guest bed, Activity and Study', () => {
+  const env: Rect = { x: 0, y: 0, w: 20000, h: 16000 };
+  const spine: ZoneRec = { id: 'spine', kind: 'spine', name: 'Spine', rect: { x: 0, y: 0, w: 1200, h: 16000 } };
+  const piece: Rect = { x: 1200, y: 0, w: 18800, h: 16000 };
+  const res = carveRooms(env, [], spine, [{ id: 'flex-1', rect: piece, cls: classifyPiece(piece) }]);
+  assert.deepEqual(res.carved.map((z) => z.name), CARVE_ORDER);
+  // the Theatre is at its preferred size where it fits
+  const theatre = res.carved[0].rect;
+  assert.deepEqual([Math.min(theatre.w, theatre.h), Math.max(theatre.w, theatre.h)], [3600, 4100]);
+  // the rooms and what is left tile the piece
+  const pieces = [...res.carved.map((z) => z.rect), ...res.flex.map((f) => f.rect)];
+  assert.equal(pieces.reduce((a, r) => a + area(r), 0), area(piece));
+  for (let i = 0; i < pieces.length; i++) for (let j = i + 1; j < pieces.length; j++) assert.ok(!overlap(pieces[i], pieces[j]));
+  // a piece too small for a Theatre skips it and moves on to the next type
+  const small: Rect = { x: 1200, y: 0, w: 3100, h: 3100 };
+  const spine2: ZoneRec = { ...spine, rect: { x: 0, y: 0, w: 1200, h: 3100 } };
+  const res2 = carveRooms({ x: 0, y: 0, w: 4300, h: 3100 }, [], spine2, [{ id: 'flex-1', rect: small, cls: classifyPiece(small) }]);
+  assert.deepEqual(res2.carved.map((z) => z.name), ['Guest bed']);
+});
+
+test('carve: real candidates carve in order, at most one of each, out of Flex, and it is common', () => {
+  assert.ok(CARVED.length > 1000, `only ${CARVED.length} candidates carved`);
+  for (const x of CARVED) {
+    const names = x.c.carved!.map((z) => z.name);
+    assert.ok(names.every((n) => CARVE_ORDER.includes(n)), where(x));
+    assert.deepEqual(names, CARVE_ORDER.filter((n) => names.includes(n)), `${where(x)}: out of order`);
+    assert.equal(new Set(names).size, names.length, where(x));
+    for (const z of x.c.carved!) assert.ok(x.c.zones.includes(z) && z.carved === true && z.kind === 'carved', where(x));
+    // not Flex: everything still tiles the envelope exactly
+    const all = [...x.c.zones.map((z) => z.rect), x.c.spine.rect, ...x.c.flex.map((f) => f.rect), ...x.c.extensions.map((e) => e.rect)];
+    assert.equal(all.reduce((a, r) => a + area(r), 0), area(box(x.c)), where(x));
+  }
+});
+
+test('carve: every carved room has a 900 mm edge on a walk-through node, and the plan stays connected', () => {
+  for (const x of CARVED) {
+    const walk: Rect[] = [
+      x.c.spine.rect,
+      ...x.c.zones.filter((z) => z.kind === 'core' || z.kind === 'flexwall').map((z) => z.rect),
+      ...x.c.flex.map((f) => f.rect),
+    ];
+    for (const z of x.c.carved!) {
+      assert.ok(walk.some((r) => sharedEdge(r, z.rect) >= 900), `${where(x)}: ${z.name} has no access`);
+    }
+    const conn = checkConnectivity({ zones: x.c.zones, spine: x.c.spine, flex: x.c.flex });
+    assert.ok(conn.ok, `${where(x)}: ${conn.unreached.join(', ')}`);
+  }
+});
+
+test('carve: the Guest bed touches the envelope, and every carved room stays inside its size row', () => {
+  let guests = 0;
+  for (const x of CARVED) {
+    for (const z of x.c.carved!) {
+      const spec = CARVE_SPECS.find((s) => s.name === z.name)!;
+      const s = Math.min(z.rect.w, z.rect.h);
+      const l = Math.max(z.rect.w, z.rect.h);
+      assert.ok(s >= spec.s.min && s <= spec.s.max, `${where(x)} ${z.name} short side ${s}`);
+      assert.ok(l >= spec.l.min && l <= spec.l.max, `${where(x)} ${z.name} long side ${l}`);
+      if (z.name === 'Guest bed') {
+        guests++;
+        assert.ok(touchesBoundary(z.rect, box(x.c)) && envelopeEdges(z.rect, box(x.c)) >= 1, `${where(x)}: Guest bed has no exterior wall`);
+      }
+    }
+  }
+  assert.ok(guests > 100, 'Guest beds get carved');
+});
+
+test('carve: deterministic - the same candidate carves the same way every time', () => {
+  for (const id of ['zf-04', 'SAMPLE-15x27']) {
+    const r = RESULTS.find((x) => x.brief.id === id)!;
+    const raw = runBrief(r.brief, { carve: false });
+    for (const c of raw.ranked.slice(0, 50)) assert.deepEqual(carveCandidate(c), carveCandidate(c), c.optionId);
+    const again = runBrief(r.brief);
+    assert.deepEqual(again.top5.map((c) => [c.optionId, c.carved, c.flex]), r.top5.map((c) => [c.optionId, c.carved, c.flex]));
+  }
+});
+
+test('carve: carve false reproduces the earlier output; carving only lowers the Flex share', () => {
+  for (const r of RESULTS) {
+    const raw = runBrief(r.brief, { carve: false });
+    const byId = new Map(raw.valid.map((c) => [c.optionId, c]));
+    for (const c of raw.valid) {
+      assert.equal(c.carved, undefined, c.optionId);
+      assert.ok(!c.zones.some((z) => z.carved || z.kind === 'carved'), c.optionId);
+      assert.ok(!c.notes.some((n) => n.startsWith('carved')), c.optionId);
+      assert.ok(!('carved' in JSON.parse(JSON.stringify(c))), c.optionId);
+    }
+    for (const c of r.valid) {
+      const g = byId.get(c.optionId)!;
+      assert.ok(c.quality.flexShare <= g.quality.flexShare + 1e-12 && c.quality.slivers <= g.quality.slivers, c.optionId);
+      // a candidate that carved nothing is the generator's candidate, plus an empty list
+      if (c.carved && c.carved.length === 0) assert.deepEqual({ ...c, carved: undefined }, { ...g, quality: c.quality, carved: undefined }, c.optionId);
+    }
+  }
+});
+
+test('carve: carved rooms are drawn like rooms (name, W x D, plain fill) and the metric line names them', () => {
+  const x = CARVED.find((y) => y.c.carved!.some((z) => z.name === 'Theatre'))!;
+  const z = x.c.carved!.find((q) => q.name === 'Theatre')!;
+  const svg = renderSVG(x.c);
+  assert.ok(svg.includes('>Theatre</text>'));
+  assert.ok(svg.includes(`>${(z.rect.w / 1000).toFixed(1)} x ${(z.rect.h / 1000).toFixed(1)} m</text>`));
+  assert.ok(svg.includes(`<rect x="${z.rect.x}" y="${z.rect.y}" width="${z.rect.w}" height="${z.rect.h}" fill="#e8e8e8"`));
+  assert.ok(carvedLine(x.c)!.startsWith('carved: Theatre'));
+  assert.equal(carvedLine({ ...x.c, carved: [] }), 'carved: none');
 });

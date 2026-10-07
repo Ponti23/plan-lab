@@ -1,6 +1,6 @@
 {
   "role": "top 5",
-  "rank": 33,
+  "rank": 59,
   "briefId": "zf-07",
   "optionId": "L|midR|split|m:rear/split|wet:split|rr:BBFM|nofw|v0",
   "options": {
@@ -51,8 +51,8 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.2726601352068335,
-    "circulationShare": 0.05995657430974994,
+    "flexShare": 0.1610267039920134,
+    "circulationShare": 0.10897345303710979,
     "coreShare": 0.1946828035503809,
     "bedroomSpread": 9323,
     "spreadNorm": 0.4316356143770726,
@@ -60,12 +60,12 @@
     "laundryNear": true,
     "masterSeparated": false,
     "spineMetres": 6,
-    "circulationM2": 12.6,
+    "circulationM2": 22.901,
     "slivers": 0,
     "spineRatio": 0.3280481137233461,
     "longestFlexRatio": 0.3280481137233461,
     "flexStrips": 0,
-    "score": 13.82,
+    "score": 13.19,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -83,21 +83,44 @@
     "Ensuite shrank in width to 1890 mm (preferred 2200 mm)",
     "Core · dining shrank in depth to 2900 mm (preferred 3000 mm)",
     "Core · kitchen + living shrank in depth to 4700 mm (preferred 5100 mm)",
-    "Master + WIR grew to 4200 x 4690 (lot surplus; was 3000 x 4690)"
+    "Master + WIR grew to 4200 x 4690 (lot surplus; was 3000 x 4690)",
+    "carved from Flex: Theatre 3.6 x 4.1, Study 3.0 x 2.9"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 12600000,
+  "circulationArea": 22901000,
   "flexArea": {
-    "Flex · circulation": 5400000,
-    "Flex · room": 40601000,
-    "Flex · storage": 11299100,
+    "Flex · circulation": 15701000,
+    "Flex · room": 0,
+    "Flex · storage": 18139100,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Theatre",
+      "label": "Theatre 3.6 x 4.1",
+      "rect": {
+        "x": 6700,
+        "y": 12290,
+        "w": 3600,
+        "h": 4100
+      }
+    },
+    {
+      "name": "Study",
+      "label": "Study 3.0 x 2.9",
+      "rect": {
+        "x": 4090,
+        "y": 4690,
+        "w": 3000,
+        "h": 2900
+      }
+    }
+  ],
   "zones": [
     {
       "id": "bedroom-1",
@@ -219,6 +242,30 @@
         "w": 5990,
         "h": 4700
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Theatre",
+      "rect": {
+        "x": 6700,
+        "y": 12290,
+        "w": 3600,
+        "h": 4100
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Study",
+      "rect": {
+        "x": 4090,
+        "y": 4690,
+        "w": 3000,
+        "h": 2900
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -259,10 +306,10 @@
       "rect": {
         "x": 3000,
         "y": 4690,
-        "w": 4090,
+        "w": 1090,
         "h": 2900
       },
-      "cls": "Flex · room"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-4",
@@ -287,12 +334,22 @@
     {
       "id": "flex-6",
       "rect": {
-        "x": 6700,
+        "x": 10300,
         "y": 12290,
-        "w": 4790,
+        "w": 1190,
         "h": 6000
       },
-      "cls": "Flex · room"
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-7",
+      "rect": {
+        "x": 6700,
+        "y": 16390,
+        "w": 3600,
+        "h": 1900
+      },
+      "cls": "Flex · storage"
     }
   ]
 }

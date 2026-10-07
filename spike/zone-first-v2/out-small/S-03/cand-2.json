@@ -1,6 +1,6 @@
 {
   "role": "option 2",
-  "rank": 10,
+  "rank": 13,
   "briefId": "S-03",
   "optionId": "L|midG|split|m:rear/block|wet:block|rr:MF|nofw|v0",
   "options": {
@@ -36,7 +36,7 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.1855757575757576,
+    "flexShare": 0.13466666666666666,
     "circulationShare": 0.06181818181818182,
     "coreShare": 0.26096969696969696,
     "bedroomSpread": 3600,
@@ -50,7 +50,7 @@
     "spineRatio": 0.2727272727272727,
     "longestFlexRatio": 0.2818181818181818,
     "flexStrips": 0,
-    "score": 26.65,
+    "score": 26.14,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -60,20 +60,34 @@
       "spreadNorm": 16.19
     }
   },
-  "notes": [],
+  "notes": [
+    "carved from Flex: Guest bed 2.8 x 3.0"
+  ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
   "circulationArea": 10200000,
   "flexArea": {
     "Flex · circulation": 3000000,
-    "Flex · room": 27620000,
+    "Flex · room": 19220000,
     "Flex · storage": 0,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
+  "carved": [
+    {
+      "name": "Guest bed",
+      "label": "Guest bed 2.8 x 3.0",
+      "rect": {
+        "x": 4700,
+        "y": 19000,
+        "w": 2800,
+        "h": 3000
+      }
+    }
+  ],
   "zones": [
     {
       "id": "master-1",
@@ -162,6 +176,18 @@
         "w": 2800,
         "h": 3600
       }
+    },
+    {
+      "id": "carved-1",
+      "kind": "carved",
+      "name": "Guest bed",
+      "rect": {
+        "x": 4700,
+        "y": 19000,
+        "w": 2800,
+        "h": 3000
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -196,16 +222,6 @@
         "h": 3000
       },
       "cls": "Flex · circulation"
-    },
-    {
-      "id": "flex-3",
-      "rect": {
-        "x": 4700,
-        "y": 19000,
-        "w": 2800,
-        "h": 3000
-      },
-      "cls": "Flex · room"
     }
   ]
 }

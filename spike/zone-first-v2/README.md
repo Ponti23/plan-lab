@@ -8,7 +8,7 @@ user's seven zoning drawings (2026-10-07). Brief: `knowledge/briefs/zf-v2-row-ce
 
 ```sh
 node spike/zone-first-v2/run.ts                 # writes spike/zone-first-v2/out/ (about 1 s)
-node --test spike/zone-first-v2/*.test.ts       # 54 tests: 49 pass, 5 todo (zf-07 and zf-08 user notes, blind zf-03, 05, 08)
+node --test spike/zone-first-v2/*.test.ts       # 61 tests: 59 pass, 2 todo (zf-07 and zf-08 user notes; the zf-08 note now passes, the blind todos pass)
 node --test spike/zone-first/*.test.ts spike/geometry-feasibility/*.test.ts spike/template-generator/*.test.ts
 ```
 
@@ -52,6 +52,7 @@ with its rank and the quality metric line); no builder plan, no zoning drawing a
 | `layout.ts` | the slicing tree (leaf / stack / row), sizing and clipping |
 | `zones.ts` | option enumeration, tree builder, validity checks, plan signature |
 | `connect.ts` | v1's connectivity with flex-walls and both Core parts walk-through, Ensuite rule |
+| `carve.ts` | round 5: the carve pass (big Flex becomes Theatre, Guest bed, Activity, Study) |
 | `render.ts` | SVG (copy of v1's with the flex-wall) |
 | `briefs.ts` | v1's briefs minus zf-02, with the seven `target` signatures |
 | `pipeline.ts` | enumerate, rank, dedupe, hide mirrors, check targets (shared by `run.ts` and the tests); `opts.top` (default 5) sets how many pairwise-different plans `topN` holds |
@@ -205,6 +206,51 @@ area that a candidate covers with the same kind group.
 ## Results (this run)
 
 Valid / generated: zf-00 3200/5504, zf-01 354/1472, zf-03 964/5504, zf-04 3184/5504, zf-05 1758/5504, zf-07 1380/5504, zf-08 2814/5504, SAMPLE-15x27 3940/5504, custom-8800x20550 16/48. Whole run 17610/40048, about 3.6 s.
+
+### Carve pass: big Flex becomes named rooms (round 5, user decision 2026-10-07)
+
+Brief: `knowledge/briefs/zf-v2-flex-split-brief.md`. On big lots the extra area became large Flex blocks (top 6: 10-20 % of a small
+lot, 23-34 % medium, 32-52 % large). `carve.ts` runs after a candidate's Flex is computed (after the grow pass) and **before
+scoring**, so the ranking sees it. It turns room-sized Flex pieces into rooms in a fixed order, **at most one of each**:
+
+1. **Theatre**, min 3150 x 3500, preferred 3600 x 4100, max 4200 x 5200
+2. **Guest bed**, the CATALOG `Bedroom` row (extra to the brief's bedrooms; named `Guest bed`; must touch the envelope, R7)
+3. **Activity**, min 3000 x 3000, preferred 3500 x 4000, max 5000 x 6000
+4. **Study**, min 2000 x 2200, preferred 3000 x 3500, max 3500 x 4000
+
+Sizes are in `sizes.ts` (`CARVE_SPECS`), from `knowledge/reference/room-sizes/room-size-guide.md`, provisional, and not in the
+`geometry-feasibility` CATALOG. A type that fits nowhere is skipped and the pass moves on.
+
+How a room is placed (all deterministic; ties go to fixed keys): in a non-sliver, non-circulation Flex piece, either way round,
+in one of the piece's four corners, at its preferred size where it fits, shrinking toward its min when the piece is short. It
+grows toward its max only when the leftover would otherwise be a sliver (< 1000 mm); if it cannot, it shrinks to leave a 1000 mm
+strip, and if that fails too the placement is dropped. The leftover is re-decomposed and re-classified by the existing
+`classifyPiece`; a placement that would leave a sliver is rejected. **Access** is the v2 connectivity check with the carved
+room added as a required node: it must share >= 900 mm with a reached walk-through node (spine, Core part, flex-wall, any
+non-sliver Flex piece) and no other room may lose its access. When no hall-free placement passes, a **hall** (Flex · circulation,
+1200 then 1000 wide, as long as the room side it runs along, never over 4000 long) is carved on one side of the room. Placement
+order: no hall before a hall, shorter hall first, (Theatre only) fewest envelope edges, fewest leftover pieces, smallest piece,
+then position keys.
+
+Carved rooms are `ZoneRec`s with `kind: 'carved'` and `carved: true` inside `zones` (and in `Candidate.carved`), so the metrics,
+the SVG and the JSON treat them as rooms, not Flex. The JSON gains `carved: [{ name, label, rect }]`; the review pages' metric line
+gains `carved: Theatre, Guest bed, ...` (or `carved: none`); the SVG draws a carved room like any room (name, `W x D m`).
+`pipeline.runBrief(brief, { carve: false })`, or `--no-carve` on `run.ts` / `run-small.ts`, switches the pass off and reproduces
+the `a9b5daf` output byte for byte (checked by regenerating all four output folders: `git status` showed no change).
+
+Judgement calls (all provisional):
+- A carved room is a neutral room for the metrics: it is not a `bedroom` (so a Guest bed does not enter the bedroom spread or the
+  wet-near-bed test), and it counts as the `Flex` kind group in the diversity rule and the closeness diagnostic, so which plans
+  count as pairwise different is unchanged by carving. The mirror-image dedupe ignores carved rooms for the same reason.
+- `signature` (the target regression) is the generator's, taken before carving.
+- Carving works on ordinary Flex pieces only, never on extensions, and never on a Flex · circulation piece (that is a hall).
+- "Walk-through Flex" is every non-sliver Flex piece, as in the existing connectivity rule, so a room may be reached through a
+  Flex room that is left over beside it.
+- Rooms sit in corners only, and a hall runs the full side of its room (rooms over 4000 on that side get no hall). Halls were used
+  for about 1 % of carved rooms (1233 of 127068 over the 9 + 5 + 5 + 5 + 5 review briefs).
+- A room at its preferred size can leave a 1000+ mm strip of Flex that classifies as circulation: a dead-end strip (see the L-01
+  picture). That follows the rule as written; whether to shrink or grow the room instead is the user's call.
+- Slivers that already existed before carving are left alone; carving never adds one.
 
 ### Grow rooms toward their max before leaving Flex (user decision 2026-10-07)
 

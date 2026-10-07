@@ -27,7 +27,7 @@ export interface ConnectResult {
 }
 
 const WALK_THROUGH_KINDS = new Set(['core', 'spine', 'flexwall']);
-const REQUIRED_KINDS = new Set(['bedroom', 'master', 'wet', 'wc', 'laundry', 'core']);
+const REQUIRED_KINDS = new Set(['bedroom', 'master', 'wet', 'wc', 'laundry', 'core', 'carved']);
 
 export function checkConnectivity(input: ConnectInput): ConnectResult {
   interface Node {

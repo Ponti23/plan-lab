@@ -202,6 +202,9 @@ export function groupOfKind(k: ZoneKind): Group {
       return 'Laundry';
     case 'garage':
       return 'Garage';
+    case 'carved':
+      // a carved room was Flex a moment ago: it keeps the Flex group for the diversity rule and the closeness diagnostic
+      return 'Flex';
     default:
       return 'Circulation';
   }
