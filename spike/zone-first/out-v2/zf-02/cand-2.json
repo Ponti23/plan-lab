@@ -1,0 +1,160 @@
+{
+  "briefId": "zf-02",
+  "optionId": "R|side-W|middle|garage",
+  "options": {
+    "garageSide": "R",
+    "coreShape": "side-W",
+    "masterPos": "middle",
+    "stackSide": "garage"
+  },
+  "envelope": {
+    "w": 9000,
+    "d": 22000
+  },
+  "zones": [
+    {
+      "id": "garage",
+      "kind": "garage",
+      "name": "Garage",
+      "rect": {
+        "x": 3500,
+        "y": 16000,
+        "w": 5500,
+        "h": 6000
+      }
+    },
+    {
+      "id": "core",
+      "kind": "core",
+      "name": "Family Core",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 4600,
+        "h": 8400
+      }
+    },
+    {
+      "id": "bed-3",
+      "kind": "bedroom",
+      "name": "Bedroom 3",
+      "rect": {
+        "x": 0,
+        "y": 19000,
+        "w": 3500,
+        "h": 3000
+      }
+    },
+    {
+      "id": "master",
+      "kind": "master",
+      "name": "Master suite",
+      "rect": {
+        "x": 4600,
+        "y": 0,
+        "w": 4400,
+        "h": 6200
+      }
+    },
+    {
+      "id": "bed-2",
+      "kind": "bedroom",
+      "name": "Bedroom 2",
+      "rect": {
+        "x": 5600,
+        "y": 6200,
+        "w": 3400,
+        "h": 3000
+      }
+    },
+    {
+      "id": "wet",
+      "kind": "wet",
+      "name": "Bath + WC",
+      "rect": {
+        "x": 6600,
+        "y": 9200,
+        "w": 2400,
+        "h": 4200
+      }
+    },
+    {
+      "id": "laundry",
+      "kind": "laundry",
+      "name": "Laundry",
+      "rect": {
+        "x": 5600,
+        "y": 13400,
+        "w": 3400,
+        "h": 2600
+      }
+    }
+  ],
+  "spine": {
+    "id": "spine",
+    "kind": "spine",
+    "name": "Spine",
+    "rect": {
+      "x": 2300,
+      "y": 16000,
+      "w": 1200,
+      "h": 3000
+    }
+  },
+  "flex": [
+    {
+      "id": "flex-1",
+      "rect": {
+        "x": 4600,
+        "y": 6200,
+        "w": 1000,
+        "h": 9800
+      },
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-2",
+      "rect": {
+        "x": 0,
+        "y": 8400,
+        "w": 4600,
+        "h": 7600
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-3",
+      "rect": {
+        "x": 5600,
+        "y": 9200,
+        "w": 1000,
+        "h": 4200
+      },
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-4",
+      "rect": {
+        "x": 0,
+        "y": 16000,
+        "w": 2300,
+        "h": 3000
+      },
+      "cls": "Flex · storage"
+    }
+  ],
+  "notes": [
+    "garage-side stack column 4400 mm, Family Core 4600 mm (J5)",
+    "Bedroom 3 sits at the front wall opposite the garage: the stack is full (J5)",
+    "side entry: the front door is on the side, behind the front room (J5)",
+    "Laundry at the front of the stack, behind the garage (R6)"
+  ],
+  "matchesReference": false,
+  "flexArea": {
+    "Flex · circulation": 14000000,
+    "Flex · room": 34960000,
+    "Flex · storage": 6900000,
+    "sliver": 0
+  },
+  "slivers": 0
+}

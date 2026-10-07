@@ -1,0 +1,170 @@
+{
+  "briefId": "zf-13",
+  "optionId": "R|band|front",
+  "options": {
+    "garageSide": "R",
+    "coreShape": "band",
+    "masterPos": "front"
+  },
+  "envelope": {
+    "w": 10490,
+    "d": 18990
+  },
+  "zones": [
+    {
+      "id": "garage",
+      "kind": "garage",
+      "name": "Garage",
+      "rect": {
+        "x": 4990,
+        "y": 12990,
+        "w": 5500,
+        "h": 6000
+      }
+    },
+    {
+      "id": "core",
+      "kind": "core",
+      "name": "Family Core",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 10490,
+        "h": 5200
+      }
+    },
+    {
+      "id": "master",
+      "kind": "master",
+      "name": "Master suite",
+      "rect": {
+        "x": 0,
+        "y": 12790,
+        "w": 3790,
+        "h": 6200
+      }
+    },
+    {
+      "id": "laundry",
+      "kind": "laundry",
+      "name": "Laundry",
+      "rect": {
+        "x": 8290,
+        "y": 5200,
+        "w": 2200,
+        "h": 2600
+      }
+    },
+    {
+      "id": "bed-2",
+      "kind": "bedroom",
+      "name": "Bedroom 2",
+      "rect": {
+        "x": 0,
+        "y": 9790,
+        "w": 3790,
+        "h": 3000
+      }
+    },
+    {
+      "id": "wet",
+      "kind": "wet",
+      "name": "Bath + WC",
+      "rect": {
+        "x": 0,
+        "y": 5590,
+        "w": 2400,
+        "h": 4200
+      }
+    },
+    {
+      "id": "bed-3",
+      "kind": "bedroom",
+      "name": "Bedroom 3",
+      "rect": {
+        "x": 6700,
+        "y": 9990,
+        "w": 3790,
+        "h": 3000
+      }
+    }
+  ],
+  "spine": {
+    "id": "spine",
+    "kind": "spine",
+    "name": "Spine",
+    "rect": {
+      "x": 3790,
+      "y": 5200,
+      "w": 1200,
+      "h": 13790
+    }
+  },
+  "flex": [
+    {
+      "id": "flex-1",
+      "rect": {
+        "x": 0,
+        "y": 5200,
+        "w": 3790,
+        "h": 390
+      },
+      "cls": "sliver"
+    },
+    {
+      "id": "flex-2",
+      "rect": {
+        "x": 4990,
+        "y": 5200,
+        "w": 3300,
+        "h": 4790
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-3",
+      "rect": {
+        "x": 2400,
+        "y": 5590,
+        "w": 1390,
+        "h": 4200
+      },
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-4",
+      "rect": {
+        "x": 8290,
+        "y": 7800,
+        "w": 2200,
+        "h": 2190
+      },
+      "cls": "Flex · storage"
+    },
+    {
+      "id": "flex-5",
+      "rect": {
+        "x": 4990,
+        "y": 9990,
+        "w": 1710,
+        "h": 3000
+      },
+      "cls": "Flex · storage"
+    }
+  ],
+  "notes": [
+    "Core band 10490 mm wide exceeds the FamilyCore catalog max 6500 mm (allowed here, reported)",
+    "Master block shrunk to the wing column: W 3790 mm (nominal 4400 mm)",
+    "Laundry at the Core front edge, garage column (R6)",
+    "Bedroom 3 overflows behind the garage, onto the garage-side wall (R4)",
+    "Master suite touches the Spine"
+  ],
+  "matchesReference": false,
+  "flexArea": {
+    "Flex · circulation": 5838000,
+    "Flex · room": 15807000,
+    "Flex · storage": 9948000,
+    "sliver": 1478100
+  },
+  "slivers": 1
+}

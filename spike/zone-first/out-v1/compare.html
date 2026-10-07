@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>zone-first - reference vs top 3</title>
+<style>
+ body { background:#fff; color:#000; font-family: Helvetica, Arial, sans-serif; margin:24px; }
+ h1 { font-size:20px } h2 { font-size:16px; border-top:2px solid #000; padding-top:12px }
+ .dim,.meta,.flex { color:#444; font-weight:normal; font-size:12px }
+ .row { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap }
+ figure { margin:0; width:300px } figcaption { font-size:12px; margin-bottom:4px }
+ figure.ref { border-left:4px solid #000; padding-left:8px }
+ figure.match { outline:3px solid #000 }
+ img { width:100%; height:auto; border:1px solid #ccc }
+ .badge { background:#000; color:#fff; font-size:10px; padding:1px 4px }
+ .ok { color:#060 } .bad { color:#900; font-weight:bold } .missing { border:1px dashed #999; padding:24px; font-size:12px; color:#900 }
+</style></head><body>
+<h1>zone-first prototype - reference plan vs the top 3 candidates</h1>
+<p class="meta">Ranking: fewer slivers, then more "Flex · room" area, then less "Flex · storage" area, then a stable id. The candidate whose options match the reference plan's own options is outlined. Every zone is labelled with its name and size (metres, 1 dp); flex pieces are hatched and carry their class - nothing relies on colour.</p>
+<section>
+<h2>zf-00 - theatre reference <span class="dim">12500 x 24000 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 8/18 candidates · <span class="ok">reference option R|band|middle: valid</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-00-theatre-ref.png" alt="reference plan zf-00-theatre-ref.png"></figure>
+<figure>
+  <figcaption><b>L|side-G|front</b><br><span class="flex">room 94.7 m² · circulation 34.0 m² · storage 2.2 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-00/cand-1.svg" alt="zf-00 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|side-G|front</b><br><span class="flex">room 94.7 m² · circulation 34.0 m² · storage 2.2 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-00/cand-2.svg" alt="zf-00 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 85.9 m² · circulation 11.0 m² · storage 8.8 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-00/cand-3.svg" alt="zf-00 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-01 - 2-bed 9.0 x 16.9 <span class="dim">9000 x 16900 mm, 2 bed, single garage</span></h2>
+<p class="meta">valid 2/18 candidates · <span class="ok">reference option R|band|front: valid</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-01-2bed-9000x16900.png" alt="reference plan zf-01-2bed-9000x16900.png"></figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 0.0 m² · circulation 5.6 m² · storage 11.5 m² · sliver 0.2 m²</span></figcaption>
+  <img src="zf-01/cand-1.svg" alt="zf-01 candidate 1">
+</figure>
+<figure class="match">
+  <figcaption><b>R|band|front</b> <span class="badge">matches reference</span><br><span class="flex">room 0.0 m² · circulation 5.6 m² · storage 11.5 m² · sliver 0.2 m²</span></figcaption>
+  <img src="zf-01/cand-2.svg" alt="zf-01 candidate 2">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-02 - 3-bed 9.0 x 22.0 <span class="dim">9000 x 22000 mm, 3 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - wing column 2300 mm < Bedroom min 2700 mm (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-02-3bed-9000x22000.png" alt="reference plan zf-02-3bed-9000x22000.png"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-03 - Turquoise Bay <span class="dim">9890 x 24790 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 4/18 candidates · <span class="bad">reference option: INVALID - Master at the rear conflicts with the full-width Core band (R3/R5)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-03-turquoise-bay.webp" alt="reference plan zf-03-turquoise-bay.webp"></figure>
+<figure>
+  <figcaption><b>L|side-G|middle</b><br><span class="flex">room 63.4 m² · circulation 6.8 m² · storage 3.5 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-03/cand-1.svg" alt="zf-03 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|side-G|middle</b><br><span class="flex">room 63.4 m² · circulation 6.8 m² · storage 3.5 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-03/cand-2.svg" alt="zf-03 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 44.8 m² · circulation 6.8 m² · storage 10.5 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-03/cand-3.svg" alt="zf-03 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-04 - Torquay Beach <span class="dim">12490 x 24190 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 8/18 candidates · <span class="bad">reference option: INVALID - the wing column and the garage column are full: 4 bedrooms do not fit (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-04-torquay-beach.webp" alt="reference plan zf-04-torquay-beach.webp"></figure>
+<figure>
+  <figcaption><b>L|side-G|front</b><br><span class="flex">room 88.0 m² · circulation 21.2 m² · storage 23.6 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-04/cand-1.svg" alt="zf-04 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|side-G|front</b><br><span class="flex">room 88.0 m² · circulation 21.2 m² · storage 23.6 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-04/cand-2.svg" alt="zf-04 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 55.9 m² · circulation 42.6 m² · storage 9.2 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-04/cand-3.svg" alt="zf-04 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-05 - Swanbourne <span class="dim">10890 x 22590 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 4/18 candidates · <span class="bad">reference option: INVALID - the wing column and the garage column are full: 4 bedrooms do not fit (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-05-swanbourne.webp" alt="reference plan zf-05-swanbourne.webp"></figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 34.7 m² · circulation 6.8 m² · storage 13.2 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-05/cand-1.svg" alt="zf-05 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|band|middle</b><br><span class="flex">room 34.7 m² · circulation 6.8 m² · storage 13.2 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-05/cand-2.svg" alt="zf-05 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 27.7 m² · circulation 12.7 m² · storage 11.4 m² · sliver 4.1 m²</span></figcaption>
+  <img src="zf-05/cand-3.svg" alt="zf-05 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-06 - Sebastian <span class="dim">10990 x 20790 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 4/18 candidates · <span class="ok">reference option R|band|middle: valid</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-06-sebastian.webp" alt="reference plan zf-06-sebastian.webp"></figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 11.8 m² · circulation 7.3 m² · storage 17.3 m² · sliver 2.2 m²</span></figcaption>
+  <img src="zf-06/cand-1.svg" alt="zf-06 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|band|front</b><br><span class="flex">room 11.8 m² · circulation 7.3 m² · storage 17.3 m² · sliver 2.2 m²</span></figcaption>
+  <img src="zf-06/cand-2.svg" alt="zf-06 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 11.2 m² · circulation 6.8 m² · storage 18.2 m² · sliver 1.7 m²</span></figcaption>
+  <img src="zf-06/cand-3.svg" alt="zf-06 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-07 - Riesling <span class="dim">11490 x 18290 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - 4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-07-riesling.png" alt="reference plan zf-07-riesling.png"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-08 - Manly <span class="dim">14990 x 21790 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 4/18 candidates · <span class="bad">reference option: INVALID - 4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-08-manly.webp" alt="reference plan zf-08-manly.webp"></figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 107.1 m² · circulation 11.0 m² · storage 3.9 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-08/cand-1.svg" alt="zf-08 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|band|middle</b><br><span class="flex">room 107.1 m² · circulation 11.0 m² · storage 3.9 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-08/cand-2.svg" alt="zf-08 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 99.0 m² · circulation 4.2 m² · storage 17.3 m² · sliver 1.6 m²</span></figcaption>
+  <img src="zf-08/cand-3.svg" alt="zf-08 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-09 - Florian <span class="dim">12990 x 16090 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - 4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-09-florian.webp" alt="reference plan zf-09-florian.webp"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-10 - Felix <span class="dim">11690 x 18090 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - 4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-10-felix.webp" alt="reference plan zf-10-felix.webp"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-11 - Dominic <span class="dim">10490 x 22190 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 4/18 candidates · <span class="bad">reference option: INVALID - the wing column and the garage column are full: 4 bedrooms do not fit (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-11-dominic.webp" alt="reference plan zf-11-dominic.webp"></figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 30.2 m² · circulation 12.7 m² · storage 4.8 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-11/cand-1.svg" alt="zf-11 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|band|middle</b><br><span class="flex">room 30.2 m² · circulation 12.7 m² · storage 4.8 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-11/cand-2.svg" alt="zf-11 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 26.4 m² · circulation 5.8 m² · storage 17.0 m² · sliver 2.2 m²</span></figcaption>
+  <img src="zf-11/cand-3.svg" alt="zf-11 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-12 - Cosmas <span class="dim">10990 x 16490 mm, 3 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - Master at the rear conflicts with the full-width Core band (R3/R5)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-12-cosmas.webp" alt="reference plan zf-12-cosmas.webp"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-13 - Augustine <span class="dim">10490 x 18990 mm, 3 bed, double garage</span></h2>
+<p class="meta">valid 2/18 candidates · <span class="bad">reference option: INVALID - 3 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-13-augustine.webp" alt="reference plan zf-13-augustine.webp"></figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 15.8 m² · circulation 5.8 m² · storage 9.9 m² · sliver 1.5 m²</span></figcaption>
+  <img src="zf-13/cand-1.svg" alt="zf-13 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|band|front</b><br><span class="flex">room 15.8 m² · circulation 5.8 m² · storage 9.9 m² · sliver 1.5 m²</span></figcaption>
+  <img src="zf-13/cand-2.svg" alt="zf-13 candidate 2">
+</figure>
+</div>
+</section>
+<section>
+<h2>zf-14 - Bede <span class="dim">10990 x 16790 mm, 3 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - Master block overlaps the Core</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-14-bede.webp" alt="reference plan zf-14-bede.webp"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-15 - Alban <span class="dim">10490 x 18490 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 0/18 candidates · <span class="bad">reference option: INVALID - 4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-15-alban.webp" alt="reference plan zf-15-alban.webp"></figure>
+
+</div>
+</section>
+<section>
+<h2>zf-16 - 4-bed rumpus <span class="dim">13550 x 23630 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 8/18 candidates · <span class="bad">reference option: INVALID - the wing column and the garage column are full: 4 bedrooms do not fit (R4)</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><img src="../../../knowledge/reference/ideal/zf-16-rumpus-13550x23630.png" alt="reference plan zf-16-rumpus-13550x23630.png"></figure>
+<figure>
+  <figcaption><b>L|band|middle</b><br><span class="flex">room 101.9 m² · circulation 11.0 m² · storage 8.0 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-16/cand-1.svg" alt="zf-16 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|band|middle</b><br><span class="flex">room 101.9 m² · circulation 11.0 m² · storage 8.0 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-16/cand-2.svg" alt="zf-16 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|band|front</b><br><span class="flex">room 81.5 m² · circulation 33.1 m² · storage 6.3 m² · sliver 0.0 m²</span></figcaption>
+  <img src="zf-16/cand-3.svg" alt="zf-16 candidate 3">
+</figure>
+</div>
+</section>
+<section>
+<h2>SAMPLE-15x27 - sample 15.0 x 27.0, 4 bed, double garage, WC <span class="dim">15000 x 27000 mm, 4 bed, double garage</span></h2>
+<p class="meta">valid 8/18 candidates · <span class="note">no reference</span></p>
+<div class="row">
+<figure class="ref"><figcaption><b>reference</b></figcaption><div class="missing">no reference image for this brief</div></figure>
+<figure>
+  <figcaption><b>L|side-G|middle</b><br><span class="flex">room 212.9 m² · circulation 11.0 m² · storage 8.4 m² · sliver 0.0 m²</span></figcaption>
+  <img src="SAMPLE-15x27/cand-1.svg" alt="SAMPLE-15x27 candidate 1">
+</figure>
+<figure>
+  <figcaption><b>R|side-G|middle</b><br><span class="flex">room 212.9 m² · circulation 11.0 m² · storage 8.4 m² · sliver 0.0 m²</span></figcaption>
+  <img src="SAMPLE-15x27/cand-2.svg" alt="SAMPLE-15x27 candidate 2">
+</figure>
+<figure>
+  <figcaption><b>L|side-G|front</b><br><span class="flex">room 188.2 m² · circulation 37.9 m² · storage 6.3 m² · sliver 0.0 m²</span></figcaption>
+  <img src="SAMPLE-15x27/cand-3.svg" alt="SAMPLE-15x27 candidate 3">
+</figure>
+</div>
+</section>
+</body></html>

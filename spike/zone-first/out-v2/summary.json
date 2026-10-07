@@ -1,0 +1,971 @@
+{
+  "optionSpace": 36,
+  "generatedOptions": 24,
+  "briefs": [
+    {
+      "id": "zf-00",
+      "title": "theatre reference",
+      "envelope": {
+        "w": 12500,
+        "d": 24000
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 10,
+      "byStackSide": {
+        "wing": {
+          "valid": 8,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "the stack (19000 mm) still does not fit in the 18000 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2
+      },
+      "referenceCandidate": {
+        "optionId": "R|band|middle|wing",
+        "valid": true
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|side-G|front|wing",
+          "flex": "room 94.7 m2 · circulation 34.0 m2 · storage 2.2 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|side-G|front|wing",
+          "flex": "room 94.7 m2 · circulation 34.0 m2 · storage 2.2 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 85.9 m2 · circulation 11.0 m2 · storage 8.8 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 85.9 m2 · circulation 11.0 m2 · storage 8.8 m2 · sliver 0.0 m2",
+          "matches": true
+        },
+        {
+          "file": "cand-5.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 70.7 m2 · circulation 28.7 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-6.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 70.7 m2 · circulation 28.7 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-01",
+      "title": "2-bed 9.0 x 16.9",
+      "envelope": {
+        "w": 9000,
+        "d": 16900
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 4,
+      "byStackSide": {
+        "wing": {
+          "valid": 2,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "Master block W 3500 mm < Ensuite+WIR min 3600 mm (behind the garage)": 6,
+        "Master block W 3500 mm < Ensuite+WIR min 3600 mm (rear corner beside the Core)": 4,
+        "the stack (13000 mm) still does not fit in the 10900 mm rear band (R4)": 4,
+        "Laundry: no free cell touches the Core or the Spine (R6)": 2,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "zones overlap: Laundry / Bedroom 2": 2
+      },
+      "referenceCandidate": {
+        "optionId": "R|band|front|wing",
+        "valid": true
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 0.0 m2 · circulation 5.6 m2 · storage 11.5 m2 · sliver 0.2 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 0.0 m2 · circulation 5.6 m2 · storage 11.5 m2 · sliver 0.2 m2",
+          "matches": true
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|side-W|front|garage",
+          "flex": "room 0.0 m2 · circulation 7.9 m2 · storage 15.5 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|side-W|front|garage",
+          "flex": "room 0.0 m2 · circulation 7.9 m2 · storage 15.5 m2 · sliver 0.0 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-02",
+      "title": "3-bed 9.0 x 22.0",
+      "envelope": {
+        "w": 9000,
+        "d": 22000
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 4,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 4,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "wing column 2300 mm < Bedroom min 2700 mm (R4)": 18,
+        "Master block W 3500 mm < Ensuite+WIR min 3600 mm (front column)": 2
+      },
+      "referenceCandidate": {
+        "optionId": "L|side-W|rear|garage",
+        "valid": true
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|side-W|middle|garage",
+          "flex": "room 35.0 m2 · circulation 14.0 m2 · storage 6.9 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|side-W|middle|garage",
+          "flex": "room 35.0 m2 · circulation 14.0 m2 · storage 6.9 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|side-W|rear|garage",
+          "flex": "room 35.0 m2 · circulation 14.0 m2 · storage 6.9 m2 · sliver 0.0 m2",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "id": "zf-03",
+      "title": "Turquoise Bay",
+      "envelope": {
+        "w": 9890,
+        "d": 24790
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 4,
+      "byStackSide": {
+        "wing": {
+          "valid": 4,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "Master block W 3190 mm < Ensuite+WIR min 3600 mm (front corner)": 6,
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 6,
+        "the stack (19000 mm) still does not fit in the 18790 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "Master block W 3190 mm < Ensuite+WIR min 3600 mm (front column)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "Master at the rear conflicts with the full-width Core band (R3/R5)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|side-G|middle|wing",
+          "flex": "room 63.4 m2 · circulation 6.8 m2 · storage 3.5 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|side-G|middle|wing",
+          "flex": "room 63.4 m2 · circulation 6.8 m2 · storage 3.5 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 44.8 m2 · circulation 6.8 m2 · storage 10.5 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 44.8 m2 · circulation 6.8 m2 · storage 10.5 m2 · sliver 0.0 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-04",
+      "title": "Torquay Beach",
+      "envelope": {
+        "w": 12490,
+        "d": 24190
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 10,
+      "byStackSide": {
+        "wing": {
+          "valid": 8,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "the stack (19000 mm) still does not fit in the 18190 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "the wing column and the garage column are full: 4 bedrooms do not fit (R4)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|side-G|front|wing",
+          "flex": "room 88.0 m2 · circulation 21.2 m2 · storage 23.6 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|side-G|front|wing",
+          "flex": "room 88.0 m2 · circulation 21.2 m2 · storage 23.6 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 55.9 m2 · circulation 42.6 m2 · storage 9.2 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 55.9 m2 · circulation 42.6 m2 · storage 9.2 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-5.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 48.0 m2 · circulation 53.5 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-6.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 48.0 m2 · circulation 53.5 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-05",
+      "title": "Swanbourne",
+      "envelope": {
+        "w": 10890,
+        "d": 22590
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 6,
+      "byStackSide": {
+        "wing": {
+          "valid": 4,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 4,
+        "the stack (19000 mm) still does not fit in the 16590 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "the wing column and the garage column are full: 4 bedrooms do not fit (R4)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 34.7 m2 · circulation 6.8 m2 · storage 13.2 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 34.7 m2 · circulation 6.8 m2 · storage 13.2 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 27.7 m2 · circulation 12.7 m2 · storage 11.4 m2 · sliver 4.1 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 27.7 m2 · circulation 12.7 m2 · storage 11.4 m2 · sliver 4.1 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-5.svg",
+          "options": "L|side-W|front|garage",
+          "flex": "room 59.8 m2 · circulation 4.2 m2 · storage 0.0 m2 · sliver 3.1 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-6.svg",
+          "options": "R|side-W|front|garage",
+          "flex": "room 59.8 m2 · circulation 4.2 m2 · storage 0.0 m2 · sliver 3.1 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-06",
+      "title": "Sebastian",
+      "envelope": {
+        "w": 10990,
+        "d": 20790
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 4,
+      "byStackSide": {
+        "wing": {
+          "valid": 4,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 4,
+        "the stack (19000 mm) still does not fit in the 14790 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "the stack (15800 mm) does not fit in the 14790 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "optionId": "R|band|middle|wing",
+        "valid": true
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 11.8 m2 · circulation 7.3 m2 · storage 17.3 m2 · sliver 2.2 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 11.8 m2 · circulation 7.3 m2 · storage 17.3 m2 · sliver 2.2 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 11.2 m2 · circulation 6.8 m2 · storage 18.2 m2 · sliver 1.7 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 11.2 m2 · circulation 6.8 m2 · storage 18.2 m2 · sliver 1.7 m2",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "id": "zf-07",
+      "title": "Riesling",
+      "envelope": {
+        "w": 11490,
+        "d": 18290
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 0,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 8,
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 6,
+        "the stack (19000 mm) still does not fit in the 12290 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "Master block overlaps the Core": 2,
+        "the stack (15800 mm) does not fit in the 12290 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)"
+      },
+      "kept": []
+    },
+    {
+      "id": "zf-08",
+      "title": "Manly",
+      "envelope": {
+        "w": 14990,
+        "d": 21790
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 4,
+      "byStackSide": {
+        "wing": {
+          "valid": 4,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 4,
+        "the stack (19000 mm) still does not fit in the 15790 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "the stack (15800 mm) does not fit in the 15790 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 107.1 m2 · circulation 11.0 m2 · storage 3.9 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 107.1 m2 · circulation 11.0 m2 · storage 3.9 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 99.0 m2 · circulation 4.2 m2 · storage 17.3 m2 · sliver 1.6 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 99.0 m2 · circulation 4.2 m2 · storage 17.3 m2 · sliver 1.6 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-09",
+      "title": "Florian",
+      "envelope": {
+        "w": 12990,
+        "d": 16090
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 0,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 10,
+        "Master block overlaps the Core": 4,
+        "the stack (19000 mm) still does not fit in the 10090 mm rear band (R4)": 4,
+        "Laundry: no free cell touches the Core or the Spine (R6)": 2,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "the stack (15800 mm) does not fit in the 10090 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)"
+      },
+      "kept": []
+    },
+    {
+      "id": "zf-10",
+      "title": "Felix",
+      "envelope": {
+        "w": 11690,
+        "d": 18090
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 0,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 14,
+        "the stack (19000 mm) still does not fit in the 12090 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "Master block overlaps the Core": 2,
+        "the stack (15800 mm) does not fit in the 12090 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)"
+      },
+      "kept": []
+    },
+    {
+      "id": "zf-11",
+      "title": "Dominic",
+      "envelope": {
+        "w": 10490,
+        "d": 22190
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 6,
+      "byStackSide": {
+        "wing": {
+          "valid": 4,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 4,
+        "the stack (19000 mm) still does not fit in the 16190 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "the wing column and the garage column are full: 4 bedrooms do not fit (R4)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 30.2 m2 · circulation 12.7 m2 · storage 4.8 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 30.2 m2 · circulation 12.7 m2 · storage 4.8 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 26.4 m2 · circulation 5.8 m2 · storage 17.0 m2 · sliver 2.2 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 26.4 m2 · circulation 5.8 m2 · storage 17.0 m2 · sliver 2.2 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-5.svg",
+          "options": "L|side-W|front|garage",
+          "flex": "room 53.8 m2 · circulation 4.2 m2 · storage 0.0 m2 · sliver 1.7 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-6.svg",
+          "options": "R|side-W|front|garage",
+          "flex": "room 53.8 m2 · circulation 4.2 m2 · storage 0.0 m2 · sliver 1.7 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-12",
+      "title": "Cosmas",
+      "envelope": {
+        "w": 10990,
+        "d": 16490
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 0,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "3 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 10,
+        "Master block overlaps the Core": 4,
+        "the stack (16000 mm) still does not fit in the 10490 mm rear band (R4)": 4,
+        "Laundry: no free cell touches the Core or the Spine (R6)": 2,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "the stack (12800 mm) does not fit in the 10490 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "Master at the rear conflicts with the full-width Core band (R3/R5)"
+      },
+      "kept": []
+    },
+    {
+      "id": "zf-13",
+      "title": "Augustine",
+      "envelope": {
+        "w": 10490,
+        "d": 18990
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 4,
+      "byStackSide": {
+        "wing": {
+          "valid": 2,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 3 bedrooms do not fit (R4)": 10,
+        "the stack (16000 mm) still does not fit in the 12990 mm rear band (R4)": 4,
+        "3 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 2,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "Master block overlaps the Core": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "3 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 15.8 m2 · circulation 5.8 m2 · storage 9.9 m2 · sliver 1.5 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 15.8 m2 · circulation 5.8 m2 · storage 9.9 m2 · sliver 1.5 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|side-W|front|garage",
+          "flex": "room 31.1 m2 · circulation 4.2 m2 · storage 0.0 m2 · sliver 1.1 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|side-W|front|garage",
+          "flex": "room 31.1 m2 · circulation 4.2 m2 · storage 0.0 m2 · sliver 1.1 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "zf-14",
+      "title": "Bede",
+      "envelope": {
+        "w": 10990,
+        "d": 16790
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 0,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "3 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 10,
+        "Master block overlaps the Core": 4,
+        "the stack (16000 mm) still does not fit in the 10790 mm rear band (R4)": 4,
+        "Laundry: no free cell touches the Core or the Spine (R6)": 2,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "the stack (12800 mm) does not fit in the 10790 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "Master block overlaps the Core"
+      },
+      "kept": []
+    },
+    {
+      "id": "zf-15",
+      "title": "Alban",
+      "envelope": {
+        "w": 10490,
+        "d": 18490
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 0,
+      "byStackSide": {
+        "wing": {
+          "valid": 0,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 0,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)": 8,
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 6,
+        "the stack (19000 mm) still does not fit in the 12490 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2,
+        "Master block overlaps the Core": 2,
+        "the stack (15800 mm) does not fit in the 12490 mm rear band (R4)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "4 bedrooms, the wet block and the laundry do not fit in the wing and the garage column (R4)"
+      },
+      "kept": []
+    },
+    {
+      "id": "zf-16",
+      "title": "4-bed rumpus",
+      "envelope": {
+        "w": 13550,
+        "d": 23630
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 10,
+      "byStackSide": {
+        "wing": {
+          "valid": 8,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 2,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "the stack (19000 mm) still does not fit in the 17630 mm rear band (R4)": 4,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2
+      },
+      "referenceCandidate": {
+        "valid": false,
+        "reason": "the wing column and the garage column are full: 4 bedrooms do not fit (R4)"
+      },
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|band|middle|wing",
+          "flex": "room 101.9 m2 · circulation 11.0 m2 · storage 8.0 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|band|middle|wing",
+          "flex": "room 101.9 m2 · circulation 11.0 m2 · storage 8.0 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|band|front|wing",
+          "flex": "room 81.5 m2 · circulation 33.1 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|band|front|wing",
+          "flex": "room 81.5 m2 · circulation 33.1 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-5.svg",
+          "options": "L|side-G|middle|wing",
+          "flex": "room 125.7 m2 · circulation 24.9 m2 · storage 0.0 m2 · sliver 0.9 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-6.svg",
+          "options": "R|side-G|middle|wing",
+          "flex": "room 125.7 m2 · circulation 24.9 m2 · storage 0.0 m2 · sliver 0.9 m2",
+          "matches": false
+        }
+      ]
+    },
+    {
+      "id": "SAMPLE-15x27",
+      "title": "sample 15.0 x 27.0, 4 bed, double garage, WC",
+      "envelope": {
+        "w": 15000,
+        "d": 27000
+      },
+      "total": 36,
+      "generated": 24,
+      "valid": 14,
+      "byStackSide": {
+        "wing": {
+          "valid": 8,
+          "generated": 18
+        },
+        "garage": {
+          "valid": 6,
+          "generated": 6
+        }
+      },
+      "failures": {
+        "the wing column and the garage column are full: 4 bedrooms do not fit (R4)": 8,
+        "Master at the rear conflicts with the full-width Core band (R3/R5)": 2
+      },
+      "referenceCandidate": null,
+      "kept": [
+        {
+          "file": "cand-1.svg",
+          "options": "L|side-G|middle|wing",
+          "flex": "room 212.9 m2 · circulation 11.0 m2 · storage 8.4 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-2.svg",
+          "options": "R|side-G|middle|wing",
+          "flex": "room 212.9 m2 · circulation 11.0 m2 · storage 8.4 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-3.svg",
+          "options": "L|side-G|front|wing",
+          "flex": "room 188.2 m2 · circulation 37.9 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-4.svg",
+          "options": "R|side-G|front|wing",
+          "flex": "room 188.2 m2 · circulation 37.9 m2 · storage 6.3 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-5.svg",
+          "options": "L|side-W|middle|garage",
+          "flex": "room 173.2 m2 · circulation 19.0 m2 · storage 6.8 m2 · sliver 0.0 m2",
+          "matches": false
+        },
+        {
+          "file": "cand-6.svg",
+          "options": "R|side-W|middle|garage",
+          "flex": "room 173.2 m2 · circulation 19.0 m2 · storage 6.8 m2 · sliver 0.0 m2",
+          "matches": false
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "candidates": 648,
+    "generated": 432,
+    "valid": 80,
+    "kept": 59,
+    "byStackSide": {
+      "wing": {
+        "valid": 56,
+        "generated": 324
+      },
+      "garage": {
+        "valid": 24,
+        "generated": 108
+      }
+    }
+  }
+}

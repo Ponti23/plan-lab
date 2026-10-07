@@ -1,0 +1,200 @@
+{
+  "briefId": "zf-03",
+  "optionId": "L·side-W·middle",
+  "options": {
+    "garageSide": "L",
+    "coreShape": "side-W",
+    "masterPos": "middle"
+  },
+  "envelope": {
+    "w": 9890,
+    "d": 24790
+  },
+  "zones": [
+    {
+      "id": "garage",
+      "kind": "garage",
+      "name": "Garage",
+      "rect": {
+        "x": 0,
+        "y": 18790,
+        "w": 5500,
+        "h": 6000
+      }
+    },
+    {
+      "id": "core",
+      "kind": "core",
+      "name": "Family Core",
+      "rect": {
+        "x": 4690,
+        "y": 0,
+        "w": 5200,
+        "h": 8400
+      }
+    },
+    {
+      "id": "master",
+      "kind": "master",
+      "name": "Master suite",
+      "rect": {
+        "x": 0,
+        "y": 12590,
+        "w": 4400,
+        "h": 6200
+      }
+    },
+    {
+      "id": "laundry",
+      "kind": "laundry",
+      "name": "Laundry",
+      "rect": {
+        "x": 6700,
+        "y": 8400,
+        "w": 2200,
+        "h": 2600
+      }
+    },
+    {
+      "id": "bed-2",
+      "kind": "bedroom",
+      "name": "Bedroom 2",
+      "rect": {
+        "x": 6700,
+        "y": 21390,
+        "w": 3190,
+        "h": 3400
+      }
+    },
+    {
+      "id": "wet",
+      "kind": "wet",
+      "name": "Bath + WC",
+      "rect": {
+        "x": 6700,
+        "y": 17190,
+        "w": 2400,
+        "h": 4200
+      }
+    },
+    {
+      "id": "bed-3",
+      "kind": "bedroom",
+      "name": "Bedroom 3",
+      "rect": {
+        "x": 6700,
+        "y": 13790,
+        "w": 3190,
+        "h": 3400
+      }
+    },
+    {
+      "id": "bed-4",
+      "kind": "bedroom",
+      "name": "Bedroom 4",
+      "rect": {
+        "x": 0,
+        "y": 9190,
+        "w": 3400,
+        "h": 3400
+      }
+    }
+  ],
+  "spine": {
+    "id": "spine",
+    "kind": "spine",
+    "name": "Spine",
+    "rect": {
+      "x": 5500,
+      "y": 8400,
+      "w": 1200,
+      "h": 16390
+    }
+  },
+  "flex": [
+    {
+      "id": "flex-1",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 4690,
+        "h": 9190
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-2",
+      "rect": {
+        "x": 4690,
+        "y": 8400,
+        "w": 810,
+        "h": 10390
+      },
+      "cls": "sliver"
+    },
+    {
+      "id": "flex-3",
+      "rect": {
+        "x": 8900,
+        "y": 8400,
+        "w": 990,
+        "h": 5390
+      },
+      "cls": "sliver"
+    },
+    {
+      "id": "flex-4",
+      "rect": {
+        "x": 3400,
+        "y": 9190,
+        "w": 1290,
+        "h": 3400
+      },
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-5",
+      "rect": {
+        "x": 6700,
+        "y": 11000,
+        "w": 2200,
+        "h": 2790
+      },
+      "cls": "Flex · storage"
+    },
+    {
+      "id": "flex-6",
+      "rect": {
+        "x": 4400,
+        "y": 12590,
+        "w": 290,
+        "h": 6200
+      },
+      "cls": "sliver"
+    },
+    {
+      "id": "flex-7",
+      "rect": {
+        "x": 9100,
+        "y": 17190,
+        "w": 790,
+        "h": 4200
+      },
+      "cls": "sliver"
+    }
+  ],
+  "notes": [
+    "Laundry at the Core front edge, wing column: touches the Spine (R6)",
+    "Bedroom 2 in the wing column",
+    "Bedroom 3 in the wing column",
+    "Bedroom 4 overflows behind the garage onto the garage-side wall (R4)"
+  ],
+  "matchesReference": false,
+  "flexArea": {
+    "Flex · circulation": 4386000,
+    "Flex · room": 43101100,
+    "Flex · storage": 6138000,
+    "sliver": 18868000
+  },
+  "slivers": 4
+}

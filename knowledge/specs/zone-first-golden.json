@@ -1,0 +1,40 @@
+{
+  "about": "The user's own zonings (2026-10-07), measured by Opus from the zoning-only panel of each drawing in knowledge/reference/ideal/user-zoning/ (thick-line detection, scaled to the plan's stated envelope, 100 mm grid). Rects are cell interiors [x, y, w, d] in mm, origin rear-left, +y toward the front; lines between cells are about 200 mm and are not part of any cell. zf-05 and zf-07 use the user's redraws (…-v2.png, 2026-10-07): the WC is its own cell and a short hall branches sideways to the rear bedrooms. Kinds: wc (separate WC), core, core-dining, core-kl, master, master-wir, ensuite, bed, beds (two bedrooms drawn as one cell), wet, laundry, garage, spine, flexwall, flex. zf-00 is left out: it has no dimensions. Provisional; the user checks these against the drawings.",
+  "plans": {
+    "zf-01": { "envelope": [9000, 16900], "zones": [
+      ["core", 200, 200, 8600, 5200], ["bed", 200, 5500, 3600, 3700], ["flex", 3900, 5600, 4900, 1800],
+      ["spine", 3900, 7600, 1200, 9200], ["laundry", 5300, 7600, 3600, 1600], ["wet", 200, 9300, 3600, 1800],
+      ["garage", 5300, 9400, 3600, 7400], ["master", 200, 11300, 3600, 5500] ] },
+    "zf-03": { "envelope": [9890, 24790], "zones": [
+      ["flex", 200, 200, 5500, 4000], ["master", 5900, 200, 3800, 7100], ["core-dining", 200, 4400, 5500, 2900],
+      ["core-kl", 200, 7500, 9500, 4500], ["laundry", 200, 12200, 4800, 1400], ["flexwall", 5200, 12200, 900, 5200],
+      ["wet", 6300, 12200, 3400, 4100], ["flex", 200, 13800, 1800, 3600], ["bed", 2200, 13900, 2800, 3500],
+      ["bed", 7300, 16500, 2500, 4000], ["spine", 6300, 16600, 800, 8000], ["garage", 200, 17600, 5900, 7000],
+      ["bed", 7300, 20800, 2500, 3800] ] },
+    "zf-04": { "envelope": [12490, 24190], "zones": [
+      ["bed", 200, 200, 4300, 3100], ["bed", 4800, 200, 2900, 4200], ["flex", 8000, 200, 4300, 4200],
+      ["wet", 200, 3500, 3300, 2900], ["flexwall", 3700, 3500, 800, 4700], ["core", 4800, 4600, 7600, 6300],
+      ["laundry", 200, 6700, 3300, 1500], ["flex", 200, 8400, 4300, 4200], ["flex", 4800, 11100, 3000, 4700],
+      ["flex", 8000, 11100, 4300, 6400], ["bed", 200, 12900, 4300, 2900], ["garage", 200, 16100, 5800, 8000],
+      ["spine", 6200, 16100, 1500, 8000], ["master", 8000, 17700, 4400, 6400] ] },
+    "zf-05": { "drawing": "zf-05-user-zoning-v2.png", "envelope": [10890, 22590], "zones": [
+      ["bed", 200, 200, 4200, 3500], ["bed", 4600, 200, 2700, 3500], ["flex", 7700, 200, 3000, 3500],
+      ["wc", 200, 4000, 1800, 800], ["flexwall", 2300, 4000, 2200, 800], ["flexwall", 4800, 4000, 800, 4300],
+      ["core", 5800, 4000, 4900, 10200], ["wet", 300, 5000, 4200, 1600], ["laundry", 300, 6800, 4200, 1500],
+      ["bed", 300, 8500, 5300, 2700], ["flex", 300, 11500, 5300, 3500], ["spine", 6100, 14400, 900, 8000],
+      ["flex", 7300, 14400, 3400, 1700], ["garage", 300, 15300, 5600, 7100], ["master", 7300, 16300, 3400, 6100] ] },
+    "zf-07": { "drawing": "zf-07-user-zoning-v2.png", "envelope": [11490, 18290], "zones": [
+      ["bed", 300, 200, 2900, 2900], ["bed", 3400, 200, 3800, 2900], ["flex", 7400, 200, 3900, 4600],
+      ["wc", 300, 3300, 1900, 900], ["flexwall", 2400, 3300, 800, 900], ["flexwall", 3400, 3300, 900, 3000],
+      ["laundry", 4500, 3300, 2700, 1500], ["wet", 300, 4400, 2900, 1900], ["core", 4500, 5100, 6800, 6700],
+      ["bed", 300, 6500, 4000, 2600], ["master", 300, 9400, 4000, 5100], ["spine", 4500, 12000, 900, 6100],
+      ["garage", 5600, 12000, 5700, 6100], ["flex", 200, 14700, 4100, 3300] ] },
+    "zf-08": { "envelope": [14990, 21790], "zones": [
+      ["flex", 100, 100, 5400, 6500], ["bed", 5600, 100, 3100, 3800], ["flex", 8900, 100, 2700, 3700],
+      ["bed", 11800, 100, 3100, 3700], ["core-dining", 5600, 4000, 4800, 2600], ["flexwall", 10600, 4000, 1000, 5700],
+      ["wet", 11800, 4000, 3100, 2700], ["core-kl", 100, 6800, 10300, 5700], ["laundry", 11800, 6900, 3100, 2800],
+      ["bed", 10600, 9900, 4200, 2600], ["flex", 100, 12600, 5800, 2500], ["flexwall", 6100, 12600, 1200, 3300],
+      ["master-wir", 7400, 12600, 7400, 3300], ["garage", 100, 15300, 5800, 6300], ["spine", 6100, 16000, 1800, 5700],
+      ["flex", 8000, 16000, 4100, 1000], ["ensuite", 12200, 16000, 2600, 5700], ["flex", 8000, 17200, 4100, 4400] ] }
+  }
+}
