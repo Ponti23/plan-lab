@@ -17,6 +17,32 @@ Output: `out/<id>/cand-N.svg|json`, `out/summary.json`, `out/compare.html`. The 
 every zone carries its name and `W x D` in metres; Flex is hatched with its class; flex-walls are hatched
 with a dashed edge and labelled `Flex-wall`; the spine is dotted and labelled `Spine`.
 
+## Lot-size review runs
+
+A second, additive run for judging how v2 handles lots of a given size, keeping the six
+pairwise-different plans of each brief instead of the top 5. Three sets share the one runner:
+
+| set | briefs | output | lots |
+|---|---|---|---|
+| `small` (default) | `briefs-small.ts`, five blocks 7.5 m to 10.5 m wide | `out-small/` | small lots |
+| `medium` | `briefs-medium.ts`, five family-sized blocks 9.5 m to 14.0 m wide | `out-medium/` | medium lots |
+| `large` | `briefs-large.ts`, five big blocks 12.5 m to 17.0 m wide | `out-large/` | large lots |
+
+Neither touches `out/` or the tests.
+
+```sh
+node spike/zone-first-v2/run-small.ts           # small (the default) -> spike/zone-first-v2/out-small/
+node spike/zone-first-v2/run-small.ts medium    # -> spike/zone-first-v2/out-medium/
+node spike/zone-first-v2/run-small.ts large     # -> spike/zone-first-v2/out-large/
+```
+
+Open `compare.html` with the repo root served:
+`/spike/zone-first-v2/out-small/compare.html`, `/spike/zone-first-v2/out-medium/compare.html` or
+`/spike/zone-first-v2/out-large/compare.html`.
+Output: `<out>/<id>/cand-1..6.svg|json`, `<out>/summary.json`, `<out>/compare.html`.
+The page shows one heading and meta line per brief, then the six cards (`option 1` .. `option 6`, each
+with its rank and the quality metric line); no builder plan, no zoning drawing and no blind test.
+
 ## Files
 
 | File | Job |
@@ -28,8 +54,10 @@ with a dashed edge and labelled `Flex-wall`; the spine is dotted and labelled `S
 | `connect.ts` | v1's connectivity with flex-walls and both Core parts walk-through, Ensuite rule |
 | `render.ts` | SVG (copy of v1's with the flex-wall) |
 | `briefs.ts` | v1's briefs minus zf-02, with the seven `target` signatures |
-| `pipeline.ts` | enumerate, rank, dedupe, hide mirrors, check targets (shared by `run.ts` and the tests) |
+| `pipeline.ts` | enumerate, rank, dedupe, hide mirrors, check targets (shared by `run.ts` and the tests); `opts.top` (default 5) sets how many pairwise-different plans `topN` holds |
 | `run.ts` | writes the output |
+| `briefs-small.ts`, `briefs-medium.ts`, `briefs-large.ts` | the five review briefs per lot-size set |
+| `run-small.ts` | the lot-size review run (`small`, `medium`, `large`): top 6 per brief, no blind test |
 | `zone-first-v2.test.ts` | the tests |
 
 `flex.ts` (decomposition, sliver merge, classes, `sharedEdge`) is imported from `spike/zone-first/` unchanged.

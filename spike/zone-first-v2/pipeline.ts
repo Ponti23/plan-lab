@@ -64,6 +64,9 @@ export interface BriefResult {
   profile: Profile;
   /** valid, deduplicated, ranked */
   ranked: Candidate[];
+  /** the pairwise-different list, up to `opts.top` (default 5) */
+  topN: Candidate[];
+  /** the first five of `topN`; every other use here keeps its meaning over these five only */
   top5: Candidate[];
   top3: Candidate[];
   mirrorsHidden: number;
@@ -77,7 +80,8 @@ export interface BriefResult {
   closenessOf: Map<Candidate, number>;
 }
 
-export function runBrief(brief: Brief, opts: { grow?: boolean } = {}): BriefResult {
+export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number } = {}): BriefResult {
+  const top = opts.top ?? 5;
   const options = enumerateOptions(brief);
   // the profile (leave-one-out for a golden brief) also gives the Flex ceiling the grow pass works against
   const profile = profileFor(brief.id);
@@ -124,7 +128,7 @@ export function runBrief(brief: Brief, opts: { grow?: boolean } = {}): BriefResu
     else visible.push(c);
   }
 
-  // diversity: the top 5 are pairwise different (another family, or same-kind overlap under the limit)
+  // diversity: the top `top` are pairwise different (another family, or same-kind overlap under the limit)
   const rects = new Map<Candidate, { g: Group; r: Rect }[]>();
   const rectsOf = (c: Candidate): { g: Group; r: Rect }[] => {
     let v = rects.get(c);
@@ -134,11 +138,13 @@ export function runBrief(brief: Brief, opts: { grow?: boolean } = {}): BriefResu
   const envArea = (c: Candidate): number => c.envelope.w * c.envelope.d;
   const overlap = (a: Candidate, b: Candidate): number => sameKindOverlap(rectsOf(a), rectsOf(b), envArea(a));
   const different = (a: Candidate, b: Candidate): boolean => familyOf(a) !== familyOf(b) || overlap(a, b) < OVERLAP_LIMIT;
-  const top5: Candidate[] = [];
+  const topN: Candidate[] = [];
   for (const c of visible) {
-    if (top5.length === 5) break;
-    if (top5.every((p) => different(c, p))) top5.push(c);
+    if (topN.length === top) break;
+    if (topN.every((p) => different(c, p))) topN.push(c);
   }
+  // `top` defaults to 5 and the greedy pick is prefix-stable, so with the default this is the old top 5
+  const top5 = topN.slice(0, 5);
   let maxTop5Overlap = 0;
   let top5Diverse = true;
   for (let i = 0; i < top5.length; i++) {
@@ -214,5 +220,5 @@ export function runBrief(brief: Brief, opts: { grow?: boolean } = {}): BriefResu
     const r: TargetResult = { matches: mm.length === 0, mismatches: mm };
     c.target = r;
   }
-  return { brief, options, valid, failures, profile, ranked, top5, top3, mirrorsHidden, top5Diverse, maxTop5Overlap, targets, golden, blind, closenessOf };
+  return { brief, options, valid, failures, profile, ranked, topN, top5, top3, mirrorsHidden, top5Diverse, maxTop5Overlap, targets, golden, blind, closenessOf };
 }

@@ -1,0 +1,214 @@
+{
+  "role": "option 5",
+  "rank": 75,
+  "briefId": "S-02",
+  "optionId": "L|midG|block|m:rear/split|wet:block|rr:FM|nofw|v0",
+  "options": {
+    "garageSide": "L",
+    "corePos": "middle",
+    "coreForm": "block",
+    "masterPos": "rear",
+    "masterForm": "split",
+    "wetForm": "block",
+    "rearPlan": [
+      "F",
+      "M"
+    ],
+    "flexWall": false,
+    "coreLane": "G",
+    "variant": 0
+  },
+  "envelope": {
+    "w": 10500,
+    "d": 16000
+  },
+  "signature": {
+    "garageSide": "L",
+    "corePos": "middle",
+    "coreForm": "block",
+    "rearRow": [
+      "flex",
+      "master",
+      "ensuite"
+    ],
+    "masterPos": "rear",
+    "masterForm": "split",
+    "flexWall": false,
+    "coreSide": "L"
+  },
+  "quality": {
+    "flexShare": 0.1744047619047619,
+    "circulationShare": 0.04285714285714286,
+    "coreShare": 0.19940476190476192,
+    "bedroomSpread": 3050,
+    "spreadNorm": 0.15937163300331506,
+    "wetNearBed": true,
+    "laundryNear": true,
+    "masterSeparated": true,
+    "spineMetres": 6,
+    "circulationM2": 7.2,
+    "slivers": 0,
+    "spineRatio": 0.375,
+    "longestFlexRatio": 0.3125,
+    "flexStrips": 0,
+    "score": 29.06,
+    "outside": {
+      "flexShare": 0,
+      "circulationShare": 0,
+      "spineRatio": 0,
+      "longestFlexRatio": 1.42,
+      "coreShare": 0,
+      "spreadNorm": 15.74
+    }
+  },
+  "notes": [
+    "Core shrank in depth to 5000 mm (preferred 6500 mm)"
+  ],
+  "spineLength": 6000,
+  "longestRun": 6000,
+  "flexWallLength": 0,
+  "circulationArea": 7200000,
+  "flexArea": {
+    "Flex · circulation": 0,
+    "Flex · room": 24000000,
+    "Flex · storage": 5300000,
+    "sliver": 0
+  },
+  "extensionArea": 0,
+  "extensions": [],
+  "slivers": 0,
+  "zones": [
+    {
+      "id": "master-1",
+      "kind": "master",
+      "name": "Master + WIR",
+      "rect": {
+        "x": 4800,
+        "y": 0,
+        "w": 3500,
+        "h": 5000
+      }
+    },
+    {
+      "id": "ensuite-1",
+      "kind": "ensuite",
+      "name": "Ensuite",
+      "rect": {
+        "x": 8300,
+        "y": 0,
+        "w": 2200,
+        "h": 3500
+      }
+    },
+    {
+      "id": "core-1",
+      "kind": "core",
+      "name": "Core",
+      "rect": {
+        "x": 0,
+        "y": 5000,
+        "w": 6700,
+        "h": 5000
+      }
+    },
+    {
+      "id": "garage-1",
+      "kind": "garage",
+      "name": "Garage",
+      "rect": {
+        "x": 0,
+        "y": 10000,
+        "w": 5500,
+        "h": 6000
+      }
+    },
+    {
+      "id": "wet-1",
+      "kind": "wet",
+      "name": "Bath + WC",
+      "rect": {
+        "x": 6700,
+        "y": 5000,
+        "w": 3800,
+        "h": 2900
+      }
+    },
+    {
+      "id": "laundry-1",
+      "kind": "laundry",
+      "name": "Laundry",
+      "rect": {
+        "x": 7700,
+        "y": 7900,
+        "w": 2800,
+        "h": 2000
+      }
+    },
+    {
+      "id": "bedroom-1",
+      "kind": "bedroom",
+      "name": "Bed 2",
+      "rect": {
+        "x": 6700,
+        "y": 9900,
+        "w": 3800,
+        "h": 3100
+      }
+    },
+    {
+      "id": "bedroom-2",
+      "kind": "bedroom",
+      "name": "Bed 3",
+      "rect": {
+        "x": 6700,
+        "y": 13000,
+        "w": 3800,
+        "h": 3000
+      }
+    }
+  ],
+  "spine": {
+    "id": "spine",
+    "kind": "spine",
+    "name": "Spine",
+    "rect": {
+      "x": 5500,
+      "y": 10000,
+      "w": 1200,
+      "h": 6000
+    }
+  },
+  "flexWalls": [],
+  "flex": [
+    {
+      "id": "flex-1",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 4800,
+        "h": 5000
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-2",
+      "rect": {
+        "x": 8300,
+        "y": 3500,
+        "w": 2200,
+        "h": 1500
+      },
+      "cls": "Flex · storage"
+    },
+    {
+      "id": "flex-3",
+      "rect": {
+        "x": 6700,
+        "y": 7900,
+        "w": 1000,
+        "h": 2000
+      },
+      "cls": "Flex · storage"
+    }
+  ]
+}

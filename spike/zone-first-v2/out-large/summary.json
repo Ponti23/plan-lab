@@ -1,0 +1,2524 @@
+{
+  "note": "Large-lot review run. Ranking is provisional; the user's layouts never steer generation. Keeps the top 6 pairwise-different valid candidates per brief.",
+  "briefs": [
+    {
+      "id": "L-01",
+      "title": "14.0 x 25.0, 4 bed, double garage",
+      "envelope": {
+        "w": 14000,
+        "d": 25000
+      },
+      "bedrooms": 4,
+      "garage": "double",
+      "generated": 5504,
+      "valid": 3834,
+      "distinctValid": 3530,
+      "failures": {
+        "the Core parts are outside the FamilyCore area range": 568,
+        "house: stack depth is below the catalogue minimum": 230,
+        "connectivity: nothing reaches Master + WIR": 228,
+        "connectivity: nothing reaches Bed": 194,
+        "connectivity: nothing reaches Laundry": 70,
+        "connectivity: nothing reaches Laundry, Bed": 64,
+        "connectivity: nothing reaches Laundry, Master + WIR": 60,
+        "a flex-wall touches no walk-through node (spine, Core, walk-through Flex, flex-wall)": 56,
+        "connectivity: nothing reaches Bath, Laundry, Bed": 44,
+        "connectivity: nothing reaches Bath + WC, Laundry, Bed": 32,
+        "connectivity: nothing reaches Bath, Laundry": 32,
+        "connectivity: nothing reaches WC, Bath, Laundry": 28,
+        "connectivity: nothing reaches WC, Bath, Laundry, Bed": 16,
+        "connectivity: nothing reaches Bed, Master + WIR": 14,
+        "connectivity: nothing reaches Laundry, Bed, Master + WIR": 14,
+        "connectivity: nothing reaches Bed, Laundry": 10,
+        "connectivity: nothing reaches WC": 6,
+        "connectivity: nothing reaches Bed, Laundry, Master + WIR": 2,
+        "connectivity: nothing reaches WC, Master + WIR": 2
+      },
+      "mirrorsHidden": 1765,
+      "profileUsed": {
+        "flexShare": {
+          "min": 0.06457753697466687,
+          "max": 0.2895991655490985
+        },
+        "circulationShare": {
+          "min": 0.04889962131606388,
+          "max": 0.14540928393615463
+        },
+        "spineRatio": {
+          "min": 0.2615878843506195,
+          "max": 0.5443786982248521
+        },
+        "longestFlexRatio": {
+          "min": 0.22186365469947558,
+          "max": 0.2983019733822855
+        },
+        "coreShare": {
+          "min": 0.178363880196692,
+          "max": 0.3274271489237077
+        },
+        "spreadNorm": {
+          "min": 0.31679688441122017,
+          "max": 0.46522627057244387
+        }
+      },
+      "plans": 6,
+      "options": [
+        {
+          "file": "cand-1.svg",
+          "role": "option 1",
+          "rank": 1,
+          "optionId": "L|midR|split|m:middle/block|wet:block|rr:FBFB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.44142857142857145,
+            "circulationShare": 0.04414285714285714,
+            "coreShare": 0.16642857142857143,
+            "bedroomSpread": 12996,
+            "spreadNorm": 0.453555449395115,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 15.45,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.34,
+            "flexStrips": 0,
+            "score": 32.69,
+            "outside": {
+              "flexShare": 15.18,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 4.17,
+              "coreShare": 1.19,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 15450000,
+          "flexArea": {
+            "Flex · circulation": 8250000,
+            "Flex · room": 144050000,
+            "Flex · storage": 2200000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-2.svg",
+          "role": "option 2",
+          "rank": 11,
+          "optionId": "L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "G",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.4382857142857143,
+            "circulationShare": 0.09434285714285714,
+            "coreShare": 0.1662857142857143,
+            "bedroomSpread": 10973,
+            "spreadNorm": 0.38295361517600307,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 33.02,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.36,
+            "flexStrips": 0,
+            "score": 34.52,
+            "outside": {
+              "flexShare": 14.87,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 6.17,
+              "coreShare": 1.21,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5600,
+          "circulationArea": 33020000,
+          "flexArea": {
+            "Flex · circulation": 19100000,
+            "Flex · room": 134300000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "L"
+          }
+        },
+        {
+          "file": "cand-3.svg",
+          "role": "option 3",
+          "rank": 19,
+          "optionId": "L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "W",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.3420285714285714,
+            "circulationShare": 0.053142857142857144,
+            "coreShare": 0.26,
+            "bedroomSpread": 16146,
+            "spreadNorm": 0.5635092110497223,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 18.6,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.38,
+            "flexStrips": 0,
+            "score": 35.19,
+            "outside": {
+              "flexShare": 5.24,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 8.17,
+              "coreShare": 0,
+              "spreadNorm": 9.83
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 18600000,
+          "flexArea": {
+            "Flex · circulation": 11400000,
+            "Flex · room": 99700000,
+            "Flex · storage": 8610000,
+            "sliver": 0
+          },
+          "extensionArea": 32500000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-4.svg",
+          "role": "option 4",
+          "rank": 55,
+          "optionId": "L|midR|split|m:front/split|wet:block|rr:BBF|fw|v3",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "front",
+            "masterForm": "split",
+            "wetForm": "block",
+            "rearPlan": [
+              "B",
+              "B",
+              "F"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 3
+          },
+          "quality": {
+            "flexShare": 0.40231428571428574,
+            "circulationShare": 0.11868571428571428,
+            "coreShare": 0.16642857142857143,
+            "bedroomSpread": 11705,
+            "spreadNorm": 0.40849684347956083,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 41.54,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.34,
+            "flexStrips": 1,
+            "score": 38.68,
+            "outside": {
+              "flexShare": 11.27,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 4.17,
+              "coreShare": 1.19,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6600,
+          "flexWallLength": 6600,
+          "circulationArea": 41540000,
+          "flexArea": {
+            "Flex · circulation": 26420000,
+            "Flex · room": 92550000,
+            "Flex · storage": 21840000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex"
+            ],
+            "masterPos": "front",
+            "masterForm": "split",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-5.svg",
+          "role": "option 5",
+          "rank": 61,
+          "optionId": "L|midW|split|m:rear/block|wet:block|rr:FM|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "rear",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "M"
+            ],
+            "flexWall": true,
+            "coreLane": "W",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.3537142857142857,
+            "circulationShare": 0.039085714285714286,
+            "coreShare": 0.26,
+            "bedroomSpread": 5400,
+            "spreadNorm": 0.18846129944513948,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 13.68,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.4,
+            "flexStrips": 0,
+            "score": 41.84,
+            "outside": {
+              "flexShare": 6.41,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 10.17,
+              "coreShare": 0,
+              "spreadNorm": 12.83
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5400,
+          "circulationArea": 13680000,
+          "flexArea": {
+            "Flex · circulation": 0,
+            "Flex · room": 123800000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 44000000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "flex",
+              "master"
+            ],
+            "masterPos": "rear",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-6.svg",
+          "role": "option 6",
+          "rank": 185,
+          "optionId": "L|midW|block|m:front/block|wet:split|rr:FBB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "W",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.46385714285714286,
+            "circulationShare": 0.06885714285714285,
+            "coreShare": 0.16714285714285715,
+            "bedroomSpread": 15137,
+            "spreadNorm": 0.528277715507273,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 24.1,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.38,
+            "flexStrips": 0,
+            "score": 46.78,
+            "outside": {
+              "flexShare": 17.43,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 8.17,
+              "coreShare": 1.12,
+              "spreadNorm": 6.31
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 24100000,
+          "flexArea": {
+            "Flex · circulation": 16900000,
+            "Flex · room": 134800000,
+            "Flex · storage": 10650000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "L"
+          }
+        }
+      ]
+    },
+    {
+      "id": "L-02",
+      "title": "16.0 x 22.0 wide, 4 bed, double garage",
+      "envelope": {
+        "w": 16000,
+        "d": 22000
+      },
+      "bedrooms": 4,
+      "garage": "double",
+      "generated": 5504,
+      "valid": 2940,
+      "distinctValid": 2486,
+      "failures": {
+        "the Core parts are outside the FamilyCore area range": 964,
+        "house: stack depth is below the catalogue minimum": 850,
+        "connectivity: nothing reaches Master + WIR": 276,
+        "connectivity: nothing reaches Bed": 190,
+        "connectivity: nothing reaches Bath, Laundry": 60,
+        "connectivity: nothing reaches Laundry": 60,
+        "connectivity: nothing reaches Laundry, Master + WIR": 54,
+        "connectivity: nothing reaches Laundry, Bed": 36,
+        "connectivity: nothing reaches WC, Bath, Laundry": 20,
+        "connectivity: nothing reaches Bed, Master + WIR": 14,
+        "connectivity: nothing reaches Bed, Laundry": 10,
+        "a flex-wall touches no walk-through node (spine, Core, walk-through Flex, flex-wall)": 8,
+        "connectivity: nothing reaches Bath + WC, Laundry, Bed": 6,
+        "connectivity: nothing reaches WC": 6,
+        "connectivity: nothing reaches Laundry, Bed, Master": 4,
+        "connectivity: nothing reaches Bed, Laundry, Master + WIR": 2,
+        "connectivity: nothing reaches WC, Bath, Laundry, Bed": 2,
+        "connectivity: nothing reaches WC, Master + WIR": 2
+      },
+      "mirrorsHidden": 1243,
+      "profileUsed": {
+        "flexShare": {
+          "min": 0.06457753697466687,
+          "max": 0.2895991655490985
+        },
+        "circulationShare": {
+          "min": 0.04889962131606388,
+          "max": 0.14540928393615463
+        },
+        "spineRatio": {
+          "min": 0.2615878843506195,
+          "max": 0.5443786982248521
+        },
+        "longestFlexRatio": {
+          "min": 0.22186365469947558,
+          "max": 0.2983019733822855
+        },
+        "coreShare": {
+          "min": 0.178363880196692,
+          "max": 0.3274271489237077
+        },
+        "spreadNorm": {
+          "min": 0.31679688441122017,
+          "max": 0.46522627057244387
+        }
+      },
+      "plans": 6,
+      "options": [
+        {
+          "file": "cand-1.svg",
+          "role": "option 1",
+          "rank": 1,
+          "optionId": "L|midR|split|m:front/block|wet:block|rr:BBF|fw|v3",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "B",
+              "B",
+              "F"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 3
+          },
+          "quality": {
+            "flexShare": 0.3936363636363636,
+            "circulationShare": 0.08954545454545454,
+            "coreShare": 0.1653409090909091,
+            "bedroomSpread": 11705,
+            "spreadNorm": 0.4302733260790577,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 31.52,
+            "slivers": 0,
+            "spineRatio": 0.2727272727272727,
+            "longestFlexRatio": 0.4090909090909091,
+            "flexStrips": 0,
+            "score": 35.7,
+            "outside": {
+              "flexShare": 10.4,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 11.08,
+              "coreShare": 1.3,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6600,
+          "flexWallLength": 6600,
+          "circulationArea": 31520000,
+          "flexArea": {
+            "Flex · circulation": 16400000,
+            "Flex · room": 115320000,
+            "Flex · storage": 6840000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-2.svg",
+          "role": "option 2",
+          "rank": 13,
+          "optionId": "L|midW|block|m:middle/split|wet:split|rr:FBFB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "split",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "W",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.3325284090909091,
+            "circulationShare": 0.05011363636363636,
+            "coreShare": 0.29545454545454547,
+            "bedroomSpread": 16824,
+            "spreadNorm": 0.6184549187179988,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 17.64,
+            "slivers": 0,
+            "spineRatio": 0.2727272727272727,
+            "longestFlexRatio": 0.35,
+            "flexStrips": 0,
+            "score": 37.54,
+            "outside": {
+              "flexShare": 4.29,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 5.17,
+              "coreShare": 0,
+              "spreadNorm": 15.32
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 17640000,
+          "flexArea": {
+            "Flex · circulation": 10440000,
+            "Flex · room": 106610000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 45500000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "split",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-3.svg",
+          "role": "option 3",
+          "rank": 19,
+          "optionId": "L|rear|block|m:middle/split|wet:split|rr:-|nofw|v2",
+          "options": {
+            "garageSide": "L",
+            "corePos": "rear",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "split",
+            "wetForm": "split",
+            "rearPlan": [],
+            "flexWall": false,
+            "coreLane": "-",
+            "variant": 2
+          },
+          "quality": {
+            "flexShare": 0.3223011363636364,
+            "circulationShare": 0.08193181818181818,
+            "coreShare": 0.29545454545454547,
+            "bedroomSpread": 6050,
+            "spreadNorm": 0.22240242318337686,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 28.84,
+            "slivers": 0,
+            "spineRatio": 0.2727272727272727,
+            "longestFlexRatio": 0.4863636363636364,
+            "flexStrips": 0,
+            "score": 45.26,
+            "outside": {
+              "flexShare": 3.27,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 18.81,
+              "coreShare": 0,
+              "spreadNorm": 9.44
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 28840000,
+          "flexArea": {
+            "Flex · circulation": 21640000,
+            "Flex · room": 91810000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 45500000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "rear",
+            "coreForm": "block",
+            "rearRow": [
+              "core"
+            ],
+            "masterPos": "middle",
+            "masterForm": "split",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-4.svg",
+          "role": "option 4",
+          "rank": 27,
+          "optionId": "L|midW|block|m:front/block|wet:split|rr:FBB|nofw|v2",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "W",
+            "variant": 2
+          },
+          "quality": {
+            "flexShare": 0.4603409090909091,
+            "circulationShare": 0.05965909090909091,
+            "coreShare": 0.16619318181818182,
+            "bedroomSpread": 13728,
+            "spreadNorm": 0.5046406267455704,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 21,
+            "slivers": 0,
+            "spineRatio": 0.2727272727272727,
+            "longestFlexRatio": 0.4090909090909091,
+            "flexStrips": 0,
+            "score": 47.33,
+            "outside": {
+              "flexShare": 17.07,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 11.08,
+              "coreShare": 1.22,
+              "spreadNorm": 3.94
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 21000000,
+          "flexArea": {
+            "Flex · circulation": 13800000,
+            "Flex · room": 141940000,
+            "Flex · storage": 6300000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "L"
+          }
+        },
+        {
+          "file": "cand-5.svg",
+          "role": "option 5",
+          "rank": 33,
+          "optionId": "L|midR|block|m:front/block|wet:split|rr:FBB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.4278409090909091,
+            "circulationShare": 0.03920454545454546,
+            "coreShare": 0.16619318181818182,
+            "bedroomSpread": 14838,
+            "spreadNorm": 0.5454727679183815,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 13.8,
+            "slivers": 0,
+            "spineRatio": 0.2727272727272727,
+            "longestFlexRatio": 0.4090909090909091,
+            "flexStrips": 0,
+            "score": 48.05,
+            "outside": {
+              "flexShare": 13.82,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 11.08,
+              "coreShare": 1.22,
+              "spreadNorm": 8.02
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 13800000,
+          "flexArea": {
+            "Flex · circulation": 6600000,
+            "Flex · room": 137700000,
+            "Flex · storage": 6300000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-6.svg",
+          "role": "option 6",
+          "rank": 35,
+          "optionId": "L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v1",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "G",
+            "variant": 1
+          },
+          "quality": {
+            "flexShare": 0.40738636363636366,
+            "circulationShare": 0.12051136363636364,
+            "coreShare": 0.1653409090909091,
+            "bedroomSpread": 12767,
+            "spreadNorm": 0.46933319576676935,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 42.42,
+            "slivers": 0,
+            "spineRatio": 0.2727272727272727,
+            "longestFlexRatio": 0.4090909090909091,
+            "flexStrips": 1,
+            "score": 48.33,
+            "outside": {
+              "flexShare": 11.78,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 11.08,
+              "coreShare": 1.3,
+              "spreadNorm": 0.41
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5600,
+          "circulationArea": 42420000,
+          "flexArea": {
+            "Flex · circulation": 28500000,
+            "Flex · room": 113700000,
+            "Flex · storage": 1200000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "L"
+          }
+        }
+      ]
+    },
+    {
+      "id": "L-03",
+      "title": "12.5 x 30.0 narrow, 4 bed, double garage",
+      "envelope": {
+        "w": 12500,
+        "d": 30000
+      },
+      "bedrooms": 4,
+      "garage": "double",
+      "generated": 5504,
+      "valid": 3478,
+      "distinctValid": 3444,
+      "failures": {
+        "the Core parts are outside the FamilyCore area range": 792,
+        "Master: row width is below the catalogue minimum": 448,
+        "rear row: row width is below the catalogue minimum": 336,
+        "connectivity: nothing reaches Bed": 152,
+        "connectivity: nothing reaches Bath, Laundry": 80,
+        "connectivity: nothing reaches Master + WIR": 58,
+        "connectivity: nothing reaches Laundry": 52,
+        "connectivity: nothing reaches WC, Bath, Laundry": 32,
+        "connectivity: nothing reaches Laundry, Master + WIR": 18,
+        "connectivity: nothing reaches Laundry, Bed": 14,
+        "a flex-wall touches no walk-through node (spine, Core, walk-through Flex, flex-wall)": 12,
+        "connectivity: nothing reaches Bath + WC, Laundry, Bed": 8,
+        "connectivity: nothing reaches Bed, Core · dining, Core · kitchen + living, Bath + WC, Laundry": 6,
+        "connectivity: nothing reaches Bed, Core · dining, Core · kitchen + living, WC, Bath, Laundry": 6,
+        "connectivity: nothing reaches Bath + WC, Laundry": 4,
+        "connectivity: nothing reaches Bed, Laundry": 4,
+        "connectivity: nothing reaches WC, Bath, Laundry, Bed": 4
+      },
+      "mirrorsHidden": 1722,
+      "profileUsed": {
+        "flexShare": {
+          "min": 0.06457753697466687,
+          "max": 0.2895991655490985
+        },
+        "circulationShare": {
+          "min": 0.04889962131606388,
+          "max": 0.14540928393615463
+        },
+        "spineRatio": {
+          "min": 0.2615878843506195,
+          "max": 0.5443786982248521
+        },
+        "longestFlexRatio": {
+          "min": 0.22186365469947558,
+          "max": 0.2983019733822855
+        },
+        "coreShare": {
+          "min": 0.178363880196692,
+          "max": 0.3274271489237077
+        },
+        "spreadNorm": {
+          "min": 0.31679688441122017,
+          "max": 0.46522627057244387
+        }
+      },
+      "plans": 6,
+      "options": [
+        {
+          "file": "cand-1.svg",
+          "role": "option 1",
+          "rank": 1,
+          "optionId": "L|midR|block|m:middle/block|wet:split|rr:BBF|fw|v1",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "B",
+              "B",
+              "F"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 1
+          },
+          "quality": {
+            "flexShare": 0.45842666666666665,
+            "circulationShare": 0.04,
+            "coreShare": 0.15426666666666666,
+            "bedroomSpread": 14116,
+            "spreadNorm": 0.4343259757997879,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 15,
+            "slivers": 0,
+            "spineRatio": 0.2,
+            "longestFlexRatio": 0.33666666666666667,
+            "flexStrips": 0,
+            "score": 34.9,
+            "outside": {
+              "flexShare": 16.88,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 3.84,
+              "coreShare": 2.41,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6500,
+          "flexWallLength": 6500,
+          "circulationArea": 15000000,
+          "flexArea": {
+            "Flex · circulation": 0,
+            "Flex · room": 171910000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-2.svg",
+          "role": "option 2",
+          "rank": 9,
+          "optionId": "L|midG|block|m:middle/block|wet:block|rr:FBFB|fw|v3",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "G",
+            "variant": 3
+          },
+          "quality": {
+            "flexShare": 0.45213333333333333,
+            "circulationShare": 0.03712,
+            "coreShare": 0.14733333333333334,
+            "bedroomSpread": 11470,
+            "spreadNorm": 0.3529252229832142,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 13.92,
+            "slivers": 0,
+            "spineRatio": 0.2,
+            "longestFlexRatio": 0.38333333333333336,
+            "flexStrips": 0,
+            "score": 40.02,
+            "outside": {
+              "flexShare": 16.25,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 8.5,
+              "coreShare": 3.1,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5600,
+          "circulationArea": 13920000,
+          "flexArea": {
+            "Flex · circulation": 0,
+            "Flex · room": 154850000,
+            "Flex · storage": 14700000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "L"
+          }
+        },
+        {
+          "file": "cand-3.svg",
+          "role": "option 3",
+          "rank": 11,
+          "optionId": "L|midR|split|m:middle/block|wet:block|rr:FBB|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.45882666666666666,
+            "circulationShare": 0.0648,
+            "coreShare": 0.15466666666666667,
+            "bedroomSpread": 12913,
+            "spreadNorm": 0.39731942048368485,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 24.3,
+            "slivers": 0,
+            "spineRatio": 0.2,
+            "longestFlexRatio": 0.38666666666666666,
+            "flexStrips": 0,
+            "score": 40.28,
+            "outside": {
+              "flexShare": 16.92,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 8.84,
+              "coreShare": 2.37,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6600,
+          "flexWallLength": 6600,
+          "circulationArea": 24300000,
+          "flexArea": {
+            "Flex · circulation": 9180000,
+            "Flex · room": 148750000,
+            "Flex · storage": 14130000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "flex",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-4.svg",
+          "role": "option 4",
+          "rank": 19,
+          "optionId": "L|midR|block|m:front/block|wet:split|rr:FBFB|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.44264,
+            "circulationShare": 0.04,
+            "coreShare": 0.15426666666666666,
+            "bedroomSpread": 13124,
+            "spreadNorm": 0.40382783841251346,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 15,
+            "slivers": 0,
+            "spineRatio": 0.2,
+            "longestFlexRatio": 0.41,
+            "flexStrips": 0,
+            "score": 40.92,
+            "outside": {
+              "flexShare": 15.3,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 11.17,
+              "coreShare": 2.41,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6500,
+          "flexWallLength": 6500,
+          "circulationArea": 15000000,
+          "flexArea": {
+            "Flex · circulation": 0,
+            "Flex · room": 146550000,
+            "Flex · storage": 19440000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-5.svg",
+          "role": "option 5",
+          "rank": 31,
+          "optionId": "L|midW|block|m:rear/split|wet:block|rr:MFBB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "rear",
+            "masterForm": "split",
+            "wetForm": "block",
+            "rearPlan": [
+              "M",
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "W",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.44152,
+            "circulationShare": 0.048,
+            "coreShare": 0.21666666666666667,
+            "bedroomSpread": 17477,
+            "spreadNorm": 0.5377577818615578,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 18,
+            "slivers": 0,
+            "spineRatio": 0.2,
+            "longestFlexRatio": 0.37,
+            "flexStrips": 0,
+            "score": 42.04,
+            "outside": {
+              "flexShare": 15.19,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 7.17,
+              "coreShare": 0,
+              "spreadNorm": 7.25
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 18000000,
+          "flexArea": {
+            "Flex · circulation": 10800000,
+            "Flex · room": 146590000,
+            "Flex · storage": 8180000,
+            "sliver": 0
+          },
+          "extensionArea": 22750000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "master",
+              "ensuite",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "rear",
+            "masterForm": "split",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-6.svg",
+          "role": "option 6",
+          "rank": 65,
+          "optionId": "L|midR|block|m:rear/split|wet:split|rr:MFBB|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "rear",
+            "masterForm": "split",
+            "wetForm": "split",
+            "rearPlan": [
+              "M",
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.48258666666666666,
+            "circulationShare": 0.04,
+            "coreShare": 0.15426666666666666,
+            "bedroomSpread": 15701,
+            "spreadNorm": 0.4830989705894802,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 15,
+            "slivers": 0,
+            "spineRatio": 0.2,
+            "longestFlexRatio": 0.37,
+            "flexStrips": 0,
+            "score": 43.5,
+            "outside": {
+              "flexShare": 19.3,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 7.17,
+              "coreShare": 2.41,
+              "spreadNorm": 1.79
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6500,
+          "flexWallLength": 6500,
+          "circulationArea": 15000000,
+          "flexArea": {
+            "Flex · circulation": 0,
+            "Flex · room": 174590000,
+            "Flex · storage": 6380000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "master",
+              "ensuite",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "rear",
+            "masterForm": "split",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        }
+      ]
+    },
+    {
+      "id": "L-04",
+      "title": "15.0 x 24.0, 5 bed, double garage",
+      "envelope": {
+        "w": 15000,
+        "d": 24000
+      },
+      "bedrooms": 5,
+      "garage": "double",
+      "generated": 5504,
+      "valid": 3098,
+      "distinctValid": 2598,
+      "failures": {
+        "house: stack depth is below the catalogue minimum": 1078,
+        "connectivity: nothing reaches Bed": 368,
+        "connectivity: nothing reaches Master + WIR": 270,
+        "the Core parts are outside the FamilyCore area range": 216,
+        "a flex-wall touches no walk-through node (spine, Core, walk-through Flex, flex-wall)": 68,
+        "connectivity: nothing reaches Bath, Laundry": 68,
+        "connectivity: nothing reaches Laundry, Master + WIR": 54,
+        "connectivity: nothing reaches Laundry": 52,
+        "connectivity: nothing reaches Laundry, Bed": 52,
+        "connectivity: nothing reaches Bath + WC, Laundry, Bed": 34,
+        "connectivity: nothing reaches WC, Bath, Laundry": 32,
+        "connectivity: nothing reaches Bath, Laundry, Bed": 26,
+        "connectivity: nothing reaches Bed, Master + WIR": 14,
+        "connectivity: nothing reaches WC, Bath, Laundry, Bed": 14,
+        "connectivity: nothing reaches Bed, Master + WIR, Core, WC, Bath, Laundry": 12,
+        "connectivity: nothing reaches Bed, Master, Core, WC, Bath, Laundry": 12,
+        "connectivity: nothing reaches Bed, Laundry": 10,
+        "connectivity: nothing reaches Master + WIR, Bed, Core, WC, Bath, Laundry": 8,
+        "connectivity: nothing reaches WC": 6,
+        "connectivity: nothing reaches Laundry, Bed, Master": 4,
+        "connectivity: nothing reaches Master, Bed, Core, WC, Bath, Laundry": 4,
+        "connectivity: nothing reaches Bed, Laundry, Master + WIR": 2,
+        "connectivity: nothing reaches WC, Master + WIR": 2
+      },
+      "mirrorsHidden": 1299,
+      "profileUsed": {
+        "flexShare": {
+          "min": 0.06457753697466687,
+          "max": 0.2895991655490985
+        },
+        "circulationShare": {
+          "min": 0.04889962131606388,
+          "max": 0.14540928393615463
+        },
+        "spineRatio": {
+          "min": 0.2615878843506195,
+          "max": 0.5443786982248521
+        },
+        "longestFlexRatio": {
+          "min": 0.22186365469947558,
+          "max": 0.2983019733822855
+        },
+        "coreShare": {
+          "min": 0.178363880196692,
+          "max": 0.3274271489237077
+        },
+        "spreadNorm": {
+          "min": 0.31679688441122017,
+          "max": 0.46522627057244387
+        }
+      },
+      "plans": 6,
+      "options": [
+        {
+          "file": "cand-1.svg",
+          "role": "option 1",
+          "rank": 1,
+          "optionId": "L|midG|block|m:middle/block|wet:split|rr:FBFB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "G",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.42,
+            "circulationShare": 0.08833333333333333,
+            "coreShare": 0.1625,
+            "bedroomSpread": 12782,
+            "spreadNorm": 0.451620055087574,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 31.8,
+            "slivers": 0,
+            "spineRatio": 0.25,
+            "longestFlexRatio": 0.375,
+            "flexStrips": 0,
+            "score": 35.14,
+            "outside": {
+              "flexShare": 13.04,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 7.67,
+              "coreShare": 1.59,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 31800000,
+          "flexArea": {
+            "Flex · circulation": 24600000,
+            "Flex · room": 122100000,
+            "Flex · storage": 4500000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "L"
+          }
+        },
+        {
+          "file": "cand-2.svg",
+          "role": "option 2",
+          "rank": 5,
+          "optionId": "L|rear|block|m:middle/split|wet:split|rr:-|nofw|v2",
+          "options": {
+            "garageSide": "L",
+            "corePos": "rear",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "split",
+            "wetForm": "split",
+            "rearPlan": [],
+            "flexWall": false,
+            "coreLane": "-",
+            "variant": 2
+          },
+          "quality": {
+            "flexShare": 0.31972222222222224,
+            "circulationShare": 0.04533333333333334,
+            "coreShare": 0.2708333333333333,
+            "bedroomSpread": 9250,
+            "spreadNorm": 0.32683267966862767,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 16.32,
+            "slivers": 0,
+            "spineRatio": 0.25,
+            "longestFlexRatio": 0.5125,
+            "flexStrips": 0,
+            "score": 36.53,
+            "outside": {
+              "flexShare": 3.01,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 21.42,
+              "coreShare": 0,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 16320000,
+          "flexArea": {
+            "Flex · circulation": 9120000,
+            "Flex · room": 105980000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 39000000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "rear",
+            "coreForm": "block",
+            "rearRow": [
+              "core"
+            ],
+            "masterPos": "middle",
+            "masterForm": "split",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-3.svg",
+          "role": "option 3",
+          "rank": 9,
+          "optionId": "L|midR|split|m:rear/block|wet:split|rr:BBFM|fw|v3",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "rear",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "B",
+              "B",
+              "F",
+              "M"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 3
+          },
+          "quality": {
+            "flexShare": 0.4137777777777778,
+            "circulationShare": 0.03966666666666667,
+            "coreShare": 0.15472222222222223,
+            "bedroomSpread": 14974,
+            "spreadNorm": 0.5290942251868682,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 14.28,
+            "slivers": 0,
+            "spineRatio": 0.25,
+            "longestFlexRatio": 0.3541666666666667,
+            "flexStrips": 0,
+            "score": 39.69,
+            "outside": {
+              "flexShare": 12.42,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 5.59,
+              "coreShare": 2.36,
+              "spreadNorm": 6.39
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5900,
+          "circulationArea": 14280000,
+          "flexArea": {
+            "Flex · circulation": 0,
+            "Flex · room": 143200000,
+            "Flex · storage": 5760000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "bed",
+              "bed",
+              "master"
+            ],
+            "masterPos": "rear",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-4.svg",
+          "role": "option 4",
+          "rank": 13,
+          "optionId": "L|midR|block|m:front/block|wet:block|rr:BBF|fw|v3",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "B",
+              "B",
+              "F"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 3
+          },
+          "quality": {
+            "flexShare": 0.40430555555555553,
+            "circulationShare": 0.08044444444444444,
+            "coreShare": 0.15347222222222223,
+            "bedroomSpread": 15234,
+            "spreadNorm": 0.5382759039878923,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 28.96,
+            "slivers": 0,
+            "spineRatio": 0.25,
+            "longestFlexRatio": 0.3541666666666667,
+            "flexStrips": 0,
+            "score": 40.21,
+            "outside": {
+              "flexShare": 11.47,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 5.59,
+              "coreShare": 2.49,
+              "spreadNorm": 7.3
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 7200,
+          "flexWallLength": 7200,
+          "circulationArea": 28960000,
+          "flexArea": {
+            "Flex · circulation": 13120000,
+            "Flex · room": 132430000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-5.svg",
+          "role": "option 5",
+          "rank": 17,
+          "optionId": "L|midR|split|m:middle/split|wet:block|rr:BBF|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "middle",
+            "masterForm": "split",
+            "wetForm": "block",
+            "rearPlan": [
+              "B",
+              "B",
+              "F"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.5017222222222222,
+            "circulationShare": 0.050555555555555555,
+            "coreShare": 0.15472222222222223,
+            "bedroomSpread": 11418,
+            "spreadNorm": 0.4034340729115695,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 18.2,
+            "slivers": 0,
+            "spineRatio": 0.25,
+            "longestFlexRatio": 0.3541666666666667,
+            "flexStrips": 0,
+            "score": 41.83,
+            "outside": {
+              "flexShare": 21.21,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 5.59,
+              "coreShare": 2.36,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5500,
+          "circulationArea": 18200000,
+          "flexArea": {
+            "Flex · circulation": 4400000,
+            "Flex · room": 174120000,
+            "Flex · storage": 2100000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex"
+            ],
+            "masterPos": "middle",
+            "masterForm": "split",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-6.svg",
+          "role": "option 6",
+          "rank": 47,
+          "optionId": "L|midG|block|m:front/block|wet:split|rr:FBB|nofw|v2",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "G",
+            "variant": 2
+          },
+          "quality": {
+            "flexShare": 0.43222222222222223,
+            "circulationShare": 0.13722222222222222,
+            "coreShare": 0.1625,
+            "bedroomSpread": 12665,
+            "spreadNorm": 0.4474926679736075,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 49.4,
+            "slivers": 0,
+            "spineRatio": 0.25,
+            "longestFlexRatio": 0.375,
+            "flexStrips": 1,
+            "score": 46.93,
+            "outside": {
+              "flexShare": 14.26,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 7.67,
+              "coreShare": 1.59,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 49400000,
+          "flexArea": {
+            "Flex · circulation": 42200000,
+            "Flex · room": 108900000,
+            "Flex · storage": 4500000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "L"
+          }
+        }
+      ]
+    },
+    {
+      "id": "L-05",
+      "title": "17.0 x 25.0, 5 bed, double garage",
+      "envelope": {
+        "w": 17000,
+        "d": 25000
+      },
+      "bedrooms": 5,
+      "garage": "double",
+      "generated": 5504,
+      "valid": 3302,
+      "distinctValid": 2880,
+      "failures": {
+        "house: stack depth is below the catalogue minimum": 722,
+        "connectivity: nothing reaches Bed": 434,
+        "the Core parts are outside the FamilyCore area range": 324,
+        "connectivity: nothing reaches Master + WIR": 274,
+        "connectivity: nothing reaches Laundry, Master + WIR": 68,
+        "connectivity: nothing reaches Laundry": 64,
+        "connectivity: nothing reaches Bath, Laundry": 60,
+        "connectivity: nothing reaches Bath + WC, Laundry, Bed": 56,
+        "connectivity: nothing reaches Laundry, Bed": 54,
+        "a flex-wall touches no walk-through node (spine, Core, walk-through Flex, flex-wall)": 48,
+        "connectivity: nothing reaches WC, Bath, Laundry": 32,
+        "connectivity: nothing reaches WC, Bath, Laundry, Bed": 24,
+        "connectivity: nothing reaches Bed, Master + WIR": 14,
+        "connectivity: nothing reaches Bed, Laundry": 10,
+        "connectivity: nothing reaches Bed, Master, Core, WC, Bath, Laundry": 8,
+        "connectivity: nothing reaches WC": 6,
+        "connectivity: nothing reaches Bed, Laundry, Master + WIR": 2,
+        "connectivity: nothing reaches WC, Master + WIR": 2
+      },
+      "mirrorsHidden": 1440,
+      "profileUsed": {
+        "flexShare": {
+          "min": 0.06457753697466687,
+          "max": 0.2895991655490985
+        },
+        "circulationShare": {
+          "min": 0.04889962131606388,
+          "max": 0.14540928393615463
+        },
+        "spineRatio": {
+          "min": 0.2615878843506195,
+          "max": 0.5443786982248521
+        },
+        "longestFlexRatio": {
+          "min": 0.22186365469947558,
+          "max": 0.2983019733822855
+        },
+        "coreShare": {
+          "min": 0.178363880196692,
+          "max": 0.3274271489237077
+        },
+        "spreadNorm": {
+          "min": 0.31679688441122017,
+          "max": 0.46522627057244387
+        }
+      },
+      "plans": 6,
+      "options": [
+        {
+          "file": "cand-1.svg",
+          "role": "option 1",
+          "rank": 1,
+          "optionId": "L|midR|block|m:front/block|wet:block|rr:BBF|fw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "B",
+              "B",
+              "F"
+            ],
+            "flexWall": true,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.4808,
+            "circulationShare": 0.06522352941176471,
+            "coreShare": 0.1376470588235294,
+            "bedroomSpread": 13244,
+            "spreadNorm": 0.4380681681113941,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 27.72,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.384,
+            "flexStrips": 1,
+            "score": 55.08,
+            "outside": {
+              "flexShare": 19.12,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 8.57,
+              "coreShare": 4.07,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6600,
+          "flexWallLength": 6600,
+          "circulationArea": 27720000,
+          "flexArea": {
+            "Flex · circulation": 12600000,
+            "Flex · room": 191740000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "R"
+          }
+        },
+        {
+          "file": "cand-2.svg",
+          "role": "option 2",
+          "rank": 17,
+          "optionId": "L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v3",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": true,
+            "coreLane": "G",
+            "variant": 3
+          },
+          "quality": {
+            "flexShare": 0.48423529411764704,
+            "circulationShare": 0.13392941176470588,
+            "coreShare": 0.13694117647058823,
+            "bedroomSpread": 14992,
+            "spreadNorm": 0.495905003431992,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": false,
+            "spineMetres": 6,
+            "circulationM2": 56.92,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.392,
+            "flexStrips": 1,
+            "score": 60.75,
+            "outside": {
+              "flexShare": 19.46,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 9.37,
+              "coreShare": 4.14,
+              "spreadNorm": 3.07
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 5600,
+          "circulationArea": 56920000,
+          "flexArea": {
+            "Flex · circulation": 43000000,
+            "Flex · room": 161600000,
+            "Flex · storage": 1200000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": true,
+            "coreSide": "L"
+          }
+        },
+        {
+          "file": "cand-3.svg",
+          "role": "option 3",
+          "rank": 29,
+          "optionId": "L|rear|block|m:middle/block|wet:split|rr:-|nofw|v2",
+          "options": {
+            "garageSide": "L",
+            "corePos": "rear",
+            "coreForm": "block",
+            "masterPos": "middle",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [],
+            "flexWall": false,
+            "coreLane": "-",
+            "variant": 2
+          },
+          "quality": {
+            "flexShare": 0.40094117647058825,
+            "circulationShare": 0.0608,
+            "coreShare": 0.26,
+            "bedroomSpread": 8750,
+            "spreadNorm": 0.2894242757243348,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 25.84,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.548,
+            "flexStrips": 1,
+            "score": 62.43,
+            "outside": {
+              "flexShare": 11.13,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 24.97,
+              "coreShare": 0,
+              "spreadNorm": 2.74
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 25840000,
+          "flexArea": {
+            "Flex · circulation": 18640000,
+            "Flex · room": 151760000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 52000000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "rear",
+            "coreForm": "block",
+            "rearRow": [
+              "core"
+            ],
+            "masterPos": "middle",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-4.svg",
+          "role": "option 4",
+          "rank": 33,
+          "optionId": "L|midG|block|m:front/block|wet:split|rr:FBFB|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "front",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "F",
+              "B",
+              "F",
+              "B"
+            ],
+            "flexWall": false,
+            "coreLane": "G",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.516235294117647,
+            "circulationShare": 0.10047058823529412,
+            "coreShare": 0.1376470588235294,
+            "bedroomSpread": 13901,
+            "spreadNorm": 0.4598187255798453,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 42.7,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.416,
+            "flexStrips": 1,
+            "score": 63.07,
+            "outside": {
+              "flexShare": 22.66,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 11.77,
+              "coreShare": 4.07,
+              "spreadNorm": 0
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 42700000,
+          "flexArea": {
+            "Flex · circulation": 35500000,
+            "Flex · room": 183900000,
+            "Flex · storage": 0,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "bed",
+              "flex",
+              "bed"
+            ],
+            "masterPos": "front",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "L"
+          }
+        },
+        {
+          "file": "cand-5.svg",
+          "role": "option 5",
+          "rank": 45,
+          "optionId": "L|midW|block|m:rear/block|wet:block|rr:FM|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "masterPos": "rear",
+            "masterForm": "block",
+            "wetForm": "block",
+            "rearPlan": [
+              "F",
+              "M"
+            ],
+            "flexWall": false,
+            "coreLane": "W",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.4716705882352941,
+            "circulationShare": 0.05251764705882353,
+            "coreShare": 0.18,
+            "bedroomSpread": 8100,
+            "spreadNorm": 0.2679241866705271,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 22.32,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.464,
+            "flexStrips": 1,
+            "score": 63.91,
+            "outside": {
+              "flexShare": 18.21,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 16.57,
+              "coreShare": 0,
+              "spreadNorm": 4.89
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 22320000,
+          "flexArea": {
+            "Flex · circulation": 15120000,
+            "Flex · room": 181920000,
+            "Flex · storage": 3420000,
+            "sliver": 0
+          },
+          "extensionArea": 36000000,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "block",
+            "rearRow": [
+              "flex",
+              "master"
+            ],
+            "masterPos": "rear",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "both"
+          }
+        },
+        {
+          "file": "cand-6.svg",
+          "role": "option 6",
+          "rank": 49,
+          "optionId": "L|midR|split|m:rear/block|wet:split|rr:BBFM|nofw|v0",
+          "options": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "masterPos": "rear",
+            "masterForm": "block",
+            "wetForm": "split",
+            "rearPlan": [
+              "B",
+              "B",
+              "F",
+              "M"
+            ],
+            "flexWall": false,
+            "coreLane": "R",
+            "variant": 0
+          },
+          "quality": {
+            "flexShare": 0.5065882352941177,
+            "circulationShare": 0.09096470588235295,
+            "coreShare": 0.13694117647058823,
+            "bedroomSpread": 14116,
+            "spreadNorm": 0.46690235790386897,
+            "wetNearBed": true,
+            "laundryNear": true,
+            "masterSeparated": true,
+            "spineMetres": 6,
+            "circulationM2": 38.66,
+            "slivers": 0,
+            "spineRatio": 0.24,
+            "longestFlexRatio": 0.432,
+            "flexStrips": 1,
+            "score": 63.99,
+            "outside": {
+              "flexShare": 21.7,
+              "circulationShare": 0,
+              "spineRatio": 0,
+              "longestFlexRatio": 13.37,
+              "coreShare": 4.14,
+              "spreadNorm": 0.17
+            }
+          },
+          "spineLength": 6000,
+          "longestRun": 6000,
+          "flexWallLength": 0,
+          "circulationArea": 38660000,
+          "flexArea": {
+            "Flex · circulation": 31460000,
+            "Flex · room": 179040000,
+            "Flex · storage": 4800000,
+            "sliver": 0
+          },
+          "extensionArea": 0,
+          "slivers": 0,
+          "signature": {
+            "garageSide": "L",
+            "corePos": "middle",
+            "coreForm": "split",
+            "rearRow": [
+              "bed",
+              "bed",
+              "flex",
+              "master"
+            ],
+            "masterPos": "rear",
+            "masterForm": "block",
+            "flexWall": false,
+            "coreSide": "R"
+          }
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "generated": 27520,
+    "valid": 16652
+  }
+}
