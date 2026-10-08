@@ -9,6 +9,7 @@ user's seven zoning drawings (2026-10-07). Brief: `knowledge/briefs/zf-v2-row-ce
 ```sh
 node spike/zone-first-v2/run.ts                 # writes spike/zone-first-v2/out/ (about 8 s)
 node spike/zone-first-v2/run.ts --carve         # round 5's carve pass on top of it (off by default since round 8b)
+                                                # `--carve` wins if `--carve` and `--no-carve` are both given
 node --test spike/zone-first-v2/*.test.ts
 node --test spike/zone-first/*.test.ts spike/geometry-feasibility/*.test.ts spike/template-generator/*.test.ts
 ```
@@ -17,7 +18,7 @@ Open `compare.html` with the repo root served: `/spike/zone-first-v2/out/compare
 Output: `out/<id>/cand-N.svg|json`, `out/summary.json`, `out/compare.html`. The SVGs never rely on colour:
 every zone carries its name and `W x D` in metres; Flex is hatched with its class; flex-walls are hatched
 with a dashed edge and labelled `Flex-wall`; the spine is dotted and labelled `Spine`. Since round 8b every
-piece is drawn with a 200 mm gap to its neighbours (see Round 8b).
+piece is drawn with a 200 mm gap to its neighbours; a zone and the extensions it owns are one space, so they touch (see Round 8b).
 
 ## Lot-size review runs
 
@@ -35,7 +36,8 @@ Neither touches `out/` or the tests.
 ```sh
 node spike/zone-first-v2/run-small.ts           # small (the default) -> spike/zone-first-v2/out-small/
 node spike/zone-first-v2/run-small.ts medium    # -> spike/zone-first-v2/out-medium/
-# add --carve to any of the three for round 5's carve pass (off by default since round 8b)
+# add --carve to any of the three for round 5's carve pass (off by default since round 8b;
+# --carve wins if both --carve and --no-carve are given)
 node spike/zone-first-v2/run-small.ts large     # -> spike/zone-first-v2/out-large/
 ```
 
@@ -178,11 +180,12 @@ cell with it), laundry next to the wet rooms or the Core (same one-cell rule), M
 (recorded only), slivers.
 
 **Tracing nooks (round 8a).** In a **measured** plan a Flex piece under **1.5 m²** (`TRACING_NOOK_MAX_AREA`) is a tracing
-artefact of a hand-measured drawing, not a space: it is merged into the neighbouring piece or zone it shares the longest
-edge with (the golden tolerance), or left out when that union is not a rectangle. It is then neither a Flex strip nor a
+artefact of a hand-measured drawing, not a space: it is left out of the plan. The rule is drop-only — the measured cells
+are inset by the drawing's ~200 mm line, so two touching cells are never exactly adjacent and a union with a neighbour is
+never a rectangle, leaving nothing to merge the artefact into. The nook is then neither a Flex strip nor a
 sliver, and nothing else about the plan changes (`total` still sums its cells as measured). Generated plans are untouched:
 a real sliver there is still a piece and still costs 50. Why: zf-17 (Botanica 36) carries a 1100 x 700 cell where its
-bedroom lane ends, and that one cell was 50 of its 78 points — with the nook absorbed the plan the user prefers scores 32.
+bedroom lane ends, and that one cell was 50 of its 78 points — with the nook left out the plan the user prefers scores 32.
 
 **Profile** (`out/quality-profile.json`): per numeric metric, the band [min, max] across the golden plans. All seven plans
 (used for briefs with no golden layout) give:
@@ -259,7 +262,7 @@ gains `carved: Theatre, Guest bed, ...` (or `carved: none`); the SVG draws a car
 **Since round 8b the pass does not run by default** (the architect decides what leftover space becomes, see Round 8b):
 `--carve` on `run.ts` / `run-small.ts`, or `pipeline.runBrief(brief, { carve: true })`, turns it on. A default run has no
 carved room anywhere (`carved` stays `undefined`, nothing is named Theatre, the metric line has no `carved:` term), and
-`--no-carve` is still accepted — it is simply the default now. `--carve` reproduces the round 5 layout and metrics (the
+`--no-carve` is still accepted — it is simply the default now; if both flags are given, `--carve` wins. `--carve` reproduces the round 5 layout and metrics (the
 `0ae512b` ones); only the drawing differs, by the round 8b wall gaps.
 
 Judgement calls (all provisional):
@@ -418,7 +421,7 @@ Study, Guest bed, thin halls, leftover strips) and prefers theirs — and the sc
 lower better). Of Botanica's 78.8, 50 points were one "sliver": a 1100 x 700 nook that is only a tracing artefact of the
 measured drawing. Two changes, both approved:
 
-1. **Tracing nooks** (see Metrics): a Flex piece under 1.5 m² in a measured plan is absorbed or left out, so it is neither a
+1. **Tracing nooks** (see Metrics): a Flex piece under 1.5 m² in a measured plan is left out, so it is neither a
    sliver nor a Flex strip. Measured plans only; generated plans are unchanged.
 2. **`pieceDensity`**: how many pieces a plan is made of — zones + Flex pieces + extensions, the spine and the flex-walls
    counted, slivers not — per 100 m² of the lot. A one-sided band metric like the others, weight **provisional** at 1 point
@@ -441,10 +444,13 @@ Judgement calls (round 8a):
 
 L8.1. **The threshold is 1.5 m², one constant, commented as a tracing artefact.** zf-17's is 0.77 m²; the next smallest
    measured cell (1100 x 1600, 1.76 m²) is above it and stays a piece.
-L8.2. **Merge by longest shared edge, within the golden tolerance (350 mm), flex or zone — whichever edge is longer.** When
-   the union is not a rectangle (`rectUnion` returns null only then) the nook is **left out** instead of merged: inventing an
-   L-shaped zone or a grown Flex piece would be a bigger lie than dropping a cell the drawing itself would not have drawn.
-   zf-17's nook is dropped this way (its longest edge, 1100 mm, is the bed's, but the widths differ).
+L8.2. **Drop only: a nook is left out of the plan, never merged.** The first design merged the nook into the neighbour it
+   shared its longest edge with (within the golden tolerance, 350 mm; flex or zone, whichever edge was longer), and left it
+   out only when that union was not a rectangle. That merge arm is gone: it never fires on real data, because the measured
+   cells are inset by the drawing's ~200 mm line, so two touching cells are never exactly adjacent and `rectUnion` always
+   returns null. Inventing an L-shaped zone or a grown Flex piece would in any case be a bigger lie than dropping a cell the
+   drawing itself would not have drawn. zf-17's nook (its longest edge, 1100 mm, is the bed's, but the widths differ) is
+   left out.
 L8.3. **`total` is the cells as measured**, nook included, so the shares of a measured plan are unchanged by the rule.
 L8.4. **A measured plan is only ever made simpler**: after the pass no measured plan holds a Flex piece under the threshold.
 L8.5. **The denominator is the envelope `w x d`** (the lot), not the sum of cells, so a candidate and a measured plan of the
@@ -472,7 +478,14 @@ becomes, so the generator should not invent those rooms.* Two changes.
    reads the envelope: a candidate's pieces tile the envelope exactly, so a side at `x = 0`, `y = 0`, `x + w = W` or
    `y + d = D` is an envelope side and every other side is shared — O(1) per piece, no adjacency scan. Golden SVGs are drawn
    with `{ gaps: false }` at their single call site in `run.ts`: a measured zoning already has its own ~200 mm lines between
-   cells and must not be inset twice.
+   cells and must not be inset twice. A zone and the extensions it owns are one space (R13/R14), so the pair is inset as a
+   single box: `drawnPiece()` takes `drawnRect()` of their union and clips it back to each rectangle, leaving no wall gap
+   inside the room while every other neighbour still gets its 2 * `PIECE_GAP`. A piece thinner than its two insets (a 100 mm
+   Flex sliver between two rooms) would draw nothing at all, so both insets shrink proportionally and it keeps 1 mm. When
+   that union covers ground neither rectangle occupies (a Core part paired with a far extension), the clip also drops the
+   inset on sides the pair only partly covers, so some other neighbours show a 100 mm line instead of 200 (measured over
+   the default run: 4 988 of 780 040 neighbouring pairs in 1 446 of 21 350 candidates, 154 of them touching outright); the
+   pair reading as one space is worth more than the exact width of those few hairlines.
 
 **Geometry, metrics and JSON are unchanged: this is drawing only.** `--carve` reproduces the `0ae512b` results exactly —
 `summary.json` is byte-identical but for the new `carve` field, the golden SVGs are byte-identical, and the candidate SVGs

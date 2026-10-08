@@ -17,7 +17,7 @@ import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, runBrief, type Brie
 import { GOLDEN, goldenById, profileFor, TRACING_NOOK_MAX_AREA } from './golden.ts';
 import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
-import { drawnRect, PIECE_GAP, renderSVG } from './render.ts';
+import { drawnPiece, drawnRect, PIECE_GAP, renderSVG } from './render.ts';
 import {
   aboveRoomMinimum,
   CARVE_SPECS,
@@ -649,10 +649,15 @@ test('closeness is a diagnostic: it is between 0 and 1 and the ranking ignores i
 
 // ------------------------------------------------------------------ grow rooms toward their zone cap before leaving Flex (2026-10-08)
 
-test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the Core cap hold; each grown room is noted', () => {
+/**
+ * The grow pass audited once (a runBrief sweep is not cheap), shared by the three tests below: the tallies plus the
+ * candidates that ended with a *higher* Flex share, which round 8b made possible (see the todo).
+ */
+function auditGrowth(): { grown: number; unchanged: number; shed: number; shareUp: string[]; worstUp: number } {
   let grown = 0;
-  let unchangedUnderCeiling = 0;
+  let unchanged = 0;
   let shed = 0;
+  let worstUp = 0;
   const shareUp: string[] = [];
   for (const id of ['zf-04', 'zf-07', 'SAMPLE-15x27']) {
     const r = RESULTS.find((x) => x.brief.id === id)!;
@@ -664,20 +669,19 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
       const same = JSON.stringify(c.zones) === JSON.stringify(b.zones); // generation only: neither run carves (round 8b)
       if (b.quality.flexShare <= ceiling) {
         assert.ok(same, `${id} ${c.optionId}: changed although its Flex share was within the ceiling`);
-        unchangedUnderCeiling++;
+        unchanged++;
         continue;
       }
       if (same) continue;
       grown++;
       assert.deepEqual(c.spine, b.spine, `${c.optionId}: the spine moved or grew`);
       assert.ok(c.quality.slivers <= b.quality.slivers, `${c.optionId}: growth made a sliver`);
-      // Round 8b: growth is no longer followed by the carve pass that used to turn the leftover strips into rooms, so
-      // the Flex share is not strictly lower after every growth: a room that grows by swallowing its own extension can
-      // leave the space it took as an ordinary Flex strip (measured 26 of 7834 grown candidates, worst +1.63 points on
-      // SAMPLE-15x27). What the pass claims is that it moves lot surplus out of Flex, and that still holds almost
-      // everywhere, so measure the exceptions instead of forbidding them.
-      if (c.quality.flexShare < b.quality.flexShare) shed++;
-      else shareUp.push(`${id} ${c.optionId} +${((c.quality.flexShare - b.quality.flexShare) * 100).toFixed(2)}pt`);
+      const up = (c.quality.flexShare - b.quality.flexShare) * 100;
+      if (up < 0) shed++;
+      else {
+        shareUp.push(`${id} ${c.optionId} +${up.toFixed(2)}pt`);
+        worstUp = Math.max(worstUp, up);
+      }
       assert.ok(c.notes.some((n) => n.includes('lot surplus')), `${c.optionId}: growth not noted`);
       const core = c.zones.filter((z) => z.kind === 'core').reduce((a, z) => a + area(z.rect), 0);
       assert.ok(core <= CORE_AREA_MAX, `${c.optionId}: Core ${core}`);
@@ -694,10 +698,37 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
       }
     }
   }
-  assert.ok(grown > 100, 'rooms grew on big lots');
-  assert.ok(unchangedUnderCeiling > 100, 'candidates within the ceiling are untouched');
-  assert.ok(shed > grown * 0.99, `only ${shed} of ${grown} grown candidates shed Flex`);
-  assert.ok(shareUp.length * 50 < grown, `grown but not less Flex (${shareUp.length} of ${grown}): ${shareUp.slice(0, 5).join('; ')}`);
+  return { grown, unchanged, shed, shareUp, worstUp };
+}
+
+let growthAuditCache: ReturnType<typeof auditGrowth> | null = null;
+const growthAudit = (): ReturnType<typeof auditGrowth> => (growthAuditCache ??= auditGrowth());
+
+test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the Core cap hold; each grown room is noted', () => {
+  const a = growthAudit();
+  assert.ok(a.grown > 100, 'rooms grew on big lots');
+  assert.ok(a.unchanged > 100, 'candidates within the ceiling are untouched');
+  assert.ok(a.shed > a.grown * 0.99, `only ${a.shed} of ${a.grown} grown candidates shed Flex`);
+});
+
+/**
+ * Round 8b removed the carve pass that used to turn the leftover strips into rooms after growth, so the strict original
+ * property - every grown candidate sheds Flex - no longer holds. It stays a todo carrying the measured exception.
+ */
+const GROW_UP =
+  'nothing carves the leftover any more (round 8b): a room that grows by swallowing its own extension can leave the ' +
+  'space it took as an ordinary Flex strip, so 26 of 7834 grown candidates end with a higher Flex share, worst ' +
+  '+1.62 pt (SAMPLE-15x27 L|midW|block|m:middle/split|wet:split|rr:BBF|nofw|v0)';
+
+test('grow pass: every grown candidate ends with a lower Flex share', { todo: GROW_UP }, () => {
+  const a = growthAudit();
+  assert.deepEqual(a.shareUp, [], `${a.shareUp.length} of ${a.grown} grown candidates: ${a.shareUp.slice(0, 5).join('; ')}`);
+});
+
+test('grow pass: the candidates that do not shed Flex stay inside the guard (round 8b)', () => {
+  const a = growthAudit();
+  assert.ok(a.shareUp.length <= 30, `${a.shareUp.length} of ${a.grown} grown candidates: ${a.shareUp.slice(0, 5).join('; ')}`);
+  assert.ok(a.worstUp <= 2, `worst Flex share rise ${a.worstUp.toFixed(2)} pt, over the 2 pt guard`);
 });
 
 // Round 8a changed this expectation: the zf-07 top 1 is no longer the same plan with and without the grow pass. The
@@ -910,11 +941,64 @@ test('round 8b: two touching zones are drawn 200 mm apart while their JSON recta
   assert.deepEqual(drawnRect(spine.rect, env), { x: 8900, y: 0, w: 1100, h: 8000 });
   const piece: FlexPiece = { id: 'f', rect: { x: 1200, y: 0, w: 1000, h: 2000 }, cls: 'Flex · room' };
   assert.ok(renderSVG(drawn(env, [], spine, [piece])).includes('<rect x="1300" y="0" width="800" height="1900" fill="url(#hatch)"'));
+  // round 8b fix: the extension is not a neighbour of its owner but part of the same space, so the pair is inset as one
+  // box (its union) and the extension keeps only the pair's outer insets; the assertion changed from 5100/7100/1800/900.
   const ext = { id: 'e', rule: 'R14' as const, ownerId: bed2.id, ownerName: 'Bed 2', name: 'Bed 2 · extension', rect: { x: 5000, y: 7000, w: 2000, h: 1000 } };
   const withExt = { ...drawn(env, [bed2, bed3], spine), extensions: [ext] } as Candidate;
-  assert.ok(renderSVG(withExt).includes('<rect x="5100" y="7100" width="1800" height="900" fill="url(#hatch2)"'));
+  assert.ok(renderSVG(withExt).includes('<rect x="5000" y="7000" width="1900" height="1000" fill="url(#hatch2)"'));
   // labels stay where they were (the numbers in them are the JSON size, one decimal)
   assert.ok(svg.includes('>Bed 2 5.0 x 8.0 m</text>'));
+});
+
+test('round 8b: a zone and its own extension are one space - no wall gap inside the room', () => {
+  const env = { w: 10000, d: 8000 };
+  const bed2: ZoneRec = { id: 'bed-1', kind: 'bedroom', name: 'Bed 2', rect: { x: 0, y: 0, w: 5000, h: 7000 } };
+  const bed3: ZoneRec = { id: 'bed-2', kind: 'bedroom', name: 'Bed 3', rect: { x: 5000, y: 0, w: 3800, h: 8000 } };
+  const spine: ZoneRec = { id: 'spine', kind: 'spine', name: 'Spine', rect: { x: 8800, y: 0, w: 1200, h: 8000 } };
+  const ext = { id: 'e', rule: 'R13' as const, ownerId: bed2.id, ownerName: 'Bed 2', name: 'Bed 2 · extension', rect: { x: 0, y: 7000, w: 5000, h: 1000 } };
+  const c = { ...drawn(env, [bed2, bed3], spine), extensions: [ext] } as Candidate;
+  const d2 = drawnPiece(c, bed2.rect);
+  const de = drawnPiece(c, ext.rect);
+  const d3 = drawnPiece(c, bed3.rect);
+  // the pair is inset as one box: only the insets of its union apply, so the extension keeps the outer 100 mm
+  assert.deepEqual(d2, { x: 0, y: 0, w: 4900, h: 7000 });
+  assert.deepEqual(de, { x: 0, y: 7000, w: 4900, h: 1000 });
+  assert.equal(sharedEdge(d2, de), 4900, 'a wall gap was drawn inside one room');
+  // the third zone still gets its 2 * PIECE_GAP against the pair
+  assert.equal(d3.x - (d2.x + d2.w), 2 * PIECE_GAP);
+  assert.equal(sharedEdge(d3, de), 0);
+  // the JSON rectangles still touch and the dashed union outline is drawn around zone + extension
+  assert.equal(bed2.rect.y + bed2.rect.h, ext.rect.y);
+  const svg = renderSVG(c);
+  assert.ok(svg.includes('<rect x="0" y="0" width="4900" height="7000" fill="#e8e8e8"'));
+  assert.ok(svg.includes('<rect x="0" y="7000" width="4900" height="1000" fill="url(#hatch2)"'));
+  assert.ok(svg.includes('<rect x="0" y="0" width="5000" height="8000" fill="none" stroke="#000" stroke-width="50" stroke-dasharray="350 200"'));
+  // and over every extension of every default run: drawn owner and drawn extension touch, never overlap
+  let pairs = 0;
+  for (const x of ALL) {
+    for (const e of x.c.extensions) {
+      const owner = x.c.zones.find((z) => z.id === e.ownerId)!;
+      const o = drawnPiece(x.c, owner.rect);
+      const q = drawnPiece(x.c, e.rect);
+      assert.ok(!overlap(o, q), `${where(x)}: ${e.name} overlaps ${owner.name}`);
+      assert.ok(sharedEdge(o, q) > 0, `${where(x)}: ${e.name} is drawn apart from ${owner.name}`);
+      pairs++;
+    }
+  }
+  assert.ok(pairs > 100, `the run produced ${pairs} extension pairs`);
+});
+
+test('round 8b: no drawn piece is empty - a piece thinner than its two insets keeps 1 mm', () => {
+  let n = 0;
+  for (const x of ALL) {
+    const rects = [...x.c.zones.map((z) => z.rect), x.c.spine.rect, ...x.c.flex.map((f) => f.rect), ...x.c.extensions.map((e) => e.rect)];
+    for (const r of rects) {
+      const d = drawnPiece(x.c, r);
+      assert.ok(d.w > 0 && d.h > 0, `${where(x)}: ${JSON.stringify(r)} is drawn as ${JSON.stringify(d)}`);
+      n++;
+    }
+  }
+  assert.ok(n > 0);
 });
 
 test('round 8b: a measured golden zoning already has its own gaps - drawn as it is, not inset twice', () => {

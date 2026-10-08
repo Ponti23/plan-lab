@@ -5,7 +5,9 @@
 //  - the Spine carries a dotted fill, rooms are a solid light grey, background white, text black,
 //  - round 8b: every piece is drawn inset by PIECE_GAP on each side it shares with a neighbour (so neighbours
 //    show a 200 mm gap, like the user's measured drawings) and by 0 on a side on the envelope, where the thick
-//    outer line stays; the labels and fills do not move. Drawing only: no geometry, metric or JSON changes.
+//    outer line stays; a zone and the extensions it owns are one space, so the pair is inset as a single box
+//    (no wall gap inside the room - see `drawnPiece`); the labels and fills do not move. Drawing only: no
+//    geometry, metric or JSON changes.
 //    Golden SVGs are drawn with `gaps: false`: a measured zoning already has its own 200 mm lines between cells.
 
 import type { Candidate, ExtensionRec, FlexPiece, Rect, ZoneRec } from './types.ts';
@@ -21,15 +23,51 @@ const FONT_SMALL = 280;
 export const PIECE_GAP = 100;
 
 /**
+ * The two insets of one axis. A piece thinner than its two insets - a 100 mm Flex sliver between two rooms - would
+ * draw nothing at all, so both insets shrink proportionally and the piece keeps 1 mm. Wide pieces are not touched.
+ */
+const insets = (size: number, a: number, b: number): [number, number] => {
+  const over = a + b - Math.max(0, size - 1);
+  if (over <= 0 || a + b === 0) return [a, b];
+  return [a - Math.ceil((over * a) / (a + b)), b - Math.ceil((over * b) / (a + b))];
+};
+
+/**
  * The rectangle as drawn: inset by PIECE_GAP on each side that is not on the envelope. The pieces of a candidate
- * tile the envelope exactly, so every other side is shared with a neighbour. Never negative.
+ * tile the envelope exactly, so every other side is shared with a neighbour. Never empty.
  */
 export function drawnRect(r: Rect, env: { w: number; d: number }): Rect {
-  const l = r.x === 0 ? 0 : PIECE_GAP;
-  const t = r.y === 0 ? 0 : PIECE_GAP;
-  const right = r.x + r.w === env.w ? 0 : PIECE_GAP;
-  const bottom = r.y + r.h === env.d ? 0 : PIECE_GAP;
-  return { x: r.x + l, y: r.y + t, w: Math.max(0, r.w - l - right), h: Math.max(0, r.h - t - bottom) };
+  const [l, right] = insets(r.w, r.x === 0 ? 0 : PIECE_GAP, r.x + r.w === env.w ? 0 : PIECE_GAP);
+  const [t, bottom] = insets(r.h, r.y === 0 ? 0 : PIECE_GAP, r.y + r.h === env.d ? 0 : PIECE_GAP);
+  return { x: r.x + l, y: r.y + t, w: r.w - l - right, h: r.h - t - bottom };
+}
+
+const unionRect = (a: Rect, b: Rect): Rect => {
+  const x = Math.min(a.x, b.x);
+  const y = Math.min(a.y, b.y);
+  return { x, y, w: Math.max(a.x + a.w, b.x + b.w) - x, h: Math.max(a.y + a.h, b.y + b.h) - y };
+};
+
+const intersectRect = (a: Rect, b: Rect): Rect => {
+  const x = Math.max(a.x, b.x);
+  const y = Math.max(a.y, b.y);
+  const right = Math.min(a.x + a.w, b.x + b.w);
+  const bottom = Math.min(a.y + a.h, b.y + b.h);
+  return { x, y, w: Math.max(0, right - x), h: Math.max(0, bottom - y) };
+};
+
+/**
+ * The rectangle as drawn for one piece of the candidate. A zone and the extensions it owns are one space (R13/R14
+ * folded the leftover strip into the room), so the pair is inset as a single box: `drawnRect` of their union, clipped
+ * back to the piece. The pair then keeps only its outer insets - no wall gap is drawn inside the room - and every
+ * other neighbour still gets its 2 * PIECE_GAP. Flex pieces and the spine have no extensions and are `drawnRect`.
+ */
+export function drawnPiece(c: Candidate, r: Rect): Rect {
+  const ext = c.extensions.find((e) => e.rect === r);
+  const owner = ext ? c.zones.find((z) => z.id === ext.ownerId) : c.zones.find((z) => z.rect === r);
+  const exts = owner ? c.extensions.filter((e) => e.ownerId === owner.id) : [];
+  if (exts.length === 0) return drawnRect(r, c.envelope);
+  return intersectRect(r, drawnRect(exts.reduce((u, e) => unionRect(u, e.rect), owner!.rect), c.envelope));
 }
 
 export interface RenderOptions {
@@ -87,7 +125,7 @@ function label(cx: number, cy: number, lines: Line[]): string {
 function zoneSvg(c: Candidate, z: ZoneRec, gaps: boolean): string {
   const cx = z.rect.x + z.rect.w / 2;
   const cy = svgTop(c.envelope.d, z.rect) + z.rect.h / 2;
-  const r = gaps ? drawnRect(z.rect, c.envelope) : z.rect;
+  const r = gaps ? drawnPiece(c, z.rect) : z.rect;
   const top = svgTop(c.envelope.d, r);
   if (z.kind === 'flexwall') {
     const long = Math.max(z.rect.w, z.rect.h);
@@ -117,7 +155,7 @@ function zoneSvg(c: Candidate, z: ZoneRec, gaps: boolean): string {
 function flexSvg(c: Candidate, f: FlexPiece, gaps: boolean): string {
   const cx = f.rect.x + f.rect.w / 2;
   const cy = svgTop(c.envelope.d, f.rect) + f.rect.h / 2;
-  const r = gaps ? drawnRect(f.rect, c.envelope) : f.rect;
+  const r = gaps ? drawnPiece(c, f.rect) : f.rect;
   const top = svgTop(c.envelope.d, r);
   const lines: Line[] =
     f.rect.h >= 3 * FONT
@@ -140,7 +178,7 @@ function extensionSvg(c: Candidate, e: ExtensionRec, gaps: boolean): string {
   };
   const cx = e.rect.x + e.rect.w / 2;
   const cy = e.rect.y + e.rect.h / 2;
-  const r = gaps ? drawnRect(e.rect, c.envelope) : e.rect;
+  const r = gaps ? drawnPiece(c, e.rect) : e.rect;
   const lines: Line[] =
     e.rect.h >= 3 * FONT
       ? [{ text: e.name, dy: -FONT * 0.5, small: true }, { text: dims(e.rect), dy: FONT * 0.7, small: true }]

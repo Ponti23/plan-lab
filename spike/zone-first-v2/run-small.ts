@@ -175,6 +175,9 @@ function main(): void {
 
   const summary = {
     note: set.note,
+    // round 8b: recorded like run.ts does, so a summary.json says which run it came from
+    carve,
+
     briefs: results.map((r) => ({
       id: r.brief.id,
       title: r.brief.title,
