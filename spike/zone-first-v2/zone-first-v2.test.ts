@@ -709,10 +709,11 @@ test('grow pass: the zf-07 pre-grow top 1 is untouched (its Flex share is alread
   const before = runBrief(r.brief, { grow: false });
   const b1 = before.top5[0];
   assert.ok(b1.quality.flexShare <= r.profile.flexShare.max);
-  const after = r.valid.find((c) => c.optionId === b1.optionId)!;
-  assert.deepEqual(after.zones, b1.zones);
-  assert.equal(after.quality.score, b1.quality.score);
-  assert.ok(!after.notes.some((n) => n.includes('lot surplus')), after.optionId);
+  const found = r.valid.find((c) => c.optionId === b1.optionId);
+  assert.ok(found, `the pre-grow zf-07 top 1 (${b1.optionId}) is not among the grown valid candidates`);
+  assert.deepEqual(found.zones, b1.zones);
+  assert.equal(found.quality.score, b1.quality.score);
+  assert.ok(!found.notes.some((n) => n.includes('lot surplus')), found.optionId);
 });
 
 // ------------------------------------------------------------------ determinism, v1 untouched
@@ -1006,9 +1007,15 @@ test('living Flex: carving leaves a living piece alone apart from Activity (no h
 
 test('round 8a: a tracing nook in a measured zoning is not a sliver (zf-17 1100 x 700), and a measured cell above the threshold stays', () => {
   const g = goldenById('zf-17')!;
-  assert.equal(g.metrics.slivers, 0, 'the 1100 x 700 tracing nook still counts as a sliver');
-  assert.ok(!g.layout.flex.some((f) => f.rect.x === 8200 && f.rect.y === 12400), 'the nook is still a piece of the measured plan');
-  assert.ok(g.layout.flex.some((f) => f.rect.x === 8200 && f.rect.y === 4000), 'the 1100 x 1600 cell (1.76 m²) is above the threshold and was absorbed anyway');
+  assert.equal(g.metrics.slivers, 0, 'the 1100 x 700 tracing nook still counts as a sliver (it was not dropped)');
+  assert.ok(!g.layout.flex.some((f) => f.rect.x === 8200 && f.rect.y === 12400), 'the 1100 x 700 tracing nook was not dropped (it is still a piece of the measured plan)');
+  assert.ok(g.layout.flex.some((f) => f.rect.x === 8200 && f.rect.y === 4000), 'the 1100 x 1600 cell (1.76 m²), above the threshold, was dropped (it should stay a piece)');
+  // dropping the artefact touches Flex only: the zones are the measured cells of the drawing, rect for rect
+  const spec = JSON.parse(readFileSync(join(import.meta.dirname!, '..', '..', 'knowledge', 'specs', 'zone-first-golden.json'), 'utf8')) as {
+    plans: Record<string, { zones: [string, number, number, number, number][] }>;
+  };
+  const measured = spec.plans['zf-17'].zones.filter(([k]) => k !== 'flex').map(([, x, y, w, h]) => `${x},${y},${w},${h}`);
+  assert.deepEqual(g.layout.zones.map((z) => `${z.rect.x},${z.rect.y},${z.rect.w},${z.rect.h}`), measured, 'the nook rule moved a zone of the measured plan');
   // the rule is about tracing, not about a big plan: no measured plan keeps a cell under the threshold
   for (const p of GOLDEN) {
     const tiny = p.layout.flex.filter((f) => f.rect.w * f.rect.h < TRACING_NOOK_MAX_AREA);

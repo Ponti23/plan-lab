@@ -428,9 +428,11 @@ Effect. The golden scores move from zf-01 42.61, zf-03 7.42, zf-04 26.16, zf-05 
 to 47.87, 12.72, 30.79, 14.41, 21.02, 13.43, 32.08. Read that carefully: zf-17 falls 46 points (50.0 for the nook it no
 longer carries, +4.1 for the new metric) and is the only plan the rule touches; the other six plans are the same zones as
 before and only move because every metric adds its reward term, so the new one adds its own count back — zf-01 +5.26,
-zf-03 +5.30, zf-04 +4.63, zf-05 +6.10, zf-08 +5.51 (each exactly its pieces/100 m², inside its band) and zf-07 +12.26
-(6.66 reward, plus 5.6 outside its own leave-one-out band, whose max is zf-05's 6.10). Top-1 plans are simpler: pieces 15→9 (zf-01),
-16→14 (zf-03), 20→19 (zf-04), 15→15 (zf-05), 17→14 (zf-07), 20→20 (zf-08), 24→23 (zf-17). The blind test passes for
+zf-03 +5.30, zf-04 +4.63, zf-05 +6.10, zf-08 +5.51 (each exactly its pieces/100 m², inside its band) and zf-07 +12.30
+(6.66 reward, plus 5.64 outside its own leave-one-out band, whose max is zf-05's 6.10). Top-1 plans are simpler: pieces (excluding the spine) 15→9 (zf-01),
+16→14 (zf-03), 20→19 (zf-04), 15→15 (zf-05), 17→14 (zf-07), 20→20 (zf-08), 24→23 (zf-17). zf-17's target-match
+regression climbs from 2724th to 2622nd of 3432 distinct valid candidates — round 8b takes it to 2160th (see that note).
+The blind test passes for
 zf-01, 04, 05 and 17 and is a todo (with the numbers) for zf-03 and zf-07, which it passed before: the goldens are now
 rewarded for being simple and the generator still makes more, smaller cells than the user's drawings do. That is a signal
 for the generator, not for the weight — the rate is the one the brief fixed.
@@ -449,7 +451,7 @@ L8.5. **The denominator is the envelope `w x d`** (the lot), not the sum of cell
    same brief are compared on the same area.
 L8.6. **Band scale 10, not 100**: the band is in pieces per 100 m², and 10 gives exactly the brief's 1 point per 0.1. A share
    keeps 100 (unchanged behaviour, checked by the existing score test).
-L8.7. **The `sanity` expectation is unchanged** (still zf-01 and zf-04 outside their bands); zf-07's piece count is 5.6 points
+L8.7. **The `sanity` expectation is unchanged** (still zf-01 and zf-04 outside their bands); zf-07's piece count is 5.64 points
    outside its own leave-one-out band, under the 10-point mark.
 
 ## Round 8b: no room carving by default; pieces drawn with a wall gap (user decision 2026-10-08)
@@ -514,7 +516,7 @@ plans are measured zonings and are not carved, so nothing in the stick moves; th
 which on zf-08 and zf-07 makes the top 1 further from the user's Flex share.
 
 **zf-17 (Botanica 36).** Its target-signature regression first matches at rank **2160 of 3432** distinct valid candidates
-(was 2622 of 3430 with carving on): the plan whose zoning the user prefers climbs 462 places now that the top of the
+(was 2622 of 3432 with carving on): the plan whose zoning the user prefers climbs 462 places now that the top of the
 ranking is not full of carved-room plans. It is still far down, for the reasons in round 6 (a full-width rear living band
 still pays in `flexStrips` and `longestFlexRatio`, L5).
 
@@ -569,7 +571,7 @@ L1. **Slivers and circulation pieces are never living.** A rear Flex hall (1000-
 L2. **Living is never lost.** `markLiving` only promotes. What is left of a living piece after an Activity is carved out of it stays living, even where it no longer touches the rear wall or the Core: the band is still the band. Without this, carving would raise the Flex share (a leftover turns ordinary), which broke the existing "carving only lowers the Flex share" test.
 L3. **No hall out of a living piece.** A carved hall would turn living Flex into circulation Flex (counted in the Flex share). Activity in a living piece is placed without a hall; the connectivity check still decides.
 L4. **Core extensions do not anchor living.** Only Core zones do. A rear piece beside only a Core extension is not living.
-L5. **`flexStrips` and `longestFlexRatio` still count living pieces.** The brief names `flexShare` only. This keeps a full-width rear band penalised (30.6 points for the zf-17 match, plus 3 strips = 30 points) and is the main reason the target match is still ranked 1918th of 3430 in round 6 (2160th of 3432 in round 8b). Excluding living pieces from those two metrics too (tried, then removed) moves it to 1138th. That is a product call: not adopted.
+L5. **`flexStrips` and `longestFlexRatio` still count living pieces.** The brief names `flexShare` only. This keeps a full-width rear band penalised (30.6 points for the zf-17 match, plus 3 strips = 30 points) and in round 6 kept the target match down at 1918th of 3430 — history now: 2622nd of 3432 after round 8a, 2160th after round 8b (see those notes). Excluding living pieces from those two metrics too (tried, then removed) moves it to 1138th. That is a product call: not adopted.
 L6. **The measured Botanica carries a 1100 x 700 Flex cell** (a sliver by v2's rule), which made its own score 78, 50 of it that one sliver. **Round 8a supersedes this**: the cell is a tracing artefact and is absorbed/left out like any other sub-1.5 m² measured Flex piece, so the plan scores 32 (see Round 8a).
 L7. **Leave-one-out sanity test**: zf-04 is 10.01 points outside its bands (ordinary Flex 22 % against the others' max, now lower because living Flex no longer counts for them), so the "known misses" list is zf-01 and zf-04. zf-08's blind test fails (round 8a: best top-5 score 15.09 against its own 13.43; round 6: 8.9 against 7.92) and is a todo with the numbers, as are zf-03 and zf-07 since round 8a (see Round 8a).
 
@@ -661,7 +663,7 @@ Numbers in this list are as of the round they were written unless restated; the 
 
 - **Three blind tests fail** (zf-03, zf-07, zf-08; todos with the numbers above; zf-03 is a near miss). Since
   round 8a the goldens are rewarded for being made of fewer pieces, and the generator still makes more, smaller cells than
-  the user's drawings do (zf-07: top 1 7.1 pieces/100 m² against the plan's own 6.7-and-under band). The generator's Flex
+  the user's drawings do (zf-07: top 1 7.1 pieces/100 m² against its own 6.7 (leave-one-out band max 6.1)). The generator's Flex
   also stays above the user's plans' and the Core is capped at 58.5 m2 with rooms at preferred sizes.
 - **zf-01 leave-one-out spine band**: its own spine is 19 points above the others' band (reported, not corrected).
 - **Top 3 for SAMPLE-15x27 are 24-33 % Flex** (the profile's Flex band tops out at 22 %; round 8b — 45-54 % when the carve

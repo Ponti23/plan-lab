@@ -3,51 +3,24 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { classifyPiece, rectUnion } from '../zone-first/flex.ts';
-import { buildProfile, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, type Layout, type Metrics, type Profile } from './quality.ts';
+import { classifyPiece } from '../zone-first/flex.ts';
+import { buildProfile, coreRectsOf, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, type Layout, type Metrics, type Profile } from './quality.ts';
 import type { Candidate, FlexPiece, Rect, ZoneKind, ZoneRec } from './types.ts';
 
 /**
  * Round 8a: a Flex cell in a hand-measured zoning under this area is a tracing artefact of the drawing, not a space
- * (Botanica 36's 1100 x 700 nook cost its own zoning 50 points as a sliver). It is merged into the neighbouring piece
- * or zone it shares the longest edge with; when that union is not a rectangle the piece is simply left out. Real
- * slivers in generated plans are unchanged and still cost 50.
+ * (Botanica 36's 1100 x 700 nook cost its own zoning 50 points as a sliver). It is left out of the plan. The cells are
+ * inset by the ~200 mm drawing line, so no two of them are ever exactly adjacent and a union of two would not be a
+ * rectangle: there is nothing to merge the artefact into. Real slivers in generated plans are unchanged and cost 50.
  */
 export const TRACING_NOOK_MAX_AREA = 1.5e6; // mm²
 
-/** Merge (or drop) the tracing nooks of one measured zoning, in place. `total` keeps the sum of the cells as measured. */
-function absorbTracingNooks(zones: ZoneRec[], flex: FlexPiece[]): void {
+/** Drop the tracing nooks of one measured zoning, in place. `total` keeps the sum of the cells as measured. */
+function absorbTracingNooks(flex: FlexPiece[]): void {
   for (let i = flex.length - 1; i >= 0; i--) {
-    const nook = flex[i];
-    if (nook.rect.w * nook.rect.h >= TRACING_NOOK_MAX_AREA) continue;
-    // the neighbour (a Flex piece or a zone) the nook shares the longest edge with, within the golden tolerance
-    let bestKind: 'flex' | 'zone' = 'flex';
-    let bestIndex = -1;
-    let bestEdge = 0;
-    for (let j = 0; j < flex.length; j++) {
-      if (j === i) continue;
-      const e = edgeBetween(nook.rect, flex[j].rect, GOLDEN_ADJ.tol);
-      if (e > bestEdge) {
-        bestEdge = e;
-        bestKind = 'flex';
-        bestIndex = j;
-      }
-    }
-    for (let j = 0; j < zones.length; j++) {
-      const e = edgeBetween(nook.rect, zones[j].rect, GOLDEN_ADJ.tol);
-      if (e > bestEdge) {
-        bestEdge = e;
-        bestKind = 'zone';
-        bestIndex = j;
-      }
-    }
-    const union = bestIndex < 0 ? null : rectUnion(nook.rect, bestKind === 'flex' ? flex[bestIndex].rect : zones[bestIndex].rect);
-    if (union) {
-      if (bestKind === 'flex') flex[bestIndex] = { ...flex[bestIndex], rect: union, cls: classifyPiece(union) };
-      else zones[bestIndex] = { ...zones[bestIndex], rect: union };
-    }
-    // merged into the neighbour (or dropped as an artefact when the union is not a rectangle)
-    flex.splice(i, 1);
+    // drop only: the measured cells are inset, so a union with a neighbour is never a rectangle (see the constant).
+    // Zones are untouched, and on real data this is the only arm that ever ran.
+    if (flex[i].rect.w * flex[i].rect.h < TRACING_NOOK_MAX_AREA) flex.splice(i, 1);
   }
 }
 
@@ -101,7 +74,7 @@ export function loadGolden(): GoldenPlan[] {
       }
     });
     const env = { w: p.envelope[0], d: p.envelope[1] };
-    absorbTracingNooks(zones, flex); // round 8a: tracing nooks of a measured drawing are not slivers
+    absorbTracingNooks(flex); // round 8a: tracing nooks of a measured drawing are not slivers
     flex.splice(0, flex.length, ...markLiving(flex, coreRectsOf(zones), GOLDEN_ADJ.tol));
     const layout: Layout = { env, zones, flex, extensions: [], total };
     const metrics = metricsOf(layout, GOLDEN_ADJ);
