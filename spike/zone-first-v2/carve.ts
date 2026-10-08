@@ -1,6 +1,10 @@
 // Round 5: the carve pass. Big Flex pieces become named rooms (Theatre, Guest bed, Activity, Study, in that order,
 // at most one of each). Pure and deterministic: no randomness, ties are broken by fixed keys.
 // Brief: knowledge/briefs/zf-v2-flex-split-brief.md. Every rule here is provisional (see the README).
+//
+// Round 8b (user decision 2026-10-08): the pass is OFF by default - the architect decides what leftover space becomes,
+// so the generator must not invent rooms. It runs only when asked: `runBrief(brief, { carve: true })`, `--carve` on
+// run.ts / run-small.ts (round 8b brief: knowledge/briefs/zf-v2-round8b-nocarve-walls-brief.md).
 
 import { checkConnectivity } from './connect.ts';
 import { classifyPiece, decompose, mergeSlivers, SLIVER_MIN_SIDE } from '../zone-first/flex.ts';

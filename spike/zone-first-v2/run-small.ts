@@ -1,4 +1,5 @@
-// Node 24, run directly: `node spike/zone-first-v2/run-small.ts [small|medium|large]`
+// Node 24, run directly: `node spike/zone-first-v2/run-small.ts [small|medium|large]` (add `--carve` for the round 5
+// carve pass; it is off by default since round 8b, and `--no-carve` is still accepted as the default behaviour).
 // Lot-size review run: the same pipeline as run.ts, but for the five briefs of the chosen set and
 // keeping the pairwise-different top 6 (runBrief(b, { top: 6 })) instead of the top 5. `small`
 // (default) reads SMALL_BRIEFS into out-small/, `medium` reads MEDIUM_BRIEFS into out-medium/,
@@ -167,7 +168,9 @@ function main(): void {
 
   const t0 = Date.now();
   mkdirSync(OUT, { recursive: true });
-  const results = set.briefs.map((b) => runBrief(b, { top: TOP, carve: !process.argv.includes('--no-carve') }));
+  // round 8b: no room carving unless `--carve` is given (`--no-carve` is accepted and is the default)
+  const carve = process.argv.includes('--carve');
+  const results = set.briefs.map((b) => runBrief(b, { top: TOP, carve }));
   for (const r of results) writeBrief(r);
 
   const summary = {

@@ -2,10 +2,11 @@
 //  - the envelope is outlined, "FRONT" is printed at the bottom (the street side),
 //  - the user is colourblind, so NEVER colour alone: every zone carries a text label with its name
 //    and its size in metres to one decimal, flex pieces carry a diagonal hatch plus their class,
-//  - the Spine carries a dotted fill, rooms are a solid light grey, background white, text black.
-//
-// Model space: origin rear-left, +y toward the FRONT. SVG space: +y downward, so a rectangle's SVG
-// top is svgY = y (no flip). All drawing coordinates are in millimetres inside the viewBox.
+//  - the Spine carries a dotted fill, rooms are a solid light grey, background white, text black,
+//  - round 8b: every piece is drawn inset by PIECE_GAP on each side it shares with a neighbour (so neighbours
+//    show a 200 mm gap, like the user's measured drawings) and by 0 on a side on the envelope, where the thick
+//    outer line stays; the labels and fills do not move. Drawing only: no geometry, metric or JSON changes.
+//    Golden SVGs are drawn with `gaps: false`: a measured zoning already has its own 200 mm lines between cells.
 
 import type { Candidate, ExtensionRec, FlexPiece, Rect, ZoneRec } from './types.ts';
 import { CARVE_SPECS, SPECS, garageRow, type RoomSpec } from './sizes.ts';
@@ -15,6 +16,26 @@ const PX_PER_MM = 0.05; // 15000 mm -> 750 px
 const MARGIN = 900; // mm of white space around the envelope
 const FONT = 320; // mm; renders at ~16 px
 const FONT_SMALL = 280;
+
+/** round 8b: the drawn inset per shared side. Two touching pieces show a 2 * PIECE_GAP = 200 mm gap. */
+export const PIECE_GAP = 100;
+
+/**
+ * The rectangle as drawn: inset by PIECE_GAP on each side that is not on the envelope. The pieces of a candidate
+ * tile the envelope exactly, so every other side is shared with a neighbour. Never negative.
+ */
+export function drawnRect(r: Rect, env: { w: number; d: number }): Rect {
+  const l = r.x === 0 ? 0 : PIECE_GAP;
+  const t = r.y === 0 ? 0 : PIECE_GAP;
+  const right = r.x + r.w === env.w ? 0 : PIECE_GAP;
+  const bottom = r.y + r.h === env.d ? 0 : PIECE_GAP;
+  return { x: r.x + l, y: r.y + t, w: Math.max(0, r.w - l - right), h: Math.max(0, r.h - t - bottom) };
+}
+
+export interface RenderOptions {
+  /** false draws the rectangles as they are (a measured golden zoning, which has its own 200 mm gaps) */
+  gaps?: boolean;
+}
 
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -63,11 +84,11 @@ function label(cx: number, cy: number, lines: Line[]): string {
     .join('');
 }
 
-function zoneSvg(c: Candidate, z: ZoneRec): string {
-  const d = c.envelope.d;
-  const top = svgTop(d, z.rect);
+function zoneSvg(c: Candidate, z: ZoneRec, gaps: boolean): string {
   const cx = z.rect.x + z.rect.w / 2;
-  const cy = top + z.rect.h / 2;
+  const cy = svgTop(c.envelope.d, z.rect) + z.rect.h / 2;
+  const r = gaps ? drawnRect(z.rect, c.envelope) : z.rect;
+  const top = svgTop(c.envelope.d, r);
   if (z.kind === 'flexwall') {
     const long = Math.max(z.rect.w, z.rect.h);
     const vertical = z.rect.h >= z.rect.w;
@@ -75,10 +96,10 @@ function zoneSvg(c: Candidate, z: ZoneRec): string {
     const lbl = vertical
       ? `<text transform="translate(${cx} ${cy}) rotate(-90)" font-size="${FONT_SMALL}" text-anchor="middle" dominant-baseline="middle">${esc(long >= 3 * FONT ? t : 'Flex-wall')}</text>`
       : label(cx, cy, [{ text: t, dy: 0, small: true }]);
-    return `<g><rect x="${z.rect.x}" y="${top}" width="${z.rect.w}" height="${z.rect.h}" fill="url(#hatch)" stroke="#000" stroke-width="60" stroke-dasharray="200 120"/>${lbl}</g>`;
+    return `<g><rect x="${r.x}" y="${top}" width="${r.w}" height="${r.h}" fill="url(#hatch)" stroke="#000" stroke-width="60" stroke-dasharray="200 120"/>${lbl}</g>`;
   }
   if (z.kind === 'spine') {
-    return `<g><rect x="${z.rect.x}" y="${top}" width="${z.rect.w}" height="${z.rect.h}" fill="url(#dots)" stroke="#000" stroke-width="60"/>${label(cx, cy, [
+    return `<g><rect x="${r.x}" y="${top}" width="${r.w}" height="${r.h}" fill="url(#dots)" stroke="#000" stroke-width="60"/>${label(cx, cy, [
       { text: 'Spine', dy: -FONT * 0.5 },
       { text: dims(z.rect), dy: FONT * 0.7, small: true },
     ])}</g>`;
@@ -90,23 +111,24 @@ function zoneSvg(c: Candidate, z: ZoneRec): string {
         { text: `room min ${min}`, dy: FONT * 0.65, small: true },
       ]
     : [{ text: `${z.name} ${dims(z.rect)}`, dy: 0, small: z.rect.h < 3 * FONT }];
-  return `<g><rect x="${z.rect.x}" y="${top}" width="${z.rect.w}" height="${z.rect.h}" fill="#e8e8e8" stroke="#000" stroke-width="60"/>${label(cx, cy, lines)}</g>`;
+  return `<g><rect x="${r.x}" y="${top}" width="${r.w}" height="${r.h}" fill="#e8e8e8" stroke="#000" stroke-width="60"/>${label(cx, cy, lines)}</g>`;
 }
 
-function flexSvg(d: number, f: FlexPiece): string {
-  const top = svgTop(d, f.rect);
+function flexSvg(c: Candidate, f: FlexPiece, gaps: boolean): string {
   const cx = f.rect.x + f.rect.w / 2;
-  const cy = top + f.rect.h / 2;
+  const cy = svgTop(c.envelope.d, f.rect) + f.rect.h / 2;
+  const r = gaps ? drawnRect(f.rect, c.envelope) : f.rect;
+  const top = svgTop(c.envelope.d, r);
   const lines: Line[] =
     f.rect.h >= 3 * FONT
       ? [{ text: f.cls, dy: -FONT * 0.5 }, { text: dims(f.rect), dy: FONT * 0.7, small: true }]
       : [{ text: f.cls, dy: 0, small: true }];
   const fill = f.cls === 'Flex · living' ? 'url(#hatch3)' : 'url(#hatch)';
-  return `<g><rect x="${f.rect.x}" y="${top}" width="${f.rect.w}" height="${f.rect.h}" fill="${fill}" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}</g>`;
+  return `<g><rect x="${r.x}" y="${top}" width="${r.w}" height="${r.h}" fill="${fill}" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}</g>`;
 }
 
 /** R13: hatched the other way, labelled "<Zone> · extension W x D", a dashed line around zone + extension. */
-function extensionSvg(c: Candidate, e: ExtensionRec): string {
+function extensionSvg(c: Candidate, e: ExtensionRec, gaps: boolean): string {
   const owner = c.zones.find((z) => z.id === e.ownerId)!;
   const x0 = Math.min(owner.rect.x, e.rect.x);
   const y0 = Math.min(owner.rect.y, e.rect.y);
@@ -118,14 +140,16 @@ function extensionSvg(c: Candidate, e: ExtensionRec): string {
   };
   const cx = e.rect.x + e.rect.w / 2;
   const cy = e.rect.y + e.rect.h / 2;
+  const r = gaps ? drawnRect(e.rect, c.envelope) : e.rect;
   const lines: Line[] =
     e.rect.h >= 3 * FONT
       ? [{ text: e.name, dy: -FONT * 0.5, small: true }, { text: dims(e.rect), dy: FONT * 0.7, small: true }]
       : [{ text: `${e.name} ${dims(e.rect)}`, dy: 0, small: true }];
-  return `<g><rect x="${e.rect.x}" y="${e.rect.y}" width="${e.rect.w}" height="${e.rect.h}" fill="url(#hatch2)" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}<rect x="${u.x}" y="${u.y}" width="${u.w}" height="${u.h}" fill="none" stroke="#000" stroke-width="50" stroke-dasharray="350 200"/></g>`;
+  return `<g><rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="url(#hatch2)" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}<rect x="${u.x}" y="${u.y}" width="${u.w}" height="${u.h}" fill="none" stroke="#000" stroke-width="50" stroke-dasharray="350 200"/></g>`;
 }
 
-export function renderSVG(c: Candidate): string {
+export function renderSVG(c: Candidate, opts: RenderOptions = {}): string {
+  const gaps = opts.gaps !== false;
   const { w, d } = c.envelope;
   const vbW = w + 2 * MARGIN;
   const vbH = d + 3 * MARGIN; // extra room at the bottom for the FRONT caption
@@ -153,10 +177,10 @@ export function renderSVG(c: Candidate): string {
 </defs>`;
 
   const body = [
-    ...c.flex.map((f) => flexSvg(d, f)),
-    ...c.extensions.map((e) => extensionSvg(c, e)),
-    ...c.zones.map((z) => zoneSvg(c, z)),
-    zoneSvg(c, c.spine),
+    ...c.flex.map((f) => flexSvg(c, f, gaps)),
+    ...c.extensions.map((e) => extensionSvg(c, e, gaps)),
+    ...c.zones.map((z) => zoneSvg(c, z, gaps)),
+    zoneSvg(c, c.spine, gaps),
   ].join('\n');
 
   const caption = `<text x="${w / 2}" y="${d + 2 * MARGIN}" font-size="700" text-anchor="middle" font-weight="bold">FRONT (street)</text>`;

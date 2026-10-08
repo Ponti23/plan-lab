@@ -1,6 +1,6 @@
 {
   "role": "option 4",
-  "rank": 39,
+  "rank": 49,
   "briefId": "S-04",
   "optionId": "L|rear|block|m:middle/block|wet:block|rr:-|fw|v2",
   "options": {
@@ -32,7 +32,7 @@
     "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.056578947368421055,
+    "flexShare": 0.15907894736842104,
     "livingShare": 0,
     "circulationShare": 0.12842105263157894,
     "coreShare": 0.2875,
@@ -48,7 +48,7 @@
     "spineRatio": 0.375,
     "longestFlexRatio": 0.425,
     "flexStrips": 1,
-    "score": 51.5,
+    "score": 52.52,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -61,8 +61,7 @@
   },
   "notes": [
     "Core shrank in depth to 4600 mm (preferred 4900 mm)",
-    "Master shrank in depth to 5400 mm (preferred 5800 mm)",
-    "carved from Flex: Theatre 3.8 x 4.1"
+    "Master shrank in depth to 5400 mm (preferred 5800 mm)"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
@@ -70,7 +69,7 @@
   "circulationArea": 19520000,
   "flexArea": {
     "Flex · circulation": 6800000,
-    "Flex · room": 0,
+    "Flex · room": 15580000,
     "Flex · storage": 1800000,
     "Flex · living": 0,
     "sliver": 0
@@ -92,18 +91,6 @@
     }
   ],
   "slivers": 0,
-  "carved": [
-    {
-      "name": "Theatre",
-      "label": "Theatre 3.8 x 4.1",
-      "rect": {
-        "x": 5700,
-        "y": 11900,
-        "w": 3800,
-        "h": 4100
-      }
-    }
-  ],
   "zones": [
     {
       "id": "core-1",
@@ -181,18 +168,6 @@
         "w": 3800,
         "h": 2700
       }
-    },
-    {
-      "id": "carved-1",
-      "kind": "carved",
-      "name": "Theatre",
-      "rect": {
-        "x": 5700,
-        "y": 11900,
-        "w": 3800,
-        "h": 4100
-      },
-      "carved": true
     }
   ],
   "spine": {
@@ -221,7 +196,7 @@
   ],
   "flex": [
     {
-      "id": "flex-1",
+      "id": "flex-2",
       "rect": {
         "x": 5900,
         "y": 7400,
@@ -231,7 +206,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-2",
+      "id": "flex-3",
       "rect": {
         "x": 4700,
         "y": 9200,
@@ -239,6 +214,16 @@
         "h": 6800
       },
       "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-4",
+      "rect": {
+        "x": 5700,
+        "y": 11900,
+        "w": 3800,
+        "h": 4100
+      },
+      "cls": "Flex · room"
     }
   ]
 }

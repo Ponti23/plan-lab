@@ -1,20 +1,21 @@
 {
   "role": "top 5",
-  "rank": 19,
+  "rank": 24,
   "briefId": "zf-01",
-  "optionId": "L|midG|block|m:front/block|wet:block|rr:F|nofw|v0",
+  "optionId": "L|midW|block|m:rear/block|wet:split|rr:MF|fw|v0",
   "options": {
     "garageSide": "L",
     "corePos": "middle",
     "coreForm": "block",
-    "masterPos": "front",
+    "masterPos": "rear",
     "masterForm": "block",
-    "wetForm": "block",
+    "wetForm": "split",
     "rearPlan": [
+      "M",
       "F"
     ],
-    "flexWall": false,
-    "coreLane": "G",
+    "flexWall": true,
+    "coreLane": "W",
     "variant": 0
   },
   "envelope": {
@@ -26,8 +27,9 @@
     "mismatches": [
       "garageSide: got \"L\", wanted \"R\"",
       "corePos: got \"middle\", wanted \"rear\"",
-      "rearRow: got [\"flex\"], wanted [\"core\"]",
-      "coreSide: got \"L\", wanted \"both\""
+      "rearRow: got [\"master\",\"flex\"], wanted [\"core\"]",
+      "masterPos: got \"rear\", wanted \"front\"",
+      "flexWall: got true, wanted false"
     ]
   },
   "signature": {
@@ -35,70 +37,82 @@
     "corePos": "middle",
     "coreForm": "block",
     "rearRow": [
+      "master",
       "flex"
     ],
-    "masterPos": "front",
+    "masterPos": "rear",
     "masterForm": "block",
-    "flexWall": false,
-    "coreSide": "L"
+    "flexWall": true,
+    "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.03418803418803419,
-    "livingShare": 0.14201183431952663,
-    "circulationShare": 0.08152531229454306,
-    "coreShare": 0.2626561472715319,
+    "flexShare": 0.06719263642340566,
+    "livingShare": 0.1542406311637081,
+    "circulationShare": 0.1531886916502301,
+    "coreShare": 0.2485207100591716,
     "bedroomSpread": 0,
     "spreadNorm": null,
     "wetNearBed": true,
     "laundryNear": true,
-    "masterSeparated": false,
+    "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 12.4,
-    "pieceDensity": 5.9171597633136095,
+    "circulationM2": 23.3,
+    "pieceDensity": 7.889546351084813,
     "slivers": 0,
     "spineRatio": 0.35502958579881655,
-    "longestFlexRatio": 0.5325443786982249,
-    "flexStrips": 1,
-    "score": 48.25,
+    "longestFlexRatio": 0.30177514792899407,
+    "flexStrips": 0,
+    "score": 36.53,
     "outside": {
       "flexShare": 0,
-      "circulationShare": 0,
+      "circulationShare": 6.97,
       "spineRatio": 0.09,
-      "longestFlexRatio": 21.53,
-      "pieceDensity": 0,
+      "longestFlexRatio": 0,
+      "pieceDensity": 12.28,
       "coreShare": 0,
       "spreadNorm": 0
     }
   },
-  "closenessToTheUsersLayout": 0.14658075852979938,
+  "closenessToTheUsersLayout": 0.06779909210718993,
   "notes": [
-    "Core shrank in depth to 8500 mm (preferred 9000 mm)"
+    "Core shrank in depth to 4200 mm (preferred 4900 mm)",
+    "Bath shrank in depth to 2100 mm (preferred 2300 mm)"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
-  "flexWallLength": 0,
-  "circulationArea": 12400000,
+  "flexWallLength": 4900,
+  "circulationArea": 23300000,
   "flexArea": {
-    "Flex · circulation": 5200000,
+    "Flex · circulation": 10220000,
     "Flex · room": 0,
     "Flex · storage": 0,
-    "Flex · living": 21600000,
+    "Flex · living": 23460000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
-  "carved": [],
   "zones": [
+    {
+      "id": "master-1",
+      "kind": "master",
+      "name": "Master",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 4400,
+        "h": 5100
+      }
+    },
     {
       "id": "core-1",
       "kind": "core",
       "name": "Core",
       "rect": {
         "x": 0,
-        "y": 2400,
-        "w": 4700,
-        "h": 8500
+        "y": 5100,
+        "w": 9000,
+        "h": 4200
       }
     },
     {
@@ -113,14 +127,36 @@
       }
     },
     {
-      "id": "wet-1",
-      "kind": "wet",
-      "name": "Bath + WC",
+      "id": "flexwall-1",
+      "kind": "flexwall",
+      "name": "Flex-wall",
       "rect": {
         "x": 4700,
-        "y": 2400,
-        "w": 4300,
-        "h": 2600
+        "y": 9300,
+        "w": 1200,
+        "h": 4900
+      }
+    },
+    {
+      "id": "wc-1",
+      "kind": "wc",
+      "name": "WC",
+      "rect": {
+        "x": 5900,
+        "y": 9300,
+        "w": 3100,
+        "h": 1000
+      }
+    },
+    {
+      "id": "wet-1",
+      "kind": "wet",
+      "name": "Bath",
+      "rect": {
+        "x": 5900,
+        "y": 10300,
+        "w": 3100,
+        "h": 2100
       }
     },
     {
@@ -128,10 +164,10 @@
       "kind": "laundry",
       "name": "Laundry",
       "rect": {
-        "x": 5700,
-        "y": 5000,
-        "w": 3300,
-        "h": 2000
+        "x": 5900,
+        "y": 12400,
+        "w": 3100,
+        "h": 1800
       }
     },
     {
@@ -140,20 +176,9 @@
       "name": "Bed 2",
       "rect": {
         "x": 5700,
-        "y": 7000,
+        "y": 14200,
         "w": 3300,
-        "h": 3200
-      }
-    },
-    {
-      "id": "master-1",
-      "kind": "master",
-      "name": "Master",
-      "rect": {
-        "x": 4700,
-        "y": 10200,
-        "w": 4300,
-        "h": 6700
+        "h": 2700
       }
     }
   ],
@@ -168,25 +193,47 @@
       "h": 6000
     }
   },
-  "flexWalls": [],
+  "flexWalls": [
+    {
+      "id": "flexwall-1",
+      "kind": "flexwall",
+      "name": "Flex-wall",
+      "rect": {
+        "x": 4700,
+        "y": 9300,
+        "w": 1200,
+        "h": 4900
+      }
+    }
+  ],
   "flex": [
     {
       "id": "flex-1",
       "rect": {
-        "x": 0,
+        "x": 4400,
         "y": 0,
-        "w": 9000,
-        "h": 2400
+        "w": 4600,
+        "h": 5100
       },
       "cls": "Flex · living"
     },
     {
       "id": "flex-2",
       "rect": {
+        "x": 0,
+        "y": 9300,
+        "w": 4700,
+        "h": 1600
+      },
+      "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-3",
+      "rect": {
         "x": 4700,
-        "y": 5000,
+        "y": 14200,
         "w": 1000,
-        "h": 5200
+        "h": 2700
       },
       "cls": "Flex · circulation"
     }

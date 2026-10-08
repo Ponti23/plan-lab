@@ -2,7 +2,7 @@
   "role": "option 1",
   "rank": 1,
   "briefId": "S-01",
-  "optionId": "L|midR|block|m:front/block|wet:block|rr:FBFB|nofw|v0",
+  "optionId": "L|midR|block|m:front/block|wet:block|rr:FBFB|fw|v0",
   "options": {
     "garageSide": "L",
     "corePos": "middle",
@@ -16,7 +16,7 @@
       "F",
       "B"
     ],
-    "flexWall": false,
+    "flexWall": true,
     "coreLane": "R",
     "variant": 0
   },
@@ -36,13 +36,13 @@
     ],
     "masterPos": "front",
     "masterForm": "block",
-    "flexWall": false,
+    "flexWall": true,
     "coreSide": "R"
   },
   "quality": {
     "flexShare": 0.045925925925925926,
     "livingShare": 0,
-    "circulationShare": 0.09259259259259259,
+    "circulationShare": 0.15302469135802468,
     "coreShare": 0.2919753086419753,
     "bedroomSpread": 4500,
     "spreadNorm": 0.22360679774997894,
@@ -50,16 +50,16 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6.3,
-    "circulationM2": 15,
+    "circulationM2": 24.79,
     "pieceDensity": 6.790123456790123,
     "slivers": 0,
     "spineRatio": 0.35,
     "longestFlexRatio": 0.17222222222222222,
     "flexStrips": 0,
-    "score": 26.36,
+    "score": 27.73,
     "outside": {
       "flexShare": 0,
-      "circulationShare": 0,
+      "circulationShare": 0.76,
       "spineRatio": 0,
       "longestFlexRatio": 0,
       "pieceDensity": 1.28,
@@ -70,13 +70,12 @@
   "notes": [
     "Bed 2 shrank in width to 3300 mm (preferred 3400 mm)",
     "Bed 3 shrank in width to 3300 mm (preferred 3400 mm)",
-    "Master shrank in width to 4300 mm (preferred 4400 mm)",
-    "carved from Flex: Theatre 3.5 x 4.2"
+    "Master shrank in width to 4300 mm (preferred 4400 mm)"
   ],
   "spineLength": 6300,
-  "longestRun": 6300,
-  "flexWallLength": 0,
-  "circulationArea": 15000000,
+  "longestRun": 8900,
+  "flexWallLength": 8900,
+  "circulationArea": 24790000,
   "flexArea": {
     "Flex · circulation": 7440000,
     "Flex · room": 0,
@@ -87,18 +86,6 @@
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
-  "carved": [
-    {
-      "name": "Theatre",
-      "label": "Theatre 3.5 x 4.2",
-      "rect": {
-        "x": 0,
-        "y": 7800,
-        "w": 3500,
-        "h": 4200
-      }
-    }
-  ],
   "zones": [
     {
       "id": "bedroom-1",
@@ -129,8 +116,8 @@
       "rect": {
         "x": 0,
         "y": 3100,
-        "w": 3500,
-        "h": 2900
+        "w": 2400,
+        "h": 5400
       }
     },
     {
@@ -139,9 +126,20 @@
       "name": "Laundry",
       "rect": {
         "x": 0,
-        "y": 6000,
-        "w": 3500,
-        "h": 1800
+        "y": 8500,
+        "w": 2400,
+        "h": 3500
+      }
+    },
+    {
+      "id": "flexwall-1",
+      "kind": "flexwall",
+      "name": "Flex-wall",
+      "rect": {
+        "x": 2400,
+        "y": 3100,
+        "w": 1100,
+        "h": 8900
       }
     },
     {
@@ -176,18 +174,6 @@
         "w": 4300,
         "h": 6300
       }
-    },
-    {
-      "id": "carved-1",
-      "kind": "carved",
-      "name": "Theatre",
-      "rect": {
-        "x": 0,
-        "y": 7800,
-        "w": 3500,
-        "h": 4200
-      },
-      "carved": true
     }
   ],
   "spine": {
@@ -201,7 +187,19 @@
       "h": 6300
     }
   },
-  "flexWalls": [],
+  "flexWalls": [
+    {
+      "id": "flexwall-1",
+      "kind": "flexwall",
+      "name": "Flex-wall",
+      "rect": {
+        "x": 2400,
+        "y": 3100,
+        "w": 1100,
+        "h": 8900
+      }
+    }
+  ],
   "flex": [
     {
       "id": "flex-1",

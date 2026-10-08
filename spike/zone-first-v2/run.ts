@@ -1,8 +1,9 @@
-// Node 24, run directly: `node spike/zone-first-v2/run.ts`
+// Node 24, run directly: `node spike/zone-first-v2/run.ts` (add `--carve` for the round 5 carve pass; it is off by
+// default since round 8b, and `--no-carve` is still accepted as the default behaviour).
 // Enumerates the options for every brief, scores each valid candidate against the quality profile taken from the
 // user's own zonings (leave-one-out for a brief that has one), keeps a diverse top 5, runs the blind test against the
 // user's layout, and checks the old target signatures as regression. Writes:
-//   spike/zone-first-v2/out/<briefId>/cand-N.svg|json, golden.svg (the user's zoning, same style)
+//   spike/zone-first-v2/out/<briefId>/cand-N.svg|json, golden.svg (the user's zoning, same style, its own gaps)
 //   spike/zone-first-v2/out/summary.json, quality-profile.json
 //   spike/zone-first-v2/out/compare.html  (served from the repo root: /spike/zone-first-v2/out/compare.html)
 
@@ -92,7 +93,8 @@ function writeBrief(r: BriefResult, kept: Kept[]): void {
     };
     writeFileSync(join(dir, `${k.file}.json`), JSON.stringify(json, null, 2), 'utf8');
   }
-  if (r.golden) writeFileSync(join(dir, 'golden.svg'), renderSVG(r.golden.asCandidate), 'utf8');
+  // the measured zoning already has its own 200 mm lines between cells: draw it as it is (round 8b)
+  if (r.golden) writeFileSync(join(dir, 'golden.svg'), renderSVG(r.golden.asCandidate, { gaps: false }), 'utf8');
 }
 
 const failureTally = (r: BriefResult): Record<string, number> =>
@@ -185,7 +187,9 @@ ${rows}
 function main(): void {
   const t0 = Date.now();
   mkdirSync(OUT, { recursive: true });
-  const results = BRIEFS.map((b) => runBrief(b, { carve: !process.argv.includes('--no-carve') })); // --no-carve reproduces the pre-carve output
+  // round 8b: no room carving unless `--carve` is given (`--no-carve` is accepted and is the default)
+  const carve = process.argv.includes('--carve');
+  const results = BRIEFS.map((b) => runBrief(b, { carve }));
   const kepts = results.map(keptFor);
   results.forEach((r, i) => writeBrief(r, kepts[i]));
 
@@ -209,6 +213,7 @@ function main(): void {
 
   const summary = {
     note: 'Ranking is provisional. Candidates are scored against the user\'s plans (leave-one-out); the user\'s layouts never steer generation.',
+    carve: process.argv.includes('--carve'),
     briefs: results.map((r, i) => ({
       id: r.brief.id,
       title: r.brief.title,

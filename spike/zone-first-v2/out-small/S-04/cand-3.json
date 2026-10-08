@@ -1,6 +1,6 @@
 {
   "role": "option 3",
-  "rank": 15,
+  "rank": 13,
   "briefId": "S-04",
   "optionId": "L|midG|block|m:rear/block|wet:block|rr:FM|nofw|v2",
   "options": {
@@ -36,8 +36,8 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.09276315789473684,
-    "livingShare": 0.05157894736842105,
+    "flexShare": 0.17526315789473684,
+    "livingShare": 0.16440789473684211,
     "circulationShare": 0.12473684210526316,
     "coreShare": 0.15769736842105264,
     "bedroomSpread": 0,
@@ -47,25 +47,24 @@
     "masterSeparated": true,
     "spineMetres": 6,
     "circulationM2": 18.96,
-    "pieceDensity": 8.552631578947368,
+    "pieceDensity": 7.894736842105263,
     "slivers": 0,
     "spineRatio": 0.375,
     "longestFlexRatio": 0.375,
     "flexStrips": 0,
-    "score": 43.57,
+    "score": 37.16,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
       "spineRatio": 0,
       "longestFlexRatio": 5.78,
-      "pieceDensity": 18.91,
+      "pieceDensity": 12.33,
       "coreShare": 0,
       "spreadNorm": 0
     }
   },
   "notes": [
-    "Core shrank in depth to 5100 mm (preferred 9000 mm)",
-    "carved from Flex: Theatre 3.8 x 3.3, Activity 3.5 x 4.9"
+    "Core shrank in depth to 5100 mm (preferred 9000 mm)"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
@@ -73,36 +72,14 @@
   "circulationArea": 18960000,
   "flexArea": {
     "Flex · circulation": 11760000,
-    "Flex · room": 0,
+    "Flex · room": 12540000,
     "Flex · storage": 2340000,
-    "Flex · living": 7840000,
+    "Flex · living": 24990000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
-  "carved": [
-    {
-      "name": "Theatre",
-      "label": "Theatre 3.8 x 3.3",
-      "rect": {
-        "x": 5700,
-        "y": 12700,
-        "w": 3800,
-        "h": 3300
-      }
-    },
-    {
-      "name": "Activity",
-      "label": "Activity 3.5 x 4.9",
-      "rect": {
-        "x": 0,
-        "y": 0,
-        "w": 3500,
-        "h": 4900
-      }
-    }
-  ],
   "zones": [
     {
       "id": "master-1",
@@ -169,30 +146,6 @@
         "w": 3800,
         "h": 2700
       }
-    },
-    {
-      "id": "carved-1",
-      "kind": "carved",
-      "name": "Theatre",
-      "rect": {
-        "x": 5700,
-        "y": 12700,
-        "w": 3800,
-        "h": 3300
-      },
-      "carved": true
-    },
-    {
-      "id": "carved-2",
-      "kind": "carved",
-      "name": "Activity",
-      "rect": {
-        "x": 0,
-        "y": 0,
-        "w": 3500,
-        "h": 4900
-      },
-      "carved": true
     }
   ],
   "spine": {
@@ -211,9 +164,9 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 3500,
+        "x": 0,
         "y": 0,
-        "w": 1600,
+        "w": 5100,
         "h": 4900
       },
       "cls": "Flex · living"
@@ -247,6 +200,16 @@
         "h": 6000
       },
       "cls": "Flex · circulation"
+    },
+    {
+      "id": "flex-5",
+      "rect": {
+        "x": 5700,
+        "y": 12700,
+        "w": 3800,
+        "h": 3300
+      },
+      "cls": "Flex · room"
     }
   ]
 }

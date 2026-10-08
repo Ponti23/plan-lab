@@ -92,8 +92,9 @@ export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; car
   const failedBy = new Map<Options, string>();
   for (const o of options) {
     const res = generate(brief, o, ceiling);
-    // round 5: big Flex becomes named rooms before anything is scored (carve: false reproduces the earlier output)
-    if (res.ok) valid.push(opts.carve === false ? res.candidate : carveCandidate(res.candidate));
+    // round 8b: carving is off unless asked for - the architect decides what leftover space becomes (carve: true
+    // is the round 5 pass; it still runs before anything is scored, so the ranking then sees the carved rooms)
+    if (res.ok) valid.push(opts.carve ? carveCandidate(res.candidate) : res.candidate);
     else {
       failures.set(res.reason, (failures.get(res.reason) ?? 0) + 1);
       failedBy.set(o, res.reason);

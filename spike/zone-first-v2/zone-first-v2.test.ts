@@ -17,7 +17,7 @@ import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, runBrief, type Brie
 import { GOLDEN, goldenById, profileFor, TRACING_NOOK_MAX_AREA } from './golden.ts';
 import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
-import { renderSVG } from './render.ts';
+import { drawnRect, PIECE_GAP, renderSVG } from './render.ts';
 import {
   aboveRoomMinimum,
   CARVE_SPECS,
@@ -43,6 +43,7 @@ import {
   touchesBoundary,
 } from './zones.ts';
 
+// round 8b: `runBrief` with no options is the shipped behaviour: no carve pass, no carved rooms.
 const RESULTS: BriefResult[] = BRIEFS.map(runBrief);
 const ALL: { brief: Brief; c: Candidate }[] = RESULTS.flatMap((r) => r.valid.map((c) => ({ brief: r.brief, c })));
 const where = (x: { c: Candidate }): string => `${x.c.briefId} ${x.c.optionId}`;
@@ -651,14 +652,16 @@ test('closeness is a diagnostic: it is between 0 and 1 and the ranking ignores i
 test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the Core cap hold; each grown room is noted', () => {
   let grown = 0;
   let unchangedUnderCeiling = 0;
+  let shed = 0;
+  const shareUp: string[] = [];
   for (const id of ['zf-04', 'zf-07', 'SAMPLE-15x27']) {
     const r = RESULTS.find((x) => x.brief.id === id)!;
-    const before = runBrief(r.brief, { grow: false, carve: false });
+    const before = runBrief(r.brief, { grow: false });
     const ceiling = r.profile.flexShare.max;
     const byId = new Map(before.valid.map((c) => [c.optionId, c]));
     for (const c of r.valid) {
       const b = byId.get(c.optionId)!;
-      const same = JSON.stringify(c.zones.filter((z) => !z.carved)) === JSON.stringify(b.zones); // generation only: carved rooms come later
+      const same = JSON.stringify(c.zones) === JSON.stringify(b.zones); // generation only: neither run carves (round 8b)
       if (b.quality.flexShare <= ceiling) {
         assert.ok(same, `${id} ${c.optionId}: changed although its Flex share was within the ceiling`);
         unchangedUnderCeiling++;
@@ -668,7 +671,13 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
       grown++;
       assert.deepEqual(c.spine, b.spine, `${c.optionId}: the spine moved or grew`);
       assert.ok(c.quality.slivers <= b.quality.slivers, `${c.optionId}: growth made a sliver`);
-      assert.ok(c.quality.flexShare < b.quality.flexShare, c.optionId);
+      // Round 8b: growth is no longer followed by the carve pass that used to turn the leftover strips into rooms, so
+      // the Flex share is not strictly lower after every growth: a room that grows by swallowing its own extension can
+      // leave the space it took as an ordinary Flex strip (measured 26 of 7834 grown candidates, worst +1.63 points on
+      // SAMPLE-15x27). What the pass claims is that it moves lot surplus out of Flex, and that still holds almost
+      // everywhere, so measure the exceptions instead of forbidding them.
+      if (c.quality.flexShare < b.quality.flexShare) shed++;
+      else shareUp.push(`${id} ${c.optionId} +${((c.quality.flexShare - b.quality.flexShare) * 100).toFixed(2)}pt`);
       assert.ok(c.notes.some((n) => n.includes('lot surplus')), `${c.optionId}: growth not noted`);
       const core = c.zones.filter((z) => z.kind === 'core').reduce((a, z) => a + area(z.rect), 0);
       assert.ok(core <= CORE_AREA_MAX, `${c.optionId}: Core ${core}`);
@@ -687,6 +696,8 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
   }
   assert.ok(grown > 100, 'rooms grew on big lots');
   assert.ok(unchangedUnderCeiling > 100, 'candidates within the ceiling are untouched');
+  assert.ok(shed > grown * 0.99, `only ${shed} of ${grown} grown candidates shed Flex`);
+  assert.ok(shareUp.length * 50 < grown, `grown but not less Flex (${shareUp.length} of ${grown}): ${shareUp.slice(0, 5).join('; ')}`);
 });
 
 // Round 8a changed this expectation: the zf-07 top 1 is no longer the same plan with and without the grow pass. The
@@ -731,7 +742,26 @@ test('v1 is untouched: its own tests still pass', () => {
 // ------------------------------------------------------------------ round 5: the carve pass (big Flex becomes rooms)
 
 const CARVE_ORDER = ['Theatre', 'Guest bed', 'Activity', 'Study'];
-const CARVED: { brief: Brief; c: Candidate }[] = ALL.filter((x) => x.c.carved && x.c.carved.length > 0);
+// round 8b: the carve pass is opt-in, so the tests that check it run the pipeline with `carve: true` (the same
+// fixture the round 5 tests used when it was the default: every valid candidate of every brief).
+const CARVE_RESULTS: BriefResult[] = BRIEFS.map((b) => runBrief(b, { carve: true }));
+const CARVED: { brief: Brief; c: Candidate }[] = CARVE_RESULTS.flatMap((r) => r.valid.map((c) => ({ brief: r.brief, c }))).filter((x) => x.c.carved && x.c.carved.length > 0);
+
+test('carve: off by default - a default run has no carved room anywhere, and `carve: true` carves', () => {
+  for (const r of RESULTS) {
+    for (const c of r.valid) {
+      assert.equal(c.carved, undefined, where({ c }));
+      assert.ok(!c.zones.some((z) => z.carved || z.kind === 'carved'), where({ c }));
+      assert.ok(!c.notes.some((n) => n.startsWith('carved')), where({ c }));
+      assert.ok(!('carved' in JSON.parse(JSON.stringify(c))), where({ c }));
+      assert.equal(carvedLine(c), null, where({ c }));
+    }
+  }
+  assert.ok(!JSON.stringify(RESULTS.flatMap((r) => r.top5)).includes('Theatre'), 'a default run draws no Theatre');
+  // the opt-in run is the round 5 pass: it carves, and the top 5 of the briefs above show it in the metric line
+  assert.ok(CARVED.length > 1000, `only ${CARVED.length} candidates carved with carve: true`);
+  assert.ok(CARVE_RESULTS.some((r) => r.top5.some((c) => carvedLine(c)?.startsWith('carved: '))), 'no opt-in run carved anything');
+});
 
 test('carve: a big block yields Theatre first, then Guest bed, Activity and Study', () => {
   const env: Rect = { x: 0, y: 0, w: 20000, h: 16000 };
@@ -802,16 +832,21 @@ test('carve: the Guest bed touches the envelope, and every carved room stays ins
 
 test('carve: deterministic - the same candidate carves the same way every time', () => {
   for (const id of ['zf-04', 'SAMPLE-15x27']) {
-    const r = RESULTS.find((x) => x.brief.id === id)!;
+    const r = CARVE_RESULTS.find((x) => x.brief.id === id)!;
     const raw = runBrief(r.brief, { carve: false });
     for (const c of raw.ranked.slice(0, 50)) assert.deepEqual(carveCandidate(c), carveCandidate(c), c.optionId);
-    const again = runBrief(r.brief);
+    const again = runBrief(r.brief, { carve: true });
     assert.deepEqual(again.top5.map((c) => [c.optionId, c.carved, c.flex]), r.top5.map((c) => [c.optionId, c.carved, c.flex]));
   }
 });
 
-test('carve: carve false reproduces the earlier output; carving only lowers the Flex share', () => {
-  for (const r of RESULTS) {
+test('carve: carve false (the default) reproduces the earlier output; carving only lowers the Flex share', () => {
+  // round 8b: `carve: false` is what `runBrief(brief)` does now; this keeps the round 5 comparison as the opt-in check
+  assert.deepEqual(
+    RESULTS.map((r) => r.valid.map((c) => c.optionId)),
+    BRIEFS.map((b) => runBrief(b, { carve: false }).valid.map((c) => c.optionId)),
+  );
+  for (const r of CARVE_RESULTS) {
     const raw = runBrief(r.brief, { carve: false });
     const byId = new Map(raw.valid.map((c) => [c.optionId, c]));
     for (const c of raw.valid) {
@@ -835,9 +870,63 @@ test('carve: carved rooms are drawn like rooms (name, W x D, plain fill) and the
   const svg = renderSVG(x.c);
   assert.ok(svg.includes(`>Theatre ${(z.rect.w / 1000).toFixed(1)} x ${(z.rect.h / 1000).toFixed(1)} m</text>`));
   assert.ok(svg.includes('>room min 3.1 x 3.5 m</text>'));
-  assert.ok(svg.includes(`<rect x="${z.rect.x}" y="${z.rect.y}" width="${z.rect.w}" height="${z.rect.h}" fill="#e8e8e8"`));
+  // round 8b: the drawn rectangle is the inset one (the JSON rect is unchanged) - see the render gap test below
+  const d = drawnRect(z.rect, x.c.envelope);
+  assert.ok(svg.includes(`<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" fill="#e8e8e8"`));
   assert.ok(carvedLine(x.c)!.startsWith('carved: Theatre'));
   assert.equal(carvedLine({ ...x.c, carved: [] }), 'carved: none');
+});
+
+// ------------------------------------------------------------------ round 8b: pieces drawn with a wall gap
+
+/** only the fields the renderer reads (the golden loader does the same, for the same reason) */
+const drawn = (env: { w: number; d: number }, zones: ZoneRec[], spine: ZoneRec, flex: FlexPiece[] = []): Candidate =>
+  ({ briefId: 'test', optionId: 'test', envelope: env, zones, spine, flex, extensions: [], target: null }) as unknown as Candidate;
+
+test('round 8b: two touching zones are drawn 200 mm apart while their JSON rectangles still touch', () => {
+  const env = { w: 10000, d: 8000 };
+  const bed2: ZoneRec = { id: 'bed-1', kind: 'bedroom', name: 'Bed 2', rect: { x: 0, y: 0, w: 5000, h: 8000 } };
+  const bed3: ZoneRec = { id: 'bed-2', kind: 'bedroom', name: 'Bed 3', rect: { x: 5000, y: 0, w: 3800, h: 8000 } };
+  const spine: ZoneRec = { id: 'spine', kind: 'spine', name: 'Spine', rect: { x: 8800, y: 0, w: 1200, h: 8000 } };
+  const c = drawn(env, [bed2, bed3], spine);
+  // geometry and the JSON are unchanged: the two rooms still share their full edge
+  assert.equal(bed2.rect.x + bed2.rect.w, bed3.rect.x);
+  const svg = renderSVG(c);
+  const d2 = drawnRect(bed2.rect, env);
+  const d3 = drawnRect(bed3.rect, env);
+  // 100 mm off each shared side: 4900 + 200 gap + 3600 = 8700 to the spine
+  assert.deepEqual([d2.x, d2.y, d2.w, d2.h], [0, 0, 4900, 8000]);
+  assert.deepEqual([d3.x, d3.y, d3.w, d3.h], [5100, 0, 3600, 8000]);
+  assert.equal(d3.x - (d2.x + d2.w), 2 * PIECE_GAP);
+  assert.ok(svg.includes(`<rect x="${d2.x}" y="${d2.y}" width="${d2.w}" height="${d2.h}" fill="#e8e8e8"`));
+  assert.ok(svg.includes(`<rect x="${d3.x}" y="${d3.y}" width="${d3.w}" height="${d3.h}" fill="#e8e8e8"`));
+  // sides on the envelope are not inset: the thick outer line stays on the drawn edge
+  assert.equal(d2.x, 0);
+  assert.equal(d2.y, 0);
+  assert.equal(d2.y + d2.h, env.d);
+  assert.equal(d3.y + d3.h, env.d);
+  // and the same holds for the spine, a Flex piece and an extension
+  assert.deepEqual(drawnRect(spine.rect, env), { x: 8900, y: 0, w: 1100, h: 8000 });
+  const piece: FlexPiece = { id: 'f', rect: { x: 1200, y: 0, w: 1000, h: 2000 }, cls: 'Flex · room' };
+  assert.ok(renderSVG(drawn(env, [], spine, [piece])).includes('<rect x="1300" y="0" width="800" height="1900" fill="url(#hatch)"'));
+  const ext = { id: 'e', rule: 'R14' as const, ownerId: bed2.id, ownerName: 'Bed 2', name: 'Bed 2 · extension', rect: { x: 5000, y: 7000, w: 2000, h: 1000 } };
+  const withExt = { ...drawn(env, [bed2, bed3], spine), extensions: [ext] } as Candidate;
+  assert.ok(renderSVG(withExt).includes('<rect x="5100" y="7100" width="1800" height="900" fill="url(#hatch2)"'));
+  // labels stay where they were (the numbers in them are the JSON size, one decimal)
+  assert.ok(svg.includes('>Bed 2 5.0 x 8.0 m</text>'));
+});
+
+test('round 8b: a measured golden zoning already has its own gaps - drawn as it is, not inset twice', () => {
+  const g = goldenById('zf-17')!;
+  const spine = g.asCandidate.spine.rect;
+  const raw = `<rect x="${spine.x}" y="${spine.y}" width="${spine.w}" height="${spine.h}" fill="url(#dots)"`;
+  const asIs = renderSVG(g.asCandidate, { gaps: false });
+  const inset = renderSVG(g.asCandidate);
+  assert.ok(asIs.includes(raw), 'the measured spine moved');
+  assert.ok(!inset.includes(raw), 'the measured spine was inset again');
+  assert.notEqual(asIs, inset);
+  // nothing else about the drawing changed: labels, hatching and the envelope line are the same text
+  assert.equal(asIs.split('\n').length, inset.split('\n').length);
 });
 
 // ------------------------------------------------------------------ round 6: Botanica 36 and living Flex

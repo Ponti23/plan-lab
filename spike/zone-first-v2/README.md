@@ -7,15 +7,17 @@ user's seven zoning drawings (2026-10-07). Brief: `knowledge/briefs/zf-v2-row-ce
 ## Run it
 
 ```sh
-node spike/zone-first-v2/run.ts                 # writes spike/zone-first-v2/out/ (about 1 s)
-node --test spike/zone-first-v2/*.test.ts       # 67 tests: 64 pass, 3 todo (zf-07 note, zf-08 note (passes), blind zf-08 (fails since round 6))
+node spike/zone-first-v2/run.ts                 # writes spike/zone-first-v2/out/ (about 8 s)
+node spike/zone-first-v2/run.ts --carve         # round 5's carve pass on top of it (off by default since round 8b)
+node --test spike/zone-first-v2/*.test.ts
 node --test spike/zone-first/*.test.ts spike/geometry-feasibility/*.test.ts spike/template-generator/*.test.ts
 ```
 
 Open `compare.html` with the repo root served: `/spike/zone-first-v2/out/compare.html`.
 Output: `out/<id>/cand-N.svg|json`, `out/summary.json`, `out/compare.html`. The SVGs never rely on colour:
 every zone carries its name and `W x D` in metres; Flex is hatched with its class; flex-walls are hatched
-with a dashed edge and labelled `Flex-wall`; the spine is dotted and labelled `Spine`.
+with a dashed edge and labelled `Flex-wall`; the spine is dotted and labelled `Spine`. Since round 8b every
+piece is drawn with a 200 mm gap to its neighbours (see Round 8b).
 
 ## Lot-size review runs
 
@@ -33,6 +35,7 @@ Neither touches `out/` or the tests.
 ```sh
 node spike/zone-first-v2/run-small.ts           # small (the default) -> spike/zone-first-v2/out-small/
 node spike/zone-first-v2/run-small.ts medium    # -> spike/zone-first-v2/out-medium/
+# add --carve to any of the three for round 5's carve pass (off by default since round 8b)
 node spike/zone-first-v2/run-small.ts large     # -> spike/zone-first-v2/out-large/
 ```
 
@@ -52,8 +55,8 @@ with its rank and the quality metric line); no builder plan, no zoning drawing a
 | `layout.ts` | the slicing tree (leaf / stack / row), sizing and clipping |
 | `zones.ts` | option enumeration, tree builder, validity checks, plan signature |
 | `connect.ts` | v1's connectivity with flex-walls and both Core parts walk-through, Ensuite rule |
-| `carve.ts` | round 5: the carve pass (big Flex becomes Theatre, Guest bed, Activity, Study) |
-| `render.ts` | SVG (copy of v1's with the flex-wall) |
+| `carve.ts` | round 5: the carve pass (big Flex becomes Theatre, Guest bed, Activity, Study) — **off by default since round 8b**, run it with `--carve` / `{ carve: true }` |
+| `render.ts` | SVG (copy of v1's with the flex-wall); round 8b: every piece is drawn inset by `PIECE_GAP` 100 mm on each side it shares with a neighbour (see Round 8b) |
 | `briefs.ts` | v1's briefs minus zf-02, with the eight `target` signatures (zf-17, Botanica 36, is defined there too) |
 | `pipeline.ts` | enumerate, rank, dedupe, hide mirrors, check targets (shared by `run.ts` and the tests); `opts.top` (default 5) sets how many pairwise-different plans `topN` holds |
 | `run.ts` | writes the output |
@@ -220,9 +223,12 @@ area that a candidate covers with the same kind group.
 
 ## Results (this run)
 
-Valid / generated (round 8a): zf-00 3200/5504, zf-01 354/1472, zf-03 964/5504, zf-04 3184/5504, zf-05 1758/5504, zf-07 1380/5504, zf-08 2814/5504, SAMPLE-15x27 3940/5504, custom-8800x20550 16/48, zf-17 3740/5504. Whole run 21350/45552, about 12.6 s.
+Valid / generated (round 8b, the default no-carve run — validity is decided before the carve pass, so these are the
+round 8a counts): zf-00 3200/5504, zf-01 354/1472, zf-03 964/5504, zf-04 3184/5504, zf-05 1758/5504, zf-07 1380/5504,
+zf-08 2814/5504, SAMPLE-15x27 3940/5504, custom-8800x20550 16/48, zf-17 3740/5504. Whole run 21350/45552, about 8 s
+(12.7 s with `--carve`).
 
-### Carve pass: big Flex becomes named rooms (round 5, user decision 2026-10-07)
+### Carve pass: big Flex becomes named rooms (round 5, user decision 2026-10-07; **off by default since round 8b**)
 
 Brief: `knowledge/briefs/zf-v2-flex-split-brief.md`. On big lots the extra area became large Flex blocks (top 6: 10-20 % of a small
 lot, 23-34 % medium, 32-52 % large). `carve.ts` runs after a candidate's Flex is computed (after the grow pass) and **before
@@ -250,8 +256,11 @@ then position keys.
 Carved rooms are `ZoneRec`s with `kind: 'carved'` and `carved: true` inside `zones` (and in `Candidate.carved`), so the metrics,
 the SVG and the JSON treat them as rooms, not Flex. The JSON gains `carved: [{ name, label, rect }]`; the review pages' metric line
 gains `carved: Theatre, Guest bed, ...` (or `carved: none`); the SVG draws a carved room like any room (name, `W x D m`).
-`pipeline.runBrief(brief, { carve: false })`, or `--no-carve` on `run.ts` / `run-small.ts`, switches the pass off and reproduces
-the `a9b5daf` output byte for byte (checked by regenerating all four output folders: `git status` showed no change).
+**Since round 8b the pass does not run by default** (the architect decides what leftover space becomes, see Round 8b):
+`--carve` on `run.ts` / `run-small.ts`, or `pipeline.runBrief(brief, { carve: true })`, turns it on. A default run has no
+carved room anywhere (`carved` stays `undefined`, nothing is named Theatre, the metric line has no `carved:` term), and
+`--no-carve` is still accepted — it is simply the default now. `--carve` reproduces the round 5 layout and metrics (the
+`0ae512b` ones); only the drawing differs, by the round 8b wall gaps.
 
 Judgement calls (all provisional):
 - A carved room is a neutral room for the metrics: it is not a `bedroom` (so a Guest bed does not enter the bedroom spread or the
@@ -443,6 +452,90 @@ L8.6. **Band scale 10, not 100**: the band is in pieces per 100 m², and 10 give
 L8.7. **The `sanity` expectation is unchanged** (still zf-01 and zf-04 outside their bands); zf-07's piece count is 5.6 points
    outside its own leave-one-out band, under the 10-point mark.
 
+## Round 8b: no room carving by default; pieces drawn with a wall gap (user decision 2026-10-08)
+
+Brief: `knowledge/briefs/zf-v2-round8b-nocarve-walls-brief.md`. The user put their own Botanica 36 zoning (golden zf-17: a
+few big zones separated by thin gaps that read as walls) beside v2's top 1 for the same brief, which was cut into many small
+carved rooms — Theatre, Study, Guest bed, Activity — and prefers their own. *The architect decides what leftover space
+becomes, so the generator should not invent those rooms.* Two changes.
+
+1. **No room carving by default.** The round 5 pass (`carve.ts`) is unchanged, but it now runs only on request: `--carve` on
+   `run.ts` / `run-small.ts`, or `pipeline.runBrief(brief, { carve: true })`. `--no-carve` is still accepted — it is simply
+   the default now. A default run has no carved room anywhere: `Candidate.carved` stays `undefined`, no zone is named
+   Theatre / Guest bed / Activity / Study, and the metric line has no `carved:` term. The tests that exercise carving call it
+   with `{ carve: true }` explicitly, so the pass is still tested.
+2. **Wall-gap drawing.** Every zone, extension, Flex piece and the spine is drawn inset by `PIECE_GAP = 100` mm on each side
+   it shares with a neighbour, so neighbours show the 200 mm gap the user's measured drawings have, and by 0 on a side on the
+   envelope, where the thick outer line stays. Labels and fills do not move, and nothing relies on colour. `drawnRect()`
+   reads the envelope: a candidate's pieces tile the envelope exactly, so a side at `x = 0`, `y = 0`, `x + w = W` or
+   `y + d = D` is an envelope side and every other side is shared — O(1) per piece, no adjacency scan. Golden SVGs are drawn
+   with `{ gaps: false }` at their single call site in `run.ts`: a measured zoning already has its own ~200 mm lines between
+   cells and must not be inset twice.
+
+**Geometry, metrics and JSON are unchanged: this is drawing only.** `--carve` reproduces the `0ae512b` results exactly —
+`summary.json` is byte-identical but for the new `carve` field, the golden SVGs are byte-identical, and the candidate SVGs
+differ only in the `<rect>` x/y/width/height of the insets (checked line by line on zf-01).
+
+### Effect of the default change (before = `0ae512b`, carving on; after = this run, no carve)
+
+| Brief | Top-1 pieces / 100 m² | Top-1 Flex share | Top-1 score |
+|---|---|---|---|
+| zf-00 | 5.7 -> 5.0 | 9 % -> 22 % | 12.41 -> 14.41 |
+| zf-01 | 6.6 -> 5.9 | 6 % -> 21 % | 24.74 -> 22.78 |
+| zf-03 | 6.1 -> 6.1 | 10 % -> 22 % | 13.36 -> 13.67 |
+| zf-04 | 6.6 -> 5.0 | 12 % -> 19 % | 14.48 -> 20.22 |
+| zf-05 | 6.5 -> 4.5 | 13 % -> 22 % | 12.79 -> 13.61 |
+| zf-07 | 7.1 -> 7.1 | 13 % -> 7 % | 28.42 -> 25.98 |
+| zf-08 | 6.4 -> 5.2 | 18 % -> 22 % | 15.09 -> 25.32 |
+| SAMPLE-15x27 | 6.7 -> 4.2 | 21 % -> 24 % | 19.95 -> 21.94 |
+| custom-8800x20550 | 8.8 -> 8.3 | 8 % -> 12 % | 54.54 -> 48.86 |
+| zf-17 | 6.6 -> 4.6 | 23 % -> 22 % | 17.09 -> 25.29 |
+
+The point of the round: the top-1 plan gets **no busier on any brief** — pieces per 100 m² falls for 8 of the 10, is
+unchanged for zf-03 and zf-07, and rises for none. Flex share rises on 8 of the 10 (by 3 to 15 points) and falls on zf-07
+(13 % -> 7 %) and zf-17 (23 % -> 22 %), because the area the carved rooms used to occupy is Flex again; that is the trade
+the user asked for (fewer invented rooms, the leftover left to the architect). The top-1 option itself changes for 9 of the
+10 briefs — only `custom-8800x20550` keeps its family — since the score now sees the uncarved Flex of every candidate.
+
+### Blind test (the 7 golden plans, after the grow pass; carving does not enter it)
+
+| Brief | Passed | The user's score | Best top-5 score | Top-1 Flex share (the user's) | First rank at least as good as the user's |
+|---|---|---|---|---|---|
+| zf-01 | yes | 47.87 | 22.78 | 21 % (6 %) | 1 |
+| zf-03 | **no** | 12.72 | 13.67 | 22 % (3 %) | none |
+| zf-04 | yes | 30.79 | 20.22 | 19 % (22 %) | 1 |
+| zf-05 | yes | 14.41 | 13.61 | 22 % (12 %) | 1 |
+| zf-07 | **no** | 21.02 | 25.98 | 7 % (7 %) | none |
+| zf-08 | **no** | 13.43 | 25.32 | 22 % (12 %) | none |
+| zf-17 | yes | 32.08 | 25.29 | 22 % (11 %) | 1 |
+
+The same four pass and the same three are todos as in round 8a (zf-03 is a 0.95-point near miss). The profile and the golden
+plans are measured zonings and are not carved, so nothing in the stick moves; the generated plans lose their carved rooms,
+which on zf-08 and zf-07 makes the top 1 further from the user's Flex share.
+
+**zf-17 (Botanica 36).** Its target-signature regression first matches at rank **2160 of 3432** distinct valid candidates
+(was 2622 of 3430 with carving on): the plan whose zoning the user prefers climbs 462 places now that the top of the
+ranking is not full of carved-room plans. It is still far down, for the reasons in round 6 (a full-width rear living band
+still pays in `flexStrips` and `longestFlexRatio`, L5).
+
+Judgement calls:
+
+L8b.1. **The wall gap is a drawing rule, not a model rule.** No zone, extension or Flex rectangle changes; `drawnRect` is
+   applied to the `<rect>` x/y/width/height only. Labels and hatches stay on the true rectangle (a 100 mm inset would move
+   and clip the text), and the extension's dashed union outline and the 120-wide envelope stroke are unchanged.
+L8b.2. **The gap is `2 * PIECE_GAP = 200` mm between neighbours**, as asked; on the envelope a piece keeps its full edge so
+   the thick outer line still reads as the wall. `Math.max(0, ...)` guards a piece under 200 mm wide (none occurs).
+L8b.3. **`{ gaps: false }` is a renderer argument, not a switch inside the geometry**; it is passed at exactly one call site
+   (`run.ts`, the golden plan), so no other drawing can silently lose its gaps. `run-small.ts` and the tests take the default.
+L8b.4. **The grow-pass test is now a bound, not a strict rule.** With carving off, growth is no longer followed by the pass
+   that used to clean up the leftover strips, so 26 of 7834 grown candidates end with a slightly *higher* Flex share (worst
+   +1.63 points on SAMPLE-15x27): a room that grows by swallowing its own extension can leave the space it took as an ordinary
+   Flex strip. The pass itself is unchanged (out of scope for round 8b); the test still requires >99 % of grown candidates to
+   shed Flex and fewer than 2 % not to, and names the exceptions. Whether the grow pass should be revisited is the user's call.
+L8b.5. **One review brief now has five different plans, not six.** `small/S-03` keeps its 302 valid / 206 distinct candidates,
+   but the diversity pass runs out one plan earlier, so its `cand-6.svg|json` is gone (the medium and large sets are
+   unchanged). The ranking that pass walks changed with the default, not the candidate set; nothing was retuned to hide it.
+
 ## Living Flex (round 6, user decision 2026-10-07) and Botanica 36
 
 Brief: `knowledge/briefs/zf-v2-botanica-living-brief.md`. The user shared Botanica 36 (14.87 x 24.59 m, 4 bed, double garage, garage
@@ -476,7 +569,7 @@ L1. **Slivers and circulation pieces are never living.** A rear Flex hall (1000-
 L2. **Living is never lost.** `markLiving` only promotes. What is left of a living piece after an Activity is carved out of it stays living, even where it no longer touches the rear wall or the Core: the band is still the band. Without this, carving would raise the Flex share (a leftover turns ordinary), which broke the existing "carving only lowers the Flex share" test.
 L3. **No hall out of a living piece.** A carved hall would turn living Flex into circulation Flex (counted in the Flex share). Activity in a living piece is placed without a hall; the connectivity check still decides.
 L4. **Core extensions do not anchor living.** Only Core zones do. A rear piece beside only a Core extension is not living.
-L5. **`flexStrips` and `longestFlexRatio` still count living pieces.** The brief names `flexShare` only. This keeps a full-width rear band penalised (30.6 points for the zf-17 match, plus 3 strips = 30 points) and is the main reason the target match is still ranked 1918th of 3430. Excluding living pieces from those two metrics too (tried, then removed) moves it to 1138th. That is a product call: not adopted.
+L5. **`flexStrips` and `longestFlexRatio` still count living pieces.** The brief names `flexShare` only. This keeps a full-width rear band penalised (30.6 points for the zf-17 match, plus 3 strips = 30 points) and is the main reason the target match is still ranked 1918th of 3430 in round 6 (2160th of 3432 in round 8b). Excluding living pieces from those two metrics too (tried, then removed) moves it to 1138th. That is a product call: not adopted.
 L6. **The measured Botanica carries a 1100 x 700 Flex cell** (a sliver by v2's rule), which made its own score 78, 50 of it that one sliver. **Round 8a supersedes this**: the cell is a tracing artefact and is absorbed/left out like any other sub-1.5 m² measured Flex piece, so the plan scores 32 (see Round 8a).
 L7. **Leave-one-out sanity test**: zf-04 is 10.01 points outside its bands (ordinary Flex 22 % against the others' max, now lower because living Flex no longer counts for them), so the "known misses" list is zf-01 and zf-04. zf-08's blind test fails (round 8a: best top-5 score 15.09 against its own 13.43; round 6: 8.9 against 7.92) and is a todo with the numbers, as are zf-03 and zf-07 since round 8a (see Round 8a).
 
@@ -564,26 +657,31 @@ Earlier rounds:
 
 ## Known gaps
 
-- **Three blind tests fail** (zf-03, zf-07, zf-08; todos with the numbers above; zf-03 and zf-08 are near misses). Since
+Numbers in this list are as of the round they were written unless restated; the current per-brief numbers are in Round 8b.
+
+- **Three blind tests fail** (zf-03, zf-07, zf-08; todos with the numbers above; zf-03 is a near miss). Since
   round 8a the goldens are rewarded for being made of fewer pieces, and the generator still makes more, smaller cells than
   the user's drawings do (zf-07: top 1 7.1 pieces/100 m² against the plan's own 6.7-and-under band). The generator's Flex
   also stays above the user's plans' and the Core is capped at 58.5 m2 with rooms at preferred sizes.
 - **zf-01 leave-one-out spine band**: its own spine is 19 points above the others' band (reported, not corrected).
-- **Top 3 for SAMPLE-15x27 are 45-54 % Flex** (the profile's Flex band tops out at 22 %), because the generator cannot fill
-  405 m2 with preferred-size rooms.
+- **Top 3 for SAMPLE-15x27 are 24-33 % Flex** (the profile's Flex band tops out at 22 %; round 8b — 45-54 % when the carve
+  pass still ran by default), because the generator cannot fill 405 m2 with preferred-size rooms.
 - **Narrow lot**: all 12 distinct layouts belong to one family, so its top 5 holds only one different layout.
 - Most passes are narrow; the score only knows seven plans.
 
-- zf-08: Flex stays at 43-46 % in every match (todo above). The drawing's Core is about 9 x 6.5 m; the FamilyCore
+- zf-08: Flex is 26 % and 28 % in the two matches in this run (16 % and 18 % at `0ae512b`, carving on) — the "Flex below
+  35 %" note is already satisfied, so its `todo` is stale and should be promoted to a test (left as it is here: not round
+  8b's call). The drawing's Core is about 9 x 6.5 m; the FamilyCore
   max area (58.5 m2) and preferred room sizes leave the rest of 326.6 m2 as Flex. Raising the Core max or
   adding rooms would be a product decision.
 - zf-07: no Flex · room beside the Master in any match (todo above).
-- zf-04 still has 42 % Flex (rooms are packed toward the rear row, so the leftover is at the front of the lane).
+- zf-04: the top 1 is also its target match and holds 19 % Flex (12 % at `0ae512b`); the round-7 fill rule took the
+  front-of-lane leftover the drawing leaves.
 - Bedroom spread is 10-15 m in zf-04, zf-05, zf-07, zf-08: the rear-row bedrooms and the lane bedroom are far
   apart in these narrow lots; the score punishes it but the targets force the rear row.
 
-- `custom-8800x20550`: 0 valid. The lane beyond the spine is 2100 wide (8800 - 5500 - 1200), too narrow for
-  any room, and v2 has no compact mode (v1's experiment). Not attempted.
+- `custom-8800x20550`: 16/48 valid, 12 distinct, one family (see "The 8.8 m lot"). The old "0 valid, no compact mode"
+  gap was closed by the narrow-lot mode: the 2100 mm lane beyond the spine takes only the wet block and the laundry.
 - The zf-00 match has a 19100 mm spine (see above).
 - With the Core at the rear, the spine still runs the full depth to the Core (zf-01 needs it); the user's
   zf-00 drawing has a short spine there, which v2 does not draw.

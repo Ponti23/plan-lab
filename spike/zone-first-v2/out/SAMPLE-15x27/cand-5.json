@@ -1,22 +1,21 @@
 {
   "role": "top 5",
-  "rank": 13,
+  "rank": 43,
   "briefId": "SAMPLE-15x27",
-  "optionId": "R|midG|split|m:middle/block|wet:block|rr:BBF|fw|v0",
+  "optionId": "L|midW|block|m:rear/block|wet:block|rr:FM|fw|v0",
   "options": {
-    "garageSide": "R",
+    "garageSide": "L",
     "corePos": "middle",
-    "coreForm": "split",
-    "masterPos": "middle",
+    "coreForm": "block",
+    "masterPos": "rear",
     "masterForm": "block",
     "wetForm": "block",
     "rearPlan": [
-      "B",
-      "B",
-      "F"
+      "F",
+      "M"
     ],
     "flexWall": true,
-    "coreLane": "G",
+    "coreLane": "W",
     "variant": 0
   },
   "envelope": {
@@ -25,156 +24,113 @@
   },
   "target": null,
   "signature": {
-    "garageSide": "R",
+    "garageSide": "L",
     "corePos": "middle",
-    "coreForm": "split",
+    "coreForm": "block",
     "rearRow": [
-      "wet",
       "flex",
-      "bed",
-      "bed"
+      "master"
     ],
-    "masterPos": "middle",
+    "masterPos": "rear",
     "masterForm": "block",
     "flexWall": true,
-    "coreSide": "R"
+    "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.2877530864197531,
-    "livingShare": 0,
-    "circulationShare": 0.084,
-    "coreShare": 0.1437037037037037,
-    "bedroomSpread": 13713,
-    "spreadNorm": 0.44397020033338624,
+    "flexShare": 0.23330864197530865,
+    "livingShare": 0.1622716049382716,
+    "circulationShare": 0.06212345679012346,
+    "coreShare": 0.24074074074074073,
+    "bedroomSpread": 5731,
+    "spreadNorm": 0.18556390345148202,
     "wetNearBed": true,
     "laundryNear": true,
-    "masterSeparated": false,
+    "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 34.02,
-    "pieceDensity": 5.432098765432099,
+    "circulationM2": 25.16,
+    "pieceDensity": 3.950617283950617,
     "slivers": 0,
     "spineRatio": 0.2222222222222222,
-    "longestFlexRatio": 0.3333333333333333,
+    "longestFlexRatio": 0.4074074074074074,
     "flexStrips": 0,
-    "score": 24.18,
+    "score": 38.67,
     "outside": {
-      "flexShare": 6.54,
+      "flexShare": 1.1,
       "circulationShare": 0,
       "spineRatio": 0,
-      "longestFlexRatio": 1.61,
+      "longestFlexRatio": 9.02,
       "pieceDensity": 0,
       "coreShare": 0,
-      "spreadNorm": 0
+      "spreadNorm": 13.12
     }
   },
   "closenessToTheUsersLayout": null,
   "notes": [
-    "Master grew to 6000 x 10600 (lot surplus; was 4000 x 6800)",
-    "Bed 3 grew to 5200 x 3000 (lot surplus; was 3400 x 3000)",
-    "Bed 4 grew to 5000 x 2700 (lot surplus; was 4000 x 2700)",
-    "Bath + WC grew to 2800 x 6600 (lot surplus; was 2800 x 3600)",
-    "Garage grew to 5500 x 8000 (lot surplus; was 5500 x 6000)",
-    "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.6 x 3.0, Activity 3.5 x 3.0, Study 3.1 x 3.0"
+    "Bed 4 grew to 5200 x 2700 (lot surplus; was 4000 x 2700)",
+    "Garage grew to 5500 x 8000 (lot surplus; was 5500 x 6000)"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
-  "flexWallLength": 5600,
-  "circulationArea": 34020000,
+  "flexWallLength": 5800,
+  "circulationArea": 25160000,
   "flexArea": {
-    "Flex · circulation": 20100000,
-    "Flex · room": 84240000,
-    "Flex · storage": 12200000,
-    "Flex · living": 0,
+    "Flex · circulation": 11000000,
+    "Flex · room": 83490000,
+    "Flex · storage": 0,
+    "Flex · living": 65720000,
     "sliver": 0
   },
-  "extensionArea": 0,
-  "extensions": [],
-  "slivers": 0,
-  "carved": [
+  "extensionArea": 47370000,
+  "extensions": [
     {
-      "name": "Theatre",
-      "label": "Theatre 3.6 x 4.1",
+      "id": "ext-1",
+      "rule": "R13",
+      "ownerId": "core-1",
+      "ownerName": "Core",
+      "name": "Core · extension",
       "rect": {
-        "x": 2400,
-        "y": 21900,
-        "w": 3600,
-        "h": 4100
+        "x": 9000,
+        "y": 6200,
+        "w": 6000,
+        "h": 6500
       }
     },
     {
-      "name": "Guest bed",
-      "label": "Guest bed 3.6 x 3.0",
+      "id": "ext-2",
+      "rule": "R14",
+      "ownerId": "bedroom-3",
+      "ownerName": "Bed 4",
+      "name": "Bed 4 · extension",
       "rect": {
-        "x": 2800,
-        "y": 0,
-        "w": 3600,
-        "h": 3000
-      }
-    },
-    {
-      "name": "Activity",
-      "label": "Activity 3.5 x 3.0",
-      "rect": {
-        "x": 4000,
-        "y": 3000,
-        "w": 3500,
-        "h": 3000
-      }
-    },
-    {
-      "name": "Study",
-      "label": "Study 3.1 x 3.0",
-      "rect": {
-        "x": 7500,
-        "y": 3000,
+        "x": 6700,
+        "y": 24300,
         "w": 3100,
-        "h": 3000
+        "h": 2700
       }
     }
   ],
+  "slivers": 0,
   "zones": [
     {
-      "id": "bedroom-1",
-      "kind": "bedroom",
-      "name": "Bed 2",
+      "id": "master-1",
+      "kind": "master",
+      "name": "Master",
       "rect": {
-        "x": 11600,
+        "x": 10600,
         "y": 0,
-        "w": 3400,
-        "h": 3000
-      }
-    },
-    {
-      "id": "bedroom-2",
-      "kind": "bedroom",
-      "name": "Bed 3",
-      "rect": {
-        "x": 6400,
-        "y": 0,
-        "w": 5200,
-        "h": 3000
+        "w": 4400,
+        "h": 6200
       }
     },
     {
       "id": "core-1",
       "kind": "core",
-      "name": "Core · dining",
+      "name": "Core",
       "rect": {
-        "x": 10600,
-        "y": 3000,
-        "w": 4400,
-        "h": 3000
-      }
-    },
-    {
-      "id": "core-2",
-      "kind": "core",
-      "name": "Core · kitchen + living",
-      "rect": {
-        "x": 6000,
-        "y": 6000,
+        "x": 0,
+        "y": 6200,
         "w": 9000,
-        "h": 5000
+        "h": 6500
       }
     },
     {
@@ -182,7 +138,7 @@
       "kind": "garage",
       "name": "Garage",
       "rect": {
-        "x": 9500,
+        "x": 0,
         "y": 19000,
         "w": 5500,
         "h": 8000
@@ -193,10 +149,10 @@
       "kind": "flexwall",
       "name": "Flex-wall",
       "rect": {
-        "x": 2800,
-        "y": 3000,
+        "x": 11000,
+        "y": 12700,
         "w": 1200,
-        "h": 5600
+        "h": 5800
       }
     },
     {
@@ -204,10 +160,10 @@
       "kind": "wet",
       "name": "Bath + WC",
       "rect": {
-        "x": 0,
-        "y": 0,
+        "x": 12200,
+        "y": 12700,
         "w": 2800,
-        "h": 6600
+        "h": 3700
       }
     },
     {
@@ -215,10 +171,32 @@
       "kind": "laundry",
       "name": "Laundry",
       "rect": {
-        "x": 0,
-        "y": 6600,
+        "x": 12200,
+        "y": 16400,
         "w": 2800,
-        "h": 2000
+        "h": 2100
+      }
+    },
+    {
+      "id": "bedroom-1",
+      "kind": "bedroom",
+      "name": "Bed 2",
+      "rect": {
+        "x": 11000,
+        "y": 18500,
+        "w": 4000,
+        "h": 2900
+      }
+    },
+    {
+      "id": "bedroom-2",
+      "kind": "bedroom",
+      "name": "Bed 3",
+      "rect": {
+        "x": 11000,
+        "y": 21400,
+        "w": 4000,
+        "h": 2900
       }
     },
     {
@@ -226,70 +204,11 @@
       "kind": "bedroom",
       "name": "Bed 4",
       "rect": {
-        "x": 0,
-        "y": 8600,
-        "w": 5000,
+        "x": 9800,
+        "y": 24300,
+        "w": 5200,
         "h": 2700
       }
-    },
-    {
-      "id": "master-1",
-      "kind": "master",
-      "name": "Master",
-      "rect": {
-        "x": 0,
-        "y": 11300,
-        "w": 6000,
-        "h": 10600
-      }
-    },
-    {
-      "id": "carved-1",
-      "kind": "carved",
-      "name": "Theatre",
-      "rect": {
-        "x": 2400,
-        "y": 21900,
-        "w": 3600,
-        "h": 4100
-      },
-      "carved": true
-    },
-    {
-      "id": "carved-2",
-      "kind": "carved",
-      "name": "Guest bed",
-      "rect": {
-        "x": 2800,
-        "y": 0,
-        "w": 3600,
-        "h": 3000
-      },
-      "carved": true
-    },
-    {
-      "id": "carved-3",
-      "kind": "carved",
-      "name": "Activity",
-      "rect": {
-        "x": 4000,
-        "y": 3000,
-        "w": 3500,
-        "h": 3000
-      },
-      "carved": true
-    },
-    {
-      "id": "carved-4",
-      "kind": "carved",
-      "name": "Study",
-      "rect": {
-        "x": 7500,
-        "y": 3000,
-        "w": 3100,
-        "h": 3000
-      },
-      "carved": true
     }
   ],
   "spine": {
@@ -297,7 +216,7 @@
     "kind": "spine",
     "name": "Spine",
     "rect": {
-      "x": 8300,
+      "x": 5500,
       "y": 21000,
       "w": 1200,
       "h": 6000
@@ -309,10 +228,10 @@
       "kind": "flexwall",
       "name": "Flex-wall",
       "rect": {
-        "x": 2800,
-        "y": 3000,
+        "x": 11000,
+        "y": 12700,
         "w": 1200,
-        "h": 5600
+        "h": 5800
       }
     }
   ],
@@ -320,72 +239,42 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 4000,
-        "y": 6000,
-        "w": 2000,
-        "h": 2600
+        "x": 0,
+        "y": 0,
+        "w": 10600,
+        "h": 6200
       },
-      "cls": "Flex · storage"
-    },
-    {
-      "id": "flex-2",
-      "rect": {
-        "x": 5000,
-        "y": 8600,
-        "w": 1000,
-        "h": 2700
-      },
-      "cls": "Flex · circulation"
+      "cls": "Flex · living"
     },
     {
       "id": "flex-3",
       "rect": {
-        "x": 6000,
-        "y": 11000,
-        "w": 9000,
-        "h": 8000
+        "x": 0,
+        "y": 12700,
+        "w": 11000,
+        "h": 6300
       },
       "cls": "Flex · room"
     },
     {
       "id": "flex-4",
       "rect": {
-        "x": 6000,
+        "x": 5500,
         "y": 19000,
-        "w": 3500,
+        "w": 5500,
         "h": 2000
       },
-      "cls": "Flex · storage"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-5",
       "rect": {
-        "x": 6000,
+        "x": 6700,
         "y": 21000,
-        "w": 2300,
-        "h": 6000
-      },
-      "cls": "Flex · circulation"
-    },
-    {
-      "id": "flex-6",
-      "rect": {
-        "x": 0,
-        "y": 21900,
-        "w": 2400,
-        "h": 5100
+        "w": 4300,
+        "h": 3300
       },
       "cls": "Flex · room"
-    },
-    {
-      "id": "flex-7",
-      "rect": {
-        "x": 2400,
-        "y": 26000,
-        "w": 3600,
-        "h": 1000
-      },
-      "cls": "Flex · circulation"
     }
   ]
 }

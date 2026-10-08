@@ -1,6 +1,6 @@
 {
   "role": "target match (regression)",
-  "rank": 220,
+  "rank": 284,
   "briefId": "zf-07",
   "optionId": "R|midW|block|m:middle/block|wet:block|rr:FBB|fw|v3",
   "options": {
@@ -42,8 +42,8 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.07545059031054174,
-    "livingShare": 0,
+    "flexShare": 0.11692055420811878,
+    "livingShare": 0.06695150797922077,
     "circulationShare": 0.08175031322551618,
     "coreShare": 0.22226758619114442,
     "bedroomSpread": 15378,
@@ -53,62 +53,38 @@
     "masterSeparated": true,
     "spineMetres": 6,
     "circulationM2": 17.18,
-    "pieceDensity": 7.6135332456825315,
+    "pieceDensity": 7.137687417827373,
     "slivers": 0,
     "spineRatio": 0.3280481137233461,
-    "longestFlexRatio": 0.1913613996719519,
+    "longestFlexRatio": 0.3493712411153636,
     "flexStrips": 0,
-    "score": 57.4,
+    "score": 57.38,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
       "spineRatio": 0,
-      "longestFlexRatio": 0,
-      "pieceDensity": 15.16,
+      "longestFlexRatio": 3.22,
+      "pieceDensity": 10.4,
       "coreShare": 0,
       "spreadNorm": 24.67
     }
   },
   "closenessToTheUsersLayout": 0.4747456231820427,
-  "notes": [
-    "carved from Flex: Activity 4.7 x 3.0, Study 2.5 x 3.5"
-  ],
+  "notes": [],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 5400,
   "circulationArea": 17180000,
   "flexArea": {
     "Flex · circulation": 3500000,
-    "Flex · room": 7196100,
+    "Flex · room": 15911100,
     "Flex · storage": 5160000,
-    "Flex · living": 0,
+    "Flex · living": 14070000,
     "sliver": 0
   },
   "extensionArea": 0,
   "extensions": [],
   "slivers": 0,
-  "carved": [
-    {
-      "name": "Activity",
-      "label": "Activity 4.7 x 3.0",
-      "rect": {
-        "x": 6800,
-        "y": 0,
-        "w": 4690,
-        "h": 3000
-      }
-    },
-    {
-      "name": "Study",
-      "label": "Study 2.5 x 3.5",
-      "rect": {
-        "x": 0,
-        "y": 3000,
-        "w": 2490,
-        "h": 3500
-      }
-    }
-  ],
   "zones": [
     {
       "id": "bedroom-1",
@@ -208,30 +184,6 @@
         "w": 3790,
         "h": 3500
       }
-    },
-    {
-      "id": "carved-1",
-      "kind": "carved",
-      "name": "Activity",
-      "rect": {
-        "x": 6800,
-        "y": 0,
-        "w": 4690,
-        "h": 3000
-      },
-      "carved": true
-    },
-    {
-      "id": "carved-2",
-      "kind": "carved",
-      "name": "Study",
-      "rect": {
-        "x": 0,
-        "y": 3000,
-        "w": 2490,
-        "h": 3500
-      },
-      "carved": true
     }
   ],
   "spine": {
@@ -262,15 +214,25 @@
     {
       "id": "flex-1",
       "rect": {
+        "x": 6800,
+        "y": 0,
+        "w": 4690,
+        "h": 3000
+      },
+      "cls": "Flex · living"
+    },
+    {
+      "id": "flex-2",
+      "rect": {
         "x": 0,
-        "y": 6500,
+        "y": 3000,
         "w": 2490,
-        "h": 2890
+        "h": 6390
       },
       "cls": "Flex · room"
     },
     {
-      "id": "flex-2",
+      "id": "flex-3",
       "rect": {
         "x": 2490,
         "y": 8190,
@@ -280,7 +242,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-3",
+      "id": "flex-4",
       "rect": {
         "x": 2590,
         "y": 12390,
@@ -290,7 +252,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-4",
+      "id": "flex-5",
       "rect": {
         "x": 3790,
         "y": 14790,

@@ -1,6 +1,6 @@
 {
   "role": "target match (regression)",
-  "rank": 2210,
+  "rank": 2184,
   "briefId": "zf-00",
   "optionId": "R|rear|block|m:middle/block|wet:block|rr:-|fw|v3",
   "options": {
@@ -36,9 +36,9 @@
     "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.15433333333333332,
+    "flexShare": 0.2305,
     "livingShare": 0,
-    "circulationShare": 0.15133333333333332,
+    "circulationShare": 0.139,
     "coreShare": 0.2708333333333333,
     "bedroomSpread": 6650,
     "spreadNorm": 0.24574911082126724,
@@ -46,16 +46,16 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 45.4,
-    "pieceDensity": 6,
+    "circulationM2": 41.7,
+    "pieceDensity": 5.333333333333333,
     "slivers": 0,
     "spineRatio": 0.25,
     "longestFlexRatio": 0.5791666666666667,
     "flexStrips": 2,
-    "score": 73.17,
+    "score": 73.37,
     "outside": {
-      "flexShare": 0,
-      "circulationShare": 0.59,
+      "flexShare": 0.82,
+      "circulationShare": 0,
       "spineRatio": 0,
       "longestFlexRatio": 26.2,
       "pieceDensity": 0,
@@ -68,17 +68,16 @@
     "Bed 4 grew to 4800 x 5200 (lot surplus; was 4000 x 2700)",
     "Bed 3 grew to 4800 x 2700 (lot surplus; was 4000 x 2700)",
     "Bed 2 grew to 4800 x 2700 (lot surplus; was 4000 x 2700)",
-    "Laundry grew to 4500 x 3700 (lot surplus; was 3500 x 1800)",
-    "carved from Flex: Theatre 3.5 x 3.7, Guest bed 3.0 x 3.3"
+    "Laundry grew to 4500 x 3700 (lot surplus; was 3500 x 1800)"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 3600,
-  "circulationArea": 45400000,
+  "circulationArea": 41700000,
   "flexArea": {
-    "Flex · circulation": 33880000,
-    "Flex · room": 0,
-    "Flex · storage": 12420000,
+    "Flex · circulation": 30180000,
+    "Flex · room": 32490000,
+    "Flex · storage": 6480000,
     "Flex · living": 0,
     "sliver": 0
   },
@@ -99,28 +98,6 @@
     }
   ],
   "slivers": 0,
-  "carved": [
-    {
-      "name": "Theatre",
-      "label": "Theatre 3.5 x 3.7",
-      "rect": {
-        "x": 8000,
-        "y": 14300,
-        "w": 3500,
-        "h": 3700
-      }
-    },
-    {
-      "name": "Guest bed",
-      "label": "Guest bed 3.0 x 3.3",
-      "rect": {
-        "x": 0,
-        "y": 20700,
-        "w": 3000,
-        "h": 3300
-      }
-    }
-  ],
   "zones": [
     {
       "id": "core-1",
@@ -220,30 +197,6 @@
         "w": 4800,
         "h": 5200
       }
-    },
-    {
-      "id": "carved-1",
-      "kind": "carved",
-      "name": "Theatre",
-      "rect": {
-        "x": 8000,
-        "y": 14300,
-        "w": 3500,
-        "h": 3700
-      },
-      "carved": true
-    },
-    {
-      "id": "carved-2",
-      "kind": "carved",
-      "name": "Guest bed",
-      "rect": {
-        "x": 0,
-        "y": 20700,
-        "w": 3000,
-        "h": 3300
-      },
-      "carved": true
     }
   ],
   "spine": {
@@ -272,7 +225,7 @@
   ],
   "flex": [
     {
-      "id": "flex-1",
+      "id": "flex-2",
       "rect": {
         "x": 4000,
         "y": 6500,
@@ -282,7 +235,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-2",
+      "id": "flex-3",
       "rect": {
         "x": 4800,
         "y": 10100,
@@ -292,7 +245,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-3",
+      "id": "flex-4",
       "rect": {
         "x": 5800,
         "y": 10600,
@@ -302,24 +255,24 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-4",
-      "rect": {
-        "x": 11500,
-        "y": 14300,
-        "w": 1000,
-        "h": 3700
-      },
-      "cls": "Flex · circulation"
-    },
-    {
       "id": "flex-5",
       "rect": {
-        "x": 3000,
+        "x": 8000,
+        "y": 14300,
+        "w": 4500,
+        "h": 3700
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-6",
+      "rect": {
+        "x": 0,
         "y": 20700,
-        "w": 1800,
+        "w": 4800,
         "h": 3300
       },
-      "cls": "Flex · storage"
+      "cls": "Flex · room"
     }
   ]
 }
