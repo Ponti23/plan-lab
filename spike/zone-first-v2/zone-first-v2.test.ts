@@ -14,7 +14,7 @@ import { carveCandidate, carvedLine, carveRooms, envelopeEdges } from './carve.t
 import { checkConnectivity } from './connect.ts';
 import { distribute } from './layout.ts';
 import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, runBrief, type BriefResult } from './pipeline.ts';
-import { GOLDEN, goldenById, profileFor } from './golden.ts';
+import { GOLDEN, goldenById, profileFor, TRACING_NOOK_MAX_AREA } from './golden.ts';
 import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
 import { renderSVG } from './render.ts';
@@ -30,7 +30,7 @@ import {
   withinZoneAllowance,
   ZONE_ALLOWANCE,
 } from './sizes.ts';
-import type { Brief, Candidate, FlexPiece, Rect, ZoneRec } from './types.ts';
+import type { Brief, Candidate, ExtensionRec, FlexPiece, Rect, ZoneRec } from './types.ts';
 import {
   allRects,
   enumerateOptions,
@@ -564,6 +564,7 @@ test('score: one-sided bands reward less, two-sided bands pull to the middle, th
     masterSeparated: true,
     spineMetres: 6,
     circulationM2: 10,
+    pieceDensity: 0,
     slivers: 0,
     flexStrips: 0,
   };
@@ -688,12 +689,19 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
   assert.ok(unchangedUnderCeiling > 100, 'candidates within the ceiling are untouched');
 });
 
-test('grow pass: the zf-07 top 1 is unchanged (its Flex share is already under the ceiling)', () => {
+// Round 8a changed this expectation: the zf-07 top 1 is no longer the same plan with and without the grow pass. The
+// plan itself is untouched - the same option, the same zones, the same score - but pieceDensity re-ranked the brief, and
+// a different candidate (L|midG|block…, a lot-surplus Bed 3) grew cheaper (28.68 -> 28.42) and took first place, so the
+// pre-grow top 1 is now rank 3. What the pass claims is still true: a plan under the ceiling is not grown.
+test('grow pass: the zf-07 pre-grow top 1 is untouched (its Flex share is already under the ceiling)', () => {
   const r = RESULTS.find((x) => x.brief.id === 'zf-07')!;
   const before = runBrief(r.brief, { grow: false });
-  assert.ok(before.top5[0].quality.flexShare <= r.profile.flexShare.max);
-  assert.equal(r.top5[0].optionId, before.top5[0].optionId);
-  assert.deepEqual(r.top5[0].zones, before.top5[0].zones);
+  const b1 = before.top5[0];
+  assert.ok(b1.quality.flexShare <= r.profile.flexShare.max);
+  const after = r.valid.find((c) => c.optionId === b1.optionId)!;
+  assert.deepEqual(after.zones, b1.zones);
+  assert.equal(after.quality.score, b1.quality.score);
+  assert.ok(!after.notes.some((n) => n.includes('lot surplus')), after.optionId);
 });
 
 // ------------------------------------------------------------------ determinism, v1 untouched
@@ -903,4 +911,59 @@ test('living Flex: carving leaves a living piece alone apart from Activity (no h
   const nonActivityOnRear = CARVED.filter((x) => x.c.carved!.some((z) => z.name !== 'Activity' && z.rect.y === 0 && coreRectsOf(x.c.zones).some((c) => edgeBetween(z.rect, c, 0) >= 1200)));
   // such a room can exist only when it was ordinary Flex that happened to touch the Core, which makes it living: so none
   assert.equal(nonActivityOnRear.length, 0);
+});
+
+// ------------------------------------------------------------------ round 8a: simplicity, and tracing nooks are not slivers
+
+test('round 8a: a tracing nook in a measured zoning is not a sliver (zf-17 1100 x 700), and a measured cell above the threshold stays', () => {
+  const g = goldenById('zf-17')!;
+  assert.equal(g.metrics.slivers, 0, 'the 1100 x 700 tracing nook still counts as a sliver');
+  assert.ok(!g.layout.flex.some((f) => f.rect.x === 8200 && f.rect.y === 12400), 'the nook is still a piece of the measured plan');
+  assert.ok(g.layout.flex.some((f) => f.rect.x === 8200 && f.rect.y === 4000), 'the 1100 x 1600 cell (1.76 m²) is above the threshold and was absorbed anyway');
+  // the rule is about tracing, not about a big plan: no measured plan keeps a cell under the threshold
+  for (const p of GOLDEN) {
+    const tiny = p.layout.flex.filter((f) => f.rect.w * f.rect.h < TRACING_NOOK_MAX_AREA);
+    assert.deepEqual(tiny.map((f) => `${f.cls} ${f.rect.x},${f.rect.y}`), [], `${p.id}: a tracing nook survived`);
+  }
+});
+
+test('round 8a: the nook rule touches measured plans only - a real sliver in a generated plan is still a piece and still costs 50', () => {
+  const withSlivers = ALL.filter((x) => x.c.quality.slivers > 0);
+  assert.ok(withSlivers.length > 100, `slivers are still common in generated plans (${withSlivers.length})`);
+  const x = withSlivers[0];
+  assert.equal(x.c.flex.filter((f) => f.cls === 'sliver').length, x.c.quality.slivers, `${where(x)}: the sliver is still a Flex piece of the candidate`);
+  const q = x.c.quality;
+  const p = profileFor('none');
+  const withIt = scoreOf(q, p).score;
+  const without = scoreOf({ ...q, slivers: q.slivers - 1 }, p).score;
+  assert.ok(Math.abs(withIt - without - QUALITY_WEIGHTS.perSliver) < 0.02, `${where(x)}: ${withIt} vs ${without}`);
+});
+
+test('round 8a: pieceDensity counts the zones (spine and flex-walls among them), the Flex pieces and the extensions, not the slivers, per 100 m²', () => {
+  const env = { w: 20000, d: 10000 }; // 200 m²: one piece per 100 m² is 1.0
+  const zones: ZoneRec[] = [
+    { id: 'spine', kind: 'spine', name: 'Spine', rect: { x: 0, y: 0, w: 1200, h: 10000 } },
+    { id: 'wall-1', kind: 'flexwall', name: 'Flex-wall', rect: { x: 1200, y: 0, w: 1000, h: 4000 } },
+    { id: 'core-1', kind: 'core', name: 'Core', rect: { x: 2200, y: 0, w: 5000, h: 10000 } },
+  ];
+  const flex: FlexPiece[] = [mkPiece(7200, 0, 5000, 5000), { id: 'f2', rect: { x: 7200, y: 5000, w: 1200, h: 900 }, cls: 'sliver' }];
+  const extensions: ExtensionRec[] = [{ id: 'ext-1', rule: 'R14', ownerId: 'core-1', ownerName: 'Core', name: 'Core · extension', rect: { x: 12200, y: 0, w: 2000, h: 5000 } }];
+  const m = metricsOf({ env, zones, flex, extensions, total: 200e6 }, CANDIDATE_ADJ);
+  // 3 zones (the spine and the flex-wall included) + 1 Flex piece + 1 extension = 5 pieces over two 100 m²
+  assert.equal(m.pieceDensity, 2.5);
+  assert.equal(m.slivers, 1, 'the sliver is counted as a sliver, not as a piece');
+  assert.ok((BAND_METRICS as readonly string[]).includes('pieceDensity'));
+  // a measured plan is read the same way: zf-17's 15 pieces over its 365.7 m² envelope
+  const g = goldenById('zf-17')!;
+  assert.equal(g.layout.zones.length + g.layout.flex.filter((f) => f.cls !== 'sliver').length + g.layout.extensions.length, 15);
+  assert.ok(Math.abs(g.metrics.pieceDensity - 4.1) < 0.01, String(g.metrics.pieceDensity));
+  // one-sided: only the amount above the band's max costs (10 points per piece/100 m²), and less scores better
+  const p = profileFor('none');
+  const max = p.pieceDensity.max;
+  const at = (v: number): ReturnType<typeof scoreOf> => scoreOf({ ...g.metrics, pieceDensity: v }, p);
+  assert.equal(at(max).outside.pieceDensity, 0);
+  assert.equal(at(max + 0.1).outside.pieceDensity, 1);
+  assert.ok(Math.abs(at(max + 1).outside.pieceDensity - 10) < 1e-9, '10 points per piece/100 m² above the band');
+  assert.ok(at(max - 1).score < at(max).score, 'a lower count is rewarded');
+  assert.ok(Math.abs(at(max).score - at(max - 1).score - 1) < 0.02, 'the reward is 1 point per piece/100 m²');
 });

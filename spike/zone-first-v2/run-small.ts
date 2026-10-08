@@ -115,7 +115,7 @@ function card(r: BriefResult, c: Candidate, i: number): string {
   const q = c.quality;
   const flex = CLASSES.map((x) => `${x.replace('Flex · ', '')} ${m2(c.flexArea[x])}`).join(' · ');
   return `<figure>
-  <figcaption><b>option ${i + 1}</b> (rank ${rankOf(r, c)} of ${r.ranked.length})<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · living ${pct(q.livingShare)} (${m2(c.flexArea['Flex · living'])} m²) · ${carvedLine(c) ? carvedLine(c) + ' · ' : ''}circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
+  <figcaption><b>option ${i + 1}</b> (rank ${rankOf(r, c)} of ${r.ranked.length})<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · living ${pct(q.livingShare)} (${m2(c.flexArea['Flex · living'])} m²) · ${carvedLine(c) ? carvedLine(c) + ' · ' : ''}circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · pieces ${q.pieceDensity.toFixed(1)}/100 m² · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
   <img src="${r.brief.id}/cand-${i + 1}.svg" alt="${r.brief.id} option ${i + 1}">
 </figure>`;
 }

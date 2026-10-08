@@ -167,29 +167,43 @@ between cells, so cells within 350 mm and sharing 600 mm count as touching there
 Flex share (ordinary Flex; extensions are not Flex), circulation share (spine + flex-walls + `Flex · circulation`), Core share
 (all Core parts and their extensions), bedroom spread (largest centre-to-centre distance between secondary bedrooms, over
 the envelope diagonal; left out when there are fewer than two secondary bedrooms), **spine ratio** (spine long side over the
-envelope depth), **longest Flex ratio** (the longest Flex piece's long side over the envelope depth), Flex strips (Flex
+envelope depth), **longest Flex ratio** (the longest Flex piece's long side over the envelope depth), **pieces per 100 m²**
+(round 8a, simplicity: zones + Flex pieces + extensions — the spine and the flex-walls count, a sliver does not — over the
+envelope area), Flex strips (Flex
 pieces with aspect ratio above 3 and a long side above 6 m), wet next to a bedroom (a Bath or WC touches one, or shares one
 cell with it), laundry next to the wet rooms or the Core (same one-cell rule), Master separated from the secondary bedrooms
 (recorded only), slivers.
+
+**Tracing nooks (round 8a).** In a **measured** plan a Flex piece under **1.5 m²** (`TRACING_NOOK_MAX_AREA`) is a tracing
+artefact of a hand-measured drawing, not a space: it is merged into the neighbouring piece or zone it shares the longest
+edge with (the golden tolerance), or left out when that union is not a rectangle. It is then neither a Flex strip nor a
+sliver, and nothing else about the plan changes (`total` still sums its cells as measured). Generated plans are untouched:
+a real sliver there is still a piece and still costs 50. Why: zf-17 (Botanica 36) carries a 1100 x 700 cell where its
+bedroom lane ends, and that one cell was 50 of its 78 points — with the nook absorbed the plan the user prefers scores 32.
 
 **Profile** (`out/quality-profile.json`): per numeric metric, the band [min, max] across the golden plans. All seven plans
 (used for briefs with no golden layout) give:
 
 | Metric | Band | Min | Max |
 |---|---|---|---|
-| flexShare | one-sided | 6 % | 29 % |
+| flexShare | one-sided | 3 % | 22 % |
 | circulationShare | one-sided | 5 % | 15 % |
 | spineRatio | one-sided | 26 % | 54 % |
-| longestFlexRatio | one-sided | 22 % | 30 % |
-| coreShare | two-sided | 18 % | 33 % |
+| longestFlexRatio | one-sided | 22 % | 32 % |
+| pieceDensity | one-sided | 4.1 | 6.7 |
+| coreShare | two-sided | 12 % | 33 % |
 | spreadNorm | two-sided | 32 % | 47 % |
+
+(pieceDensity is pieces per 100 m², not a share; the other rows are shares, shown as whole percentages.)
 
 For a golden brief the profile is built from the **other six** (leave-one-out), so the plan is never ranked against itself.
 
 **Score** (lower is better; `QUALITY_WEIGHTS` in `quality.ts`). Round 5 fix: efficient plans are never worse.
-- **One-sided metrics** (Flex share, circulation share, spine ratio, longest Flex ratio): only the amount **above the band's
-  max** is a miss (1 point per percentage point), plus a small linear reward for lower values (0.1 per percentage point of the
-  value itself), so less is preferred even inside the band. No centre pull.
+- **One-sided metrics** (Flex share, circulation share, spine ratio, longest Flex ratio, pieces per 100 m²): only the amount
+  **above the band's max** is a miss (1 point per percentage point; for the piece count 1 point per 0.1 pieces/100 m²), plus a
+  small linear reward for lower values (0.1 per percentage point of the value itself, so 1 point per piece/100 m²), so less is
+  preferred even inside the band. No centre pull. The per-metric rate is `QUALITY_WEIGHTS.bandScale` (100 for a share, 10 for
+  the piece count; **provisional**).
 - **Two-sided metrics** (Core share, bedroom spread): 1 point per percentage point outside the band, plus 0.1 per point from
   the middle of the band (so layouts inside it are not tied alphabetically).
 - +10 if no wet room is near a bedroom, +10 if the laundry is not near the wet rooms or the Core, +10 per Flex strip, +50 per sliver.
@@ -206,7 +220,7 @@ area that a candidate covers with the same kind group.
 
 ## Results (this run)
 
-Valid / generated: zf-00 3200/5504, zf-01 354/1472, zf-03 964/5504, zf-04 3184/5504, zf-05 1758/5504, zf-07 1380/5504, zf-08 2814/5504, SAMPLE-15x27 3940/5504, custom-8800x20550 16/48. Whole run 17610/40048, about 3.6 s.
+Valid / generated (round 8a): zf-00 3200/5504, zf-01 354/1472, zf-03 964/5504, zf-04 3184/5504, zf-05 1758/5504, zf-07 1380/5504, zf-08 2814/5504, SAMPLE-15x27 3940/5504, custom-8800x20550 16/48, zf-17 3740/5504. Whole run 21350/45552, about 12.6 s.
 
 ### Carve pass: big Flex becomes named rooms (round 5, user decision 2026-10-07)
 
@@ -387,6 +401,48 @@ when it is a placed Flex cell. (4) In the signature only `rearRow` counts an ext
 one owner collapse into one); `masterPos` and `corePos` use the zone's own rectangle, otherwise zf-07's
 middle Master with a front strip would read `front`.
 
+## Round 8a: simplicity in the score; tracing nooks are not slivers (user decision 2026-10-08)
+
+Brief: `knowledge/briefs/zf-v2-round8a-simplicity-brief.md`. The user put their own zoning of Botanica 36 (golden zf-17:
+16 pieces, big simple zones, a clear lane structure) beside v2's top 1 for that brief (about 25 pieces: Activity, Theatre,
+Study, Guest bed, thin halls, leftover strips) and prefers theirs — and the score had it backwards (78.8 against 19.6,
+lower better). Of Botanica's 78.8, 50 points were one "sliver": a 1100 x 700 nook that is only a tracing artefact of the
+measured drawing. Two changes, both approved:
+
+1. **Tracing nooks** (see Metrics): a Flex piece under 1.5 m² in a measured plan is absorbed or left out, so it is neither a
+   sliver nor a Flex strip. Measured plans only; generated plans are unchanged.
+2. **`pieceDensity`**: how many pieces a plan is made of — zones + Flex pieces + extensions, the spine and the flex-walls
+   counted, slivers not — per 100 m² of the lot. A one-sided band metric like the others, weight **provisional** at 1 point
+   per 0.1 pieces/100 m² above the band's max, with the same small reward for less.
+
+Effect. The golden scores move from zf-01 42.61, zf-03 7.42, zf-04 26.16, zf-05 8.31, zf-07 8.72, zf-08 7.92, zf-17 78.00
+to 47.87, 12.72, 30.79, 14.41, 21.02, 13.43, 32.08. Read that carefully: zf-17 falls 46 points (50.0 for the nook it no
+longer carries, +4.1 for the new metric) and is the only plan the rule touches; the other six plans are the same zones as
+before and only move because every metric adds its reward term, so the new one adds its own count back — zf-01 +5.26,
+zf-03 +5.30, zf-04 +4.63, zf-05 +6.10, zf-08 +5.51 (each exactly its pieces/100 m², inside its band) and zf-07 +12.26
+(6.66 reward, plus 5.6 outside its own leave-one-out band, whose max is zf-05's 6.10). Top-1 plans are simpler: pieces 15→9 (zf-01),
+16→14 (zf-03), 20→19 (zf-04), 15→15 (zf-05), 17→14 (zf-07), 20→20 (zf-08), 24→23 (zf-17). The blind test passes for
+zf-01, 04, 05 and 17 and is a todo (with the numbers) for zf-03 and zf-07, which it passed before: the goldens are now
+rewarded for being simple and the generator still makes more, smaller cells than the user's drawings do. That is a signal
+for the generator, not for the weight — the rate is the one the brief fixed.
+
+Judgement calls (round 8a):
+
+L8.1. **The threshold is 1.5 m², one constant, commented as a tracing artefact.** zf-17's is 0.77 m²; the next smallest
+   measured cell (1100 x 1600, 1.76 m²) is above it and stays a piece.
+L8.2. **Merge by longest shared edge, within the golden tolerance (350 mm), flex or zone — whichever edge is longer.** When
+   the union is not a rectangle (`rectUnion` returns null only then) the nook is **left out** instead of merged: inventing an
+   L-shaped zone or a grown Flex piece would be a bigger lie than dropping a cell the drawing itself would not have drawn.
+   zf-17's nook is dropped this way (its longest edge, 1100 mm, is the bed's, but the widths differ).
+L8.3. **`total` is the cells as measured**, nook included, so the shares of a measured plan are unchanged by the rule.
+L8.4. **A measured plan is only ever made simpler**: after the pass no measured plan holds a Flex piece under the threshold.
+L8.5. **The denominator is the envelope `w x d`** (the lot), not the sum of cells, so a candidate and a measured plan of the
+   same brief are compared on the same area.
+L8.6. **Band scale 10, not 100**: the band is in pieces per 100 m², and 10 gives exactly the brief's 1 point per 0.1. A share
+   keeps 100 (unchanged behaviour, checked by the existing score test).
+L8.7. **The `sanity` expectation is unchanged** (still zf-01 and zf-04 outside their bands); zf-07's piece count is 5.6 points
+   outside its own leave-one-out band, under the 10-point mark.
+
 ## Living Flex (round 6, user decision 2026-10-07) and Botanica 36
 
 Brief: `knowledge/briefs/zf-v2-botanica-living-brief.md`. The user shared Botanica 36 (14.87 x 24.59 m, 4 bed, double garage, garage
@@ -421,8 +477,8 @@ L2. **Living is never lost.** `markLiving` only promotes. What is left of a livi
 L3. **No hall out of a living piece.** A carved hall would turn living Flex into circulation Flex (counted in the Flex share). Activity in a living piece is placed without a hall; the connectivity check still decides.
 L4. **Core extensions do not anchor living.** Only Core zones do. A rear piece beside only a Core extension is not living.
 L5. **`flexStrips` and `longestFlexRatio` still count living pieces.** The brief names `flexShare` only. This keeps a full-width rear band penalised (30.6 points for the zf-17 match, plus 3 strips = 30 points) and is the main reason the target match is still ranked 1918th of 3430. Excluding living pieces from those two metrics too (tried, then removed) moves it to 1138th. That is a product call: not adopted.
-L6. **The measured Botanica carries a 1100 x 700 Flex cell** (a sliver by v2's rule) so its own score is 78 (50 of it is the sliver). Its blind test is therefore easy to pass; the cell stays as measured.
-L7. **Leave-one-out sanity test**: zf-04 is now 10.01 points outside its bands (ordinary Flex 22 % against the others' max, now lower because living Flex no longer counts for them), so the "known misses" list is zf-01 and zf-04. zf-08's blind test now fails (best top-5 score 8.9 against its own 7.92; was a pass at `bdd50fe`, 9.59 against 10.27) and is a todo with the numbers.
+L6. **The measured Botanica carries a 1100 x 700 Flex cell** (a sliver by v2's rule), which made its own score 78, 50 of it that one sliver. **Round 8a supersedes this**: the cell is a tracing artefact and is absorbed/left out like any other sub-1.5 m² measured Flex piece, so the plan scores 32 (see Round 8a).
+L7. **Leave-one-out sanity test**: zf-04 is 10.01 points outside its bands (ordinary Flex 22 % against the others' max, now lower because living Flex no longer counts for them), so the "known misses" list is zf-01 and zf-04. zf-08's blind test fails (round 8a: best top-5 score 15.09 against its own 13.43; round 6: 8.9 against 7.92) and is a todo with the numbers, as are zf-03 and zf-07 since round 8a (see Round 8a).
 
 ## Judgement calls
 
@@ -508,10 +564,12 @@ Earlier rounds:
 
 ## Known gaps
 
-- **Three blind tests fail** (zf-03, zf-05, zf-08; todos with the numbers above; zf-03 and zf-05 are near misses). The generator's Flex stays above the user's plans' and
-  the Core is capped at 58.5 m2 with rooms at preferred sizes.
+- **Three blind tests fail** (zf-03, zf-07, zf-08; todos with the numbers above; zf-03 and zf-08 are near misses). Since
+  round 8a the goldens are rewarded for being made of fewer pieces, and the generator still makes more, smaller cells than
+  the user's drawings do (zf-07: top 1 7.1 pieces/100 m² against the plan's own 6.7-and-under band). The generator's Flex
+  also stays above the user's plans' and the Core is capped at 58.5 m2 with rooms at preferred sizes.
 - **zf-01 leave-one-out spine band**: its own spine is 19 points above the others' band (reported, not corrected).
-- **Top 3 for SAMPLE-15x27 are 45-54 % Flex** (the profile's Flex band tops out at 29 %), because the generator cannot fill
+- **Top 3 for SAMPLE-15x27 are 45-54 % Flex** (the profile's Flex band tops out at 22 %), because the generator cannot fill
   405 m2 with preferred-size rooms.
 - **Narrow lot**: all 12 distinct layouts belong to one family, so its top 5 holds only one different layout.
 - Most passes are narrow; the score only knows seven plans.

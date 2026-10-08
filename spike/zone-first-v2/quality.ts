@@ -99,6 +99,8 @@ export interface Metrics {
   masterSeparated: boolean;
   spineMetres: number;
   circulationM2: number;
+  /** round 8a, simplicity: zones + Flex pieces + extensions (spine and flex-walls counted, slivers not) per 100 m² of the lot */
+  pieceDensity: number;
   slivers: number;
   /** spine long side over the envelope depth */
   spineRatio: number;
@@ -139,6 +141,10 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
   const masters = l.zones.filter((z) => z.kind === 'master');
   const masterSeparated = masters.every((m) => !beds.some((b) => touch(m.rect, b.rect)));
   const spineLen = spineZ.length ? Math.max(spineZ[0].rect.w, spineZ[0].rect.h) : 0;
+  // round 8a, simplicity: how many pieces the plan is made of, per 100 m² of the lot. The spine and the flex-walls
+  // count (they are cells), a sliver does not (it is not a space). Fewer, bigger pieces is the user's preference
+  // (Botanica 36: 16 pieces and a clear lane structure).
+  const pieces = l.zones.length + l.flex.filter((f) => f.cls !== 'sliver').length + l.extensions.length;
   return {
     flexShare,
     livingShare,
@@ -151,6 +157,7 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
     masterSeparated,
     spineMetres: spineLen / 1000,
     circulationM2: circ / 1e6,
+    pieceDensity: (pieces * 100e6) / (l.env.w * l.env.d),
     slivers: l.flex.filter((f) => f.cls === 'sliver').length,
     spineRatio: spineLen / l.env.d,
     longestFlexRatio: l.flex.length ? Math.max(...l.flex.map((f) => Math.max(f.rect.w, f.rect.h))) / l.env.d : 0,
@@ -167,7 +174,7 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
 /** two-sided bands: too much and too little both cost (Core share, bedroom spread) */
 export const TWO_SIDED = ['coreShare', 'spreadNorm'] as const;
 /** one-sided bands: only the amount above the band's max costs, and less is rewarded (efficient plans are never worse) */
-export const ONE_SIDED = ['flexShare', 'circulationShare', 'spineRatio', 'longestFlexRatio'] as const;
+export const ONE_SIDED = ['flexShare', 'circulationShare', 'spineRatio', 'longestFlexRatio', 'pieceDensity'] as const;
 export const BAND_METRICS = [...ONE_SIDED, ...TWO_SIDED] as const;
 export type BandMetric = (typeof BAND_METRICS)[number];
 export type Profile = Record<BandMetric, { min: number; max: number }>;
@@ -181,13 +188,27 @@ export function buildProfile(list: Metrics[]): Profile {
   return out;
 }
 
-/** weights of the score (documented in the README): points = 100 x the distance outside the band */
+/** weights of the score (documented in the README): points = the metric's scale x the distance outside the band */
 export const QUALITY_WEIGHTS = {
   perBandPoint: 1,
   /** two-sided metrics: a small pull toward the middle of the band, so layouts inside it are not tied (alphabetical) */
   perCentrePoint: 0.1,
-  /** one-sided metrics: a small linear reward for lower values, per percentage point of the value itself */
+  /** one-sided metrics: a small linear reward for lower values, per unit of the metric's own scale (see bandScale) */
   perLowPoint: 0.1,
+  /**
+   * Points per unit of each band metric when it is outside its band, and the scale the perLowPoint reward uses.
+   * A share is a fraction, so 100 = one point per percentage point. pieceDensity is pieces per 100 m², so its scale
+   * is provisional (round 8a): 10 = one point per 0.1 pieces/100 m², the brief's rate.
+   */
+  bandScale: {
+    flexShare: 100,
+    circulationShare: 100,
+    spineRatio: 100,
+    longestFlexRatio: 100,
+    coreShare: 100,
+    spreadNorm: 100,
+    pieceDensity: 10,
+  } as Record<BandMetric, number>,
   perFlexStrip: 10,
   wetNotNearBed: 10,
   laundryNotNear: 10,
@@ -206,16 +227,18 @@ export function scoreOf(m: Metrics, p: Profile): Scored {
   for (const k of ONE_SIDED) {
     const v = m[k];
     const d = v > p[k].max ? v - p[k].max : 0;
-    outside[k] = Math.round(d * 10000) / 100;
-    score += QUALITY_WEIGHTS.perBandPoint * 100 * d + QUALITY_WEIGHTS.perLowPoint * 100 * v;
+    const s = QUALITY_WEIGHTS.bandScale[k];
+    outside[k] = Math.round(d * s * 100) / 100;
+    score += QUALITY_WEIGHTS.perBandPoint * s * d + QUALITY_WEIGHTS.perLowPoint * s * v;
   }
   for (const k of TWO_SIDED) {
     const b = p[k];
     const v = m[k];
     const d = v === null ? 0 : v < b.min ? b.min - v : v > b.max ? v - b.max : 0;
-    outside[k] = Math.round(d * 10000) / 100;
-    score += QUALITY_WEIGHTS.perBandPoint * 100 * d;
-    if (v !== null) score += QUALITY_WEIGHTS.perCentrePoint * 100 * Math.abs(v - (b.min + b.max) / 2);
+    const s = QUALITY_WEIGHTS.bandScale[k];
+    outside[k] = Math.round(d * s * 100) / 100;
+    score += QUALITY_WEIGHTS.perBandPoint * s * d;
+    if (v !== null) score += QUALITY_WEIGHTS.perCentrePoint * s * Math.abs(v - (b.min + b.max) / 2);
   }
   if (!m.wetNearBed) score += QUALITY_WEIGHTS.wetNotNearBed;
   if (!m.laundryNear) score += QUALITY_WEIGHTS.laundryNotNear;

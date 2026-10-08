@@ -4,6 +4,15 @@
     "perBandPoint": 1,
     "perCentrePoint": 0.1,
     "perLowPoint": 0.1,
+    "bandScale": {
+      "flexShare": 100,
+      "circulationShare": 100,
+      "spineRatio": 100,
+      "longestFlexRatio": 100,
+      "coreShare": 100,
+      "spreadNorm": 100,
+      "pieceDensity": 10
+    },
     "perFlexStrip": 10,
     "wetNotNearBed": 10,
     "laundryNotNear": 10,
@@ -25,6 +34,10 @@
     "longestFlexRatio": {
       "min": 0.22186365469947558,
       "max": 0.31720211468076454
+    },
+    "pieceDensity": {
+      "min": 4.102246581666294,
+      "max": 6.661841589972215
     },
     "coreShare": {
       "min": 0.11875527197056183,
@@ -53,6 +66,10 @@
         "min": 0.22186365469947558,
         "max": 0.31720211468076454
       },
+      "pieceDensity": {
+        "min": 4.102246581666294,
+        "max": 6.661841589972215
+      },
       "coreShare": {
         "min": 0.11875527197056183,
         "max": 0.27113163972286375
@@ -78,6 +95,10 @@
       "longestFlexRatio": {
         "min": 0.23461708720672864,
         "max": 0.31720211468076454
+      },
+      "pieceDensity": {
+        "min": 4.102246581666294,
+        "max": 6.661841589972215
       },
       "coreShare": {
         "min": 0.11875527197056183,
@@ -105,6 +126,10 @@
         "min": 0.22186365469947558,
         "max": 0.31720211468076454
       },
+      "pieceDensity": {
+        "min": 4.102246581666294,
+        "max": 6.661841589972215
+      },
       "coreShare": {
         "min": 0.11875527197056183,
         "max": 0.3274271489237077
@@ -130,6 +155,10 @@
       "longestFlexRatio": {
         "min": 0.22186365469947558,
         "max": 0.31720211468076454
+      },
+      "pieceDensity": {
+        "min": 4.102246581666294,
+        "max": 6.661841589972215
       },
       "coreShare": {
         "min": 0.11875527197056183,
@@ -157,6 +186,10 @@
         "min": 0.22186365469947558,
         "max": 0.31720211468076454
       },
+      "pieceDensity": {
+        "min": 4.102246581666294,
+        "max": 6.097434565380961
+      },
       "coreShare": {
         "min": 0.11875527197056183,
         "max": 0.3274271489237077
@@ -182,6 +215,10 @@
       "longestFlexRatio": {
         "min": 0.22186365469947558,
         "max": 0.31720211468076454
+      },
+      "pieceDensity": {
+        "min": 4.102246581666294,
+        "max": 6.661841589972215
       },
       "coreShare": {
         "min": 0.11875527197056183,
@@ -209,6 +246,10 @@
         "min": 0.22186365469947558,
         "max": 0.2983019733822855
       },
+      "pieceDensity": {
+        "min": 4.63371937732079,
+        "max": 6.661841589972215
+      },
       "coreShare": {
         "min": 0.178363880196692,
         "max": 0.3274271489237077
@@ -232,6 +273,7 @@
       "masterSeparated": true,
       "spineMetres": 9.2,
       "circulationM2": 19.86,
+      "pieceDensity": 5.259697567389875,
       "slivers": 0,
       "spineRatio": 0.5443786982248521,
       "longestFlexRatio": 0.28994082840236685,
@@ -249,6 +291,7 @@
       "masterSeparated": true,
       "spineMetres": 8,
       "circulationM2": 11.08,
+      "pieceDensity": 5.3023761579063935,
       "slivers": 0,
       "spineRatio": 0.3227107704719645,
       "longestFlexRatio": 0.22186365469947558,
@@ -266,6 +309,7 @@
       "masterSeparated": true,
       "spineMetres": 8,
       "circulationM2": 15.76,
+      "pieceDensity": 4.63371937732079,
       "slivers": 0,
       "spineRatio": 0.3307151715584952,
       "longestFlexRatio": 0.2645721372467962,
@@ -283,6 +327,7 @@
       "masterSeparated": true,
       "spineMetres": 8,
       "circulationM2": 12.4,
+      "pieceDensity": 6.097434565380961,
       "slivers": 0,
       "spineRatio": 0.35413899955732625,
       "longestFlexRatio": 0.23461708720672864,
@@ -300,6 +345,7 @@
       "masterSeparated": false,
       "spineMetres": 6.1,
       "circulationM2": 8.91,
+      "pieceDensity": 6.661841589972215,
       "slivers": 0,
       "spineRatio": 0.33351558228540185,
       "longestFlexRatio": 0.25150355385456535,
@@ -317,13 +363,14 @@
       "masterSeparated": false,
       "spineMetres": 5.7,
       "circulationM2": 24.02,
+      "pieceDensity": 5.510787212891813,
       "slivers": 0,
       "spineRatio": 0.2615878843506195,
       "longestFlexRatio": 0.2983019733822855,
       "flexStrips": 0
     },
     "zf-17": {
-      "flexShare": 0.10853453135014463,
+      "flexShare": 0.10619227829129901,
       "livingShare": 0.19897591829247926,
       "circulationShare": 0.08353021947519539,
       "coreShare": 0.11875527197056183,
@@ -334,7 +381,8 @@
       "masterSeparated": true,
       "spineMetres": 7.49,
       "circulationM2": 27.46,
-      "slivers": 1,
+      "pieceDensity": 4.102246581666294,
+      "slivers": 0,
       "spineRatio": 0.30459536396909315,
       "longestFlexRatio": 0.31720211468076454,
       "flexStrips": 1
