@@ -12,21 +12,29 @@ import { classifyPiece, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { BRIEFS } from './briefs.ts';
 import { carveCandidate, carvedLine, carveRooms, envelopeEdges, splitFlex } from './carve.ts';
 import { checkConnectivity } from './connect.ts';
-import { distribute } from './layout.ts';
+import { distribute, type Node } from './layout.ts';
 import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, rank, runBrief, type BriefResult } from './pipeline.ts';
 import { GOLDEN, goldenById, profileFor, TRACING_NOOK_MAX_AREA } from './golden.ts';
-import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
+import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, LIVING_MIN_EDGE, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
 import { drawnPiece, drawnRect, PIECE_GAP, renderSVG } from './render.ts';
 import {
   aboveRoomMinimum,
+  BED_PREF_DEPTH,
   CARVE_SPECS,
   CORE_AREA_MAX,
   CORE_AREA_MIN,
   FLEX_SPLIT_CIRC_MIN_WIDTH,
   FLEX_SPLIT_MAX_LONG,
+  fillWidth,
+  fillWidthCap,
+  fillWidthMax,
+  LAUNDRY_PREF_DEPTH,
+  LIVING_REAR_MAX_DEPTH,
+  SLIVER_MIN_SIDE,
   SPECS,
   SPINE_W,
+  WET_PREF_DEPTH,
   withinGarage,
   withinSpec,
   withinZoneAllowance,
@@ -35,12 +43,15 @@ import {
 import type { Brief, Candidate, ExtensionRec, FlexPiece, Rect, ZoneRec } from './types.ts';
 import {
   allRects,
+  buildTree,
   enumerateOptions,
   extensionOwner,
   findExtensions,
   longestRun,
   mismatches,
+  optionAimsAt,
   optionId,
+  REAR_STRIP_D,
   RUN_EXTRA,
   spineStopsAtCore,
   touchesBoundary,
@@ -345,8 +356,29 @@ test('distribute: shrinks toward min, fails below min, sinks take the spare', ()
 
 // ------------------------------------------------------------------ the user's seven drawings
 
-/** A target that honestly cannot be reached is a todo with the exact reason, never a loosened rule. None now: R13 extensions let zf-00 match. */
-const TODO: Record<string, string> = {};
+/**
+ * A target that honestly cannot be reached is a todo with the exact reason, never a loosened rule.
+ * zf-08, round 10a: the target wants masterPos middle. All 8 aiming options (coreLane G, the only lane whose side is
+ * L) put the Master at the front wall - the round 9 Master buffer moves the lane Master to the last cell of its stack.
+ * The one family that used to match the target (coreLane W, the Master in the G column) is now dropped by the round 9
+ * split pass: the round 10a lane fill makes the rear-row Bed 3 5200 mm wide, 790 mm right of the Core's 9000 mm
+ * max-width edge, and that leaves a 790 mm Flex notch beside the Core band, which splitFlex refuses.
+ * zf-05 and zf-07, round 10b: the two briefs whose target asks for a rear row of two bedrooms and a Flex cell
+ * (`rr:BBF`, `rr:FBB`). With BED_PREF_DEPTH the rear-row bedrooms are 3400 mm deep, and the row leaves that Flex cell
+ * 1000 mm wide (zf-05) or 1100 mm (zf-07) - under the 1200 mm RAIL_MIN a rear-row item is counted from - so `rearRow`
+ * reads [bed, bed] and the wanted [bed, bed, flex] can never match. Measured: with only the bedroom's preferred depth
+ * off - the wet and laundry ones are round 10b too, and they move the corpus as well - both targets match, at zf-05 rank
+ * 465 and zf-07 rank 578 (469 / 668 with all three off). zf-07 loses a second field: with the deeper lane the Master
+ * buffer has no spare to move, so the Master reaches the front wall and `masterPos` reads front.
+ */
+const TODO: Record<string, string> = {
+  'zf-05':
+    'round 10b: BED_PREF_DEPTH makes the rear-row bedrooms 3400 mm deep, so the 10890 mm row leaves its Flex cell 1000 mm (Bed 2 4800 + Bed 3 5090), under the 1200 mm RAIL_MIN a rear-row item is counted from; rearRow is [bed, bed] against the wanted [bed, bed, flex]. With only the bedroom preferred depth off - the wet and laundry preferences are round 10b too - the bedrooms fall back to 2700 mm, the same option leaves exactly 1200 mm and matched at rank 465',
+  'zf-07':
+    'round 10b: BED_PREF_DEPTH makes the rear-row bedrooms 3400 mm deep, so the row leaves its Flex cell 1100 mm (under the 1200 mm RAIL_MIN), and the deeper lane leaves the Master buffer no spare, so the Master reaches the front wall and masterPos reads front - rearRow and masterPos both differ. With only the bedroom preferred depth off the bedrooms fall back to 2700 mm and both matched (rank 578)',
+  'zf-08':
+    'the target wants masterPos middle; all 8 aiming options put the Master at the front wall, and the coreLane-W family that used to match (Master mid-lane in the G column) now leaves a 790 mm Flex notch beside the Core max-width band (round 10a lane fill), which splitFlex drops',
+};
 
 for (const r of RESULTS) {
   for (const t of r.targets) {
@@ -380,7 +412,17 @@ test('zf-00 target: the Core stays at its CATALOG max and the rest of the rear w
 
 // ------------------------------------------------------------------ the user's notes on v2 (2026-10-07)
 
-const matchOf = (id: string): Candidate => RESULTS.find((r) => r.brief.id === id)!.targets[0].candidate!;
+// round 10: a brief whose primary target is a todo (see TODO above) falls back to its other target, and a brief with no
+// matching candidate at all (zf-05, zf-07) to the best-ranked valid candidate that aims at one of its targets - the
+// notes are about the user's drawings, and they are read off the layout we do produce (`valid` and not `ranked`: every
+// zf-07 aiming candidate is hidden by the layout dedupe, a twin that scores higher)
+const matchOf = (id: string): Candidate => {
+  const r = RESULTS.find((x) => x.brief.id === id)!;
+  const matched = r.targets.map((t) => t.candidate).find((c) => c !== null);
+  if (matched) return matched;
+  const targets = r.targets.map((t) => t.target);
+  return r.valid.slice().sort(rank).find((c) => targets.some((t) => optionAimsAt(c.options, t)))!;
+};
 const cells = (c: Candidate): Rect[] => [...c.zones.map((z) => z.rect), c.spine.rect, ...c.flex.filter((f) => f.cls !== 'sliver').map((f) => f.rect)];
 const touches = (a: Rect, b: Rect): boolean => sharedEdge(a, b) >= 900;
 /** touching, or one cell (a room, a flex-wall, Flex) between them */
@@ -406,12 +448,14 @@ test('zf-05 (user note): the Core touches the right wall and Bed 4 is within one
 
 test('zf-04 (user note): the wet block touches the rear-row band, or a flex-wall that does', () => {
   const c = matchOf('zf-04');
-  const wet = c.zones.find((z) => z.kind === 'wet')!;
+  // round 10: the wet block fills its lane, so its split form stacks Bath and WC end to end; either cell of the block
+  // touching the rear band counts as the block touching it (before, the Bath sat against the band in every option).
+  const wet = c.zones.filter((z) => z.kind === 'wet' || z.kind === 'wc');
   const band = c.zones.filter((z) => z.rect.y === 0 && z.kind !== 'garage');
   const walls = c.zones.filter((z) => z.kind === 'flexwall');
   const ok =
-    band.some((z) => touches(wet.rect, z.rect)) ||
-    walls.some((w) => touches(wet.rect, w.rect) && band.some((z) => touches(w.rect, z.rect)));
+    wet.some((z) => band.some((b) => touches(z.rect, b.rect))) ||
+    walls.some((w) => wet.some((z) => touches(z.rect, w.rect)) && band.some((z) => touches(w.rect, z.rect)));
   assert.ok(ok, 'the wet block is not near the rear bedrooms');
 });
 
@@ -427,8 +471,11 @@ test(
   'zf-07 (user note): a Flex · room touches the Master',
   {
     todo:
-      'both zf-07 matches (one layout, two wet forms) pack hall, wet block, laundry, bedroom and Master at their preferred sizes into 15290 mm of lane depth, ' +
-      'so no gap of 2400 mm or more is left beside the Master; the Core grows first and rooms stretch only into gaps under 2400',
+      'round 10b: zf-07 has no matching candidate at all any more (see the round 10b note above the target map), so this reads the fallback ' +
+      '(R|midG|block|m:middle/block|wet:split|rr:FBB|fw|v2): its lane is filled end to end by Bed 4 and the Master and no Flex touches the ' +
+      'Master at all; the plan\'s only Flex pieces are a 1100 x 3390 circulation strip at the rear wall and two 3350 x 2400 storage pieces ' +
+      'against the Core, whose 2400 mm short side is under the 2700 mm Flex · room band. At round 10a the best match left a 2300 x 1200 ' +
+      'piece beside the Master, Flex · storage too',
   },
   () => {
     const c = matchOf('zf-07');
@@ -437,17 +484,14 @@ test(
   },
 );
 
-test(
-  'zf-08 (user note): the Flex share is below 35 %',
-  {
-    todo:
-      'the lowest Flex share of any zf-08 match is 39 % (best-ranked 41 %, after the grow pass): the Core is capped at the FamilyCore max area (58.5 m2) and every room is at its CATALOG preferred size, so 14990 x 21790 mm (326.6 m2) cannot be filled below 35 % without breaking a rule',
-  },
-  () => {
-    const c = matchOf('zf-08');
-    assert.ok(c.quality.flexShare < 0.35, `Flex share ${(c.quality.flexShare * 100).toFixed(0)} %`);
-  },
-);
+test('zf-08 (user note): the Flex share is below 35 %', () => {
+  // round 10: the note holds now - the round 10a lane fill gives the bedrooms and the wet block the whole lane, so the
+  // best zf-08 layout (the alt target L|midW|block|m:middle/split|wet:block|rr:FBFB|fw|v3) is at 30 % Flex and 2714 of
+  // its 3078 valid candidates are under 35 %; before round 10 the best match was 41 % and this was a todo, because the
+  // Core is capped at the FamilyCore max area (58.5 m2) and every room sat at its CATALOG preferred size
+  const c = matchOf('zf-08');
+  assert.ok(c.quality.flexShare < 0.35, `Flex share ${(c.quality.flexShare * 100).toFixed(0)} %`);
+});
 
 test('quality terms are reported and the top 5 are pairwise different', () => {
   for (const r of RESULTS) {
@@ -730,7 +774,9 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
 const GROW_UP =
   'nothing carves the leftover any more (round 8b): a room that grows by swallowing its own extension can leave the ' +
   'space it took as an ordinary Flex strip, and round 9 grew bedrooms and the Master into Flex under the ceiling too, ' +
-  'so 60 of 7124 grown candidates end with a higher Flex share, worst +2.61 pt (zf-07 L|midR|split|m:front/block|wet:block|rr:BBF|fw|v0)';
+  // round 10: the round 10a lane fill widened the rooms, so fewer of them can still eat their extension whole
+  // round 10b: 6 of 9080 now (12 of 8266 at round 10a), all of them zf-04; the worst is unchanged
+  'so 6 of 9080 grown candidates end with a higher Flex share, worst +0.60 pt (zf-04 L|midR|split|m:rear/split|wet:split|rr:MF|nofw|v0)';
 
 test('grow pass: every grown candidate ends with a lower Flex share', { todo: GROW_UP }, () => {
   const a = growthAudit();
@@ -1245,7 +1291,97 @@ test('round 9: the bedroom-column variant (v4) exists and is valid for zf-17', (
   }
 });
 
-test('round 9: pieceDensity weight 0 ranks the round 7 top-1 option of zf-17 far above the round 8 top-1 option', () => {
+// ------------------------------------------------------------------ round 10a: rooms fill their column (2026-10-08)
+
+/** the forced lane (the nearest stack that fixes its width) a named room sits in, or null when it is not in one */
+const laneWidthOf = (n: Node, name: string, lane: number | null = null): number | null => {
+  if (n.t === 'room') return n.name === name ? lane : null;
+  if (n.t !== 'stack' && n.t !== 'row') return null;
+  const inner = n.t === 'stack' && n.w !== undefined ? n.w : lane;
+  for (const k of n.kids) {
+    const v = laneWidthOf(k, name, inner);
+    if (v !== null) return v;
+  }
+  return null;
+};
+
+test('round 10a: in a stack lane every bedroom takes the lane width up to its zone allowance, and what is left beside it is a whole 1000 mm', () => {
+  const brief = BRIEFS.find((b) => b.id === 'zf-17')!;
+  const r = RESULTS.find((x) => x.brief.id === 'zf-17')!;
+  const v4 = r.valid.filter((c) => c.options.variant === 4);
+  assert.ok(v4.length > 0, 'no valid v4 candidate for zf-17');
+  let wide = 0;
+  let leftover = 0;
+  for (const c of v4) {
+    const tree = buildTree(brief, c.options);
+    for (const z of c.zones.filter((q) => q.kind === 'bedroom')) {
+      const lane = laneWidthOf(tree, z.name);
+      if (lane === null) continue; // a rear-row bedroom: it shares the row width instead (the rowW range)
+      const left = lane - z.rect.w;
+      // the lane is wider than the catalogue long side for most variants, so a room at its catalogue width would leave
+      // a strip of Flex: every lane bedroom fills the lane up to the 5200 mm allowance cap instead
+      if (z.rect.w > CATALOG.Bedroom.max[1]) wide++;
+      assert.ok(z.rect.w >= Math.min(lane, CATALOG.Bedroom.max[1]), `${c.optionId}: ${z.name} is ${z.rect.w} mm wide, not lane-wide (lane ${lane})`);
+      assert.ok(z.rect.w <= fillWidthCap(SPECS.bed), `${c.optionId}: ${z.name} is ${z.rect.w} mm wide, past its allowance cap`);
+      assert.ok(left >= 0, `${c.optionId}: ${z.name} is wider than its lane (${z.rect.w} > ${lane})`);
+      // what is left beside a capped room is a WHOLE 1000 mm (or nothing), so two rooms of one lane never leave a sliver
+      assert.equal(left % SLIVER_MIN_SIDE, 0, `${c.optionId}: ${z.name} leaves ${left} mm beside it, not 0 or a whole 1000 mm`);
+      if (left === 0) continue;
+      leftover++;
+      // and that leftover is Flex, not another room's cell: the strip is covered by Flex (possibly split between two
+      // pieces) or by a room extension that grew into it (round 10a grows rooms into the Flex they touch)
+      const cut = (a: Rect, b: Rect): number =>
+        Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+      const strips = [
+        { x: z.rect.x - left, y: z.rect.y, w: left, h: z.rect.h },
+        { x: z.rect.x + z.rect.w, y: z.rect.y, w: left, h: z.rect.h },
+      ];
+      const flexA = strips.reduce((a, s) => a + c.flex.reduce((b, f) => b + cut(f.rect, s), 0), 0);
+      const extA = strips.reduce((a, s) => a + c.extensions.reduce((b, e) => b + cut(e.rect, s), 0), 0);
+      const occupied = c.zones.filter((q) => q.id !== z.id).reduce((a, q) => a + strips.reduce((b, s) => b + cut(q.rect, s), 0), 0);
+      assert.equal(flexA + extA + occupied, left * z.rect.h, `${c.optionId}: ${left * z.rect.h - flexA - extA - occupied} mm² beside ${z.name} is neither Flex nor an extension`);
+      assert.equal(occupied, 0, `${c.optionId}: another zone sits in the ${left} mm strip beside ${z.name} (${z.rect.x},${z.rect.y} ${z.rect.w}x${z.rect.h})`);
+    }
+  }
+  assert.ok(wide > 0, 'no v4 bedroom is wider than the catalogue long side');
+  assert.ok(leftover > 0, 'no v4 lane is wider than the cap, so nothing tests the leftover Flex');
+});
+
+test('round 10a: a lane room fills its cell to the allowance cap; the clip leaves a whole 1000 mm of Flex, never a sliver', () => {
+  const bed = SPECS.bed;
+  const cap = fillWidthCap(bed);
+  assert.equal(cap, 1.3 * bed.l.max, 'the cap is the long-side zone allowance'); // 5200 for CATALOG.Bedroom
+  assert.equal(fillWidth(bed.s, bed, cap - 400, 3000), cap - 400, 'a cell under the cap is taken whole');
+  assert.equal(fillWidth(bed.s, bed, cap, 3000), cap, 'a cell at the cap is taken whole');
+  assert.equal(fillWidth(bed.s, bed, cap + 400, 3000), cap - 600, '400 mm over the cap rounds up to a 1000 mm leftover');
+  assert.equal(fillWidth(bed.s, bed, cap + 2000, 3000), cap, 'a whole 2000 mm of leftover stays Flex');
+  assert.equal(fillWidth(bed.s, bed, cap + 2400, 3000), cap - 600, '400 mm into a third strip rounds up to 3000 mm of Flex');
+  // two capped rooms of one lane therefore leave leftovers differing by 0 or by 1000 mm or more: no strip under 1000
+  for (const a of [0, 300, 900, 1000, 1400]) for (const b of [0, 300, 900, 1000, 1400]) {
+    const la = cap + a - fillWidth(bed.s, bed, cap + a, 3000);
+    const lb = cap + b - fillWidth(bed.s, bed, cap + b, 3000);
+    assert.ok(la === lb || Math.abs(la - lb) >= SLIVER_MIN_SIDE, `${la} mm beside ${lb} mm`);
+  }
+  // a deep cell caps the width by area as well: 1.6 x 4000 x 4000 / 6000 = 4200, under the 5200 mm side allowance
+  assert.equal(fillWidthMax(bed, 6000), 4200);
+  assert.ok(fillWidthMax(bed, 6000) < cap);
+  assert.equal(fillWidth(bed.s, bed, 6000, 6000), 4000, 'the area cap leaves whole 1000 mm strips too'); // 4200 capped, 1800 over -> 2000 of Flex
+});
+
+test('round 10a: the bedrooms of one lane are one group, so the v4 column has no bedroom spread', () => {
+  const r = RESULTS.find((x) => x.brief.id === 'zf-17')!;
+  const v4 = r.valid.filter((c) => c.options.variant === 4);
+  assert.ok(v4.length > 0, 'no valid v4 candidate for zf-17');
+  for (const c of v4) {
+    assert.equal(c.quality.spreadNorm, null, `${c.optionId}: the column is measured as spread (${c.quality.spreadNorm})`);
+    assert.equal(c.quality.bedroomSpread, 0, `${c.optionId}: the column has a spread of ${c.quality.bedroomSpread} mm`);
+  }
+  // the measure still bites when the bedrooms sit in different lanes, and the user's own zoning is one lane too
+  assert.ok(r.valid.some((c) => c.quality.spreadNorm !== null), 'no candidate keeps a bedroom spread at all');
+  assert.equal(goldenById('zf-17')!.metrics.spreadNorm, null);
+});
+
+test('round 10: the round 8 top-1 option of zf-17 ranks above the round 7 top-1 option, the reverse of round 9', () => {
   const r = RESULTS.find((x) => x.brief.id === 'zf-17')!;
   // the score order over the valid candidates is the pipeline's own `rank`; `ranked` is that list after layout dedupe
   const order = r.valid.slice().sort(rank);
@@ -1254,10 +1390,128 @@ test('round 9: pieceDensity weight 0 ranks the round 7 top-1 option of zf-17 far
   const rank8 = rankOf('L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0');
   assert.ok(rank7 > 0, 'the round 7 top-1 option is not a valid zf-17 candidate');
   assert.ok(rank8 > 0, 'the round 8 top-1 option is not a valid zf-17 candidate');
-  assert.ok(rank7 < rank8, `round 7 top 1 (rank ${rank7}) does not beat round 8 top 1 (rank ${rank8})`);
-  assert.ok(order[rank7 - 1].quality.score < order[rank8 - 1].quality.score, 'the round 7 top 1 does not score better');
+  // round 10: the round 7 option no longer beats the round 8 one (93 now, 648 for the round 7 option). The round 10a
+  // lane fill widens its Master to 7170 x 4800 and leaves a 1000 mm Flex · circulation strip down the lane, so its
+  // longestFlexRatio is 0.50 against 0.25 before and its score 59.65 against 37.94. The round 9 pieceDensity decision
+  // (weight 0) is untouched - the flip is the width rule, not the piece count.
+  assert.ok(rank8 < rank7, `round 8 top 1 (rank ${rank8}) does not beat round 7 top 1 (rank ${rank7})`);
+  assert.ok(order[rank8 - 1].quality.score < order[rank7 - 1].quality.score, 'the round 8 top 1 does not score better');
   // round 9's Master buffer makes the option's layout identical to its front-Master twin's, so the deduped list keeps
   // the twin; that twin is ranked at least as high as the option itself
   const twinRank = r.ranked.findIndex((c) => c.optionId === 'L|midG|split|m:front/block|wet:block|rr:FBFB|fw|v2') + 1;
   assert.ok(twinRank > 0 && twinRank <= rank7, `the round 7 family is not ranked in the deduped list (${twinRank})`);
+});
+
+// ------------------------------------------------------------------ round 10b: the Core lower, a living band behind it (2026-10-09)
+
+const overlapArea = (a: Rect, b: Rect): number =>
+  Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+
+/** the Flex piece that is the living band of a lower Core: at the rear wall, under the lowest part of the Core */
+const bandOf = (c: Candidate): FlexPiece[] => {
+  const cores = coreRectsOf(c.zones);
+  const top = Math.min(...cores.map((r) => r.y));
+  return c.flex.filter((f) => f.rect.y === 0 && f.rect.y + f.rect.h === top && cores.some((r) => sharedEdge(f.rect, r) >= LIVING_MIN_EDGE));
+};
+
+test('round 10b: the lower-Core option is enumerated beside every eligible option and nowhere else, inside the 6000 budget', () => {
+  const briefs: string[] = [];
+  for (const brief of BRIEFS) {
+    const opts = enumerateOptions(brief);
+    assert.ok(opts.length <= 6000, `${brief.id}: ${opts.length} options, over the 6000 budget`);
+    const lower = opts.filter((o) => o.coreLower);
+    const ids = new Set(opts.map(optionId));
+    // one more option beside each eligible plain one: three lane bedrooms (a 4-bed brief), a front Master, a single-Flex
+    // rear row and a Core lane of its own. coreLane W is the Core spanning both lanes, so it is never doubled, and the
+    // narrow-lot branch (all rear-row, no front Master) has nothing to double either.
+    const eligible = opts.filter(
+      (o) =>
+        !o.coreLower &&
+        brief.bedrooms === 4 &&
+        o.corePos === 'middle' &&
+        o.masterPos === 'front' &&
+        o.rearPlan.length === 1 &&
+        o.rearPlan[0] === 'F' &&
+        (o.coreLane === 'G' || o.coreLane === 'R'),
+    );
+    assert.equal(lower.length, eligible.length, `${brief.id}: ${lower.length} lower-Core options against ${eligible.length} eligible plain ones`);
+    if (lower.length) briefs.push(brief.id);
+    for (const o of lower) {
+      const id = optionId(o);
+      assert.equal(o.corePos, 'middle', `${id}: a lower Core that is not a middle Core`);
+      assert.ok(o.coreLane === 'G' || o.coreLane === 'R', `${id}: the lower Core has no lane of its own (${o.coreLane})`);
+      assert.equal(o.masterPos, 'front', `${id}: the lower Core without a front Master`);
+      assert.deepEqual(o.rearPlan, ['F'], `${id}: the lower Core without a single rear Flex`);
+      assert.ok(id.endsWith('|core-low'), `${id}: the id does not carry the bit`);
+      assert.ok(ids.has(optionId({ ...o, coreLower: undefined })), `${id}: the plain twin is missing`);
+    }
+  }
+  assert.deepEqual(briefs, ['zf-00', 'zf-03', 'zf-04', 'zf-05', 'zf-07', 'zf-08', 'SAMPLE-15x27', 'zf-17']);
+  // the budget: 5568 plain + 256 doubled = 5824 for a 4-bed brief, the doubling never touching the option cap
+  const zf17 = enumerateOptions(BRIEFS.find((b) => b.id === 'zf-17')!);
+  assert.equal(zf17.length, 5824);
+  assert.equal(zf17.filter((o) => o.coreLower).length, 256);
+  assert.equal(zf17.length - zf17.filter((o) => o.coreLower).length, 5568);
+});
+
+test('round 10b: with the lower Core one unsplit Flex · living band lies between the Core and the rear wall', () => {
+  let candidates = 0;
+  for (const x of ALL) {
+    if (!x.c.options.coreLower) continue;
+    candidates++;
+    const bands = bandOf(x.c);
+    assert.equal(bands.length, 1, `${where(x)}: ${bands.length} Flex pieces lie between the Core and the rear wall`);
+    const band = bands[0];
+    assert.equal(band.cls, 'Flex · living', `${where(x)}: the band is ${band.cls}`);
+    // one deep band, never the plain rear strip: the Core did move
+    assert.ok(band.rect.h > REAR_STRIP_D, `${where(x)}: the band is ${band.rect.h} mm deep, the plain rear strip`);
+    assert.ok(band.rect.h <= LIVING_REAR_MAX_DEPTH, `${where(x)}: the band is ${band.rect.h} mm deep, over the ${LIVING_REAR_MAX_DEPTH} mm cap`);
+    // the Core's distance from the rear wall is exactly the band: nothing else sits between the two
+    assert.equal(Math.min(...coreRectsOf(x.c.zones).map((r) => r.y)), band.rect.h, `${where(x)}: the Core is not right above the band`);
+    const core = coreRectsOf(x.c.zones).find((r) => r.y === band.rect.y + band.rect.h)!;
+    assert.equal(sharedEdge(band.rect, core), Math.min(band.rect.w, core.w), `${where(x)}: the band touches the Core over part of an edge only`);
+    // one piece, not two: neither Flex nor a zone covers any of it
+    assert.equal(x.c.flex.filter((f) => f !== band).reduce((a, f) => a + overlapArea(f.rect, band.rect), 0), 0, `${where(x)}: another Flex piece overlaps the band`);
+    assert.equal(x.c.zones.reduce((a, z) => a + overlapArea(z.rect, band.rect), 0), 0, `${where(x)}: a zone overlaps the band`);
+  }
+  assert.ok(candidates > 0, 'no valid candidate uses the lower Core');
+  // 7 of the 8 briefs that enumerate the option reach it; zf-03 is the exception and stays measured, not skipped
+  const reached: string[] = [];
+  for (const r of RESULTS) {
+    if (!r.options.some((o) => o.coreLower)) continue;
+    const n = r.valid.filter((c) => c.options.coreLower).length;
+    if (r.brief.id === 'zf-03') {
+      assert.equal(n, 0, `zf-03: ${n} valid lower-Core candidates, against a measured 0`);
+      continue;
+    }
+    assert.ok(n > 0, `${r.brief.id}: no valid lower-Core candidate`);
+    reached.push(r.brief.id);
+  }
+  assert.equal(reached.length, 7, `the option is reached by ${reached.join(', ')}`);
+});
+
+test("round 10b: the preferred depths are the user's zoning, and the two small ones land on the catalogue minimum", () => {
+  assert.equal(BED_PREF_DEPTH, 3400);
+  assert.equal(WET_PREF_DEPTH, 1900);
+  assert.equal(LAUNDRY_PREF_DEPTH, 1600);
+  assert.equal(SPECS.bed.prefDepth, BED_PREF_DEPTH);
+  assert.equal(SPECS.wet.prefDepth, WET_PREF_DEPTH);
+  assert.equal(SPECS.laundry.prefDepth, LAUNDRY_PREF_DEPTH);
+  // 3400 sits inside the bedroom's own 2700..4000 depth range, so the layout really prefers it
+  assert.ok(SPECS.bed.s.min < BED_PREF_DEPTH && BED_PREF_DEPTH <= SPECS.bed.s.max);
+  // the wet block and the laundry ask for less than their own minimum side (2000 / 1800), so `fitRoom` clamps both up to
+  // it - the catalogue minimum, not the depth a lane-wide cell would otherwise want (2100 / 1900 in the measured counts)
+  assert.ok(WET_PREF_DEPTH < Math.min(SPECS.wet.s.min, SPECS.wet.l.min));
+  assert.ok(LAUNDRY_PREF_DEPTH < Math.min(SPECS.laundry.s.min, SPECS.laundry.l.min));
+  const modeSide = (kind: string): number => {
+    const n = new Map<number, number>();
+    for (const x of ALL) for (const z of x.c.zones) {
+      if (z.kind !== kind) continue;
+      const d = Math.min(z.rect.w, z.rect.h);
+      n.set(d, (n.get(d) ?? 0) + 1);
+    }
+    return [...n].sort((a, b) => b[1] - a[1])[0][0];
+  };
+  assert.equal(modeSide('wet'), SPECS.wet.s.min);
+  assert.equal(modeSide('laundry'), SPECS.laundry.s.min);
 });

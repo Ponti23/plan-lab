@@ -47,7 +47,9 @@ export const LIVING_MIN_EDGE = 1200;
  * A Flex piece is living when it touches the rear wall (y = 0; within `tol` for a measured zoning) and shares an edge of
  * at least LIVING_MIN_EDGE with a Core part, or with another living piece (chained). Slivers and circulation pieces
  * (walk-through halls) are never living. Pure and idempotent; it only ever promotes (a piece already marked living stays
- * living: the carve pass relies on that, see carve.ts).
+ * living: the carve pass relies on that, see carve.ts). The round 10b reserved band behind the lower Core needs no
+ * argument of its own: the band is the Flex cell at the rear wall, held out of the decomposition and re-added whole
+ * (zones.ts), so it is rear-wall Flex like any other and `rear` already marks it.
  */
 export function markLiving(flex: FlexPiece[], cores: Rect[], tol: number): FlexPiece[] {
   const living = new Set<number>(flex.flatMap((f, i) => (f.cls === 'Flex · living' ? [i] : [])));
@@ -112,6 +114,32 @@ export interface Metrics {
 
 const area = (r: Rect): number => r.w * r.h;
 
+/**
+ * Round 10a (provisional, round 10, user zf-17 review): how far two bedrooms' columns must overlap in x to count as
+ * one lane. Half the narrower bedroom, because two rooms of one lane line up on their side walls.
+ */
+export const LANE_OVERLAP_SHARE = 0.5;
+
+/**
+ * Zone kinds that may sit BETWEEN two bedrooms of one lane without cutting it: the v4 column is bedrooms with only
+ * the wet block / laundry between them. The Core, the garage or a carve does cut a lane - it is not a bedroom wing.
+ */
+const LANE_KINDS = new Set<ZoneKind>(['bedroom', 'master', 'ensuite', 'wet', 'wc', 'laundry', 'flexwall']);
+
+/** Do two bedrooms lie in one stack lane: overlapping columns with nothing but lane rooms between them? */
+function sameLane(a: Rect, b: Rect, zones: ZoneRec[]): boolean {
+  const [rear, front] = a.y <= b.y ? [a, b] : [b, a];
+  const x0 = Math.max(a.x, b.x);
+  const band = Math.min(a.x + a.w, b.x + b.w) - x0;
+  if (band < LANE_OVERLAP_SHARE * Math.min(a.w, b.w)) return false;
+  const top = rear.y + rear.h;
+  return !zones.some((z) => {
+    const r = z.rect;
+    // a non-lane zone crossing the strip between them and inside their shared column cuts the lane
+    return !LANE_KINDS.has(z.kind) && r.x < x0 + band && r.x + r.w > x0 && r.y < front.y && r.y + r.h > top;
+  });
+}
+
 export function metricsOf(l: Layout, adj: Adjacency): Metrics {
   const sum = (rs: Rect[]): number => rs.reduce((a, r) => a + area(r), 0);
   const flexShare = sum(l.flex.filter((f) => f.cls !== 'Flex · living').map((f) => f.rect)) / l.total;
@@ -122,14 +150,25 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
   const coreIds = new Set(l.zones.filter((z) => z.kind === 'core').map((z) => z.id));
   const core = sum(l.zones.filter((z) => z.kind === 'core').map((z) => z.rect)) + sum(l.extensions.filter((e) => coreIds.has(e.ownerId)).map((e) => e.rect));
   const beds = l.zones.filter((z) => z.kind === 'bedroom');
+  // round 10a (user zf-17 review): the bedrooms of one stack lane are one GROUP, so the distance between them along
+  // the lane (the v4 column) is not spread. Pairs in different lanes / the rear row keep the round 9 measure.
+  const group = beds.map((_, i) => i);
+  const root = (i: number): number => (group[i] === i ? i : (group[i] = root(group[i])));
+  for (let i = 0; i < beds.length; i++) {
+    for (let j = i + 1; j < beds.length; j++) {
+      if (sameLane(beds[i].rect, beds[j].rect, l.zones)) group[root(i)] = root(j);
+    }
+  }
   let spread = 0;
   for (let i = 0; i < beds.length; i++) {
     for (let j = i + 1; j < beds.length; j++) {
+      if (root(i) === root(j)) continue;
       const a = beds[i].rect;
       const b = beds[j].rect;
       spread = Math.max(spread, Math.hypot(a.x + a.w / 2 - (b.x + b.w / 2), a.y + a.h / 2 - (b.y + b.h / 2)));
     }
   }
+  const groups = new Set(beds.map((_, i) => root(i))).size;
   const cells: Rect[] = [...l.zones.map((z) => z.rect), ...l.flex.filter((f) => f.cls !== 'sliver').map((f) => f.rect)];
   const touch = (a: Rect, b: Rect): boolean => edgeBetween(a, b, adj.tol) >= adj.minEdge;
   const within1 = (a: Rect, b: Rect): boolean => touch(a, b) || cells.some((c) => c !== a && c !== b && touch(a, c) && touch(c, b));
@@ -151,7 +190,9 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
     circulationShare: circ / l.total,
     coreShare: core / l.total,
     bedroomSpread: Math.round(spread),
-    spreadNorm: beds.length < 2 ? null : spread / Math.hypot(l.env.w, l.env.d),
+    // fewer than two secondary bedrooms, or one bedroom lane only: there is nothing to spread (the user's own zf-17
+    // zoning is one lane - the round 10a column - and was scored as a maximally spread plan before this)
+    spreadNorm: beds.length < 2 || groups < 2 ? null : spread / Math.hypot(l.env.w, l.env.d),
     wetNearBed,
     laundryNear,
     masterSeparated,

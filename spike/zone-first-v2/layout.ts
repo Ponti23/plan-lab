@@ -9,11 +9,12 @@
 //     spine) equally; with no sink, the rooms stretch toward their max (water-fill);
 //   - total <  sum of preferred: every child shrinks toward its min in proportion to how much it can give;
 //   - total <  sum of min: the layout fails.
-// Initial placement never grows past the room's catalogue max: it is clipped there and the rest of its cell
-// becomes Flex. The later grow pass may extend that zone to its allowance cap. A clip that would leave a strip
-// under 1000 mm is shortened to leave exactly 1000 instead, so a clip never creates a sliver.
+// Initial placement never grows past the room's catalogue max, except a room in a lane (round 10a), which fills its
+// cell up to the zone allowance cap. What a room does not take of its cell becomes Flex. The later grow pass may
+// extend that zone to its allowance cap. A clip that would leave a strip under 1000 mm is shortened to leave exactly
+// 1000 instead, so a clip never creates a sliver.
 
-import { fitRoom, SLIVER_MIN_SIDE, type RoomSpec, type Rng } from './sizes.ts';
+import { fillSideMax, fillWidth, fitRoom, SLIVER_MIN_SIDE, type RoomSpec, type Rng } from './sizes.ts';
 import type { Rect, ZoneKind } from './types.ts';
 
 export class Fail extends Error {}
@@ -34,6 +35,8 @@ export interface RoomLeaf extends Base {
   /** the Core: grows into spare length before Flex does */
   grow?: boolean;
   areaMax?: number;
+  /** round 10a: a room in a lane / rear-row cell takes the whole cell width up to its zone allowance cap */
+  fill?: boolean;
 }
 export interface FixedLeaf extends Base {
   t: 'fixed';
@@ -61,6 +64,8 @@ export interface FlexLeaf extends Base {
   soft?: boolean;
   /** a Flex hall of this exact depth (not a sink) */
   fixedD?: number;
+  /** round 10b: takes its depth (up to this cap) before the Core grows — the living band behind the lower Core */
+  capD?: number;
 }
 export type Leaf = RoomLeaf | FixedLeaf | StripLeaf | FlexLeaf;
 
@@ -71,10 +76,6 @@ export interface Stack extends Base {
   /** forced width (a lane) */
   w?: number;
   grow?: boolean;
-  /** the stack never stretches wider than its preferred width (the wet cluster beside its flex-wall) */
-  noStretch?: boolean;
-  /** width of the room block when it is narrower than the lane; the rest of the lane is left as Flex, on the inner side */
-  content?: number;
   anchor: Anchor;
 }
 export interface Row extends Base {
@@ -107,6 +108,8 @@ interface Len extends Rng {
   soft?: boolean;
   /** takes spare length (up to its max) before any sink does: the Core */
   grow?: boolean;
+  /** round 10b: a sink that takes the spare up to this depth before the Core grows (the living band) */
+  cap?: number;
 }
 
 /** the Flex · room threshold: a gap under this is absorbed by the rooms, a bigger one stays Flex */
@@ -134,7 +137,7 @@ function wd(n: Node): Len {
       return {
         min: Math.max(...k.map((r) => r.min)),
         pref,
-        max: n.noStretch ? pref : Math.max(...k.map((r) => r.max)),
+        max: Math.max(...k.map((r) => r.max)),
         sink: n.sink,
       };
     }
@@ -164,9 +167,9 @@ function dd(n: Node, w: number): Len {
         : { min: n.dMin, pref: n.dMin, max: INF, sink: true };
     case 'flex':
       if (n.fixedD !== undefined) return exact(n.fixedD);
-      return { min: n.dMin, pref: n.dMin, max: INF, sink: true, soft: n.soft };
+      return { min: n.dMin, pref: n.dMin, max: n.capD ?? INF, sink: true, soft: n.soft, cap: n.capD };
     case 'stack': {
-      const k = n.kids.map((c) => dd(c, n.content ?? n.w ?? w));
+      const k = n.kids.map((c) => dd(c, n.w ?? w));
       const sum = (f: 'min' | 'pref' | 'max'): number => k.reduce((a, r) => a + r[f], 0);
       return { min: sum('min'), pref: sum('pref'), max: sum('max'), sink: n.sink, grow: n.grow };
     }
@@ -182,9 +185,6 @@ function dd(n: Node, w: number): Len {
     }
   }
 }
-
-/** the narrowest width a node can take */
-export const minWidth = (n: Node): number => wd(n).min;
 
 // ------------------------------------------------------------------ distribution
 
@@ -215,14 +215,23 @@ export function distribute(total: number, r: Len[]): number[] | null {
     const growers = r.map((x, i) => (x.grow ? i : -1)).filter((i) => i >= 0);
     const sinks = r.map((x, i) => (x.sink ? i : -1)).filter((i) => i >= 0);
     const rooms = r.map((x, i) => (!x.sink && !x.grow && x.max > x.min ? i : -1)).filter((i) => i >= 0);
+    // round 10b: a CAPPED sink (the living band behind the lower Core) takes its depth before the Core grows; the
+    // open sinks then split what is left, as before. With no capped sink the order is the round 9 one, unchanged.
+    const capped = sinks.filter((i) => r[i].cap !== undefined);
+    for (const i of capped) {
+      const give = Math.min(extra, Math.max(0, r[i].cap! - out[i]));
+      out[i] += give;
+      extra -= give;
+    }
+    const open = sinks.filter((i) => r[i].cap === undefined);
     // 1. the Core grows first
-    if (growers.length) extra = fill(growers, extra);
-    if (extra > 0 && sinks.length) {
+    if (extra > 0 && growers.length) extra = fill(growers, extra);
+    if (extra > 0 && open.length) {
       // 2. a gap under SOFT_GAP is absorbed by the rooms when every sink is soft; otherwise it stays Flex
       if (sinks.every((i) => r[i].soft) && extra < SOFT_GAP) extra = fill(rooms, extra);
-      const each = snap(extra / sinks.length);
-      sinks.forEach((i, j) => {
-        const give = j === sinks.length - 1 ? extra : Math.min(each, extra);
+      const each = snap(extra / open.length);
+      open.forEach((i, j) => {
+        const give = j === open.length - 1 ? extra : Math.min(each, extra);
         out[i] += give;
         extra -= give;
       });
@@ -286,8 +295,16 @@ export function allocate(n: Node, rect: Rect, ctx: Ctx, anchor: Anchor): void {
     case 'room': {
       const f = fitRoom(n.spec, rect.w, n.areaMax);
       if (!f) throw new Fail(`${n.name} is too narrow for its column`);
-      const w = clip(rect.w, f.wr.max, f.wr.min);
-      const h = clip(rect.h, f.dr.max, f.dr.min);
+      // round 10a: a filling room takes the cell width up to its zone allowance; the clip leaves 1000 mm of Flex
+      // beside it, never a sliver, and only a lane wider than the cap leaves anything over. Filling makes the width
+      // the long side, so the SHORT side is then the depth and the short-side allowance caps that (round 10a). A room
+      // in a lane narrower than the cap takes the whole lane, its width stays the short side and its depth is free.
+      const free = (): number => clip(rect.h, f.dr.max, f.dr.min);
+      const widthAt = (depth: number): number =>
+        n.fill ? fillWidth(f.wr, n.spec, rect.w, depth) : clip(rect.w, f.wr.max, f.wr.min);
+      let h = n.fill ? clip(rect.h, Math.min(f.dr.max, fillSideMax(n.spec)), f.dr.min) : free();
+      if (n.fill && widthAt(h) < h) h = free();
+      const w = widthAt(h);
       if (h < f.dr.min) throw new Fail(`${n.name} is too shallow for its cell`);
       place(ctx, n.name, n.spec.kind, rect, w, h, anchor, n.spec.key);
       return;
@@ -305,7 +322,7 @@ export function allocate(n: Node, rect: Rect, ctx: Ctx, anchor: Anchor): void {
       return;
     }
     case 'stack': {
-      const w = Math.min(n.content ?? n.w ?? rect.w, rect.w);
+      const w = Math.min(n.w ?? rect.w, rect.w);
       const x0 = n.anchor === 'l' || w === rect.w ? rect.x : rect.x + rect.w - w;
       const lens = n.kids.map((c) => dd(c, w));
       const out = distribute(rect.h, lens);
@@ -354,13 +371,12 @@ function place(ctx: Ctx, name: string, kind: ZoneKind, cell: Rect, w: number, h:
 export const room = (name: string, spec: RoomSpec): RoomLeaf => ({ t: 'room', name, spec });
 export const fixed = (kind: ZoneKind, name: string, w: number, d: number): FixedLeaf => ({ t: 'fixed', kind, name, w, d });
 export const sinkFlex = (wMin = 1200, dMin = 0, soft = false): FlexLeaf => ({ t: 'flex', wMin, dMin, sink: true, soft });
-export const stack = (label: string, kids: Node[], anchor: Anchor, w?: number, sink?: boolean, content?: number): Stack => ({
+export const stack = (label: string, kids: Node[], anchor: Anchor, w?: number, sink?: boolean): Stack => ({
   t: 'stack',
   label,
   kids,
   anchor,
   w,
   sink,
-  content,
 });
 export const row = (label: string, kids: Node[], anchor: Anchor, sink?: boolean): Row => ({ t: 'row', label, kids, anchor, sink });

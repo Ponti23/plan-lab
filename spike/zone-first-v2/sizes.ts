@@ -23,6 +23,12 @@ export interface RoomSpec {
   prefArea: number;
   /** the width range used when the room sits in a row (rear row), when it differs from the short side */
   rowW?: Rng;
+  /**
+   * Round 10b: the preferred depth (short side) to use instead of the area-preserving one, where the layout picks the
+   * room's preferred depth. `fitRoom` clamps it by the orientation's own min / max, so caps and the catalogue range
+   * still hold.
+   */
+  prefDepth?: number;
 }
 
 export const SPINE_W = 1200;
@@ -39,6 +45,23 @@ export const ZONE_ALLOWANCE = {
   garageDepthMax: 8000,
 } as const;
 
+/**
+ * Provisional, round 10, from zf-17's 5.4 m: the deepest single Flex · living band between the Core and the rear wall
+ * when the Core takes the lower position (round 10b).
+ */
+export const LIVING_REAR_MAX_DEPTH = 5400;
+
+/**
+ * Provisional, round 10, user zf-17 zoning: the depth (short side) the user's own plan draws. All three are clamped by
+ * `fitRoom` to the room's own min / max side, so the wet block and the laundry - both below their minimum side (2000 /
+ * 1800) - come out at exactly that minimum (shallower than the area-preserving depth of a lane-wide room, 2100 for a
+ * 4800 mm wide wet block), and only the bedroom's 3400 lands inside its own range. Measured, the two small ones are not
+ * inert either: zf-07 has 1666 valid candidates with all three against 1694 with the bedroom preference alone.
+ */
+export const BED_PREF_DEPTH = 3400;
+export const WET_PREF_DEPTH = 1900;
+export const LAUNDRY_PREF_DEPTH = 1600;
+
 /** Round 9, provisional and user-approved for this round; calibrate against architect-reviewed plans. */
 export const FLEX_SPLIT_MAX_LONG = 5400;
 export const FLEX_SPLIT_ROOM_MIN_SIDE = 2700;
@@ -48,6 +71,8 @@ export const FLEX_SPLIT_CIRC_MIN_RATIO = 2;
 
 const rng = (min: number, pref: number, max: number): Rng => ({ min, pref, max });
 const r100 = (v: number): number => Math.round(v / 100) * 100;
+/** a cap is rounded DOWN, so it can never sit a millimetre past the allowance it stands for */
+const f100 = (v: number): number => Math.floor(v / 100) * 100;
 
 type Row = (typeof CATALOG)[keyof typeof CATALOG];
 const fromRow = (key: string, kind: ZoneKind, c: Row): RoomSpec => ({
@@ -58,8 +83,34 @@ const fromRow = (key: string, kind: ZoneKind, c: Row): RoomSpec => ({
   prefArea: c.pref[0] * c.pref[1],
 });
 
+/**
+ * Round 10a (provisional, round 10, user zf-17 review): a room in a stack lane - and a rear-row cell - takes the
+ * whole column width up to its zone allowance, so Flex is only what is left of a lane wider than the cap. The user
+ * draws their zoning the same way round (round 9 rooms sat at their catalogue width with Flex beside them).
+ */
+export const fillWidthCap = (spec: RoomSpec): number => f100(ZONE_ALLOWANCE.sideFactor * spec.l.max);
+/** The same rule once the cell's depth `h` is known: the long-side allowance and the area allowance, whichever binds. */
+export const fillWidthMax = (spec: RoomSpec, h: number): number =>
+  f100(Math.min(ZONE_ALLOWANCE.sideFactor * spec.l.max, (ZONE_ALLOWANCE.areaFactor * spec.s.max * spec.l.max) / h));
+/** Filling a lane makes the width the room's long side, so the short-side allowance is what caps its depth. */
+export const fillSideMax = (spec: RoomSpec): number => f100(ZONE_ALLOWANCE.sideFactor * spec.s.max);
+
+/**
+ * Provisional, round 10, user zf-17 review: the width a filling room takes of its cell. The Flex left beside a capped
+ * room in a lane is a whole SLIVER_MIN_SIDE, so two rooms of one lane can never leave a strip under SLIVER_MIN_SIDE
+ * between them: their leftovers differ by 0 or by 1000 mm or more (a 4600 Bath beside a 4500 Laundry left a 100 mm dead
+ * strip before this, round 10a).
+ */
+export const fillWidth = (wr: Rng, spec: RoomSpec, cellW: number, h: number): number => {
+  const cap = Math.max(wr.min, fillWidthMax(spec, h));
+  if (cellW <= cap) return cellW;
+  const left = Math.ceil((cellW - cap) / SLIVER_MIN_SIDE) * SLIVER_MIN_SIDE;
+  return Math.max(wr.min, cellW - left);
+};
+
 const bed = fromRow('bed', 'bedroom', CATALOG.Bedroom);
-bed.rowW = rng(bed.s.min, bed.l.pref, bed.s.max); // v1: a bedroom in a row is its long preferred side wide
+bed.rowW = rng(bed.s.min, fillWidthCap(bed), fillWidthCap(bed)); // round 10a: a rear-row bedroom shares the row width
+bed.prefDepth = BED_PREF_DEPTH; // round 10b: the user's 5.2 x 3.4 bedrooms, not the area-preserving 2700 depth
 
 const M = CATALOG.Master;
 const E = CATALOG.Ensuite;
@@ -142,6 +193,12 @@ export const SPECS: Record<string, RoomSpec> = {
   coreKL,
 };
 
+// round 10b, provisional, user zf-17 zoning: the wet block and the laundry ask for the user's depth, and both ask for
+// less than their own minimum side (2000 / 1800), so `dPref` clamps them up to it - the user's depth as far as the
+// catalogue allows, and no further (see the constants above)
+SPECS.wet.prefDepth = WET_PREF_DEPTH;
+SPECS.laundry.prefDepth = LAUNDRY_PREF_DEPTH;
+
 export const CORE_AREA_MIN = FC.min[0] * FC.min[1];
 export const CORE_AREA_MAX = FC.max[0] * FC.max[1];
 
@@ -197,7 +254,8 @@ export interface Fit {
 /**
  * Pick the orientation for a room given the width its column offers. Preference: a way round where the
  * width is inside the range (no clipping), short-side-wide first; otherwise one that at least reaches the
- * minimum. The preferred depth keeps the preferred area (v1: a 3400 wide bedroom is 3000 deep).
+ * minimum. The preferred depth keeps the preferred area (v1: a 3400 wide bedroom is 3000 deep), unless the
+ * spec names a preferred depth (round 10b: the user's 5.2 x 3.4 bedrooms).
  */
 export function fitRoom(spec: RoomSpec, w: number, areaMax?: number): Fit | null {
   const A = { wr: spec.s, dr: spec.l };
@@ -211,7 +269,7 @@ export function fitRoom(spec: RoomSpec, w: number, areaMax?: number): Fit | null
   const wEff = Math.min(w, o.wr.max);
   // a split Core part is also capped by area, so the two parts together stay inside the FamilyCore range
   const dMax = areaMax === undefined ? o.dr.max : Math.max(o.dr.min, Math.min(o.dr.max, Math.floor(areaMax / wEff / 100) * 100));
-  const dPref = Math.max(o.dr.min, Math.min(dMax, r100(spec.prefArea / wEff)));
+  const dPref = Math.max(o.dr.min, Math.min(dMax, spec.prefDepth ?? r100(spec.prefArea / wEff)));
   return { wr: o.wr, dr: { min: o.dr.min, pref: dPref, max: dMax }, dPref };
 }
 

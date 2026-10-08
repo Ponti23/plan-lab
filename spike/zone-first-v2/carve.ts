@@ -60,6 +60,8 @@ export interface CarveResult {
 
 /** Round 9: the default split pass rejects an existing sliver rather than carrying it into the zoning. */
 export const SPLIT_SLIVER_FAILURE = 'split pass: Flex has a side under 1000 mm';
+/** Round 10b: the split is refused when the pieces it leaves strand a room (see `splitCandidate`). */
+export const SPLIT_UNREACHABLE_FAILURE = 'split pass: the split leaves a room unreachable';
 
 const splitClass = (r: Rect): FlexClass => {
   const short = Math.min(r.w, r.h);
@@ -261,10 +263,22 @@ function withFlex(c: Candidate, zones: ZoneRec[], flex: FlexPiece[], notes: stri
   };
 }
 
-/** Default round-9 pass, after growth and R14: split and relabel Flex without inventing a named room. */
-export function splitCandidate(c: Candidate): Candidate | null {
+export type SplitResult = { ok: true; candidate: Candidate } | { ok: false; reason: string };
+
+/**
+ * Default round-9 pass, after growth and R14: split and relabel Flex without inventing a named room.
+ *
+ * Round 10b: the pass never strands a room either. `splitFlex` cuts each piece on its own grid, and the cut can shrink
+ * a Flex pocket's only walk-through contact under MIN_EDGE: SAMPLE-15x27 has a WC behind a 1000 x 1000 pocket, and the
+ * whole piece beside that pocket touches it over 1000 mm while the parts beside it touch it over 533. A split that
+ * breaks connectivity fails the option, as a cut that would leave a sliver does - 2 of 25742 candidates, the deeper
+ * bedrooms (BED_PREF_DEPTH) being what moved the geometry onto them.
+ */
+export function splitCandidate(c: Candidate): SplitResult {
   const flex = splitFlex(c.flex);
-  return flex ? withFlex(c, c.zones, flex, c.notes) : null;
+  if (!flex) return { ok: false, reason: SPLIT_SLIVER_FAILURE };
+  if (!checkConnectivity({ zones: c.zones, spine: c.spine, flex }).ok) return { ok: false, reason: SPLIT_UNREACHABLE_FAILURE };
+  return { ok: true, candidate: withFlex(c, c.zones, flex, c.notes) };
 }
 
 /**

@@ -12,9 +12,9 @@
 //       R lane   x [gw + 1200, W]     stack: ... rooms, front cells
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
-import { computeFlex, overlap, sharedEdge } from '../zone-first/flex.ts';
+import { classifyPiece, computeFlex, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { checkConnectivity } from './connect.ts';
-import { CANDIDATE_ADJ, coreRectsOf, flexAreaOf, markLiving, metricsOf } from './quality.ts';
+import { CANDIDATE_ADJ, coreRectsOf, flexAreaOf, LIVING_MIN_EDGE, markLiving, metricsOf } from './quality.ts';
 import {
   allocate,
   Fail,
@@ -29,7 +29,6 @@ import {
   type RoomLeaf,
   type Stack,
   type StripLeaf,
-  minWidth,
 } from './layout.ts';
 import {
   CORE_AREA_MAX,
@@ -38,6 +37,7 @@ import {
   FLEXWALL_MAX_W,
   FLEXWALL_W,
   garageSize,
+  LIVING_REAR_MAX_DEPTH,
   MIN_SHARED_CORE_EDGE,
   SPECS,
   SPINE_W,
@@ -63,6 +63,12 @@ export { SPINE_W };
 
 const R = (x: number, y: number, w: number, h: number): Rect => ({ x, y, w, h });
 
+/**
+ * Round 10b: the depth of the rear-row Flex cell (round 9) the lower Core takes over — the band is never shallower
+ * than the strip it replaces, so the Core never sits higher than it does without the option.
+ */
+export const REAR_STRIP_D = 2400;
+
 // ------------------------------------------------------------------ options
 
 export const optionId = (o: Options): string =>
@@ -75,6 +81,8 @@ export const optionId = (o: Options): string =>
     `rr:${o.rearPlan.join('') || '-'}`,
     o.flexWall ? 'fw' : 'nofw',
     `v${o.variant}`,
+    // round 10b: only present when the option is used, so every other id is unchanged
+    ...(o.coreLower ? ['core-low'] : []),
   ].join('|');
 
 const REAR_BASES: RearPlan[] = [
@@ -167,9 +175,19 @@ export function enumerateOptions(brief: Brief): Options[] {
                 ) {
                   variants.push(4);
                 }
+                // round 10b: the Core one band lower, its lane keeping one living band at the rear wall. Only the
+                // bedroom-column shape takes the bit (three lane bedrooms, a front Master, a Flex rear row and a Core
+                // lane of its own): 256 more options for a 4-bed brief, 5568 -> 5824, under the 6000 budget. `coreLane
+                // W` has no Core lane of its own (the Core spans both), so it is left out.
+                const coreLower =
+                  nBeds === 3 &&
+                  masterPos === 'front' &&
+                  rearPlan.length === 1 &&
+                  rearPlan[0] === 'F' &&
+                  (coreLane === 'G' || coreLane === 'R');
                 for (const variant of variants) {
                   for (const wetForm of ['block', 'split'] as const) {
-                    out.push({
+                    const option: Options = {
                       garageSide,
                       corePos: 'middle',
                       coreForm,
@@ -180,7 +198,9 @@ export function enumerateOptions(brief: Brief): Options[] {
                       flexWall,
                       coreLane,
                       variant,
-                    });
+                    };
+                    out.push(option);
+                    if (coreLower) out.push({ ...option, coreLower: true });
                   }
                 }
               }
@@ -205,24 +225,49 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
   }
   if (wr < SPECS.wet.s.min) throw new Fail('the lane beyond the spine is too narrow for the wet block');
 
+  // round 10b: the lower Core needs a lane of its own to sit in (so the band behind it is in that lane)
+  if (o.coreLower && (o.corePos !== 'middle' || (o.coreLane !== 'G' && o.coreLane !== 'R'))) {
+    throw new Fail('the lower Core needs its own lane');
+  }
+  if (o.coreLower && narrow) throw new Fail('the lane is too narrow for the lower Core');
+
   const nBeds = brief.bedrooms - 1;
-  const rearBeds = o.corePos === 'middle' ? o.rearPlan.filter((t) => t === 'B').length : 0;
+  const rearBeds = o.corePos === 'middle' && !o.coreLower ? o.rearPlan.filter((t) => t === 'B').length : 0;
   const stackBeds = nBeds - rearBeds;
   if (stackBeds < 0) throw new Fail('more rear-row bedrooms than the brief has');
   if (narrow && stackBeds > 0) throw new Fail('the lane beyond the spine is too narrow for a bedroom');
 
+  // Lane widths depend only on the brief and the Core lane, so a room block can be told the width it fills (round 10a).
+  // A Core lane is as wide as the Core can use (its max long side); the stack lane keeps at least a bedroom's width.
+  const base = gs.w + SPINE_W;
+  let gwMid = base;
+  if (o.coreLane === 'G') {
+    gwMid = Math.max(base, Math.min(SPECS.core.l.max, W - SPECS.bed.s.max));
+    if (gwMid - base < 1200) gwMid = base;
+  }
+  const wrMid = W - gwMid;
+  /** width of the stack lane: the lane the bedroom / wet / laundry column sits in (the Core lane is the other one) */
+  const stackLaneW = (): number => (o.corePos === 'rear' ? wr : o.coreLane === 'R' ? gs.w : wrMid);
+
   let bedN = 1;
-  const newBed = (): Node => room(`Bed ${++bedN}`, SPECS.bed);
+  /** round 10a: a room that takes the whole width of the lane / rear-row cell it sits in (the user's zoning) */
+  const filling = (n: RoomLeaf): RoomLeaf => ({ ...n, fill: true });
+  const newBed = (): Node => filling(room(`Bed ${++bedN}`, SPECS.bed));
   /** Flex in a lane: soft, so a gap under 2400 is absorbed by the rooms and a bigger one stays Flex */
   const F = (): Node => sinkFlex(1200, 0, true);
+  /**
+   * Round 10b: the living band behind the lower Core. A capped sink, so it takes the lane's spare up to
+   * LIVING_REAR_MAX_DEPTH before the Core grows into its own allowance; what is left of that spare still reaches Flex.
+   */
+  const lowerBand = (): Node => ({ t: 'flex', wMin: 1200, dMin: REAR_STRIP_D, sink: true, capD: LIVING_REAR_MAX_DEPTH });
   const grown = (n: RoomLeaf, areaMax?: number): RoomLeaf => ({ ...n, grow: true, areaMax });
 
   const masterNode = (where: 'G' | 'R' | 'rear'): Node =>
     o.masterForm === 'block'
-      ? room('Master', SPECS.masterBlock)
+      ? filling(room('Master', SPECS.masterBlock))
       : where === 'R'
-        ? row('Master', [room('Ensuite', SPECS.ensuite), room('Master + WIR', SPECS.masterWir)], 'r')
-        : row('Master', [room('Master + WIR', SPECS.masterWir), room('Ensuite', SPECS.ensuite)], 'l');
+        ? row('Master', [filling(room('Ensuite', SPECS.ensuite)), filling(room('Master + WIR', SPECS.masterWir))], 'r')
+        : row('Master', [filling(room('Master + WIR', SPECS.masterWir)), filling(room('Ensuite', SPECS.ensuite))], 'l');
 
   /** R11: the Core grows first. A split Core: the dining part keeps its size, kitchen + living grows. */
   const coreNodes = (): Node[] =>
@@ -231,14 +276,16 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
       : [room('Core · dining', SPECS.coreDining), grown(room('Core · kitchen + living', SPECS.coreKL), CORE_KL_AREA_MAX)];
 
   // ---- top
-  let top: Node;
+  // Round 10b: with the lower Core there is no rear row at all — the Core's lane runs the full envelope depth and takes
+  // the living band at its rear, so the whole root is the body row.
+  let top: Node | null = null;
   if (o.corePos === 'rear') {
     top = grown(room('Core', SPECS.core));
-  } else {
+  } else if (!o.coreLower) {
     if (!o.rearPlan.length) throw new Fail('no rear row');
     const cells = o.rearPlan.map((t) => {
       if (t === 'B') return newBed();
-      if (t === 'F') return sinkFlex(1200, 2400);
+      if (t === 'F') return sinkFlex(1200, REAR_STRIP_D);
       return masterNode('rear');
     });
     top = row('rear row', cells, 'l');
@@ -247,8 +294,10 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
   // ---- lanes
   /** the wet cells: one Bath + WC block, or a separate WC above a Bath (the WC within one cell of the Bath) */
   const wetCells = (): Node[] =>
-    o.wetForm === 'split' ? [room('WC', SPECS.wc), room('Bath', SPECS.bath)] : [room('Bath + WC', SPECS.wet)];
-  const lnd = (): Node => room('Laundry', SPECS.laundry);
+    o.wetForm === 'split'
+      ? [filling(room('WC', SPECS.wc)), filling(room('Bath', SPECS.bath))]
+      : [filling(room('Bath + WC', SPECS.wet))];
+  const lnd = (): Node => filling(room('Laundry', SPECS.laundry));
   const garage = fixed('garage', 'Garage', gs.w, gs.d);
   const flexwallStrip = (): StripLeaf => ({
     t: 'strip',
@@ -263,10 +312,11 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
    * The wet block (+ laundry) as one cell. With the flex-wall option it gets a flex-wall strip beside it, on
    * the lane's inner side, exactly as deep as the cluster: it serves those rooms and no others.
    */
-  const cluster = (items: Node[], lane: 'G' | 'R'): Node => {
-    const rooms = stack('wet cluster', items, lane === 'G' ? 'l' : 'r');
-    if (!o.flexWall || narrow) return rooms;
-    (rooms as Stack).noStretch = true;
+  const cluster = (items: Node[], lane: 'G' | 'R', laneW: number): Node => {
+    const wall = o.flexWall && !narrow ? FLEXWALL_W : 0;
+    // round 10a: the rooms take the lane width less the hall strip (which keeps its own 1000-1200 mm)
+    const rooms = stack('wet cluster', items, lane === 'G' ? 'l' : 'r', laneW - wall);
+    if (!wall) return rooms;
     return lane === 'G'
       ? row('wet cluster + flex-wall', [rooms, flexwallStrip()], 'l')
       : row('wet cluster + flex-wall', [flexwallStrip(), rooms], 'r');
@@ -283,7 +333,7 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
     const beds = Array.from({ length: stackBeds }, newBed);
     const lndInG = (o.variant & 1) === 1;
     const shortSpine = o.variant >= 2;
-    const rStack: Node[] = [cluster([...wetCells(), ...(lndInG ? [] : [lnd()])], 'R'), ...beds, F()];
+    const rStack: Node[] = [cluster([...wetCells(), ...(lndInG ? [] : [lnd()])], 'R', wr), ...beds, F()];
     if (o.masterPos === 'front') rStack.push(masterNode('R'));
     rKids = rStack;
     gKids = shortSpine
@@ -299,7 +349,7 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
     const laneMaster = o.masterPos === 'middle' && !masterInGcol && !narrow ? masterNode(stackLane) : null;
     const mid: Node[] = [...midBeds, ...(laneMaster ? [laneMaster] : [])];
     const front: Node[] = frontMasterInStack ? [masterNode('R')] : [];
-    const wl = (): Node => cluster([...wetCells(), lnd()], stackLane);
+    const wl = (): Node => cluster([...wetCells(), lnd()], stackLane, stackLaneW());
     // (a) the lane bedroom right after the laundry, Flex toward the front; (b) one Flex cell between them
     // round 4: with the flex-wall option the hall is a placed sideways flex-wall (1000 deep) branching off the vertical
     // flex-wall / Core; without it, plain Flex
@@ -338,6 +388,8 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
       rKids = st;
     } else {
       const coreList: Node[] = narrow ? [hallNode(), masterNode('G'), ...coreNodes(), F()] : [...coreNodes(), F()];
+      // round 10b: the band opens the Core's lane at the rear wall, pushing the Core one band toward the front
+      if (o.coreLower) coreList.unshift(lowerBand());
       if (o.coreLane === 'R') {
         // the front corner beside the spine: the Master, or a room-sized Flex
         rFront = o.masterPos === 'front' ? masterNode('R') : sinkFlex(1200, 0);
@@ -352,60 +404,49 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
     }
   }
 
-  // a stack lane keeps its rooms at most as wide as a bedroom can be (the rest is a Flex hall on the inner
-  // side, never under 1000 mm); the Core lane takes the whole lane
-  const roomWidth = (lane: number, kids: Node[]): number => {
-    const cap = Math.max(SPECS.bed.s.max, ...kids.map(minWidth));
-    return lane <= cap ? lane : lane - cap < SLIVER_MIN_SIDE ? lane : cap;
-  };
+  // Round 10a: a stack lane hands its rooms the whole lane width; a room takes what its zone allowance permits and
+  // the rest of that row stays Flex (the fill happens in allocate, and a clip never leaves a strip under 1000 mm).
   const spineFixed: StripLeaf = { t: 'strip', kind: 'spine', name: 'Spine', wMin: SPINE_W, wMax: SPINE_W, dMin: gs.d, d: gs.d };
 
   let body: Node;
   if (o.corePos === 'rear' && o.variant >= 2) {
     // the spine stops at the first walk-through Flex above the garage band, not at the Core
-    const gw = gs.w + SPINE_W;
-    const gCol = stack('G lane', [stack('G rooms', gKids, 'l', undefined, true, gw), row('front band', [garage, spineFixed], 'l')], 'l', gw);
-    body = row('body', [gCol, stack('R lane', rKids, 'r', wr, undefined, roomWidth(wr, rKids))], 'l', true);
+    const gCol = stack('G lane', [stack('G rooms', gKids, 'l', undefined, true), row('front band', [garage, spineFixed], 'l')], 'l', base);
+    body = row('body', [gCol, stack('R lane', rKids, 'r', wr)], 'l', true);
   } else if (o.corePos === 'rear') {
-    const gLane = stack('G lane', [stack('G rooms', gKids, 'l', undefined, true, roomWidth(gs.w, gKids)), garage], 'l', gs.w);
-    const rLane = stack('R lane', rKids, 'r', wr, undefined, roomWidth(wr, rKids));
+    const gLane = stack('G lane', [stack('G rooms', gKids, 'l', undefined, true), garage], 'l', gs.w);
+    const rLane = stack('R lane', rKids, 'r', wr);
     const spineSink: StripLeaf = { t: 'strip', kind: 'spine', name: 'Spine', wMin: SPINE_W, wMax: SPINE_W, dMin: 1200, sink: true };
     body = row('body', [gLane, stack('S lane', [spineSink], 'l', SPINE_W), rLane], 'l', true);
   } else if (o.coreLane === 'G' || o.coreLane === 'W') {
     // the left column (G) takes the strip above the spine: the spine ends at the Core or its Flex
-    // the Core lane (G) is as wide as the Core can use (its max long side) while the stack lane keeps a bedroom's width;
     // the front band then also holds a room-sized Flex beside the spine
-    const base = gs.w + SPINE_W;
-    let gw = base;
-    if (o.coreLane === 'G') {
-      gw = Math.max(base, Math.min(SPECS.core.l.max, W - SPECS.bed.s.max));
-      if (gw - base < 1200) gw = base;
-    }
-    const wr2 = W - gw;
-    if (wr2 < SPECS.wet.s.min) throw new Fail('the lane beyond the spine is too narrow for the wet block');
+    if (wrMid < SPECS.wet.s.min) throw new Fail('the lane beyond the spine is too narrow for the wet block');
     const gCol = stack(
       'G lane',
       [
-        stack('G rooms', gKids, 'l', undefined, true, gw),
-        row('front band', gw > base ? [garage, spineFixed, sinkFlex(1200, 0)] : [garage, spineFixed], 'l'),
+        stack('G rooms', gKids, 'l', undefined, true),
+        row('front band', gwMid > base ? [garage, spineFixed, sinkFlex(1200, 0)] : [garage, spineFixed], 'l'),
       ],
       'l',
-      gw,
+      gwMid,
     );
-    const rLane = stack('R lane', rKids, 'r', wr2, undefined, roomWidth(wr2, rKids));
+    const rLane = stack('R lane', rKids, 'r', wrMid);
     body = row('body', [gCol, rLane], 'l', true);
   } else {
     // the Core lane (R) takes the strip above the spine; the front corner is a Master or room-sized Flex
     const rw = wr + SPINE_W;
-    const gLane = stack('G lane', [stack('G rooms', gKids, 'l', undefined, true, roomWidth(gs.w, gKids)), garage], 'l', gs.w);
+    const gLane = stack('G lane', [stack('G rooms', gKids, 'l', undefined, true), garage], 'l', gs.w);
     const rCol = stack(
       'R lane',
-      [stack('R rooms', rKids, 'r', undefined, true, rw), row('front band', [spineFixed, rFront!], 'r')],
+      [stack('R rooms', rKids, 'r', undefined, true), row('front band', [spineFixed, rFront!], 'r')],
       'r',
       rw,
     );
     body = row('body', [gLane, rCol], 'l', true);
   }
+  // round 10b: without a rear row the body row is the whole house, so it is the root
+  if (!top) return body;
   return coreSection ? stack('house', [top, coreSection, body], 'l') : stack('house', [top, body], 'l');
 }
 
@@ -671,7 +712,14 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
     // a Core block clipped to its max: fine; below min is caught by the catalogue check
   }
 
-  const flex = computeFlex(env, all.map((z) => z.rect));
+  // round 10b: with the Core lower, the band behind it is the one flex cell at the rear wall that shares an edge with
+  // the Core - its own lane's. It is held out of the free-space decomposition as an obstacle and put back as a single
+  // piece: the decomposition would otherwise run a strip along the rear wall through it (to reach a Wet cell behind the
+  // Core), cutting the band in two. The other lane's rear Flex cell (the wet lane's spare) is not a band.
+  const bands = options.coreLower ? flexCells.filter((c) => c.y === 0 && cores.some((z) => sharedEdge(c, z.rect) >= LIVING_MIN_EDGE)) : [];
+  const flex: FlexPiece[] = [...bands.map((r) => ({ id: '', rect: r, cls: classifyPiece(r) })), ...computeFlex(env, [...all.map((z) => z.rect), ...bands])]
+    .sort((a, b) => a.rect.y - b.rect.y || a.rect.x - b.rect.x || a.rect.w - b.rect.w || a.rect.h - b.rect.h)
+    .map((p, i) => ({ ...p, id: `flex-${i + 1}` }));
 
   // flex-walls must touch the spine, the Core or another flex-wall, and serve a room
   const walls = zones.filter((z) => z.kind === 'flexwall');
@@ -706,6 +754,8 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   // first and fills after, so the share the grow pass works against is measured on `living` - the Flex still there
   // before R14 touches it (see flexShareBeforeFill).
   const legacy = findLineExtensions(env, zones, spineRec, flex, flexCells);
+  // round 10b: the band is the Core's own lane cell at the rear wall, held out of the decomposition and re-added whole,
+  // so it is rear-wall Flex and `markLiving` marks it, unsplit, as living like any other rear-wall piece.
   const living = markLiving(legacy.rest, coreRectsOf(zones), CANDIDATE_ADJ.tol);
   const filled = findExtensions(zones, spineRec, living, flexCells);
   const extensions = [...legacy.extensions, ...filled.extensions].map((e, i) => ({ ...e, id: `ext-${i + 1}` }));

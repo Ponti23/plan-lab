@@ -2,7 +2,7 @@
 // diverse top 5 -> blind test and closeness against the user's own zoning (diagnostics) -> target check (regression).
 // Pure (no file output) so run.ts and the tests share it.
 
-import { carveCandidate, SPLIT_SLIVER_FAILURE, splitCandidate } from './carve.ts';
+import { carveCandidate, splitCandidate } from './carve.ts';
 import { goldenById, goldenRects, profileFor, type GoldenPlan } from './golden.ts';
 import { closeness, groupedRects, sameKindOverlap, scoreOf, type Group, type Metrics, type Profile } from './quality.ts';
 import { enumerateOptions, generate, mismatches, optionAimsAt } from './zones.ts';
@@ -106,8 +106,8 @@ export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; car
     else if (opts.split === false) valid.push(res.candidate);
     else {
       const split = splitCandidate(res.candidate);
-      if (split) valid.push(split);
-      else failed(o, SPLIT_SLIVER_FAILURE);
+      if (split.ok) valid.push(split.candidate);
+      else failed(o, split.reason);
     }
   }
 

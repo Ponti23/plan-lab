@@ -109,7 +109,9 @@ and ends against the Core or room-sized Flex. It is never carried on by a hall.
   candidate's `notes`.
 - A stack lane keeps its rooms no wider than a bedroom can be (the Bedroom max, 4000), unless a room's own
   minimum is wider. The rest of the lane is a Flex hall on the inner side. This is what makes the strips
-  between the rooms and the spine clean rectangles instead of ragged slivers.
+  between the rooms and the spine clean rectangles instead of ragged slivers. **Round 10a**: a lane room now fills
+  the lane width up to its zone allowance cap instead (5200 for a bedroom) and the leftover, if any, is Flex —
+  see Round 10a below.
 - Garage: double 5500 wide, single 3500 wide; both start 6000 deep and may grow to 8000. Spine 1200 wide.
   Flex-wall 1000-1200 wide.
 - Room specs not in v1 (all derived from CATALOG, see `sizes.ts`): the **Master block** uses v1's formula
@@ -226,10 +228,12 @@ area that a candidate covers with the same kind group.
 
 ## Results (this run)
 
-Round 9, the default run (split pass on, no carve): zf-00 2838/5568, zf-01 348/1472, zf-03 908/5568, zf-04 2828/5568,
-zf-05 1626/5568, zf-07 1112/5568, zf-08 2288/5568, SAMPLE-15x27 3184/5568, custom-8800x20550 40/48, zf-17 3114/5568.
-Whole run 18286/46064 valid, about 7.6 s (validity is decided before the split pass, so these counts include the
-candidates the split pass rejects). The option budget itself grew from 5504 to 5568 with the round 9 variant 4.
+Round 10a, the default run (split pass on, no carve): zf-00 3156/5568, zf-01 340/1472, zf-03 1012/5568, zf-04 3150/5568,
+zf-05 1648/5568, zf-07 1526/5568, zf-08 3078/5568, SAMPLE-15x27 4000/5568, custom-8800x20550 40/48, zf-17 3796/5568.
+Whole run 21746/46064 valid, about 6.1 s (validity is decided before the split pass, so these counts include the
+candidates the split pass rejects). The option budget is unchanged from round 9 (5568 for a 4-bed brief, 1472 for zf-01,
+48 for the 8.8 m lot). The valid counts rose because the lane fill leaves whole 1000 mm strips instead of the sub-1000 mm
+Flex remains the split pass was rejecting (see Round 10a).
 
 ### Carve pass: big Flex becomes named rooms (round 5, user decision 2026-10-07; **off by default since round 8b**)
 
@@ -635,6 +639,194 @@ L9.6. **The Master buffer is a default with a guard**, not a hard rule: the fall
 L9.7. **The review sets are regenerated** (`out-small` 2752/23488, `out-medium` 7898/27776, `out-large` 13608/27712).
    `small/S-03` still shows five plans rather than six (L8b.5), now 298 valid / 202 distinct where round 8b had 302 / 206
    — the split pass's rejections and the Master buffer, not a retune.
+
+## Round 10a: a room fills its column; Flex is only what is left (user decision 2026-10-08)
+
+Brief: `knowledge/briefs/zf-v2-round10a-room-fill-brief.md`. The user's review of round 9: *"the rooms look SO small while we
+have so much Flex"*. In their own Botanica 36 zoning (zf-17) Bed 2 and Bed 3 are 5.2 x 3.4 m, Bath + WC 5.2 x 1.9, Laundry
+6.5 x 1.6 and the Master 6.5 x 8.4: **each room takes the full width of the lane it sits in**, and Flex is only what is
+left of the lane. Round 9 did it the other way round — rooms sat at their catalogue width with the Flex beside them (zf-17
+top 1: Bed 2/Bed 3 at 3.4 x 3.0 m inside 29 % hatched Flex). Three changes; the user liked the round 9 variant 4 bedroom
+column, so it had to keep working (it does: 409th of 3796 instead of 1663rd of 3114).
+
+1. **A lane room fills its lane.** A room that sits in a lane (a stack with a fixed width) or in a rear-row cell is marked
+   `fill: true` (`zones.ts`); `allocate` (`layout.ts`) then gives it the whole cell **width** up to its zone allowance cap
+   (`fillWidth`, `sizes.ts`). Only a lane wider than the cap leaves anything over, and the leftover beside a capped room is
+   a whole `SLIVER_MIN_SIDE` (1000 mm) — the clip rounds *up* to the next 1000, so two rooms of one lane leave either
+   nothing or >= 1000 mm between them (round 9 left a 100 mm dead strip where a 4600 Bath sat beside a 4500 Laundry). The
+   cap is `fillWidthCap = 1.3 x the long-side max`, refined to `fillWidthMax(spec, h) = min(1.3 x long max,
+   1.6 x s.max x l.max / h)` once the cell's depth is known (the side allowance and the area allowance, whichever binds);
+   caps round **down**. Filling makes the width the room's long side, so the **short**-side allowance is what caps its depth:
+   `fillSideMax = 1.3 x short max` (5200 mm for a bedroom). A rear-row bedroom shares the row width between the cells:
+   `bed.rowW` is min .. `fillWidthCap` instead of the catalogue short side. All three constants are
+   **provisional, round 10, user zf-17 review**.
+   - The **depth** rule is unchanged: catalogue preferred, then the grow pass. A bedroom in a packed lane is 5170 x 2700 mm
+     (13.96 m2) where round 9 gave it 4000 x 2700 (10.80 m2) — the user's 5.2 m width, the depth the cell has.
+2. **Growth in depth into Flex** already works: round 9's priority phase (`growPass`, `zones.ts`) takes a whole adjacent Flex
+   piece along the full shared edge, up to the zone cap. Round 10a needed **no change** there — where a lane room touches
+   Flex it grows (Bed 4 in the zf-17 top 1 is 5170 x 4890, 25.28 m2), and where the lane is packed there is nothing to grow
+   into. The two-phase order and the Flex ceiling are untouched.
+3. **Bedroom spread counts lane groups** (`quality.ts`). Rooms of one lane are one group: two zone rects are in the same
+   group when their x bands overlap by at least `LANE_OVERLAP_SHARE = 0.5` of the narrower one and no non-lane zone
+   (`LANE_KINDS`: bedroom, master, ensuite, wet, wc, laundry, flex-wall) crosses the column they share. The pair is
+   ordered rear/front by y and the strip between them read off; being y-disjoint is implied by the rects never
+   overlapping, not a separate check. The groups are closed with union-find. `spreadNorm` is null (the term drops out)
+   when a candidate has one group only — the
+   variant 4 bedroom column is one group, so it no longer reads as three rooms far apart. Bedrooms in different lanes, or in
+   the rear row, keep the round 4 measure. **No other weight changed**; `pieceDensity` stays 0.
+
+**Acceptance check (from the brief) — zf-17, before = HEAD `271e869` (round 9), after = this run:**
+
+| zf-17 | before | after |
+|---|---|---|
+| top-5 secondary-bedroom median area | 13.96 m2 | 14.04 m2 |
+| top-5 secondary-bedroom max area | 53.75 m2 | 25.28 m2 |
+| top-1 Flex share | 29.2 % | 26.4 % |
+| top-1 option | `L\|midR\|block\|m:front/split\|wet:split\|rr:BBF\|fw\|v0` | `L\|rear\|block\|m:middle/split\|wet:split\|rr:-\|fw\|v2` |
+| valid / distinct candidates | 3114 / 2704 | 3796 / 3334 |
+| best variant 4 (valid rank) | 1663 (`L\|midG\|split\|m:front/block\|...\|v4`) | 409 (`L\|midW\|block\|m:front/split\|wet:block\|rr:F\|nofw\|v4`) |
+| round 7 option `L\|midG\|split\|m:middle/block\|wet:block\|rr:FBFB\|fw\|v2` | rank 25, 29.7 % Flex | rank 658, 37.1 % Flex |
+
+The median is the median over the three secondary bedrooms (rect plus the extensions the room owns) of the five top plans;
+the max is the largest of the same 15 numbers.
+
+- **Every brief still has valid candidates and the option counts are unchanged** (5568 for the 4-bed briefs, 1472 for zf-01,
+  48 for the 8.8 m lot). Valid counts rose (zf-17 3114 -> 3796, SAMPLE-15x27 3184 -> 4000, zf-03 908 -> 1012) because the fill
+  removes the sub-1000 mm Flex remains: split-pass drops fell from 654 to 404 (zf-17), 796 to 358 (SAMPLE-15x27), 542 to 320
+  (zf-08), 380 to 262 (zf-00); zf-05 is the one brief that rose, 148 to 234. Across all ten briefs, before and after, **no**
+  valid candidate has a Flex piece with a side under 1000 mm (0 of 21746 after).
+- **Bedroom widths** move to the lane: median bedroom width in the zf-17 valid set is 4870 mm (10th percentile 4400) where
+  round 9's was 4870 / 3400 — the median was already carried by wide rear-row rooms, the floor moved from the catalogue
+  3400 mm to 4400 mm. All 56 valid variant 4 candidates have a bedroom wider than the catalogue long side (4000 mm).
+- **The round 7 option's rank falls 25 -> 658** and it is the known flip of this round: the fill widens its Master to
+  7170 x 4800 and its guest lane to 4870 wide rooms, and what is left along the lane is a **1000 x 12190 mm
+  `Flex · circulation`** strip, so `longestFlexRatio` goes 0.2517 -> 0.4957 and the score 27.71 -> 59.65. Its `m:front/block`
+  twin sits at rank 657. The user's own zoning has the same long thin lane, but there it is a hall the architect drew, not a
+  leftover; the strip is exactly what "fill the lanes first" leaves.
+- The other briefs (extra, not in the brief): zf-00 top-5 bedroom median 10.80 -> 14.04 m2 and top-1 Flex 22.9 % -> 18.3 %;
+  SAMPLE-15x27 median 16.64 -> 14.04 m2 and Flex 33.3 % -> 22.2 %; the zf-17 blind test passes with the best top-5 score
+  12.1 against the user's 27.31 (round 9: 22.50 against 27.97) — the top plans are further from the user's *score*, because
+  the zoning the user drew is not a "fill every lane" plan either.
+
+Judgement calls (all provisional, round 10a):
+
+L10a.1. **The leftover is a strip of Flex, not a wider room.** Where a lane is wider than the allowance cap the room stops at
+   the cap and the rest stays Flex; the cap is the user's calibration surface, not a target, so a wider lane does not grow a
+   wider room.
+L10a.2. **A clip never creates a sliver, but a too-deep cell can.** `fillWidth` rounds the leftover up to a whole 1000 mm;
+   the only way a room can leave a strip under 1000 mm is a cell so deep that the **area** allowance caps the room below the
+   short-side minimum, and such a candidate is dropped by the round 9 split pass rather than drawn (no valid candidate in the
+   default run has one).
+L10a.3. **The depth rule was not touched**, as the brief asked: the fill changes the width only. A filled bedroom is wide and
+   shallow (5170 x 2700) where round 9's was narrow and deep (3400 x 5200); the area is larger, the shape is the user's width
+   with the depth the cell holds.
+L10a.4. **The wet rooms fill too** — WC, Bath, Bath + WC, Laundry and the ensuite block all carry `fill: true`, so a lane-wide
+   wet column is what is left of the lane after its cap, not a narrow bathroom with Flex beside it.
+L10a.5. **The rear-row bedrooms share the row width** through `rowW` (min .. cap), so a rear row of two bedrooms splits its
+   width between them within the same caps instead of each sitting at the catalogue width.
+L10a.6. **One quality weight is tested, none changed**: the lane grouping only removes a spread term that round 4 never meant
+   to apply to a column of bedrooms, `pieceDensity` stays 0, and every other weight and band is round 9's.
+L10a.7. **Review sets regenerated** (`out-small` 2844/23488, `out-medium` 9082/27776, `out-large` 16386/27712; round 9 had
+   2752, 7898 and 13608 — the same split-pass effect as above, largest on the roomy lots). `small/S-03` still shows five
+   plans rather than six (L8b.5).
+L10a.8. **New test todo**: the zf-08 primary target no longer has a matching candidate — a 790 mm Flex notch appears beside
+   the Core in the `coreLane W` family once the rear-row bedrooms are 5200 wide, and the split pass drops those layouts. The
+   test records it as a todo with the exact option ids; the brief's alt target matches at rank 1917.
+
+## Round 10b: the Core drops a band, and the rear becomes one Flex · living (user decision 2026-10-09)
+
+Brief: `knowledge/briefs/zf-v2-round10b-core-living-brief.md`. Round 10a filled the lanes but left two things not like the
+user's own Botanica 36 zoning (zf-17): there the Core sits a band forward of the rear wall with a **full-width living band
+behind it**, and the rooms are the depths the user drew — Bed 2/Bed 3 3.4 m deep, Bath + WC 1.9, Laundry 1.6. Round 10b adds
+the Core move as an **option** (one bit) and turns those three depths into preferred depths. Three changes.
+
+1. **The lower Core is one bit on the option, cheap enough to keep.** `Options.coreLower` is set in `enumerateOptions`
+   (`zones.ts`) only where the brief can carry it: a 4-bed plan, `corePos middle` (a Core moved one band is still a middle
+   Core — the plain twin is always emitted beside it), `masterPos front`, a single-cell all-Flex rear row (`rr:F`, so the band
+   is not competing with a rear bedroom) and `coreLane G` or `R` (the Core needs a side wall to touch, R7). The 8 briefs that
+   qualify (zf-00, 03, 04, 05, 07, 08, SAMPLE-15x27, zf-17) each go from **5568 options to 5824** (+256 = 8 lanes x 32), still
+   under the 6000 budget — the doubling happens after the plain enumeration, so the cap it is measured against is unchanged.
+   zf-01 (2-bed) and the 8.8 m lot (narrow branch) never enumerate it. `optionId` carries the bit as a `|core-low` suffix.
+2. **The band is held out of the Flex decomposition and put back as exactly one piece.** The cell is the flex cell at the
+   rear wall (`y === 0`) whose edge is shared with a Core part over at least `LIVING_MIN_EDGE` (1200 mm) — the Core's own
+   lane's rear cell. `finish` (`zones.ts`) passes it to `computeFlex` as an **obstacle** and re-adds it as one piece: the
+   decomposition would otherwise run a strip along the rear wall through it (to reach a Wet cell behind the Core) and cut the
+   band in two. The band itself is `lowerBand()`: `{ wMin: 1200, dMin: REAR_STRIP_D (2400), sink: true, capD:
+   LIVING_REAR_MAX_DEPTH (5400) }`, so it takes the lane's spare before the Core grows into its own allowance and the Core
+   sits exactly one band forward. `markLiving` (`quality.ts`) needs no change: the band is the Flex cell at the rear wall,
+   re-added whole, so it is rear-wall Flex and comes out living like any other piece that shares at least 1200 mm with a
+   Core part or another living piece.
+3. **Bedroom and utility depths are the user's zoning, as preferred depths.** `BED_PREF_DEPTH = 3400`, `WET_PREF_DEPTH =
+   1900`, `LAUNDRY_PREF_DEPTH = 1600` (`sizes.ts`, "provisional, round 10, user zf-17 zoning") feed `RoomSpec.prefDepth`,
+   used by `allocate` where it otherwise takes the area-preserving depth. Only the bedroom's 3400 lands inside its own
+   2700..4000 range; the wet block's 1900 and the laundry's 1600 ask for **less than their own minimum side** (2000 / 1800),
+   so `dPref` clamps both up to that minimum — the user's depth as far as the catalogue allows. They are not inert: they move
+   the corpus (zf-07 is 1666 valid with all three, 1694 with the bedroom preference alone). Caps and the no-sliver rule hold.
+
+**The split pass no longer strands a room.** `splitFlex` cuts each Flex piece on its own grid, and a cut can shrink a Flex
+pocket's only walk-through contact below `MIN_EDGE`: SAMPLE-15x27 has a WC behind a 1000 x 1000 pocket that the whole piece
+reaches over 1000 mm and each half over 533. `splitCandidate` (`carve.ts`) now runs `checkConnectivity` on the split Flex and
+fails the option with `SPLIT_UNREACHABLE_FAILURE` — 2 of 25742 candidates, the deeper bedrooms being what moved the geometry
+onto them.
+
+**Acceptance check (from the brief) — zf-17, before = round 10a, after = this run:**
+
+| zf-17 | round 10a | round 10b |
+|---|---|---|
+| top-5 secondary-bedroom median area | 14.04 m2 | 17.58 m2 |
+| top-5 secondary-bedroom max area | 25.28 m2 | 25.28 m2 |
+| top-1 Flex share | 26.4 % | 24.5 % |
+| top-1 option | `L\|rear\|block\|m:middle/split\|wet:split\|rr:-\|fw\|v2` | same, and it does **not** use the new bit |
+| valid / distinct candidates | 3796 / 3334 | 4078 / 3484 |
+| best variant 4 (valid rank) | 409 | 803 |
+| best variant 4 + `core-low` (valid rank) | — (no such option) | 157 (`L\|midG\|block\|m:front/block\|wet:block\|rr:F\|nofw\|v4\|core-low`) |
+| round 7 option `L\|midG\|split\|m:middle/block\|wet:block\|rr:FBFB\|fw\|v2` | rank 658, 37.1 % Flex | rank 648, 34.8 % Flex |
+
+The median is the median over the three secondary bedrooms (rect plus the room's extensions) of the five top plans (15
+numbers); the max is the largest of the same 15. "Valid rank" is the 1-based position in the valid set sorted by score, the
+measure the round 10a table used.
+
+- **The living band.** All **1306** valid `core-low` candidates across the eight briefs have exactly one Flex piece between
+  the Core and the rear wall, always classified `Flex · living`, **4190..5400 mm deep** (never the plain 2400 mm rear strip,
+  never over the 5400 mm cap), with the Core directly above it and sharing a full edge with a Core part; no zone and no other
+  Flex piece overlaps it. The Core's distance from the rear wall is the band depth in every one — 5400 mm except in zf-07
+  (4190..4990). Per brief the valid counts are zf-00 182, zf-03 0, zf-04 182, zf-05 128, zf-07 46, zf-08 256, SAMPLE-15x27 256,
+  zf-17 256. The best rank the option reaches is zf-05 97th of 1698, zf-04 99th, zf-17 157th, zf-08 185th, SAMPLE-15x27 187th,
+  zf-00 237th, zf-07 287th — never the top 5, but inside the top 3 % of each brief. In zf-17 the best `v4|core-low` plan
+  (rank 157) scores **40.49** with a single 9000 x 5400 mm `Flex · living` band (48.60 m2) and the Core 5400 mm off the rear
+  wall; the plain best v4 is 803rd, so on this brief the lower Core helps the column variant rank.
+- **zf-03 is the only brief that enumerates the option and reaches no valid candidate** (256 of 256 fail: 112 "front band:
+  row width is below the catalogue minimum", 72 "Master is too narrow for its column", 72 "Master: row width is below the
+  catalogue minimum") — the lot is too narrow to carry the band. Pinned in the test as measured, not skipped.
+- **Every brief still has valid candidates** (zf-00 3474, zf-01 348, zf-03 948, zf-04 3480, zf-05 1698, zf-07 1666, zf-08 3396,
+  SAMPLE-15x27 4344, 8.8 m lot 40, zf-17 4078; **23472 / 48112** total, round 10a 21746).
+- **Two target regressions, measured and attributed.** The zf-05 (`rr:BBF`) and zf-07 (`rr:FBB`) targets now have no matching
+  candidate. A/B/C/D on the three preferred depths: with all three on, no match; with the wet and laundry ones on but the
+  bedroom's off, **both match** (ranked index 465 and 578); with all three off, 469 / 668. So `BED_PREF_DEPTH` alone is the
+  cause — the rear-row bedrooms at 3400 mm deep leave the wanted Flex cell 1000 mm (zf-05) or 1100 mm (zf-07) of a 10890 mm
+  row, under the 1200 mm `RAIL_MIN` a rear-row item is counted from, so `rearRow` reads `[bed, bed]`; in zf-07 the deeper lane
+  also leaves the Master buffer no spare, so the Master reaches the front wall (`masterPos front`). Both are recorded as test
+  todos with those numbers. The wet/laundry depths move the corpus and the ranks but cause neither. zf-08's primary target is
+  still the round 10a todo; its alt target matches at rank 1959.
+- **Nothing was tuned.** No quality weight, band or threshold changed; the only scoring-adjacent change is that living Flex is
+  excluded from `flexShare` exactly as before (the band is added to the same set). The three new tests assert the option gate
+  and the 6000 budget, the single unsplit band (one piece, `Flex · living`, touching the Core, 2400 < depth <= 5400, no
+  overlap), and that the three preferred depths are the user's and the two small ones clamp to the catalogue minimum.
+- **Review sets regenerated** (`out-small` 2916/23488, `out-medium` 9674/28800, `out-large` 17536/28480; round 10a 2844, 9082,
+  16386). `small/S-03` still shows five plans rather than six (L8b.5).
+
+Judgement calls (all provisional, round 10b):
+
+L10b.1. **The band is one piece of Flex, not a room.** It is never carved and never split — `splitFlex` is not reached for it,
+   and the test asserts no other piece or zone overlaps it. Living Flex is excluded from `flexShare`, so the band costs the
+   plan nothing in "less Flex ranks higher".
+L10b.2. **The Core is a *capped sink*, so the band takes the lane's spare before the Core grows.** `capD` bounds the band at
+   5400 and the Core keeps its own allowance above it; without the cap the Core's growth would eat the band.
+L10b.3. **The depths are preferences, not rules.** A cell too shallow for the preference keeps what `allocate` can give it; the
+   bedroom's 3400 is the only one inside its catalogue range, and the wet and laundry depths are clamped up to their
+   minimum side — the user's shape as far as the catalogue allows, and no further.
+L10b.4. **The lower Core is an option, not the new default.** It is preferred by no weight, so the round 10a plan stays the
+   zf-17 top 1; the user chooses it by family. This is the calibration surface if it should rank higher.
 
 ## Living Flex (round 6, user decision 2026-10-07) and Botanica 36
 

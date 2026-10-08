@@ -90,6 +90,11 @@ export interface Options {
   flexWall: boolean;
   /** which lane holds the Core when corePos is middle (G = above the garage, R = beyond the spine); '-' when the Core is the rear band */
   coreLane: 'G' | 'R' | 'W' | '-';
+  /**
+   * Round 10b: with a middle Core, no rear row — the Core's lane keeps one bounded Flex band at the rear wall (the
+   * living band), so the Core sits one band toward the front. Only meaningful when `coreLane` is 'G' or 'R'.
+   */
+  coreLower?: boolean;
   /** which ordering of the side-lane stack (see README) */
   variant: number;
 }
