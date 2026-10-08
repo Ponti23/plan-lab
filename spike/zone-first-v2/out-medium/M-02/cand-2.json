@@ -1,6 +1,6 @@
 {
   "role": "option 2",
-  "rank": 5,
+  "rank": 13,
   "briefId": "M-02",
   "optionId": "L|midR|block|m:middle/block|wet:block|rr:FBFB|nofw|v0",
   "options": {
@@ -29,7 +29,6 @@
     "corePos": "middle",
     "coreForm": "block",
     "rearRow": [
-      "flex",
       "bed",
       "flex",
       "bed"
@@ -40,46 +39,47 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.15568888888888888,
+    "flexShare": 0.13275555555555554,
     "livingShare": 0.03484444444444444,
-    "circulationShare": 0.09066666666666667,
+    "circulationShare": 0.10435555555555555,
     "coreShare": 0.24555555555555555,
-    "bedroomSpread": 6500,
-    "spreadNorm": 0.29660582093757903,
+    "bedroomSpread": 7100,
+    "spreadNorm": 0.3239848197933556,
     "wetNearBed": true,
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 20.4,
+    "circulationM2": 23.48,
     "slivers": 0,
     "spineRatio": 0.3333333333333333,
     "longestFlexRatio": 0.3333333333333333,
     "flexStrips": 0,
-    "score": 13.93,
+    "score": 11.55,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
       "spineRatio": 0,
       "longestFlexRatio": 1.61,
       "coreShare": 0,
-      "spreadNorm": 2.02
+      "spreadNorm": 0
     }
   },
   "notes": [
     "Bath + WC shrank in depth to 2100 mm (preferred 2500 mm)",
     "Master shrank in depth to 5300 mm (preferred 6800 mm)",
     "Core grew to 8500 x 6500 (lot surplus; was 7000 x 6500)",
-    "Bed 2 grew to 4000 x 2800 (lot surplus; was 3400 x 2800)",
+    "Bed 2 grew to 5200 x 2800 (lot surplus; was 3400 x 2800)",
+    "Laundry grew to 4000 x 1800 (lot surplus; was 3000 x 1800)",
     "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.0 x 2.7, Study 3.0 x 2.7"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 20400000,
+  "circulationArea": 23480000,
   "flexArea": {
-    "Flex · circulation": 13200000,
+    "Flex · circulation": 16280000,
     "Flex · room": 6750000,
-    "Flex · storage": 15080000,
+    "Flex · storage": 6840000,
     "Flex · living": 7840000,
     "sliver": 0
   },
@@ -124,9 +124,9 @@
       "kind": "bedroom",
       "name": "Bed 2",
       "rect": {
-        "x": 2300,
+        "x": 1100,
         "y": 0,
-        "w": 4000,
+        "w": 5200,
         "h": 2800
       }
     },
@@ -159,7 +159,7 @@
       "rect": {
         "x": 0,
         "y": 4900,
-        "w": 3000,
+        "w": 4000,
         "h": 1800
       }
     },
@@ -251,10 +251,10 @@
       "rect": {
         "x": 0,
         "y": 0,
-        "w": 2300,
+        "w": 1100,
         "h": 2800
       },
-      "cls": "Flex · storage"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-2",
@@ -269,16 +269,6 @@
     {
       "id": "flex-3",
       "rect": {
-        "x": 3000,
-        "y": 4900,
-        "w": 1000,
-        "h": 1800
-      },
-      "cls": "Flex · storage"
-    },
-    {
-      "id": "flex-4",
-      "rect": {
         "x": 4000,
         "y": 9300,
         "w": 2500,
@@ -287,7 +277,7 @@
       "cls": "Flex · room"
     },
     {
-      "id": "flex-5",
+      "id": "flex-4",
       "rect": {
         "x": 10300,
         "y": 12000,
@@ -297,7 +287,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-6",
+      "id": "flex-5",
       "rect": {
         "x": 6700,
         "y": 16100,

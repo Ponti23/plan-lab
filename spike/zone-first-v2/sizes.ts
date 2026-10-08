@@ -31,6 +31,14 @@ export const FLEXWALL_MAX_W = 1200;
 export const MIN_SHARED_CORE_EDGE = 2400;
 export const MIN_SHARED_MASTER_EDGE = 900;
 
+/** Provisional; the user extended zones by eye, needs calibration. */
+export const ZONE_ALLOWANCE = {
+  areaFactor: 1.6,
+  sideFactor: 1.3,
+  garageDepthMin: 6000,
+  garageDepthMax: 8000,
+} as const;
+
 const rng = (min: number, pref: number, max: number): Rng => ({ min, pref, max });
 const r100 = (v: number): number => Math.round(v / 100) * 100;
 
@@ -132,8 +140,8 @@ export const CORE_AREA_MAX = FC.max[0] * FC.max[1];
 
 export const garageSize = (g: 'single' | 'double'): { w: number; d: number } =>
   g === 'double'
-    ? { w: CATALOG.GarageDouble.pref[0], d: CATALOG.GarageDouble.pref[1] }
-    : { w: CATALOG.GarageSingle.pref[0], d: CATALOG.GarageSingle.pref[1] };
+    ? { w: CATALOG.GarageDouble.pref[0], d: ZONE_ALLOWANCE.garageDepthMin }
+    : { w: CATALOG.GarageSingle.pref[0], d: ZONE_ALLOWANCE.garageDepthMin };
 
 export const garageRow = (g: 'single' | 'double'): Row => (g === 'double' ? CATALOG.GarageDouble : CATALOG.GarageSingle);
 
@@ -144,11 +152,31 @@ export function withinSpec(spec: RoomSpec, r: Rect): boolean {
   return s >= spec.s.min && s <= spec.s.max && l >= spec.l.min && l <= spec.l.max;
 }
 
-export function withinGarage(g: 'single' | 'double', r: Rect): boolean {
-  const row = garageRow(g);
+/** A zone still has to hold the room's CATALOG minimum, either way round. */
+export function aboveRoomMinimum(spec: RoomSpec, r: Rect): boolean {
   const s = Math.min(r.w, r.h);
   const l = Math.max(r.w, r.h);
-  return s >= row.min[0] && s <= row.max[0] && l >= row.min[1] && l <= row.max[1];
+  return s >= spec.s.min && l >= spec.l.min;
+}
+
+/** Room minimum plus the provisional zone allowance cap, either way round. */
+export function withinZoneAllowance(spec: RoomSpec, r: Rect): boolean {
+  const s = Math.min(r.w, r.h);
+  const l = Math.max(r.w, r.h);
+  return (
+    aboveRoomMinimum(spec, r) &&
+    s <= ZONE_ALLOWANCE.sideFactor * spec.s.max &&
+    l <= ZONE_ALLOWANCE.sideFactor * spec.l.max &&
+    r.w * r.h <= ZONE_ALLOWANCE.areaFactor * spec.s.max * spec.l.max
+  );
+}
+
+export function withinGarage(g: 'single' | 'double', r: Rect): boolean {
+  return (
+    r.w === garageSize(g).w &&
+    r.h >= ZONE_ALLOWANCE.garageDepthMin &&
+    r.h <= ZONE_ALLOWANCE.garageDepthMax
+  );
 }
 
 export interface Fit {

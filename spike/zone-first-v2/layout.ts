@@ -9,9 +9,9 @@
 //     spine) equally; with no sink, the rooms stretch toward their max (water-fill);
 //   - total <  sum of preferred: every child shrinks toward its min in proportion to how much it can give;
 //   - total <  sum of min: the layout fails.
-// A room never grows past its catalogue max: it is clipped to the max and the rest of its cell is simply
-// not covered by a zone, which makes it Flex. A clip that would leave a strip under 1000 mm is shortened
-// to leave exactly 1000 instead, so a clip never creates a sliver.
+// Initial placement never grows past the room's catalogue max: it is clipped there and the rest of its cell
+// becomes Flex. The later grow pass may extend that zone to its allowance cap. A clip that would leave a strip
+// under 1000 mm is shortened to leave exactly 1000 instead, so a clip never creates a sliver.
 
 import { fitRoom, SLIVER_MIN_SIDE, type RoomSpec, type Rng } from './sizes.ts';
 import type { Rect, ZoneKind } from './types.ts';

@@ -46,22 +46,22 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.05172919994613425,
-    "livingShare": 0.06695150797922077,
-    "circulationShare": 0.0718907876723573,
-    "coreShare": 0.2420965576836967,
+    "flexShare": 0.03587877542027893,
+    "livingShare": 0,
+    "circulationShare": 0.08849780706450233,
+    "coreShare": 0.2745540016016971,
     "bedroomSpread": 9936,
     "spreadNorm": 0.46000663355637084,
     "wetNearBed": true,
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 15.108,
+    "circulationM2": 18.598,
     "slivers": 0,
     "spineRatio": 0.3280481137233461,
-    "longestFlexRatio": 0.2564242755604155,
+    "longestFlexRatio": 0.1908146528157463,
     "flexStrips": 0,
-    "score": 7.93,
+    "score": 7.61,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -71,33 +71,57 @@
       "spreadNorm": 0
     }
   },
-  "closenessToTheUsersLayout": 0.40068602162340156,
+  "closenessToTheUsersLayout": 0.42038856264749463,
   "notes": [
-    "carved from Flex: Activity 3.5 x 3.0"
+    "carved from Flex: Activity 4.7 x 3.0, Study 3.5 x 2.0"
   ],
   "spineLength": 6000,
   "longestRun": 6590,
   "flexWallLength": 6590,
-  "circulationArea": 15108000,
+  "circulationArea": 18598000,
   "flexArea": {
-    "Flex · circulation": 0,
+    "Flex · circulation": 3490000,
     "Flex · room": 0,
-    "Flex · storage": 10871000,
-    "Flex · living": 14070000,
+    "Flex · storage": 4050000,
+    "Flex · living": 0,
     "sliver": 0
   },
-  "extensionArea": 0,
-  "extensions": [],
+  "extensionArea": 6821000,
+  "extensions": [
+    {
+      "id": "ext-1",
+      "rule": "R14",
+      "ownerId": "core-2",
+      "ownerName": "Core · kitchen + living",
+      "name": "Core · kitchen + living · extension",
+      "rect": {
+        "x": 3600,
+        "y": 6000,
+        "w": 1900,
+        "h": 3590
+      }
+    }
+  ],
   "slivers": 0,
   "carved": [
     {
       "name": "Activity",
-      "label": "Activity 3.5 x 3.0",
+      "label": "Activity 4.7 x 3.0",
+      "rect": {
+        "x": 6800,
+        "y": 0,
+        "w": 4690,
+        "h": 3000
+      }
+    },
+    {
+      "name": "Study",
+      "label": "Study 3.5 x 2.0",
       "rect": {
         "x": 3600,
-        "y": 3000,
+        "y": 4000,
         "w": 3490,
-        "h": 3000
+        "h": 2000
       }
     }
   ],
@@ -228,10 +252,22 @@
       "kind": "carved",
       "name": "Activity",
       "rect": {
-        "x": 3600,
-        "y": 3000,
-        "w": 3490,
+        "x": 6800,
+        "y": 0,
+        "w": 4690,
         "h": 3000
+      },
+      "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Study",
+      "rect": {
+        "x": 3600,
+        "y": 4000,
+        "w": 3490,
+        "h": 2000
       },
       "carved": true
     }
@@ -264,25 +300,15 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 6800,
-        "y": 0,
-        "w": 4690,
-        "h": 3000
+        "x": 3600,
+        "y": 3000,
+        "w": 3490,
+        "h": 1000
       },
-      "cls": "Flex · living"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-2",
-      "rect": {
-        "x": 3600,
-        "y": 6000,
-        "w": 1900,
-        "h": 3590
-      },
-      "cls": "Flex · storage"
-    },
-    {
-      "id": "flex-3",
       "rect": {
         "x": 4000,
         "y": 9590,

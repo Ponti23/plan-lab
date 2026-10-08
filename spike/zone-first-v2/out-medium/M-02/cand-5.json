@@ -1,6 +1,6 @@
 {
   "role": "option 5",
-  "rank": 63,
+  "rank": 73,
   "briefId": "M-02",
   "optionId": "L|midW|block|m:front/block|wet:block|rr:FBFB|fw|v2",
   "options": {
@@ -40,7 +40,7 @@
     "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.09808888888888889,
+    "flexShare": 0.08928888888888889,
     "livingShare": 0.0684,
     "circulationShare": 0.14253333333333335,
     "coreShare": 0.2222222222222222,
@@ -55,7 +55,7 @@
     "spineRatio": 0.3333333333333333,
     "longestFlexRatio": 0.29444444444444445,
     "flexStrips": 0,
-    "score": 23.16,
+    "score": 23.07,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -79,14 +79,15 @@
   "flexArea": {
     "Flex · circulation": 14390000,
     "Flex · room": 0,
-    "Flex · storage": 7680000,
+    "Flex · storage": 5700000,
     "Flex · living": 15390000,
     "sliver": 0
   },
-  "extensionArea": 14000000,
+  "extensionArea": 15980000,
   "extensions": [
     {
       "id": "ext-1",
+      "rule": "R13",
       "ownerId": "core-1",
       "ownerName": "Core",
       "name": "Core · extension",
@@ -95,6 +96,19 @@
         "y": 2700,
         "w": 3500,
         "h": 4000
+      }
+    },
+    {
+      "id": "ext-2",
+      "rule": "R14",
+      "ownerId": "master-1",
+      "ownerName": "Master",
+      "name": "Master · extension",
+      "rect": {
+        "x": 6700,
+        "y": 12000,
+        "w": 1800,
+        "h": 1100
       }
     }
   ],
@@ -331,16 +345,6 @@
         "h": 1200
       },
       "cls": "Flex · circulation"
-    },
-    {
-      "id": "flex-6",
-      "rect": {
-        "x": 6700,
-        "y": 12000,
-        "w": 1800,
-        "h": 1100
-      },
-      "cls": "Flex · storage"
     }
   ]
 }

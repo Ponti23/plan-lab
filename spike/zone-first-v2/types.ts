@@ -64,11 +64,13 @@ export type RearCell = 'B' | 'F' | 'M';
 export type RearPlan = RearCell[];
 
 /**
- * R13: Flex that belongs to one zone. A Flex piece that shares one complete edge (equal extents) with a room
- * zone and whose opposite side lies on the envelope boundary. A separate piece, not walk-through.
+ * R13/R14: ordinary Flex that touches exactly one non-circulation zone and is not needed for connectivity.
+ * A separate piece, not walk-through.
  */
 export interface ExtensionRec {
   id: string;
+  /** R13: the original wall-aligned strip (one complete edge, far side on the envelope); R14: the generalised fill */
+  rule: 'R13' | 'R14';
   ownerId: string;
   ownerName: string;
   /** `<owner name> · extension` */
@@ -159,6 +161,12 @@ export interface Candidate {
   flexWallLength: number;
   circulationArea: number;
   flexArea: Record<FlexClass, number>;
+  /**
+   * Ordinary Flex as a share of the area *before* R14 absorption. Round 7 grows first and fills after, so the grow
+   * pass measures this share, not the reported `quality.flexShare`: a piece that absorption would have taken anyway
+   * must not make a zone look already grown. Never smaller than `quality.flexShare`.
+   */
+  flexShareBeforeFill: number;
   slivers: number;
   signature: PlanSignature;
   quality: Quality;

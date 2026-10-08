@@ -18,9 +18,30 @@ import { GOLDEN, goldenById, profileFor } from './golden.ts';
 import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
 import { renderSVG } from './render.ts';
-import { CARVE_SPECS, CORE_AREA_MAX, CORE_AREA_MIN, SPECS, SPINE_W, withinGarage, withinSpec } from './sizes.ts';
+import {
+  aboveRoomMinimum,
+  CARVE_SPECS,
+  CORE_AREA_MAX,
+  CORE_AREA_MIN,
+  SPECS,
+  SPINE_W,
+  withinGarage,
+  withinSpec,
+  withinZoneAllowance,
+  ZONE_ALLOWANCE,
+} from './sizes.ts';
 import type { Brief, Candidate, FlexPiece, Rect, ZoneRec } from './types.ts';
-import { allRects, enumerateOptions, longestRun, mismatches, RUN_EXTRA, spineStopsAtCore, touchesBoundary } from './zones.ts';
+import {
+  allRects,
+  enumerateOptions,
+  extensionOwner,
+  findExtensions,
+  longestRun,
+  mismatches,
+  RUN_EXTRA,
+  spineStopsAtCore,
+  touchesBoundary,
+} from './zones.ts';
 
 const RESULTS: BriefResult[] = BRIEFS.map(runBrief);
 const ALL: { brief: Brief; c: Candidate }[] = RESULTS.flatMap((r) => r.valid.map((c) => ({ brief: r.brief, c })));
@@ -142,9 +163,11 @@ test('the run helper sees a collinear spine + flex-wall and ignores a parallel o
   assert.equal(longestRun(spine, []), 2000);
 });
 
-test('R13 extensions: equal-extent edge with the owner, far side on the wall, room owner, not walk-through, areas counted apart', () => {
+test('R13/R14 extensions: ordinary Flex has one owner, is not walk-through, and is counted apart', () => {
   let n = 0;
-  const OWNERS = new Set(['core', 'bedroom', 'master', 'ensuite', 'wet', 'laundry']);
+  let r13 = 0;
+  let r14 = 0;
+  const OWNERS = new Set(['core', 'bedroom', 'master', 'ensuite', 'wet', 'wc', 'laundry', 'garage']);
   for (const x of ALL) {
     const e = box(x.c);
     let sum = 0;
@@ -154,20 +177,32 @@ test('R13 extensions: equal-extent edge with the owner, far side on the wall, ro
       assert.ok(o && OWNERS.has(o.kind), `${where(x)}: owner is not a room zone`);
       assert.equal(ex.name, `${o.name} · extension`);
       const p = ex.rect;
-      const r = o.rect;
-      const sideShare =
-        (p.y === r.y && p.h === r.h && ((p.x === r.x + r.w && p.x + p.w === e.w) || (p.x + p.w === r.x && p.x === 0))) ||
-        (p.x === r.x && p.w === r.w && ((p.y === r.y + r.h && p.y + p.h === e.h) || (p.y + p.h === r.y && p.y === 0)));
-      assert.ok(sideShare, `${where(x)}: ${ex.name} is not a full-edge strip to the wall`);
+      if (ex.rule === 'R13') {
+        // R13, unchanged: one complete edge with the owner (equal extents) and the opposite side on the envelope wall
+        r13++;
+        const r = o.rect;
+        const sideShare =
+          (p.y === r.y && p.h === r.h && ((p.x === r.x + r.w && p.x + p.w === e.w) || (p.x + p.w === r.x && p.x === 0))) ||
+          (p.x === r.x && p.w === r.w && ((p.y === r.y + r.h && p.y + p.h === e.h) || (p.y + p.h === r.y && p.y === 0)));
+        assert.ok(sideShare, `${where(x)}: ${ex.name} is not a full-edge strip to the wall`);
+      } else {
+        // R14, the generalised fill: exactly one owner, or at least a 900 mm touch when a corner piece is in line with two
+        assert.equal(ex.rule, 'R14', `${where(x)}: ${ex.name} rule`);
+        r14++;
+        assert.ok(extensionOwner(p, x.c.zones) === o || sharedEdge(p, o.rect) >= 900, `${where(x)}: ${ex.name} does not touch its owner`);
+      }
       assert.ok(Math.min(p.w, p.h) >= 1000, `${where(x)}: sliver extension`);
       sum += area(p);
     }
+    // growth is measured before absorption, so the share it works against is never smaller than the reported one
+    assert.ok(x.c.flexShareBeforeFill >= x.c.quality.flexShare, `${where(x)}: absorption raised the Flex share`);
     assert.equal(sum, x.c.extensionArea, where(x));
     // none of them is in the Flex list, and connectivity holds without them (they are not walk-through)
     for (const f of x.c.flex) assert.ok(!x.c.extensions.some((ex) => ex.rect === f.rect), where(x));
     assert.equal(allRects(x.c).reduce((a, r) => a + area(r), 0), x.c.envelope.w * x.c.envelope.d, where(x));
   }
   assert.ok(n > 0, 'the run produced extensions');
+  assert.ok(r13 > 0 && r14 > 0, `both rules produced extensions (R13 ${r13}, R14 ${r14})`);
 });
 
 test('connectivity passes', () => {
@@ -177,7 +212,7 @@ test('connectivity passes', () => {
   }
 });
 
-test('no room is below its CATALOG min or above its CATALOG max', () => {
+test('a zone never goes below its room minimum', () => {
   for (const x of ALL) {
     for (const z of x.c.zones) {
       if (z.kind === 'garage') {
@@ -186,7 +221,7 @@ test('no room is below its CATALOG min or above its CATALOG max', () => {
       }
       const key = SPEC_OF(z);
       if (!key) continue;
-      assert.ok(withinSpec(SPECS[key], z.rect), `${where(x)}: ${z.name} ${z.rect.w}x${z.rect.h} outside ${key}`);
+      assert.ok(aboveRoomMinimum(SPECS[key], z.rect), `${where(x)}: ${z.name} ${z.rect.w}x${z.rect.h} below ${key} minimum`);
     }
     const cores = x.c.zones.filter((z) => z.kind === 'core');
     if (cores.length === 2) {
@@ -198,6 +233,42 @@ test('no room is below its CATALOG min or above its CATALOG max', () => {
   // sanity: the catalogue numbers the specs are built from
   assert.equal(SPECS.core.s.min, CATALOG.FamilyCore.min[0]);
   assert.equal(SPECS.bed.s.max, CATALOG.Bedroom.max[0]);
+});
+
+test('a zone never exceeds its allowance cap; the Core keeps its CATALOG cap', () => {
+  for (const x of ALL) {
+    for (const z of x.c.zones) {
+      const key = SPEC_OF(z);
+      if (!key) continue;
+      const inside = z.kind === 'core' ? withinSpec(SPECS[key], z.rect) : withinZoneAllowance(SPECS[key], z.rect);
+      assert.ok(inside, `${where(x)}: ${z.name} ${z.rect.w}x${z.rect.h} exceeds its cap`);
+    }
+  }
+  assert.deepEqual(ZONE_ALLOWANCE, { areaFactor: 1.6, sideFactor: 1.3, garageDepthMin: 6000, garageDepthMax: 8000 });
+});
+
+test('garage width stays fixed and depth stays within 6000-8000', () => {
+  for (const x of ALL) {
+    const garage = x.c.zones.find((z) => z.kind === 'garage')!;
+    assert.ok(withinGarage(x.brief.garage, garage.rect), `${where(x)}: Garage ${garage.rect.w}x${garage.rect.h}`);
+  }
+});
+
+test('fill first: Flex touching two zones is never absorbed, and absorption never breaks connectivity', () => {
+  const spine: ZoneRec = { id: 'spine', kind: 'spine', name: 'Spine', rect: { x: 0, y: 0, w: 1200, h: 1200 } };
+  const bridge = mkPiece(1200, 0, 1200, 1200);
+  const owner: ZoneRec = { id: 'bed-1', kind: 'bedroom', name: 'Bed 2', rect: { x: 1200, y: 1200, w: 1200, h: 1200 } };
+  assert.equal(findExtensions([owner], spine, [bridge]).extensions.length, 0, 'the access bridge must stay Flex');
+
+  const second: ZoneRec = { id: 'bed-2', kind: 'bedroom', name: 'Bed 3', rect: { x: 2400, y: 0, w: 1200, h: 1200 } };
+  assert.equal(extensionOwner(bridge.rect, [owner, second]), null, 'two touching zones have no sole owner');
+  assert.equal(findExtensions([owner, second], spine, [bridge]).extensions.length, 0, 'shared Flex must stay Flex');
+
+  const directOwner: ZoneRec = { ...owner, rect: { x: 1200, y: 0, w: 1200, h: 1200 } };
+  const spare = mkPiece(1200, 1200, 1200, 1200);
+  const filled = findExtensions([directOwner], spine, [spare]);
+  assert.equal(filled.extensions.length, 1, 'disposable single-owner Flex should be absorbed');
+  assert.ok(checkConnectivity({ zones: [directOwner], spine, flex: filled.rest }).ok);
 });
 
 test('flex-walls are 1000-1200 wide, touch the spine, a Core part, walk-through Flex or another flex-wall, and a split Ensuite touches Master + WIR', () => {
@@ -399,7 +470,7 @@ test('quality terms are reported and the top 5 are pairwise different', () => {
 
 test('the core side signature is read from the Core and its extension', () => {
   for (const r of RESULTS) {
-    for (const t of r.targets) assert.equal(t.candidate?.signature.coreSide, t.target.coreSide, r.brief.id);
+    for (const t of r.targets) if (t.candidate) assert.equal(t.candidate.signature.coreSide, t.target.coreSide, r.brief.id);
   }
 });
 
@@ -419,7 +490,7 @@ test('a separate WC: split wet blocks exist, the WC is within one cell of the Ba
       touchesAny(wc.rect, bath.rect) || cs.some((c) => c !== wc.rect && c !== bath.rect && touchesAny(wc.rect, c) && touchesAny(c, bath.rect)),
       `${where(x)}: the WC is far from the Bath`,
     );
-    assert.ok(withinSpec(SPECS.wc, wc.rect) && withinSpec(SPECS.bath, bath.rect), where(x));
+    assert.ok(withinZoneAllowance(SPECS.wc, wc.rect) && withinZoneAllowance(SPECS.bath, bath.rect), where(x));
   }
   assert.ok(n > 100, 'split wet blocks were generated');
 });
@@ -574,9 +645,9 @@ test('closeness is a diagnostic: it is between 0 and 1 and the ranking ignores i
   }
 });
 
-// ------------------------------------------------------------------ grow rooms toward their max before leaving Flex (2026-10-07)
+// ------------------------------------------------------------------ grow rooms toward their zone cap before leaving Flex (2026-10-08)
 
-test('grow pass: only above the Flex ceiling; spine, slivers, CATALOG max and the Core cap hold; each grown room is noted', () => {
+test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the Core cap hold; each grown room is noted', () => {
   let grown = 0;
   let unchangedUnderCeiling = 0;
   for (const id of ['zf-04', 'zf-07', 'SAMPLE-15x27']) {
@@ -601,9 +672,15 @@ test('grow pass: only above the Flex ceiling; spine, slivers, CATALOG max and th
       const core = c.zones.filter((z) => z.kind === 'core').reduce((a, z) => a + area(z.rect), 0);
       assert.ok(core <= CORE_AREA_MAX, `${c.optionId}: Core ${core}`);
       for (const z of c.zones) {
-        if (z.kind === 'garage') continue;
+        if (z.kind === 'garage') {
+          assert.ok(withinGarage(r.brief.garage, z.rect), `${c.optionId}: Garage outside 6000-8000 depth`);
+          continue;
+        }
         const key = SPEC_OF(z);
-        if (key) assert.ok(withinSpec(SPECS[key], z.rect), `${c.optionId}: ${z.name} past its CATALOG max`);
+        if (key) {
+          const inside = z.kind === 'core' ? withinSpec(SPECS[key], z.rect) : withinZoneAllowance(SPECS[key], z.rect);
+          assert.ok(inside, `${c.optionId}: ${z.name} past its zone cap`);
+        }
       }
     }
   }
@@ -748,8 +825,8 @@ test('carve: carved rooms are drawn like rooms (name, W x D, plain fill) and the
   const x = CARVED.find((y) => y.c.carved!.some((z) => z.name === 'Theatre'))!;
   const z = x.c.carved!.find((q) => q.name === 'Theatre')!;
   const svg = renderSVG(x.c);
-  assert.ok(svg.includes('>Theatre</text>'));
-  assert.ok(svg.includes(`>${(z.rect.w / 1000).toFixed(1)} x ${(z.rect.h / 1000).toFixed(1)} m</text>`));
+  assert.ok(svg.includes(`>Theatre ${(z.rect.w / 1000).toFixed(1)} x ${(z.rect.h / 1000).toFixed(1)} m</text>`));
+  assert.ok(svg.includes('>room min 3.1 x 3.5 m</text>'));
   assert.ok(svg.includes(`<rect x="${z.rect.x}" y="${z.rect.y}" width="${z.rect.w}" height="${z.rect.h}" fill="#e8e8e8"`));
   assert.ok(carvedLine(x.c)!.startsWith('carved: Theatre'));
   assert.equal(carvedLine({ ...x.c, carved: [] }), 'carved: none');

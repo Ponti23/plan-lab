@@ -8,6 +8,7 @@
 // top is svgY = y (no flip). All drawing coordinates are in millimetres inside the viewBox.
 
 import type { Candidate, ExtensionRec, FlexPiece, Rect, ZoneRec } from './types.ts';
+import { CARVE_SPECS, SPECS, garageRow, type RoomSpec } from './sizes.ts';
 
 
 const PX_PER_MM = 0.05; // 15000 mm -> 750 px
@@ -20,6 +21,29 @@ const esc = (s: string): string =>
 
 const ms = (mm: number): string => (mm / 1000).toFixed(1);
 const dims = (r: Rect): string => `${ms(r.w)} x ${ms(r.h)} m`;
+const minDims = (s: Pick<RoomSpec, 's' | 'l'>): string => `${ms(s.s.min)} x ${ms(s.l.min)} m`;
+
+function roomMinimum(c: Candidate, z: ZoneRec): string | null {
+  const key =
+    z.kind === 'bedroom' ? 'bed' :
+    z.name === 'Master' ? 'masterBlock' :
+    z.name === 'Master + WIR' ? 'masterWir' :
+    z.name === 'Ensuite' ? 'ensuite' :
+    z.name === 'Bath + WC' ? 'wet' :
+    z.name === 'Bath' ? 'bath' :
+    z.name === 'WC' ? 'wc' :
+    z.name === 'Laundry' ? 'laundry' :
+    z.name === 'Core' ? 'core' :
+    z.name === 'Core · dining' ? 'coreDining' :
+    z.name === 'Core · kitchen + living' ? 'coreKL' : null;
+  if (key) return minDims(SPECS[key]);
+  if (z.kind === 'garage') {
+    const r = garageRow(z.rect.w <= 4500 ? 'single' : 'double');
+    return `${ms(r.min[0])} x ${ms(r.min[1])} m`;
+  }
+  const carved = CARVE_SPECS.find((s) => s.name === z.name);
+  return carved ? minDims(carved) : null;
+}
 
 // model +y runs toward the FRONT and SVG +y runs down, so the FRONT lands at the bottom with no flip
 const svgTop = (_d: number, r: Rect): number => r.y;
@@ -39,14 +63,11 @@ function label(cx: number, cy: number, lines: Line[]): string {
     .join('');
 }
 
-function zoneSvg(d: number, z: ZoneRec): string {
+function zoneSvg(c: Candidate, z: ZoneRec): string {
+  const d = c.envelope.d;
   const top = svgTop(d, z.rect);
   const cx = z.rect.x + z.rect.w / 2;
   const cy = top + z.rect.h / 2;
-  const lines: Line[] =
-    z.rect.h >= 4 * FONT
-      ? [{ text: z.name, dy: -FONT * 0.6 }, { text: dims(z.rect), dy: FONT * 0.6 }]
-      : [{ text: z.name, dy: -FONT * 0.4 }, { text: dims(z.rect), dy: FONT * 0.8, small: true }];
   if (z.kind === 'flexwall') {
     const long = Math.max(z.rect.w, z.rect.h);
     const vertical = z.rect.h >= z.rect.w;
@@ -62,6 +83,13 @@ function zoneSvg(d: number, z: ZoneRec): string {
       { text: dims(z.rect), dy: FONT * 0.7, small: true },
     ])}</g>`;
   }
+  const min = roomMinimum(c, z);
+  const lines: Line[] = min
+    ? [
+        { text: `${z.name} ${dims(z.rect)}`, dy: -FONT * 0.45, small: z.rect.h < 4 * FONT },
+        { text: `room min ${min}`, dy: FONT * 0.65, small: true },
+      ]
+    : [{ text: `${z.name} ${dims(z.rect)}`, dy: 0, small: z.rect.h < 3 * FONT }];
   return `<g><rect x="${z.rect.x}" y="${top}" width="${z.rect.w}" height="${z.rect.h}" fill="#e8e8e8" stroke="#000" stroke-width="60"/>${label(cx, cy, lines)}</g>`;
 }
 
@@ -127,8 +155,8 @@ export function renderSVG(c: Candidate): string {
   const body = [
     ...c.flex.map((f) => flexSvg(d, f)),
     ...c.extensions.map((e) => extensionSvg(c, e)),
-    ...c.zones.map((z) => zoneSvg(d, z)),
-    zoneSvg(d, c.spine),
+    ...c.zones.map((z) => zoneSvg(c, z)),
+    zoneSvg(c, c.spine),
   ].join('\n');
 
   const caption = `<text x="${w / 2}" y="${d + 2 * MARGIN}" font-size="700" text-anchor="middle" font-weight="bold">FRONT (street)</text>`;

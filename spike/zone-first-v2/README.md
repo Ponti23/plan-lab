@@ -94,10 +94,10 @@ and ends against the Core or room-sized Flex. It is never carried on by a hall.
   included): `fitRoom` picks the orientation from the width its column gives it, preferring a way round
   where the width is inside the range (no clipping). The preferred depth keeps the preferred area
   (a 3400 wide bedroom is 3000 deep, as in v1).
-- **Stretch**: when a stack has spare length, the spare goes to its Flex "sinks" (explicit Flex cells, the
-  flex-wall) equally. With no sink, rooms stretch toward their CATALOG max. Past the max, the remainder is
-  simply not covered by a zone, so it becomes Flex.
-- **Clip**: a room is clipped to its max and stays against the envelope wall. A clip that would leave a strip
+- **Stretch**: initial layout behaves as before: when a stack has spare length, the spare goes to its Flex
+  "sinks" equally; with no sink, rooms stretch toward their CATALOG max. The round-7 grow pass can then extend
+  zones beyond the room max, within the zone allowance below.
+- **Clip**: initial placement is clipped to the room max and stays against the envelope wall. A clip that would leave a strip
   under 1000 mm is shortened to leave exactly 1000, so a clip never makes a sliver.
 - **Shrink**: when a stack or row runs out of room, children shrink toward their CATALOG min in proportion to
   how much each can give. Below the sum of the minimums the option fails. Shrunk rooms are named in the
@@ -105,7 +105,8 @@ and ends against the Core or room-sized Flex. It is never carried on by a hall.
 - A stack lane keeps its rooms no wider than a bedroom can be (the Bedroom max, 4000), unless a room's own
   minimum is wider. The rest of the lane is a Flex hall on the inner side. This is what makes the strips
   between the rooms and the spine clean rectangles instead of ragged slivers.
-- Garage: double 5500 x 6000, single 3500 x 6000 (as v1). Spine 1200 wide. Flex-wall 1000-1200 wide.
+- Garage: double 5500 wide, single 3500 wide; both start 6000 deep and may grow to 8000. Spine 1200 wide.
+  Flex-wall 1000-1200 wide.
 - Room specs not in v1 (all derived from CATALOG, see `sizes.ts`): the **Master block** uses v1's formula
   (`Master + WIR + Ensuite`, 4400 x 6200 preferred) with min and max added the same way; **`Master + WIR`**
   is the Master plus the WIR by area on the Master's width range; the **wet block** is Bathroom + WC
@@ -252,14 +253,48 @@ Judgement calls (all provisional):
   picture). That follows the rule as written; whether to shrink or grow the room instead is the user's call.
 - Slivers that already existed before carving are left alone; carving never adds one.
 
-### Grow rooms toward their max before leaving Flex (user decision 2026-10-07)
+## Round 7: zones are allowances (user decision 2026-10-08)
+
+The CATALOG rectangle is the room that must fit; the drawn zone is an allowance the architect may later carve into
+the room plus a porch, store, broom cupboard, linen, powder room, pantry, court or setback. The user's seven zonings
+stretch zones to nearby walls and neighbours by eye, so their measured sizes are evidence rather than limits. This
+round therefore fills zones before treating leftover area as shared Flex.
+
+Rule: initial placement still uses the CATALOG min/preferred/max. When the existing grow pass runs, every non-Core room
+zone may grow to at most **1.6 x its room's CATALOG max area**, with either side at most **1.3 x the corresponding max
+side** (rotation remains allowed). The Core keeps its 58.5 m² cap; surplus beside it can become an extension. Garage
+width stays 3500/5500, starts 6000 deep and may grow along its depth to 8000. The factors live together in
+`ZONE_ALLOWANCE` in `sizes.ts` and are **provisional; the user extended zones by eye, needs calibration**.
+
+After growth, an ordinary Flex piece becomes an extension when it touches exactly one non-circulation zone and removing
+it from the walk-through graph still leaves every room reachable. Flex touching two or more zones, circulation Flex,
+living Flex and explicit Flex cells stay Flex; carving then runs on what remains.
+
+Judgement calls (provisional):
+
+1. The 1.6 area factor and 1.3 side factor are safety caps, not target sizes; growth still stops at the existing Flex ceiling.
+2. The Core is the sole room type that keeps its old CATALOG/58.5 m² zone cap.
+3. Garage growth is depth-only and runs after the existing room order, so it cannot widen the garage or displace rooms.
+4. "Touches" means a shared edge of at least 900 mm, matching candidate connectivity; corner contact does not assign ownership.
+5. Fill-first includes the garage as a non-circulation owner, but never the spine or a flex-wall.
+6. The original R13 wall-aligned extension (full shared edge, far side on the envelope; longer shared edge wins when two
+   zones qualify) runs first and is unchanged, so zf-00 and zf-03 still match their targets; `wc` is not one of its owner
+   kinds, so a WC only ever gains an extension through R14. The new single-owner rule then runs on what is left, after
+   living Flex is marked.
+7. Growth runs **before** absorption: the grow pass measures the Flex share *before* R14 (`flexShareBeforeFill` in
+   `Candidate`), so a piece that absorption would have taken anyway does not make the zone look already grown and growth
+   is not spent twice on the same area. The decision *whether* a plan grows at all still uses the reported Flex share, so
+   a candidate already within the ceiling is untouched.
+8. Garage depth is grown last (after rooms) by the same pass, only forward/back, 6000 to 8000; width never changes.
+
+### Grow rooms toward their zone cap before leaving Flex (user decision 2026-10-07; cap revised 2026-10-08)
 
 When a candidate's Flex share is above the profile's Flex ceiling (the same profile the ranking uses: leave-one-out for a golden
 brief, all seven otherwise; `run.ts` passes it in, so the generator never reads the golden layouts), a **grow pass** runs after
-placement. A zone grows into an ordinary Flex piece that covers one whole side of it, keeping its rectangle, up to its CATALOG
-max, and by no more than is needed to reach the ceiling. Fixed order: Core (up to the 58.5 m2 cap; area past it can only be a
-`Core · extension`), then the Master and its parts, then the bedrooms, then the wet rooms and laundry; within a group, in list
-order. A growth is kept only if the candidate is still valid (connectivity, R7, CATALOG max, Core cap), the spine is unchanged and
+placement. A zone grows into an ordinary Flex piece that covers one whole side of it, keeping its rectangle, up to its zone
+cap, and by no more than is needed to reach the ceiling (measured before R14 absorption, since round 7). Fixed order: Core (up to the 58.5 m2 cap; area past it can only be a
+`Core · extension`), then the Master and its parts, then the bedrooms, then the wet rooms and laundry, then the garage; within a group, in list
+order. A growth is kept only if the candidate is still valid (connectivity, R7, zone cap, Core cap), the spine is unchanged and
 no sliver appears; it never leaves a strip under 1000 mm in the piece. Each grown room is noted ("Bed 2 grew to 4000 x 3600
 (lot surplus; was ...)"). The pass works in the canonical (garage-left) frame so a plan and its mirror grow the same way.
 Candidates already within the ceiling are untouched, so zf-07's top 1 does not change.
@@ -333,17 +368,18 @@ spine earlier); the drawing's short spine there is still a gap. Extension area i
 
 ### Extensions (R13)
 
-After Flex decomposition and sliver merge, a non-sliver Flex piece becomes an extension of a room zone
-(Core part, bedroom, Master or `Master + WIR`, Ensuite, wet block, laundry; never the spine, a flex-wall or
-the garage) when it shares one complete edge with the zone (equal extents) and its opposite side lies on the
-envelope boundary. They are a separate list (`extensions`, each with `ownerId`), not in `flex`, not walk-through
+After the grow pass and living-Flex classification, an ordinary Flex piece becomes an extension of exactly one
+non-circulation zone (Core part, bedroom, Master or `Master + WIR`, Ensuite, wet block, laundry or garage; never
+the spine or a flex-wall) when they share at least 900 mm of edge. Flex that touches two zones stays shared. Extensions
+are a separate list (`extensions`, each with `ownerId`), not in `flex`, not walk-through
 (a piece whose removal from the walk-through set would break connectivity stays ordinary Flex), and counted in
 their own area bucket (`extensionArea`), so the Flex classes and the ranking metrics exclude them. Areas still sum
 to w x d. SVG: hatched the other way, labelled `<Zone> · extension W x D`, with a dashed line around zone +
 extension.
 
-Calls made: (1) two qualifying owners: the longer shared edge wins, then the earlier zone in the list.
-(2) Slivers (under 1000) never become extensions. (3) **Explicit Flex cells stay Flex**: a rear-row Flex, or the
+Calls made: (1) for the original wall-aligned form two qualifying owners are settled by the longer shared edge, then the
+earlier zone in the list; for the round-7 single-owner form two touching zones mean the piece stays Flex.
+(2) Slivers never become extensions; circulation Flex and living Flex are never absorbed by the round-7 rule. (3) **Explicit Flex cells stay Flex**: a rear-row Flex, or the
 Flex placed after a room in a lane, is intended Flex even when its geometry fits the rule (otherwise the rear
 Flex beside a bedroom becomes a `Bed · extension` and zf-03/04/07/08 stop matching their `flex`). So a strip
 in line with the Master in front of the wall (zf-07 style) is an extension only when it is clip leftover, not

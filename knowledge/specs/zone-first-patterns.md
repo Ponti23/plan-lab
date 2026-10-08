@@ -97,6 +97,8 @@ Table correction: zf-03's Core is **middle, L-shaped**, not "band". zf-12 still 
 - **Origin:** the user's drawings stretch rooms to the envelope edge (for example zf-00's full-width Core) to use space that would otherwise be wasted. Extensions keep that intent without breaking the room-size presets.
 - **Labels:** wording beyond the generic "· extension" is a later copy decision.
 
+**R14: zone allowance (user 2026-10-08, provisional).** A room's CATALOG min/preferred/max decides whether the room fits, but its zone may grow as an allowance for later architectural carving: provisionally up to 1.6 times the room's max area and 1.3 times each max side (rotation allowed), while the Core retains its 58.5 m² cap and the garage stays at its current width with 6000-8000 depth. Growth runs first and measures the Flex the plan has before absorption, so a piece that absorption would have taken anyway does not make a zone look already grown. After growth, ordinary Flex that touches exactly one non-circulation zone becomes that zone's extension only when removing it as walk-through preserves connectivity; shared, circulation, living and explicit Flex stay Flex.
+
 ### The user's review of v2 (2026-10-07)
 
 - **zf-00:** cannot be judged without dimensions. Keep it in the run, but do not judge by eye.

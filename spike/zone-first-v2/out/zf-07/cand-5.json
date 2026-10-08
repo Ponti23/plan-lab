@@ -1,6 +1,6 @@
 {
   "role": "top 5",
-  "rank": 43,
+  "rank": 41,
   "briefId": "zf-07",
   "optionId": "L|midR|split|m:rear/split|wet:block|rr:BBFM|nofw|v0",
   "options": {
@@ -51,9 +51,9 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.15841906885536713,
+    "flexShare": 0.11269456741093713,
     "livingShare": 0,
-    "circulationShare": 0.09393196641860824,
+    "circulationShare": 0.08155997489437412,
     "coreShare": 0.2118798717690663,
     "bedroomSpread": 9172,
     "spreadNorm": 0.42463812212137114,
@@ -61,12 +61,12 @@
     "laundryNear": true,
     "masterSeparated": false,
     "spineMetres": 6,
-    "circulationM2": 19.74,
+    "circulationM2": 17.14,
     "slivers": 0,
     "spineRatio": 0.3280481137233461,
     "longestFlexRatio": 0.3280481137233461,
     "flexStrips": 0,
-    "score": 10.59,
+    "score": 10.01,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -76,7 +76,7 @@
       "spreadNorm": 0
     }
   },
-  "closenessToTheUsersLayout": 0.31768838153778606,
+  "closenessToTheUsersLayout": 0.3082267713078316,
   "notes": [
     "Bed 2 shrank in width to 2700 mm (preferred 3400 mm)",
     "Bed 3 shrank in width to 2700 mm (preferred 3400 mm)",
@@ -86,17 +86,18 @@
     "Core · kitchen + living shrank in depth to 4300 mm (preferred 5100 mm)",
     "Master + WIR grew to 4200 x 5190 (lot surplus; was 3000 x 5190)",
     "Core · kitchen + living grew to 7490 x 4300 (lot surplus; was 5990 x 4300)",
-    "Bath + WC grew to 4000 x 2790 (lot surplus; was 4000 x 2600)",
-    "carved from Flex: Theatre 3.6 x 4.1"
+    "Ensuite grew to 1890 x 4190 (lot surplus; was 1890 x 3500)",
+    "Bed 2 grew to 2700 x 5190 (lot surplus; was 2700 x 4000)",
+    "carved from Flex: Theatre 3.6 x 4.1, Study 2.1 x 2.8"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 19740000,
+  "circulationArea": 17140000,
   "flexArea": {
-    "Flex · circulation": 12540000,
+    "Flex · circulation": 9940000,
     "Flex · room": 0,
-    "Flex · storage": 20752100,
+    "Flex · storage": 13743000,
     "Flex · living": 0,
     "sliver": 0
   },
@@ -113,6 +114,16 @@
         "w": 3600,
         "h": 4100
       }
+    },
+    {
+      "name": "Study",
+      "label": "Study 2.1 x 2.8",
+      "rect": {
+        "x": 5000,
+        "y": 5190,
+        "w": 2090,
+        "h": 2800
+      }
     }
   ],
   "zones": [
@@ -124,7 +135,7 @@
         "x": 0,
         "y": 0,
         "w": 2700,
-        "h": 4000
+        "h": 5190
       }
     },
     {
@@ -157,7 +168,7 @@
         "x": 9600,
         "y": 0,
         "w": 1890,
-        "h": 3500
+        "h": 4190
       }
     },
     {
@@ -166,9 +177,9 @@
       "name": "Bath + WC",
       "rect": {
         "x": 0,
-        "y": 5000,
+        "y": 5190,
         "w": 4000,
-        "h": 2790
+        "h": 2600
       }
     },
     {
@@ -237,6 +248,18 @@
         "h": 4100
       },
       "carved": true
+    },
+    {
+      "id": "carved-2",
+      "kind": "carved",
+      "name": "Study",
+      "rect": {
+        "x": 5000,
+        "y": 5190,
+        "w": 2090,
+        "h": 2800
+      },
+      "carved": true
     }
   ],
   "spine": {
@@ -255,45 +278,35 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 9600,
-        "y": 3500,
-        "w": 1890,
-        "h": 1690
+        "x": 2700,
+        "y": 4000,
+        "w": 2700,
+        "h": 1190
       },
       "cls": "Flex · storage"
     },
     {
       "id": "flex-2",
       "rect": {
-        "x": 0,
-        "y": 4000,
-        "w": 5400,
+        "x": 9600,
+        "y": 4190,
+        "w": 1890,
         "h": 1000
       },
-      "cls": "Flex · circulation"
+      "cls": "Flex · storage"
     },
     {
       "id": "flex-3",
       "rect": {
         "x": 4000,
-        "y": 5000,
-        "w": 1400,
-        "h": 2990
+        "y": 5190,
+        "w": 1000,
+        "h": 2800
       },
-      "cls": "Flex · storage"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-4",
-      "rect": {
-        "x": 5400,
-        "y": 5190,
-        "w": 1690,
-        "h": 2800
-      },
-      "cls": "Flex · storage"
-    },
-    {
-      "id": "flex-5",
       "rect": {
         "x": 3000,
         "y": 7790,
@@ -303,7 +316,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-6",
+      "id": "flex-5",
       "rect": {
         "x": 10300,
         "y": 12290,
@@ -313,7 +326,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-7",
+      "id": "flex-6",
       "rect": {
         "x": 6700,
         "y": 16390,

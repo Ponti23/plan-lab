@@ -41,6 +41,7 @@ import {
   MIN_SHARED_CORE_EDGE,
   SPECS,
   SPINE_W,
+  withinZoneAllowance,
   withinGarage,
   SLIVER_MIN_SIDE,
   withinSpec,
@@ -407,8 +408,12 @@ export function generate(brief: Brief, options: Options, flexCeiling?: number): 
     rect: options.garageSide === 'R' ? mirrorRect(p.rect, W) : p.rect,
   }));
   const flexCells = ctx.flexCells.map((r) => (options.garageSide === 'R' ? mirrorRect(r, W) : r));
+  // grow first, then fill (round 7): the grown candidate fixes the plan, R14 absorption runs on what is left of the
+  // Flex afterwards. The grow pass therefore measures candidate.flexShareBeforeFill, not the reported share;
+  // only a plan whose *reported* share is above the ceiling needs growing at all.
   const first = finish(brief, options, ctx.notes, placed, flexCells);
-  if (!first.ok || flexCeiling === undefined || first.candidate.quality.flexShare <= flexCeiling) return first;
+  if (!first.ok) return first;
+  if (flexCeiling === undefined || first.candidate.quality.flexShare <= flexCeiling) return first;
   // the grow pass works in the canonical (garage-left) frame, so a plan and its mirror grow the same way
   return growPass(brief, options, ctx.placed, ctx.flexCells, first.candidate, flexCeiling);
 }
@@ -416,15 +421,16 @@ export function generate(brief: Brief, options: Options, flexCeiling?: number): 
 // ------------------------------------------------------------------ grow pass (user decision 2026-10-07)
 
 /**
- * Big lots: when the Flex share is above the ceiling (the profile's Flex max, passed in by the caller), rooms and the
- * Core grow toward their CATALOG max first, so that only what is still left stays Flex. A zone grows into an adjacent
- * ordinary Flex piece that covers one whole side of it, keeping its rectangle. Fixed order: Core, then Master (and its
- * parts), then the bedrooms, then the wet rooms and laundry; within a group, in list order. It stops when the Flex share is at
- * or under the ceiling or nothing can grow. A growth is only kept if the candidate is still valid (connectivity, R7,
- * catalogue max, the Core area cap, the spine unchanged) and gains no sliver; it never leaves a strip under 1000 mm.
- * When the Flex share is already within the ceiling nothing changes.
+ * Big lots: when the reported Flex share is above the ceiling (the profile's Flex max, passed in by the caller), rooms
+ * and the Core grow toward their zone allowance cap first, so that only what is still left stays Flex. A zone grows
+ * into an adjacent ordinary Flex piece that covers one whole side of it, keeping its rectangle. Fixed order: Core, then
+ * Master (and its parts), then the bedrooms, then the wet rooms and laundry; within a group, in list order. It stops
+ * when the Flex share *before* R14 absorption (`flexShareBeforeFill`) is at or under the ceiling or nothing can grow:
+ * growth and absorption are not spent on the same area twice. A growth is only kept if the candidate is still valid
+ * (connectivity, R7, zone cap, the Core area cap, the spine unchanged) and gains no sliver; it never leaves a strip
+ * under 1000 mm. When the reported Flex share is already within the ceiling nothing changes.
  */
-const GROW_ORDER: Record<string, number> = { core: 0, master: 1, ensuite: 1, bedroom: 2, wet: 3, wc: 3, laundry: 3 };
+const GROW_ORDER: Record<string, number> = { core: 0, master: 1, ensuite: 1, bedroom: 2, wet: 3, wc: 3, laundry: 3, garage: 4 };
 
 function growPass(
   brief: Brief,
@@ -443,17 +449,17 @@ function growPass(
   let cand = cand0;
   const baseNotes = cand0.notes.slice();
   const grew = new Map<number, true>();
-  for (let guard = 0; guard < 80 && cand.quality.flexShare > ceiling; guard++) {
-    const needArea = cand.quality.flexShare * total - ceiling * total;
+  for (let guard = 0; guard < 80 && cand.flexShareBeforeFill > ceiling; guard++) {
+    const needArea = cand.flexShareBeforeFill * total - ceiling * total;
     const order = placed
       .map((p, i) => ({ p, i }))
-      .filter(({ p }) => p.kind in GROW_ORDER && p.spec && p.spec !== 'garage')
+      .filter(({ p }) => p.kind in GROW_ORDER && p.spec)
       .sort((a, b) => GROW_ORDER[a.p.kind] - GROW_ORDER[b.p.kind] || a.i - b.i);
     let done = false;
     const canonFlex = computeFlex(envR, placed.map((x) => x.rect));
     for (const { p, i } of order) {
       const r = p.rect;
-      const spec = SPECS[p.spec!];
+      const spec = p.spec === 'garage' ? null : SPECS[p.spec!];
       for (const f of canonFlex) {
         if (f.cls === 'sliver') continue;
         const q = f.rect;
@@ -468,13 +474,19 @@ function growPass(
         if (!dir) continue;
         const grown = (g: number): Rect =>
           dir === 'r' ? { ...r, w: r.w + g } : dir === 'l' ? { ...r, x: r.x - g, w: r.w + g } : dir === 'f' ? { ...r, h: r.h + g } : { ...r, y: r.y - g, h: r.h + g };
-        // the most it may grow: the piece, the CATALOG max, and no more than needed to reach the ceiling
+        const withinCap = (rect: Rect): boolean =>
+          p.kind === 'garage'
+            ? (dir === 'f' || dir === 'b') && withinGarage(brief.garage, rect)
+            : p.kind === 'core'
+              ? withinSpec(spec!, rect)
+              : withinZoneAllowance(spec!, rect);
+        // the most it may grow: the piece, the zone cap, and no more than needed to reach the ceiling
         let g = Math.min(depth, Math.ceil(needArea / side / 100) * 100);
-        while (g >= 100 && !withinSpec(spec, grown(g))) g -= 100;
+        while (g >= 100 && !withinCap(grown(g))) g -= 100;
         if (g < 100) continue;
         // never leave a strip under 1000 mm in the piece
         if (depth - g > 0 && depth - g < SLIVER_MIN_SIDE) {
-          if (withinSpec(spec, grown(depth))) g = depth;
+          if (withinCap(grown(depth))) g = depth;
           else g = depth - SLIVER_MIN_SIDE;
           if (g < 100) continue;
         }
@@ -482,7 +494,7 @@ function growPass(
         const res = finish(brief, options, baseNotes.slice(), toActual(trial), cellsActual);
         if (!res.ok) continue;
         if (res.candidate.quality.slivers > cand.quality.slivers) continue;
-        if (res.candidate.quality.flexShare >= cand.quality.flexShare) continue;
+        if (res.candidate.flexShareBeforeFill >= cand.flexShareBeforeFill) continue;
         placed = trial;
         cand = res.candidate;
         grew.set(i, true);
@@ -493,15 +505,15 @@ function growPass(
     }
     if (!done) break;
   }
-  if (!grew.size) return { ok: true, candidate: cand0 };
+  if (!grew.size) return { ok: true, candidate: cand0 }; // the caller already computed this plan; nothing grew
   const notes = baseNotes.slice();
   for (const i of grew.keys()) {
     const a = placed0[i];
     const b = placed[i];
     notes.push(`${a.name} grew to ${b.rect.w} x ${b.rect.h} (lot surplus; was ${a.rect.w} x ${a.rect.h})`);
   }
-  cand.notes = notes;
-  return { ok: true, candidate: cand };
+  const final = finish(brief, options, notes, toActual(placed), cellsActual);
+  return final.ok ? final : fail(options, final.reason);
 }
 
 const inEnvelope = (r: Rect, env: Rect): boolean =>
@@ -586,8 +598,9 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
     const key = specOf.get(z.id);
     if (key === 'garage') {
       if (!withinGarage(brief.garage, z.rect)) return fail(options, 'Garage is outside its catalogue range');
-    } else if (key && !withinSpec(SPECS[key], z.rect)) {
-      return fail(options, `${z.name} is outside its catalogue range`);
+    } else if (key) {
+      const inside = z.kind === 'core' ? withinSpec(SPECS[key], z.rect) : withinZoneAllowance(SPECS[key], z.rect);
+      if (!inside) return fail(options, `${z.name} is outside its zone allowance`);
     }
   }
   // R7
@@ -647,11 +660,20 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   if (conn.ensuiteApart) return fail(options, 'the Ensuite does not touch Master + WIR');
   if (!conn.ok) return fail(options, `connectivity: nothing reaches ${[...new Set(conn.unreached.map(stripNumber))].join(', ')}`);
 
-  // R13: Flex that belongs to one zone becomes an extension, unless that would break connectivity
-  const { extensions, rest: ext } = findExtensions(env, zones, spineRec, flex, flexCells);
-  // round 6: rear Flex that adjoins the Core is living space, not waste
-  const flexKept = markLiving(ext, coreRectsOf(zones), CANDIDATE_ADJ.tol);
+  // Existing R13 wall-aligned extensions are resolved before living Flex, as in round 6. R14 absorption then
+  // generalises ownership over what remains; a piece already classified as living is never absorbed. Round 7 grows
+  // first and fills after, so the share the grow pass works against is measured on `living` - the Flex still there
+  // before R14 touches it (see flexShareBeforeFill).
+  const legacy = findLineExtensions(env, zones, spineRec, flex, flexCells);
+  const living = markLiving(legacy.rest, coreRectsOf(zones), CANDIDATE_ADJ.tol);
+  const filled = findExtensions(zones, spineRec, living, flexCells);
+  const extensions = [...legacy.extensions, ...filled.extensions].map((e, i) => ({ ...e, id: `ext-${i + 1}` }));
+  const flexKept = filled.rest;
   const flexArea = flexAreaOf(flexKept);
+  const preFill = flexAreaOf(living);
+  const flexShareBeforeFill =
+    (preFill['Flex · circulation'] + preFill['Flex · room'] + preFill['Flex · storage'] + preFill.sliver) /
+    (brief.envelope.w * brief.envelope.d);
   const circulationArea =
     spineRec.rect.w * spineRec.rect.h + walls.reduce((a, w) => a + w.rect.w * w.rect.h, 0) + flexArea['Flex · circulation'];
   const candidate: Candidate = {
@@ -671,6 +693,7 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
     flexWallLength: walls.reduce((a, w) => a + Math.max(w.rect.w, w.rect.h), 0),
     circulationArea,
     flexArea,
+    flexShareBeforeFill,
     slivers: flexKept.filter((f) => f.cls === 'sliver').length,
     signature: signatureOf(brief.envelope, zones, flexKept, extensions),
     quality: {
@@ -685,17 +708,27 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   return { ok: true, candidate };
 }
 
-const EXT_OWNER_KINDS = new Set(['core', 'bedroom', 'master', 'ensuite', 'wet', 'wc', 'laundry']);
+const EXT_OWNER_KINDS = new Set(['core', 'bedroom', 'master', 'ensuite', 'wet', 'wc', 'laundry', 'garage']);
 
 /**
- * The room zone a Flex piece is an extension of, or null. The piece must share one complete edge with the zone
- * (same start and end on that line) and its opposite side must lie on the envelope boundary. Two zones can
- * qualify (a corner piece in line with two): the longer shared edge wins, then the earlier zone in the list.
+ * The one non-circulation zone a Flex piece touches, or null when it touches none or more than one.
  */
-export function extensionOwner(p: Rect, zones: ZoneRec[], env: Rect): ZoneRec | null {
+export function extensionOwner(p: Rect, zones: ZoneRec[]): ZoneRec | null {
+  const touching = zones.filter((z) => EXT_OWNER_KINDS.has(z.kind) && sharedEdge(p, z.rect) >= CANDIDATE_ADJ.minEdge);
+  return touching.length === 1 ? touching[0] : null;
+}
+
+const LINE_OWNER_KINDS = new Set(['core', 'bedroom', 'master', 'ensuite', 'wet', 'laundry']);
+
+/**
+ * Original R13, unchanged: the piece shares one complete edge with the zone (same start and end on that line) and its
+ * opposite side lies on the envelope boundary. Two zones can qualify (a corner piece in line with two): the longer
+ * shared edge wins, then the earlier zone in the list. Kept ahead of the R14 single-owner rule so zf-00 and zf-03 still match.
+ */
+function lineExtensionOwner(p: Rect, zones: ZoneRec[], env: Rect): ZoneRec | null {
   let best: { z: ZoneRec; len: number } | null = null;
   for (const z of zones) {
-    if (!EXT_OWNER_KINDS.has(z.kind)) continue;
+    if (!LINE_OWNER_KINDS.has(z.kind)) continue;
     const r = z.rect;
     let len = 0;
     if (p.y === r.y && p.h === r.h) {
@@ -711,9 +744,30 @@ export function extensionOwner(p: Rect, zones: ZoneRec[], env: Rect): ZoneRec | 
   return best ? best.z : null;
 }
 
-/** R13. Pieces whose removal from the walk-through set would break connectivity stay ordinary Flex. */
-export function findExtensions(
+function findLineExtensions(
   env: Rect,
+  zones: ZoneRec[],
+  spine: ZoneRec,
+  flex: FlexPiece[],
+  flexCells: Rect[],
+): { extensions: ExtensionRec[]; rest: FlexPiece[] } {
+  let rest = flex.slice();
+  const extensions: ExtensionRec[] = [];
+  for (const f of flex) {
+    if (f.cls === 'sliver') continue;
+    if (flexCells.some((c) => overlap(c, f.rect))) continue;
+    const owner = lineExtensionOwner(f.rect, zones, env);
+    if (!owner) continue;
+    const trial = rest.filter((k) => k !== f);
+    if (!checkConnectivity({ zones, spine, flex: trial }).ok) continue;
+    rest = trial;
+    extensions.push({ id: '', rule: 'R13', ownerId: owner.id, ownerName: owner.name, name: `${owner.name} · extension`, rect: f.rect });
+  }
+  return { extensions, rest };
+}
+
+/** R13/R14. Explicit, living, circulation and connectivity-bearing Flex stays Flex. */
+export function findExtensions(
   zones: ZoneRec[],
   spine: ZoneRec,
   flex: FlexPiece[],
@@ -722,15 +776,16 @@ export function findExtensions(
   let rest = flex.slice();
   const extensions: ExtensionRec[] = [];
   for (const f of flex) {
-    if (f.cls === 'sliver') continue;
+    if (f.cls === 'sliver' || f.cls === 'Flex · circulation' || f.cls === 'Flex · living') continue;
     if (flexCells.some((c) => overlap(c, f.rect))) continue; // intended Flex stays Flex
-    const owner = extensionOwner(f.rect, zones, env);
+    const owner = extensionOwner(f.rect, zones);
     if (!owner) continue;
     const trial = rest.filter((k) => k !== f);
     if (!checkConnectivity({ zones, spine, flex: trial }).ok) continue;
     rest = trial;
     extensions.push({
       id: `ext-${extensions.length + 1}`,
+      rule: 'R14',
       ownerId: owner.id,
       ownerName: owner.name,
       name: `${owner.name} · extension`,
