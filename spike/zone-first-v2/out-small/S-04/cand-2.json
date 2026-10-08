@@ -1,6 +1,6 @@
 {
   "role": "option 2",
-  "rank": 5,
+  "rank": 3,
   "briefId": "S-04",
   "optionId": "L|midW|block|m:rear/split|wet:split|rr:FM|fw|v0",
   "options": {
@@ -37,8 +37,9 @@
     "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.12203947368421053,
-    "circulationShare": 0.1744078947368421,
+    "flexShare": 0.09703947368421052,
+    "livingShare": 0,
+    "circulationShare": 0.1494078947368421,
     "coreShare": 0.25625,
     "bedroomSpread": 0,
     "spreadNorm": null,
@@ -46,15 +47,15 @@
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 26.51,
+    "circulationM2": 22.71,
     "slivers": 0,
     "spineRatio": 0.375,
     "longestFlexRatio": 0.29375,
     "flexStrips": 0,
-    "score": 12.59,
+    "score": 9.88,
     "outside": {
       "flexShare": 0,
-      "circulationShare": 2.9,
+      "circulationShare": 0.4,
       "spineRatio": 0,
       "longestFlexRatio": 0,
       "coreShare": 0,
@@ -63,16 +64,17 @@
   },
   "notes": [
     "Core shrank in depth to 4100 mm (preferred 4900 mm)",
-    "carved from Flex: Theatre 3.8 x 3.4"
+    "carved from Flex: Activity 3.8 x 4.4"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 4800,
-  "circulationArea": 26510000,
+  "circulationArea": 22710000,
   "flexArea": {
-    "Flex · circulation": 13550000,
+    "Flex · circulation": 9750000,
     "Flex · room": 0,
     "Flex · storage": 5000000,
+    "Flex · living": 0,
     "sliver": 0
   },
   "extensionArea": 4100000,
@@ -93,13 +95,13 @@
   "slivers": 0,
   "carved": [
     {
-      "name": "Theatre",
-      "label": "Theatre 3.8 x 3.4",
+      "name": "Activity",
+      "label": "Activity 3.8 x 4.4",
       "rect": {
         "x": 0,
-        "y": 1000,
+        "y": 0,
         "w": 3800,
-        "h": 3400
+        "h": 4400
       }
     }
   ],
@@ -206,12 +208,12 @@
     {
       "id": "carved-1",
       "kind": "carved",
-      "name": "Theatre",
+      "name": "Activity",
       "rect": {
         "x": 0,
-        "y": 1000,
+        "y": 0,
         "w": 3800,
-        "h": 3400
+        "h": 4400
       },
       "carved": true
     }
@@ -244,16 +246,6 @@
     {
       "id": "flex-1",
       "rect": {
-        "x": 0,
-        "y": 0,
-        "w": 3800,
-        "h": 1000
-      },
-      "cls": "Flex · circulation"
-    },
-    {
-      "id": "flex-2",
-      "rect": {
         "x": 7300,
         "y": 3400,
         "w": 2200,
@@ -262,7 +254,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-3",
+      "id": "flex-2",
       "rect": {
         "x": 0,
         "y": 8500,
@@ -272,7 +264,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-4",
+      "id": "flex-3",
       "rect": {
         "x": 5900,
         "y": 8500,
@@ -282,7 +274,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-5",
+      "id": "flex-4",
       "rect": {
         "x": 5900,
         "y": 11500,
@@ -292,7 +284,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-6",
+      "id": "flex-5",
       "rect": {
         "x": 4700,
         "y": 13300,

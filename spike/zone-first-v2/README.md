@@ -8,7 +8,7 @@ user's seven zoning drawings (2026-10-07). Brief: `knowledge/briefs/zf-v2-row-ce
 
 ```sh
 node spike/zone-first-v2/run.ts                 # writes spike/zone-first-v2/out/ (about 1 s)
-node --test spike/zone-first-v2/*.test.ts       # 61 tests: 59 pass, 2 todo (zf-07 and zf-08 user notes; the zf-08 note now passes, the blind todos pass)
+node --test spike/zone-first-v2/*.test.ts       # 67 tests: 64 pass, 3 todo (zf-07 note, zf-08 note (passes), blind zf-08 (fails since round 6))
 node --test spike/zone-first/*.test.ts spike/geometry-feasibility/*.test.ts spike/template-generator/*.test.ts
 ```
 
@@ -54,7 +54,7 @@ with its rank and the quality metric line); no builder plan, no zoning drawing a
 | `connect.ts` | v1's connectivity with flex-walls and both Core parts walk-through, Ensuite rule |
 | `carve.ts` | round 5: the carve pass (big Flex becomes Theatre, Guest bed, Activity, Study) |
 | `render.ts` | SVG (copy of v1's with the flex-wall) |
-| `briefs.ts` | v1's briefs minus zf-02, with the seven `target` signatures |
+| `briefs.ts` | v1's briefs minus zf-02, with the eight `target` signatures (zf-17, Botanica 36, is defined there too) |
 | `pipeline.ts` | enumerate, rank, dedupe, hide mirrors, check targets (shared by `run.ts` and the tests); `opts.top` (default 5) sets how many pairwise-different plans `topN` holds |
 | `run.ts` | writes the output |
 | `briefs-small.ts`, `briefs-medium.ts`, `briefs-large.ts` | the five review briefs per lot-size set |
@@ -171,7 +171,7 @@ pieces with aspect ratio above 3 and a long side above 6 m), wet next to a bedro
 cell with it), laundry next to the wet rooms or the Core (same one-cell rule), Master separated from the secondary bedrooms
 (recorded only), slivers.
 
-**Profile** (`out/quality-profile.json`): per numeric metric, the band [min, max] across the golden plans. All six plans
+**Profile** (`out/quality-profile.json`): per numeric metric, the band [min, max] across the golden plans. All seven plans
 (used for briefs with no golden layout) give:
 
 | Metric | Band | Min | Max |
@@ -183,7 +183,7 @@ cell with it), laundry next to the wet rooms or the Core (same one-cell rule), M
 | coreShare | two-sided | 18 % | 33 % |
 | spreadNorm | two-sided | 32 % | 47 % |
 
-For a golden brief the profile is built from the **other five** (leave-one-out), so the plan is never ranked against itself.
+For a golden brief the profile is built from the **other six** (leave-one-out), so the plan is never ranked against itself.
 
 **Score** (lower is better; `QUALITY_WEIGHTS` in `quality.ts`). Round 5 fix: efficient plans are never worse.
 - **One-sided metrics** (Flex share, circulation share, spine ratio, longest Flex ratio): only the amount **above the band's
@@ -255,7 +255,7 @@ Judgement calls (all provisional):
 ### Grow rooms toward their max before leaving Flex (user decision 2026-10-07)
 
 When a candidate's Flex share is above the profile's Flex ceiling (the same profile the ranking uses: leave-one-out for a golden
-brief, all six otherwise; `run.ts` passes it in, so the generator never reads the golden layouts), a **grow pass** runs after
+brief, all seven otherwise; `run.ts` passes it in, so the generator never reads the golden layouts), a **grow pass** runs after
 placement. A zone grows into an ordinary Flex piece that covers one whole side of it, keeping its rectangle, up to its CATALOG
 max, and by no more than is needed to reach the ceiling. Fixed order: Core (up to the 58.5 m2 cap; area past it can only be a
 `Core · extension`), then the Master and its parts, then the bedrooms, then the wet rooms and laundry; within a group, in list
@@ -281,9 +281,9 @@ and the lot surplus beyond what the other rooms can take stays Flex. Growth made
 zf-03 from 13.28 to 8.76.
 
 Sanity check on the stick: zf-01's own plan is 19 points outside its leave-one-out **spine ratio** band (its spine is 54 % of
-the depth, the other five 26-35 %). Every other golden plan is within 10 points of every band.
+the depth, the other six 26-35 %). Every other golden plan is within 10 points of every band.
 
-### Brief with no golden layout (ranked against all six plans)
+### Brief with no golden layout (ranked against all seven plans)
 
 - **SAMPLE-15x27** 3940/5504 valid. Top 3: L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0 (Flex 40 %, grew: Master, Bed 2, Bed 3, Bed 4, Bath + WC, Laundry, score 42.26); L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v0 (Flex 49 %, grew: Master, Bed 2, Bed 3, score 44.3); L|midR|split|m:middle/block|wet:block|rr:BBF|fw|v3 (Flex 50 %, grew: Core · kitchen + living, Master, Bed 2, Bed 3, Bath + WC, score 44.32). Growing took the top 1 from 54 % to 40 % Flex; the 405 m2 envelope still cannot be filled with rooms held to their CATALOG maxima and a capped Core.
 - **custom-8800x20550** 16/48 valid, 12 distinct. Top: L|midG|block|m:middle/split|wet:block|rr:BBB|fw|v2 (Flex 12 %, grew: nothing, score 24.53) (12 % Flex, already under the ceiling, so unchanged). See "The 8.8 m lot" below.
@@ -297,7 +297,7 @@ regression matches now use it.
 
 ### Regression: the old target signatures
 
-The seven signatures still match (zf-08 both ways) and are tests; they no longer affect ranking.
+The eight signatures still match (zf-08 both ways) and are tests; they no longer affect ranking.
 
 ### The 8.8 m lot
 
@@ -350,6 +350,43 @@ in line with the Master in front of the wall (zf-07 style) is an extension only 
 when it is a placed Flex cell. (4) In the signature only `rearRow` counts an extension as its owner (entries of
 one owner collapse into one); `masterPos` and `corePos` use the zone's own rectangle, otherwise zf-07's
 middle Master with a front strip would read `front`.
+
+## Living Flex (round 6, user decision 2026-10-07) and Botanica 36
+
+Brief: `knowledge/briefs/zf-v2-botanica-living-brief.md`. The user shared Botanica 36 (14.87 x 24.59 m, 4 bed, double garage, garage
+front-right; the drawing is not in the repo yet) as a plan they like: Master front-left, spine between the Master and the garage,
+bedrooms and bath in one lane down the right wall, the Core mid-left with a 3 m Flex hall column beside it, and **a full-width
+Flex band along the rear wall** (Outdoor room and Family on the left, Rumpus on the right). v2 already generated that arrangement
+(Core in the middle, Master at the front, an all-Flex rear row) but ranked it low, because "less Flex ranks higher" treated the
+rear living band as waste. Two changes, both approved:
+
+1. **zf-17** (Botanica 36) is the seventh measured zoning (`knowledge/specs/zone-first-golden.json`, 16 cells, provisional, measured
+   by Opus from the user's zoning panel) and a seventh brief (`briefs.ts`; target `R | middle | block | [flex] | front | block | no
+   flex-wall | core on the L`, which is the signature the measured layout itself gives, checked after taking the 200 mm margin
+   off). It runs in `run.ts` with the blind test like the others. The profile has 7 plans, so every leave-one-out profile changed.
+2. **Living Flex.** A Flex piece is **living** when it touches the rear wall (y = 0) **and** shares an edge of at least 1200 mm
+   with a Core part, or with another living piece (chained). It is a classification beside `Flex · room`: the class is
+   `Flex · living`, drawn hatched (a grid, so it differs from the diagonal Flex hatch without colour) and labelled `Flex · living`;
+   the metric line gives its m².
+   - `flexShare` (and so the score) **excludes** living Flex. `livingShare` is reported only: no band, no score weight.
+   - The measured zonings are classified the same way, with the 200 mm lines as tolerance (`GOLDEN_ADJ.tol`) for the rear wall and
+     for the gap to the Core. Living pieces found: zf-03 one (Flex above the dining Core), zf-04 one, zf-05 one, zf-07 one, zf-08
+     two, zf-17 two (the Family piece touches the Core; the Rumpus piece is living by chain through it). zf-01 has none (its Core is the
+     rear band).
+   - **Carving**: only **Activity** may be carved out of a living piece; Theatre, Guest bed and Study skip it. Elsewhere carving is
+     unchanged (the rules in the carve section hold).
+
+Code: `markLiving` in `quality.ts` (called at generation in `zones.ts`, at load in `golden.ts`, and at the start of the carve pass).
+
+### Judgement calls (round 6)
+
+L1. **Slivers and circulation pieces are never living.** A rear Flex hall (1000-2399 wide, aspect >= 2.5) is a walk-through, not a room; a sliver is no space.
+L2. **Living is never lost.** `markLiving` only promotes. What is left of a living piece after an Activity is carved out of it stays living, even where it no longer touches the rear wall or the Core: the band is still the band. Without this, carving would raise the Flex share (a leftover turns ordinary), which broke the existing "carving only lowers the Flex share" test.
+L3. **No hall out of a living piece.** A carved hall would turn living Flex into circulation Flex (counted in the Flex share). Activity in a living piece is placed without a hall; the connectivity check still decides.
+L4. **Core extensions do not anchor living.** Only Core zones do. A rear piece beside only a Core extension is not living.
+L5. **`flexStrips` and `longestFlexRatio` still count living pieces.** The brief names `flexShare` only. This keeps a full-width rear band penalised (30.6 points for the zf-17 match, plus 3 strips = 30 points) and is the main reason the target match is still ranked 1918th of 3430. Excluding living pieces from those two metrics too (tried, then removed) moves it to 1138th. That is a product call: not adopted.
+L6. **The measured Botanica carries a 1100 x 700 Flex cell** (a sliver by v2's rule) so its own score is 78 (50 of it is the sliver). Its blind test is therefore easy to pass; the cell stays as measured.
+L7. **Leave-one-out sanity test**: zf-04 is now 10.01 points outside its bands (ordinary Flex 22 % against the others' max, now lower because living Flex no longer counts for them), so the "known misses" list is zf-01 and zf-04. zf-08's blind test now fails (best top-5 score 8.9 against its own 7.92; was a pass at `bdd50fe`, 9.59 against 10.27) and is a todo with the numbers.
 
 ## Judgement calls
 
@@ -441,7 +478,7 @@ Earlier rounds:
 - **Top 3 for SAMPLE-15x27 are 45-54 % Flex** (the profile's Flex band tops out at 29 %), because the generator cannot fill
   405 m2 with preferred-size rooms.
 - **Narrow lot**: all 12 distinct layouts belong to one family, so its top 5 holds only one different layout.
-- Most passes are narrow; the score only knows six plans.
+- Most passes are narrow; the score only knows seven plans.
 
 - zf-08: Flex stays at 43-46 % in every match (todo above). The drawing's Core is about 9 x 6.5 m; the FamilyCore
   max area (58.5 m2) and preferred room sizes leave the rest of 326.6 m2 as Flex. Raising the Core max or

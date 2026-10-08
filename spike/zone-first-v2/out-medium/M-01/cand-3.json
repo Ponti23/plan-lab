@@ -1,8 +1,8 @@
 {
   "role": "option 3",
-  "rank": 29,
+  "rank": 19,
   "briefId": "M-01",
-  "optionId": "L|midR|block|m:middle/block|wet:block|rr:FBB|nofw|v0",
+  "optionId": "L|midR|block|m:middle/block|wet:block|rr:FBFB|nofw|v0",
   "options": {
     "garageSide": "L",
     "corePos": "middle",
@@ -13,6 +13,7 @@
     "rearPlan": [
       "F",
       "B",
+      "F",
       "B"
     ],
     "flexWall": false,
@@ -30,6 +31,7 @@
     "rearRow": [
       "flex",
       "bed",
+      "flex",
       "bed"
     ],
     "masterPos": "middle",
@@ -38,7 +40,8 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.1484848484848485,
+    "flexShare": 0.11835497835497835,
+    "livingShare": 0.0225974025974026,
     "circulationShare": 0.03116883116883117,
     "coreShare": 0.2532467532467532,
     "bedroomSpread": 9759,
@@ -66,6 +69,7 @@
     "Bath + WC shrank in depth to 2400 mm (preferred 2500 mm)",
     "Master shrank in depth to 6200 mm (preferred 6800 mm)",
     "Core grew to 6500 x 9000 (lot surplus; was 5000 x 9000)",
+    "Bed 2 grew to 4000 x 2900 (lot surplus; was 3400 x 2900)",
     "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.8 x 3.4"
   ],
   "spineLength": 6000,
@@ -74,8 +78,9 @@
   "circulationArea": 7200000,
   "flexArea": {
     "Flex · circulation": 0,
-    "Flex · room": 32500000,
-    "Flex · storage": 1800000,
+    "Flex · room": 21770000,
+    "Flex · storage": 5570000,
+    "Flex · living": 5220000,
     "sliver": 0
   },
   "extensionArea": 0,
@@ -109,9 +114,9 @@
       "kind": "bedroom",
       "name": "Bed 2",
       "rect": {
-        "x": 3700,
+        "x": 1300,
         "y": 0,
-        "w": 3400,
+        "w": 4000,
         "h": 2900
       }
     },
@@ -235,13 +240,23 @@
       "rect": {
         "x": 0,
         "y": 0,
-        "w": 3700,
+        "w": 1300,
         "h": 2900
       },
-      "cls": "Flex · room"
+      "cls": "Flex · storage"
     },
     {
       "id": "flex-2",
+      "rect": {
+        "x": 5300,
+        "y": 0,
+        "w": 1800,
+        "h": 2900
+      },
+      "cls": "Flex · living"
+    },
+    {
+      "id": "flex-3",
       "rect": {
         "x": 3000,
         "y": 5300,
@@ -251,7 +266,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-3",
+      "id": "flex-4",
       "rect": {
         "x": 7600,
         "y": 11900,
@@ -261,7 +276,7 @@
       "cls": "Flex · room"
     },
     {
-      "id": "flex-4",
+      "id": "flex-5",
       "rect": {
         "x": 6700,
         "y": 16000,

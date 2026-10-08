@@ -1,6 +1,6 @@
 {
   "role": "alt-target match (regression)",
-  "rank": 123,
+  "rank": 128,
   "briefId": "zf-08",
   "optionId": "L|midG|block|m:middle/split|wet:block|rr:FBFB|fw|v0",
   "options": {
@@ -47,11 +47,12 @@
     "coreSide": "L"
   },
   "quality": {
-    "flexShare": 0.2839956636227731,
+    "flexShare": 0.25184940488090424,
+    "livingShare": 0.03756519950121252,
     "circulationShare": 0.11605411715504999,
     "coreShare": 0.17910058441898394,
-    "bedroomSpread": 10635,
-    "spreadNorm": 0.40212075550648807,
+    "bedroomSpread": 10423,
+    "spreadNorm": 0.39410587297235494,
     "wetNearBed": true,
     "laundryNear": true,
     "masterSeparated": false,
@@ -61,25 +62,23 @@
     "spineRatio": 0.27535566773749426,
     "longestFlexRatio": 0.3350160624139514,
     "flexStrips": 1,
-    "score": 25.46,
+    "score": 24.99,
     "outside": {
-      "flexShare": 0,
+      "flexShare": 2.95,
       "circulationShare": 0,
       "spineRatio": 0,
-      "longestFlexRatio": 4.51,
+      "longestFlexRatio": 1.78,
       "coreShare": 0,
       "spreadNorm": 0
     }
   },
-  "closenessToTheUsersLayout": 0.5535689034151547,
+  "closenessToTheUsersLayout": 0.5650783751334045,
   "notes": [
     "Ensuite shrank in width to 1800 mm (preferred 2200 mm)",
     "Master + WIR shrank in width to 3000 mm (preferred 3500 mm)",
     "Ensuite grew to 2990 x 3500 (lot surplus; was 1800 x 3500)",
     "Master + WIR grew to 3000 x 7990 (lot surplus; was 3000 x 6900)",
-    "Bed 2 grew to 4000 x 3000 (lot surplus; was 3400 x 3000)",
-    "Bed 3 grew to 3990 x 3000 (lot surplus; was 3400 x 3000)",
-    "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.5 x 3.0, Activity 3.0 x 3.5, Study 3.0 x 3.5"
+    "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.0 x 3.5, Activity 4.1 x 3.0, Study 3.0 x 3.5"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
@@ -87,8 +86,9 @@
   "circulationArea": 37907000,
   "flexArea": {
     "Flex · circulation": 25187000,
-    "Flex · room": 57891100,
+    "Flex · room": 47391100,
     "Flex · storage": 9684000,
+    "Flex · living": 12270000,
     "sliver": 0
   },
   "extensionArea": 0,
@@ -107,22 +107,22 @@
     },
     {
       "name": "Guest bed",
-      "label": "Guest bed 3.5 x 3.0",
-      "rect": {
-        "x": 0,
-        "y": 0,
-        "w": 3500,
-        "h": 3000
-      }
-    },
-    {
-      "name": "Activity",
-      "label": "Activity 3.0 x 3.5",
+      "label": "Guest bed 3.0 x 3.5",
       "rect": {
         "x": 11990,
         "y": 18290,
         "w": 3000,
         "h": 3500
+      }
+    },
+    {
+      "name": "Activity",
+      "label": "Activity 4.1 x 3.0",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 4100,
+        "h": 3000
       }
     },
     {
@@ -142,9 +142,9 @@
       "kind": "bedroom",
       "name": "Bed 2",
       "rect": {
-        "x": 3500,
+        "x": 4100,
         "y": 0,
-        "w": 4000,
+        "w": 3400,
         "h": 3000
       }
     },
@@ -153,9 +153,9 @@
       "kind": "bedroom",
       "name": "Bed 3",
       "rect": {
-        "x": 11000,
+        "x": 11590,
         "y": 0,
-        "w": 3990,
+        "w": 3400,
         "h": 3000
       }
     },
@@ -264,10 +264,10 @@
       "kind": "carved",
       "name": "Guest bed",
       "rect": {
-        "x": 0,
-        "y": 0,
-        "w": 3500,
-        "h": 3000
+        "x": 11990,
+        "y": 18290,
+        "w": 3000,
+        "h": 3500
       },
       "carved": true
     },
@@ -276,10 +276,10 @@
       "kind": "carved",
       "name": "Activity",
       "rect": {
-        "x": 11990,
-        "y": 18290,
-        "w": 3000,
-        "h": 3500
+        "x": 0,
+        "y": 0,
+        "w": 4100,
+        "h": 3000
       },
       "carved": true
     },
@@ -326,10 +326,10 @@
       "rect": {
         "x": 7500,
         "y": 0,
-        "w": 3500,
+        "w": 4090,
         "h": 3000
       },
-      "cls": "Flex · room"
+      "cls": "Flex · living"
     },
     {
       "id": "flex-2",

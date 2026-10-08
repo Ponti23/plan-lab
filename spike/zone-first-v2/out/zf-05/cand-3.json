@@ -1,8 +1,8 @@
 {
   "role": "top 3",
-  "rank": 32,
+  "rank": 13,
   "briefId": "zf-05",
-  "optionId": "L|midR|block|m:middle/block|wet:block|rr:FBB|nofw|v0",
+  "optionId": "L|midR|block|m:middle/block|wet:block|rr:FBFB|nofw|v0",
   "options": {
     "garageSide": "L",
     "corePos": "middle",
@@ -13,6 +13,7 @@
     "rearPlan": [
       "F",
       "B",
+      "F",
       "B"
     ],
     "flexWall": false,
@@ -26,7 +27,7 @@
   "target": {
     "matches": false,
     "mismatches": [
-      "rearRow: got [\"flex\",\"bed\",\"bed\"], wanted [\"bed\",\"bed\",\"flex\"]",
+      "rearRow: got [\"flex\",\"bed\",\"flex\",\"bed\"], wanted [\"bed\",\"bed\",\"flex\"]",
       "masterPos: got \"middle\", wanted \"front\"",
       "flexWall: got false, wanted true"
     ]
@@ -38,6 +39,7 @@
     "rearRow": [
       "flex",
       "bed",
+      "flex",
       "bed"
     ],
     "masterPos": "middle",
@@ -46,7 +48,8 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.17157815020908104,
+    "flexShare": 0.14251737057483768,
+    "livingShare": 0.025402318895014778,
     "circulationShare": 0.05668988163253526,
     "coreShare": 0.21548333754056317,
     "bedroomSpread": 10136,
@@ -60,7 +63,7 @@
     "spineRatio": 0.2656042496679947,
     "longestFlexRatio": 0.2036299247454626,
     "flexStrips": 0,
-    "score": 7.48,
+    "score": 6.89,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -70,13 +73,14 @@
       "spreadNorm": 0
     }
   },
-  "closenessToTheUsersLayout": 0.4787584864454256,
+  "closenessToTheUsersLayout": 0.48243839908844893,
   "notes": [
     "Master shrank in depth to 6600 mm (preferred 6800 mm)",
     "Core grew to 5890 x 9000 (lot surplus; was 5390 x 9000)",
     "Master grew to 5000 x 6600 (lot surplus; was 4000 x 6600)",
     "Bed 2 grew to 4000 x 2990 (lot surplus; was 3400 x 2990)",
     "Bath + WC grew to 5000 x 2500 (lot surplus; was 4000 x 2500)",
+    "Laundry grew to 3500 x 1800 (lot surplus; was 3000 x 1800)",
     "carved from Flex: Theatre 3.6 x 4.6, Guest bed 3.0 x 3.4"
   ],
   "spineLength": 6000,
@@ -85,8 +89,9 @@
   "circulationArea": 13946000,
   "flexArea": {
     "Flex · circulation": 6746000,
-    "Flex · room": 21329100,
-    "Flex · storage": 14134000,
+    "Flex · room": 10894000,
+    "Flex · storage": 17420000,
+    "Flex · living": 6249100,
     "sliver": 0
   },
   "extensionArea": 0,
@@ -120,7 +125,7 @@
       "kind": "bedroom",
       "name": "Bed 2",
       "rect": {
-        "x": 3490,
+        "x": 1400,
         "y": 0,
         "w": 4000,
         "h": 2990
@@ -155,7 +160,7 @@
       "rect": {
         "x": 0,
         "y": 5490,
-        "w": 3000,
+        "w": 3500,
         "h": 1800
       }
     },
@@ -246,23 +251,33 @@
       "rect": {
         "x": 0,
         "y": 0,
-        "w": 3490,
+        "w": 1400,
         "h": 2990
       },
-      "cls": "Flex · room"
+      "cls": "Flex · storage"
     },
     {
       "id": "flex-2",
       "rect": {
-        "x": 3000,
+        "x": 5400,
+        "y": 0,
+        "w": 2090,
+        "h": 2990
+      },
+      "cls": "Flex · living"
+    },
+    {
+      "id": "flex-3",
+      "rect": {
+        "x": 3500,
         "y": 5490,
-        "w": 2000,
+        "w": 1500,
         "h": 1800
       },
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-3",
+      "id": "flex-4",
       "rect": {
         "x": 4000,
         "y": 7290,
@@ -272,7 +287,7 @@
       "cls": "Flex · circulation"
     },
     {
-      "id": "flex-4",
+      "id": "flex-5",
       "rect": {
         "x": 8600,
         "y": 11990,
@@ -282,7 +297,7 @@
       "cls": "Flex · storage"
     },
     {
-      "id": "flex-5",
+      "id": "flex-6",
       "rect": {
         "x": 6700,
         "y": 16590,
@@ -292,7 +307,7 @@
       "cls": "Flex · room"
     },
     {
-      "id": "flex-6",
+      "id": "flex-7",
       "rect": {
         "x": 9700,
         "y": 19190,

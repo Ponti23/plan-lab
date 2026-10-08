@@ -22,7 +22,7 @@ const REPO = join(HERE, '..', '..');
 const REF_DIR = join(REPO, 'knowledge', 'reference', 'ideal');
 const ZONING_DIR = join(REF_DIR, 'user-zoning');
 
-const CLASSES: FlexClass[] = ['Flex · room', 'Flex · circulation', 'Flex · storage', 'sliver'];
+const CLASSES: FlexClass[] = ['Flex · room', 'Flex · living', 'Flex · circulation', 'Flex · storage', 'sliver'];
 const cmpStr = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0);
 const m2 = (mm2: number): string => (mm2 / 1e6).toFixed(1);
 const pct = (v: number): string => `${(v * 100).toFixed(0)}%`;
@@ -107,14 +107,14 @@ function card(r: BriefResult, k: Kept): string {
     ? ` <span class="badge">${k.hits.map((h) => (h === 'target' ? 'TARGET MATCH' : 'ALT TARGET MATCH')).join(' + ')}</span>`
     : '';
   return `<figure${k.hits.length ? ' class="match"' : ''}>
-  <figcaption><b>${esc(k.role)}</b> (rank ${k.rank} of ${r.ranked.length})${badge}<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · ${carvedLine(c) ? carvedLine(c) + ' · ' : ''}circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'}${clo === null ? '' : ` · closeness to the user's layout ${pct(clo)}`} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
+  <figcaption><b>${esc(k.role)}</b> (rank ${k.rank} of ${r.ranked.length})${badge}<br>${esc(c.optionId)}<br><span class="flex">score ${q.score} · <b>Flex share ${pct(q.flexShare)}</b> · living ${pct(q.livingShare)} (${m2(c.flexArea['Flex · living'])} m²) · ${carvedLine(c) ? carvedLine(c) + ' · ' : ''}circulation ${pct(q.circulationShare)} · Core ${pct(q.coreShare)} · bedroom spread ${(q.bedroomSpread / 1000).toFixed(1)} m · wet near bed ${q.wetNearBed ? 'yes' : 'no'} · laundry near ${q.laundryNear ? 'yes' : 'no'}${clo === null ? '' : ` · closeness to the user's layout ${pct(clo)}`} · spine ${(c.spineLength / 1000).toFixed(1)} m · extensions ${m2(c.extensionArea)} m² · flex m²: ${flex}</span></figcaption>
   <img src="${r.brief.id}/${k.file}.svg" alt="${r.brief.id} ${esc(k.role)}">
 </figure>`;
 }
 
 function blindLine(r: BriefResult): string {
   const b = r.blind;
-  if (!b) return `<span class="note">no layout of the user's for this brief: ranked against the profile of all six plans</span>`;
+  if (!b) return `<span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span>`;
   const g = b.goldenMetrics;
   return `<b class="${b.pass ? 'ok' : 'bad'}">blind test ${b.pass ? 'PASSED' : 'NOT passed'}</b>: best score in the top 5 ${b.bestTop5Score} vs the user's layout ${b.goldenScore} (first candidate at least as good: rank ${b.bestRank ?? 'none'}); the user's layout: Flex ${pct(g.flexShare)}, circulation ${pct(g.circulationShare)}, Core ${pct(g.coreShare)}; top 1 Flex ${pct(r.top5[0].quality.flexShare)}; closeness top 1 ${pct(b.top1Closeness)}, best of all ${pct(b.bestCloseness)}`;
 }
@@ -195,9 +195,9 @@ function main(): void {
     JSON.stringify(
       {
         about:
-          'Band [min, max] of each metric across the golden plans (the user\'s zonings). Shares are of the sum of the cell areas for a measured plan, of w x d for a candidate. spreadNorm is the bedroom spread over the envelope diagonal; plans with fewer than two secondary bedrooms are left out of that band. allSix is used for briefs with no golden layout; for a golden brief the profile leaves its own plan out (leaveOneOut).',
+          'Band [min, max] of each metric across the golden plans (the user\'s zonings). Shares are of the sum of the cell areas for a measured plan, of w x d for a candidate. spreadNorm is the bedroom spread over the envelope diagonal; plans with fewer than two secondary bedrooms are left out of that band. allGolden is used for briefs with no golden layout; for a golden brief the profile leaves its own plan out (leaveOneOut).',
         weights: QUALITY_WEIGHTS,
-        allSix: profileFor('none'),
+        allGolden: profileFor('none'),
         leaveOneOut: loo,
         goldenMetrics: Object.fromEntries(GOLDEN.map((g) => [g.id, g.metrics])),
       },

@@ -3,7 +3,7 @@
 // generation, and the profile used to rank brief X leaves X's own plan out.
 
 import { classifyPiece, SLIVER_MIN_SIDE } from '../zone-first/flex.ts';
-import type { ExtensionRec, FlexPiece, Rect, ZoneKind, ZoneRec } from './types.ts';
+import type { ExtensionRec, FlexClass, FlexPiece, Rect, ZoneKind, ZoneRec } from './types.ts';
 
 // ------------------------------------------------------------------ layouts
 
@@ -38,11 +38,51 @@ export function edgeBetween(a: Rect, b: Rect, tol: number): number {
   return best;
 }
 
+// ------------------------------------------------------------------ living Flex (round 6)
+
+/** a living piece must share at least this much edge with a Core part (or with another living piece) */
+export const LIVING_MIN_EDGE = 1200;
+
+/**
+ * A Flex piece is living when it touches the rear wall (y = 0; within `tol` for a measured zoning) and shares an edge of
+ * at least LIVING_MIN_EDGE with a Core part, or with another living piece (chained). Slivers and circulation pieces
+ * (walk-through halls) are never living. Pure and idempotent; it only ever promotes (a piece already marked living stays
+ * living: the carve pass relies on that, see carve.ts).
+ */
+export function markLiving(flex: FlexPiece[], cores: Rect[], tol: number): FlexPiece[] {
+  const living = new Set<number>(flex.flatMap((f, i) => (f.cls === 'Flex · living' ? [i] : [])));
+  const rear = (f: FlexPiece): boolean => f.rect.y <= tol && f.cls !== 'sliver' && f.cls !== 'Flex · circulation';
+  const livingCandidates = flex.map((f, i) => (rear(f) ? i : -1)).filter((i) => i >= 0);
+  for (let changed = true; changed; ) {
+    changed = false;
+    for (const i of livingCandidates) {
+      if (living.has(i)) continue;
+      const rect = flex[i].rect;
+      if (cores.some((c) => edgeBetween(rect, c, tol) >= LIVING_MIN_EDGE) || [...living].some((j) => edgeBetween(rect, flex[j].rect, tol) >= LIVING_MIN_EDGE)) {
+        living.add(i);
+        changed = true;
+      }
+    }
+  }
+  return flex.map((f, i) => (living.has(i) ? { ...f, cls: 'Flex · living' as FlexClass } : f));
+}
+
+/** the Core parts of a layout's zones, for markLiving */
+export const coreRectsOf = (zones: ZoneRec[]): Rect[] => zones.filter((z) => z.kind === 'core').map((z) => z.rect);
+
+export function flexAreaOf(pieces: FlexPiece[]): Record<FlexClass, number> {
+  const out: Record<FlexClass, number> = { 'Flex · circulation': 0, 'Flex · room': 0, 'Flex · storage': 0, 'Flex · living': 0, sliver: 0 };
+  for (const p of pieces) out[p.cls] += p.rect.w * p.rect.h;
+  return out;
+}
+
 // ------------------------------------------------------------------ metrics
 
 export interface Metrics {
-  /** ordinary Flex (not extensions) as a share of the area */
+  /** ordinary Flex (not extensions, not living Flex) as a share of the area */
   flexShare: number;
+  /** living Flex (rear Flex that adjoins the Core) as a share of the area; reported only, no band, no score weight */
+  livingShare: number;
   /** spine + flex-walls + Flex · circulation */
   circulationShare: number;
   /** all Core parts and their extensions */
@@ -72,7 +112,8 @@ const area = (r: Rect): number => r.w * r.h;
 
 export function metricsOf(l: Layout, adj: Adjacency): Metrics {
   const sum = (rs: Rect[]): number => rs.reduce((a, r) => a + area(r), 0);
-  const flexShare = sum(l.flex.map((f) => f.rect)) / l.total;
+  const flexShare = sum(l.flex.filter((f) => f.cls !== 'Flex · living').map((f) => f.rect)) / l.total;
+  const livingShare = sum(l.flex.filter((f) => f.cls === 'Flex · living').map((f) => f.rect)) / l.total;
   const spineZ = l.zones.filter((z) => z.kind === 'spine');
   const walls = l.zones.filter((z) => z.kind === 'flexwall');
   const circ = sum(spineZ.map((z) => z.rect)) + sum(walls.map((z) => z.rect)) + sum(l.flex.filter((f) => f.cls === 'Flex · circulation').map((f) => f.rect));
@@ -100,6 +141,7 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
   const spineLen = spineZ.length ? Math.max(spineZ[0].rect.w, spineZ[0].rect.h) : 0;
   return {
     flexShare,
+    livingShare,
     circulationShare: circ / l.total,
     coreShare: core / l.total,
     bedroomSpread: Math.round(spread),

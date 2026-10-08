@@ -1,5 +1,5 @@
 {
-  "about": "Band [min, max] of each metric across the golden plans (the user's zonings). Shares are of the sum of the cell areas for a measured plan, of w x d for a candidate. spreadNorm is the bedroom spread over the envelope diagonal; plans with fewer than two secondary bedrooms are left out of that band. allSix is used for briefs with no golden layout; for a golden brief the profile leaves its own plan out (leaveOneOut).",
+  "about": "Band [min, max] of each metric across the golden plans (the user's zonings). Shares are of the sum of the cell areas for a measured plan, of w x d for a candidate. spreadNorm is the bedroom spread over the envelope diagonal; plans with fewer than two secondary bedrooms are left out of that band. allGolden is used for briefs with no golden layout; for a golden brief the profile leaves its own plan out (leaveOneOut).",
   "weights": {
     "perBandPoint": 1,
     "perCentrePoint": 0.1,
@@ -9,10 +9,10 @@
     "laundryNotNear": 10,
     "perSliver": 50
   },
-  "allSix": {
+  "allGolden": {
     "flexShare": {
-      "min": 0.06457753697466687,
-      "max": 0.2895991655490985
+      "min": 0.029930715935334872,
+      "max": 0.22232156161525854
     },
     "circulationShare": {
       "min": 0.04889962131606388,
@@ -24,10 +24,10 @@
     },
     "longestFlexRatio": {
       "min": 0.22186365469947558,
-      "max": 0.2983019733822855
+      "max": 0.31720211468076454
     },
     "coreShare": {
-      "min": 0.178363880196692,
+      "min": 0.11875527197056183,
       "max": 0.3274271489237077
     },
     "spreadNorm": {
@@ -38,12 +38,12 @@
   "leaveOneOut": {
     "zf-01": {
       "flexShare": {
-        "min": 0.1315473441108545,
-        "max": 0.2895991655490985
+        "min": 0.029930715935334872,
+        "max": 0.22232156161525854
       },
       "circulationShare": {
         "min": 0.04889962131606388,
-        "max": 0.0801093916755603
+        "max": 0.08353021947519539
       },
       "spineRatio": {
         "min": 0.2615878843506195,
@@ -51,10 +51,10 @@
       },
       "longestFlexRatio": {
         "min": 0.22186365469947558,
-        "max": 0.2983019733822855
+        "max": 0.31720211468076454
       },
       "coreShare": {
-        "min": 0.178363880196692,
+        "min": 0.11875527197056183,
         "max": 0.27113163972286375
       },
       "spreadNorm": {
@@ -65,7 +65,7 @@
     "zf-03": {
       "flexShare": {
         "min": 0.06457753697466687,
-        "max": 0.2895991655490985
+        "max": 0.22232156161525854
       },
       "circulationShare": {
         "min": 0.04889962131606388,
@@ -77,10 +77,10 @@
       },
       "longestFlexRatio": {
         "min": 0.23461708720672864,
-        "max": 0.2983019733822855
+        "max": 0.31720211468076454
       },
       "coreShare": {
-        "min": 0.178363880196692,
+        "min": 0.11875527197056183,
         "max": 0.3274271489237077
       },
       "spreadNorm": {
@@ -90,8 +90,8 @@
     },
     "zf-04": {
       "flexShare": {
-        "min": 0.06457753697466687,
-        "max": 0.2725787086446105
+        "min": 0.029930715935334872,
+        "max": 0.12219850586979722
       },
       "circulationShare": {
         "min": 0.04889962131606388,
@@ -103,10 +103,10 @@
       },
       "longestFlexRatio": {
         "min": 0.22186365469947558,
-        "max": 0.2983019733822855
+        "max": 0.31720211468076454
       },
       "coreShare": {
-        "min": 0.23728813559322035,
+        "min": 0.11875527197056183,
         "max": 0.3274271489237077
       },
       "spreadNorm": {
@@ -116,8 +116,8 @@
     },
     "zf-05": {
       "flexShare": {
-        "min": 0.06457753697466687,
-        "max": 0.2895991655490985
+        "min": 0.029930715935334872,
+        "max": 0.22232156161525854
       },
       "circulationShare": {
         "min": 0.04889962131606388,
@@ -129,10 +129,10 @@
       },
       "longestFlexRatio": {
         "min": 0.22186365469947558,
-        "max": 0.2983019733822855
+        "max": 0.31720211468076454
       },
       "coreShare": {
-        "min": 0.178363880196692,
+        "min": 0.11875527197056183,
         "max": 0.3274271489237077
       },
       "spreadNorm": {
@@ -142,8 +142,8 @@
     },
     "zf-07": {
       "flexShare": {
-        "min": 0.06457753697466687,
-        "max": 0.2895991655490985
+        "min": 0.029930715935334872,
+        "max": 0.22232156161525854
       },
       "circulationShare": {
         "min": 0.05117782909930716,
@@ -155,10 +155,10 @@
       },
       "longestFlexRatio": {
         "min": 0.22186365469947558,
-        "max": 0.2983019733822855
+        "max": 0.31720211468076454
       },
       "coreShare": {
-        "min": 0.178363880196692,
+        "min": 0.11875527197056183,
         "max": 0.3274271489237077
       },
       "spreadNorm": {
@@ -168,20 +168,46 @@
     },
     "zf-08": {
       "flexShare": {
-        "min": 0.06457753697466687,
-        "max": 0.2895991655490985
+        "min": 0.029930715935334872,
+        "max": 0.22232156161525854
       },
       "circulationShare": {
         "min": 0.04889962131606388,
         "max": 0.14540928393615463
       },
       "spineRatio": {
-        "min": 0.3227107704719645,
+        "min": 0.30459536396909315,
         "max": 0.5443786982248521
       },
       "longestFlexRatio": {
         "min": 0.22186365469947558,
-        "max": 0.28994082840236685
+        "max": 0.31720211468076454
+      },
+      "coreShare": {
+        "min": 0.11875527197056183,
+        "max": 0.3274271489237077
+      },
+      "spreadNorm": {
+        "min": 0.31679688441122017,
+        "max": 0.46522627057244387
+      }
+    },
+    "zf-17": {
+      "flexShare": {
+        "min": 0.029930715935334872,
+        "max": 0.22232156161525854
+      },
+      "circulationShare": {
+        "min": 0.04889962131606388,
+        "max": 0.14540928393615463
+      },
+      "spineRatio": {
+        "min": 0.2615878843506195,
+        "max": 0.5443786982248521
+      },
+      "longestFlexRatio": {
+        "min": 0.22186365469947558,
+        "max": 0.2983019733822855
       },
       "coreShare": {
         "min": 0.178363880196692,
@@ -196,6 +222,7 @@
   "goldenMetrics": {
     "zf-01": {
       "flexShare": 0.06457753697466687,
+      "livingShare": 0,
       "circulationShare": 0.14540928393615463,
       "coreShare": 0.3274271489237077,
       "bedroomSpread": 0,
@@ -211,7 +238,8 @@
       "flexStrips": 0
     },
     "zf-03": {
-      "flexShare": 0.1315473441108545,
+      "flexShare": 0.029930715935334872,
+      "livingShare": 0.10161662817551963,
       "circulationShare": 0.05117782909930716,
       "coreShare": 0.27113163972286375,
       "bedroomSpread": 8614,
@@ -227,7 +255,8 @@
       "flexStrips": 0
     },
     "zf-04": {
-      "flexShare": 0.2895991655490985,
+      "flexShare": 0.22232156161525854,
+      "livingShare": 0.06727760393383997,
       "circulationShare": 0.05870958128445835,
       "coreShare": 0.178363880196692,
       "bedroomSpread": 12665,
@@ -243,7 +272,8 @@
       "flexStrips": 0
     },
     "zf-05": {
-      "flexShare": 0.16536105967810852,
+      "flexShare": 0.11551061102407065,
+      "livingShare": 0.049850448654037885,
       "circulationShare": 0.05887100602953046,
       "coreShare": 0.23728813559322035,
       "bedroomSpread": 8450,
@@ -259,7 +289,8 @@
       "flexStrips": 0
     },
     "zf-07": {
-      "flexShare": 0.17271280390757918,
+      "flexShare": 0.0742549805169859,
+      "livingShare": 0.09845782339059327,
       "circulationShare": 0.04889962131606388,
       "coreShare": 0.2500411612974041,
       "bedroomSpread": 6843,
@@ -275,7 +306,8 @@
       "flexStrips": 0
     },
     "zf-08": {
-      "flexShare": 0.2725787086446105,
+      "flexShare": 0.12219850586979722,
+      "livingShare": 0.15038020277481323,
       "circulationShare": 0.0801093916755603,
       "coreShare": 0.23742662753468516,
       "bedroomSpread": 10744,
@@ -289,6 +321,23 @@
       "spineRatio": 0.2615878843506195,
       "longestFlexRatio": 0.2983019733822855,
       "flexStrips": 0
+    },
+    "zf-17": {
+      "flexShare": 0.10853453135014463,
+      "livingShare": 0.19897591829247926,
+      "circulationShare": 0.08353021947519539,
+      "coreShare": 0.11875527197056183,
+      "bedroomSpread": 9323,
+      "spreadNorm": 0.32442000471428695,
+      "wetNearBed": true,
+      "laundryNear": true,
+      "masterSeparated": true,
+      "spineMetres": 7.49,
+      "circulationM2": 27.46,
+      "slivers": 1,
+      "spineRatio": 0.30459536396909315,
+      "longestFlexRatio": 0.31720211468076454,
+      "flexStrips": 1
     }
   }
 }

@@ -15,11 +15,11 @@ import { checkConnectivity } from './connect.ts';
 import { distribute } from './layout.ts';
 import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, runBrief, type BriefResult } from './pipeline.ts';
 import { GOLDEN, goldenById, profileFor } from './golden.ts';
-import { BAND_METRICS, buildProfile, closeness, groupedRects, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
+import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
 import { renderSVG } from './render.ts';
 import { CARVE_SPECS, CORE_AREA_MAX, CORE_AREA_MIN, SPECS, SPINE_W, withinGarage, withinSpec } from './sizes.ts';
-import type { Brief, Candidate, Rect, ZoneRec } from './types.ts';
+import type { Brief, Candidate, FlexPiece, Rect, ZoneRec } from './types.ts';
 import { allRects, enumerateOptions, longestRun, mismatches, RUN_EXTRA, spineStopsAtCore, touchesBoundary } from './zones.ts';
 
 const RESULTS: BriefResult[] = BRIEFS.map(runBrief);
@@ -450,8 +450,8 @@ test('the 8.8 m lot now produces valid layouts (rooms behind the garage, Core ab
   }
 });
 
-test('profile: the band of each metric across the other golden plans (leave-one-out), all six for a brief with none', () => {
-  assert.equal(GOLDEN.length, 6);
+test('profile: the band of each metric across the other golden plans (leave-one-out), all seven for a brief with none', () => {
+  assert.equal(GOLDEN.length, 7); // round 6 added zf-17 (Botanica 36)
   for (const g of GOLDEN) {
     const loo = profileFor(g.id);
     const others = buildProfile(GOLDEN.filter((x) => x.id !== g.id).map((x) => x.metrics));
@@ -543,8 +543,9 @@ test('sanity: every golden layout is within, or at most 10 points outside, its l
     for (const k of BAND_METRICS) if (sc.outside[k] > 10) failing.push(`${g.id}: ${k} ${sc.outside[k]} points outside`);
     assert.ok(g.metrics.wetNearBed && g.metrics.laundryNear, `${g.id}: a yes/no term fails`);
   }
-  // the one known miss: zf-01's spine (54 % of the depth) is longer than the other five plans' (see README)
-  assert.deepEqual(failing.map((f) => f.split(':')[0]), failing.length ? ['zf-01'] : []);
+  // the known misses: zf-01's spine (54 % of the depth) is longer than the other plans' (see README); and, since round 6
+  // (living Flex leaves the Flex share, zf-17 joined the profile), zf-04's 22 % ordinary Flex is 10.01 points above the others' max
+  assert.deepEqual(failing.map((f) => f.split(':')[0]), failing.length ? ['zf-01', 'zf-04'] : []);
 });
 
 for (const g of GOLDEN) {
@@ -752,4 +753,77 @@ test('carve: carved rooms are drawn like rooms (name, W x D, plain fill) and the
   assert.ok(svg.includes(`<rect x="${z.rect.x}" y="${z.rect.y}" width="${z.rect.w}" height="${z.rect.h}" fill="#e8e8e8"`));
   assert.ok(carvedLine(x.c)!.startsWith('carved: Theatre'));
   assert.equal(carvedLine({ ...x.c, carved: [] }), 'carved: none');
+});
+
+// ------------------------------------------------------------------ round 6: Botanica 36 and living Flex
+
+const mkPiece = (x: number, y: number, w: number, h: number): FlexPiece => ({ id: 'f', rect: { x, y, w, h }, cls: classifyPiece({ x, y, w, h }) });
+const livingAt = (flex: FlexPiece[]): string[] => flex.filter((f) => f.cls === 'Flex · living').map((f) => `${f.rect.x},${f.rect.y}`);
+
+test('living Flex: Botanica (zf-17) has its two rear pieces living, and no other piece', () => {
+  const g = goldenById('zf-17')!;
+  assert.deepEqual(livingAt(g.layout.flex).sort(), ['200,200', '8200,200']);
+  assert.ok(g.metrics.livingShare > 0.19 && g.metrics.livingShare < 0.21, String(g.metrics.livingShare));
+  // the second piece is living by chain: it touches the first one, not the Core
+  const rumpus = g.layout.flex.find((f) => f.rect.x === 8200 && f.rect.y === 200)!;
+  assert.ok(!coreRectsOf(g.layout.zones).some((c) => edgeBetween(rumpus.rect, c, GOLDEN_ADJ.tol) > 0));
+});
+
+test('living Flex: a rear piece that does not touch the Core (directly or by chain) is not living; neither are non-rear, short-edge and circulation pieces', () => {
+  const core: Rect[] = [{ x: 0, y: 5000, w: 6000, h: 5000 }];
+  const t = (flex: FlexPiece[], cores = core): string[] => livingAt(markLiving(flex, cores, CANDIDATE_ADJ.tol));
+  assert.deepEqual(t([mkPiece(0, 0, 6000, 5000)]), ['0,0'], 'rear and touching the Core');
+  assert.deepEqual(t([mkPiece(6000, 0, 4000, 5000)]), [], 'rear, but it meets the Core at a corner only');
+  assert.deepEqual(t([mkPiece(5000, 0, 4000, 5000)]), [], 'rear, but the Core edge is 1000 mm, under 1200');
+  assert.deepEqual(t([mkPiece(0, 0, 6000, 5000), mkPiece(6000, 0, 4000, 5000)]), ['0,0', '6000,0'], 'the second is living through the first');
+  assert.deepEqual(t([mkPiece(6000, 0, 4000, 5000), mkPiece(10000, 0, 4000, 5000)]), [], 'a chain with no Core at its start is not living');
+  assert.deepEqual(t([mkPiece(0, 1000, 6000, 4000)]), [], 'not on the rear wall');
+  const hall = mkPiece(0, 0, 6000, 1500);
+  assert.equal(hall.cls, 'Flex · circulation');
+  assert.deepEqual(t([hall], [{ x: 0, y: 1500, w: 6000, h: 5000 }]), [], 'circulation Flex is never living');
+  // a measured zoning has ~200 mm lines: the tolerance carries the rear wall and the gap to the Core
+  assert.deepEqual(livingAt(markLiving([mkPiece(200, 200, 5800, 4600)], [{ x: 200, y: 5000, w: 6000, h: 5000 }], GOLDEN_ADJ.tol)), ['200,200']);
+  // idempotent
+  const once = markLiving([mkPiece(0, 0, 6000, 5000)], core, 0);
+  assert.deepEqual(markLiving(once, core, 0), once);
+});
+
+test('living Flex: flexShare excludes living Flex, livingShare reports it, and it has no weight in the score', () => {
+  const env = { w: 20000, d: 10000 };
+  const zones: ZoneRec[] = [{ id: 'core-1', kind: 'core', name: 'Core', rect: { x: 0, y: 5000, w: 20000, h: 5000 } }];
+  const mk = (cls: FlexPiece['cls']): FlexPiece[] => [{ id: 'f', rect: { x: 0, y: 0, w: 20000, h: 5000 }, cls }];
+  const room = metricsOf({ env, zones, flex: mk('Flex · room'), extensions: [], total: 200e6 }, CANDIDATE_ADJ);
+  const liv = metricsOf({ env, zones, flex: mk('Flex · living'), extensions: [], total: 200e6 }, CANDIDATE_ADJ);
+  assert.deepEqual([room.flexShare, room.livingShare], [0.5, 0]);
+  assert.deepEqual([liv.flexShare, liv.livingShare], [0, 0.5]);
+  for (const x of ALL) {
+    const total = x.c.envelope.w * x.c.envelope.d;
+    const all = x.c.flex.reduce((a, f) => a + area(f.rect), 0) / total;
+    assert.ok(Math.abs(x.c.quality.flexShare + x.c.quality.livingShare - all) < 1e-9, where(x));
+    assert.ok(Math.abs(x.c.quality.livingShare - x.c.flexArea['Flex · living'] / total) < 1e-9, where(x));
+  }
+  assert.ok(ALL.filter((x) => x.c.quality.livingShare > 0).length > 100, 'living Flex is common');
+  const p = profileFor('zf-17');
+  assert.equal(scoreOf({ ...liv, livingShare: 0 }, p).score, scoreOf({ ...liv, livingShare: 0.9 }, p).score);
+});
+
+test('living Flex: carving leaves a living piece alone apart from Activity (no hall; the leftovers stay living); elsewhere it is unchanged', () => {
+  const env: Rect = { x: 0, y: 0, w: 20000, h: 16000 };
+  const spine: ZoneRec = { id: 'spine', kind: 'spine', name: 'Spine', rect: { x: 0, y: 0, w: 1200, h: 16000 } };
+  const rear: Rect = { x: 1200, y: 0, w: 18800, h: 6000 };
+  const core: ZoneRec = { id: 'core-1', kind: 'core', name: 'Core', rect: { x: 1200, y: 6000, w: 18800, h: 5000 } };
+  const tiles = (r: { carved: ZoneRec[]; flex: FlexPiece[] }): number => [...r.carved.map((z) => z.rect), ...r.flex.map((f) => f.rect)].reduce((a, q) => a + area(q), 0);
+  const withCore = carveRooms(env, [core], spine, [{ id: 'f1', rect: rear, cls: classifyPiece(rear) }]);
+  assert.deepEqual(withCore.carved.map((z) => z.name), ['Activity'], 'Theatre, Guest bed and Study skip the living piece');
+  assert.ok(withCore.flex.length > 0 && withCore.flex.every((f) => f.cls === 'Flex · living'), 'what is left of it is still living');
+  assert.equal(tiles(withCore), area(rear), 'the room and the leftovers tile the piece');
+  // the same piece with no Core under it is ordinary Flex: Theatre comes out first, as before
+  const lone = carveRooms(env, [], spine, [{ id: 'f1', rect: rear, cls: classifyPiece(rear) }]);
+  assert.equal(lone.carved[0].name, 'Theatre');
+  assert.ok(!lone.flex.some((f) => f.cls === 'Flex · living'));
+  // real candidates: the carve pass never takes a room other than Activity out of a living band, so carving never raises the Flex share
+  // (also checked, over every brief, by 'carve: carve false reproduces the earlier output')
+  const nonActivityOnRear = CARVED.filter((x) => x.c.carved!.some((z) => z.name !== 'Activity' && z.rect.y === 0 && coreRectsOf(x.c.zones).some((c) => edgeBetween(z.rect, c, 0) >= 1200)));
+  // such a room can exist only when it was ordinary Flex that happened to touch the Core, which makes it living: so none
+  assert.equal(nonActivityOnRear.length, 0);
 });

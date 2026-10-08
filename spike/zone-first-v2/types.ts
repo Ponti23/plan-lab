@@ -36,7 +36,8 @@ export interface ZoneRec {
   carved?: true;
 }
 
-export type FlexClass = 'Flex · circulation' | 'Flex · room' | 'Flex · storage' | 'sliver';
+/** 'Flex · living' (round 6): rear-wall Flex that adjoins the Core, directly or through other living Flex (see quality.ts markLiving) */
+export type FlexClass = 'Flex · circulation' | 'Flex · room' | 'Flex · storage' | 'Flex · living' | 'sliver';
 
 export interface FlexPiece {
   id: string;

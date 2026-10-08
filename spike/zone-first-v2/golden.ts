@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { classifyPiece } from '../zone-first/flex.ts';
-import { buildProfile, GOLDEN_ADJ, groupedRects, metricsOf, type Layout, type Metrics, type Profile } from './quality.ts';
+import { buildProfile, coreRectsOf, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, type Layout, type Metrics, type Profile } from './quality.ts';
 import type { Candidate, FlexPiece, Rect, ZoneKind, ZoneRec } from './types.ts';
 
 const FILE = join(import.meta.dirname!, '..', '..', 'knowledge', 'specs', 'zone-first-golden.json');
@@ -57,6 +57,7 @@ export function loadGolden(): GoldenPlan[] {
       }
     });
     const env = { w: p.envelope[0], d: p.envelope[1] };
+    flex.splice(0, flex.length, ...markLiving(flex, coreRectsOf(zones), GOLDEN_ADJ.tol));
     const layout: Layout = { env, zones, flex, extensions: [], total };
     const metrics = metricsOf(layout, GOLDEN_ADJ);
     const spine = zones.find((z) => z.kind === 'spine')!;

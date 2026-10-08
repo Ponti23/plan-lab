@@ -73,7 +73,8 @@ function flexSvg(d: number, f: FlexPiece): string {
     f.rect.h >= 3 * FONT
       ? [{ text: f.cls, dy: -FONT * 0.5 }, { text: dims(f.rect), dy: FONT * 0.7, small: true }]
       : [{ text: f.cls, dy: 0, small: true }];
-  return `<g><rect x="${f.rect.x}" y="${top}" width="${f.rect.w}" height="${f.rect.h}" fill="url(#hatch)" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}</g>`;
+  const fill = f.cls === 'Flex · living' ? 'url(#hatch3)' : 'url(#hatch)';
+  return `<g><rect x="${f.rect.x}" y="${top}" width="${f.rect.w}" height="${f.rect.h}" fill="${fill}" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}</g>`;
 }
 
 /** R13: hatched the other way, labelled "<Zone> · extension W x D", a dashed line around zone + extension. */
@@ -111,6 +112,11 @@ export function renderSVG(c: Candidate): string {
 <pattern id="hatch2" width="500" height="500" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
   <rect width="500" height="500" fill="#ffffff"/>
   <line x1="0" y1="0" x2="0" y2="500" stroke="#666" stroke-width="70"/>
+</pattern>
+<pattern id="hatch3" width="600" height="600" patternUnits="userSpaceOnUse">
+  <rect width="600" height="600" fill="#ffffff"/>
+  <line x1="0" y1="0" x2="0" y2="600" stroke="#aaa" stroke-width="60"/>
+  <line x1="0" y1="0" x2="600" y2="0" stroke="#aaa" stroke-width="60"/>
 </pattern>
 <pattern id="dots" width="600" height="600" patternUnits="userSpaceOnUse">
   <rect width="600" height="600" fill="#f4f4f4"/>

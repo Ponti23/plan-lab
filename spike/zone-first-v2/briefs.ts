@@ -22,12 +22,16 @@ const TARGETS: Record<string, { target: Target; altTarget?: Target }> = {
   'zf-04': { target: T('L', 'middle', 'block', ['bed', 'bed', 'flex'], 'front', 'block', true, 'R') },
   'zf-05': { target: T('L', 'middle', 'block', ['bed', 'bed', 'flex'], 'front', 'block', true, 'R') },
   'zf-07': { target: T('R', 'middle', 'block', ['bed', 'bed', 'flex'], 'middle', 'block', true, 'R') },
+  'zf-17': { target: T('R', 'middle', 'block', ['flex'], 'front', 'block', false, 'L') },
   'zf-08': {
     target: T('L', 'middle', 'split', ['flex', 'bed', 'flex', 'bed'], 'middle', 'split', true, 'L'),
     // the user's simplified version: the same, with one big Core block
     altTarget: T('L', 'middle', 'block', ['flex', 'bed', 'flex', 'bed'], 'middle', 'split', true, 'L'),
   },
 };
+
+/** Botanica 36 (2026-10-07): not a v1 brief, so it is defined here */
+const BOTANICA: Brief = { id: 'zf-17', title: 'Botanica 36', envelope: { w: 14870, d: 24590 }, bedrooms: 4, garage: 'double', wc: true, laundry: true, ...TARGETS['zf-17'] };
 
 export const BRIEFS: Brief[] = V1.filter((b) => b.id !== 'zf-02')
   .filter((b) => b.id in TARGETS || b.id === 'SAMPLE-15x27' || b.id === 'custom-8800x20550')
@@ -41,4 +45,5 @@ export const BRIEFS: Brief[] = V1.filter((b) => b.id !== 'zf-02')
     laundry: b.laundry,
     file: b.ref?.file,
     ...(TARGETS[b.id] ?? {}),
-  }));
+  }))
+  .concat([BOTANICA]);

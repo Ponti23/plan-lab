@@ -3,8 +3,8 @@
 // Brief: knowledge/briefs/zf-v2-flex-split-brief.md. Every rule here is provisional (see the README).
 
 import { checkConnectivity } from './connect.ts';
-import { classifyPiece, decompose, flexAreaOf, mergeSlivers, SLIVER_MIN_SIDE } from '../zone-first/flex.ts';
-import { CANDIDATE_ADJ, metricsOf } from './quality.ts';
+import { classifyPiece, decompose, mergeSlivers, SLIVER_MIN_SIDE } from '../zone-first/flex.ts';
+import { CANDIDATE_ADJ, coreRectsOf, flexAreaOf, markLiving, metricsOf } from './quality.ts';
 import { CARVE_SPECS, HALL_MAX_LEN, HALL_WIDTHS, type CarveSpec, type Rng } from './sizes.ts';
 import type { Candidate, FlexPiece, Rect, ZoneRec } from './types.ts';
 
@@ -63,14 +63,17 @@ const cmpKey = (a: number[], b: number[]): number => {
  * leftover pieces, then the smallest piece, then fixed positional keys.
  */
 export function carveRooms(env: Rect, zones: ZoneRec[], spine: ZoneRec, flex: FlexPiece[]): CarveResult {
-  let pieces = flex.slice();
+  const cores = coreRectsOf(zones);
+  let pieces = markLiving(flex, cores, CANDIDATE_ADJ.tol);
   const carved: ZoneRec[] = [];
   for (const spec of CARVE_SPECS) {
     const options = optionsFor(spec, env, pieces);
     options.sort((a, b) => cmpKey(a.key, b.key));
     for (const o of options) {
       const room: ZoneRec = { id: `carved-${carved.length + 1}`, kind: 'carved', name: spec.name, rect: o.room, carved: true };
-      const parts: FlexPiece[] = o.parts.map((r) => ({ id: '', rect: r, cls: classifyPiece(r) }));
+      // what is left of a living piece stays living (the band is still the band), so carving never adds to the Flex share
+      const leftCls = pieces[o.piece].cls === 'Flex · living' ? 'Flex · living' : null;
+      const parts: FlexPiece[] = o.parts.map((r) => ({ id: '', rect: r, cls: leftCls ?? classifyPiece(r) }));
       if (o.hall) parts.push({ id: '', rect: o.hall, cls: 'Flex · circulation' });
       const next = pieces.filter((_, i) => i !== o.piece).concat(parts);
       const conn = checkConnectivity({ zones: [...zones, ...carved, room], spine, flex: next });
@@ -97,9 +100,14 @@ function optionsFor(spec: CarveSpec, env: Rect, pieces: FlexPiece[]): Option[] {
   pieces.forEach((p, pi) => {
     // circulation Flex is a walk-through hall: it is never carved
     if (p.cls === 'sliver' || p.cls === 'Flex · circulation') return;
+    // round 6: a living piece (rear Flex that adjoins the Core) is only ever carved into an Activity room
+    const living = p.cls === 'Flex · living';
+    if (living && spec.name !== 'Activity') return;
     const P = p.rect;
     ways.forEach(([wr, hr], oi) => {
       for (const h of halls) {
+        // no hall out of a living piece: it would turn living Flex into circulation Flex
+        if (living && h.w > 0) continue;
         // side: 0 = hall left of the room, 1 = right, 2 = rear (above), 3 = front (below)
         const hallX = h.w > 0 && h.side < 2 ? h.w : 0;
         const hallY = h.w > 0 && h.side >= 2 ? h.w : 0;

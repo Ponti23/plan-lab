@@ -1,5 +1,5 @@
 {
-  "about": "The user's own zonings (2026-10-07), measured by Opus from the zoning-only panel of each drawing in knowledge/reference/ideal/user-zoning/ (thick-line detection, scaled to the plan's stated envelope, 100 mm grid). Rects are cell interiors [x, y, w, d] in mm, origin rear-left, +y toward the front; lines between cells are about 200 mm and are not part of any cell. zf-05 and zf-07 use the user's redraws (…-v2.png, 2026-10-07): the WC is its own cell and a short hall branches sideways to the rear bedrooms. Kinds: wc (separate WC), core, core-dining, core-kl, master, master-wir, ensuite, bed, beds (two bedrooms drawn as one cell), wet, laundry, garage, spine, flexwall, flex. zf-00 is left out: it has no dimensions. Provisional; the user checks these against the drawings.",
+  "about": "The user's own zonings (2026-10-07), measured by Opus from the zoning-only panel of each drawing in knowledge/reference/ideal/user-zoning/ (thick-line detection, scaled to the plan's stated envelope, 100 mm grid). Rects are cell interiors [x, y, w, d] in mm, origin rear-left, +y toward the front; lines between cells are about 200 mm and are not part of any cell. zf-05 and zf-07 use the user's redraws (…-v2.png, 2026-10-07): the WC is its own cell and a short hall branches sideways to the rear bedrooms. Kinds: wc (separate WC), core, core-dining, core-kl, master, master-wir, ensuite, bed, beds (two bedrooms drawn as one cell), wet, laundry, garage, spine, flexwall, flex. zf-00 is left out: it has no dimensions. zf-17 is Botanica 36 (14.87 x 24.59 m, 4 bed, double garage), added 2026-10-07 and measured by Opus from the user's zoning panel; the drawing is not in the repo yet. Provisional; the user checks these against the drawings.",
   "plans": {
     "zf-01": { "envelope": [9000, 16900], "zones": [
       ["core", 200, 200, 8600, 5200], ["bed", 200, 5500, 3600, 3700], ["flex", 3900, 5600, 4900, 1800],
@@ -35,6 +35,13 @@
       ["wet", 11800, 4000, 3100, 2700], ["core-kl", 100, 6800, 10300, 5700], ["laundry", 11800, 6900, 3100, 2800],
       ["bed", 10600, 9900, 4200, 2600], ["flex", 100, 12600, 5800, 2500], ["flexwall", 6100, 12600, 1200, 3300],
       ["master-wir", 7400, 12600, 7400, 3300], ["garage", 100, 15300, 5800, 6300], ["spine", 6100, 16000, 1800, 5700],
-      ["flex", 8000, 16000, 4100, 1000], ["ensuite", 12200, 16000, 2600, 5700], ["flex", 8000, 17200, 4100, 4400] ] }
+      ["flex", 8000, 16000, 4100, 1000], ["ensuite", 12200, 16000, 2600, 5700], ["flex", 8000, 17200, 4100, 4400] ] },
+    "zf-17": { "envelope": [14870, 24590], "zones": [
+      ["flex", 200, 200, 7800, 5400], ["flex", 8200, 200, 6470, 3600], ["flex", 8200, 4000, 1100, 1600],
+      ["bed", 9500, 4000, 5170, 3400], ["core", 200, 5800, 6100, 6400], ["flex", 6500, 5800, 2800, 6400],
+      ["wet", 9500, 7600, 5170, 1900], ["bed", 9500, 9700, 5170, 3400], ["flex", 200, 12400, 7800, 1600],
+      ["flex", 8200, 12400, 1100, 700], ["bed", 8200, 13300, 6470, 3400], ["laundry", 200, 14200, 6500, 1600],
+      ["flex", 6900, 14200, 1100, 2500], ["master", 200, 16000, 6500, 8390], ["spine", 6900, 16900, 2000, 7490],
+      ["garage", 9100, 16900, 5570, 7490] ] }
   }
 }

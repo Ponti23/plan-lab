@@ -12,9 +12,9 @@
 //       R lane   x [gw + 1200, W]     stack: ... rooms, front cells
 
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
-import { computeFlex, flexAreaOf, overlap, sharedEdge } from '../zone-first/flex.ts';
+import { computeFlex, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { checkConnectivity } from './connect.ts';
-import { CANDIDATE_ADJ, metricsOf } from './quality.ts';
+import { CANDIDATE_ADJ, coreRectsOf, flexAreaOf, markLiving, metricsOf } from './quality.ts';
 import {
   allocate,
   Fail,
@@ -648,7 +648,9 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   if (!conn.ok) return fail(options, `connectivity: nothing reaches ${[...new Set(conn.unreached.map(stripNumber))].join(', ')}`);
 
   // R13: Flex that belongs to one zone becomes an extension, unless that would break connectivity
-  const { extensions, rest: flexKept } = findExtensions(env, zones, spineRec, flex, flexCells);
+  const { extensions, rest: ext } = findExtensions(env, zones, spineRec, flex, flexCells);
+  // round 6: rear Flex that adjoins the Core is living space, not waste
+  const flexKept = markLiving(ext, coreRectsOf(zones), CANDIDATE_ADJ.tol);
   const flexArea = flexAreaOf(flexKept);
   const circulationArea =
     spineRec.rect.w * spineRec.rect.h + walls.reduce((a, w) => a + w.rect.w * w.rect.h, 0) + flexArea['Flex · circulation'];

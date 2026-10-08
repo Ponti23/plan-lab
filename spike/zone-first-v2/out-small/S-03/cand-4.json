@@ -36,7 +36,8 @@
     "coreSide": "both"
   },
   "quality": {
-    "flexShare": 0.11333333333333333,
+    "flexShare": 0.07575757575757576,
+    "livingShare": 0.026303030303030304,
     "circulationShare": 0.08230303030303031,
     "coreShare": 0.21818181818181817,
     "bedroomSpread": 3150,
@@ -50,7 +51,7 @@
     "spineRatio": 0.2727272727272727,
     "longestFlexRatio": 0.2636363636363636,
     "flexStrips": 0,
-    "score": 28.35,
+    "score": 27.68,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -65,7 +66,7 @@
     "Bath + WC shrank in depth to 3500 mm (preferred 3600 mm)",
     "Bed 2 shrank in depth to 3100 mm (preferred 3600 mm)",
     "Bed 3 shrank in depth to 3200 mm (preferred 3600 mm)",
-    "carved from Flex: Theatre 3.6 x 4.1, Guest bed 3.1 x 3.4"
+    "carved from Flex: Theatre 3.6 x 4.1, Activity 3.1 x 4.0"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
@@ -74,7 +75,8 @@
   "flexArea": {
     "Flex · circulation": 6380000,
     "Flex · room": 0,
-    "Flex · storage": 12320000,
+    "Flex · storage": 6120000,
+    "Flex · living": 4340000,
     "sliver": 0
   },
   "extensionArea": 0,
@@ -92,13 +94,13 @@
       }
     },
     {
-      "name": "Guest bed",
-      "label": "Guest bed 3.1 x 3.4",
+      "name": "Activity",
+      "label": "Activity 3.1 x 4.0",
       "rect": {
         "x": 0,
         "y": 0,
         "w": 3100,
-        "h": 3400
+        "h": 4000
       }
     }
   ],
@@ -195,12 +197,12 @@
     {
       "id": "carved-2",
       "kind": "carved",
-      "name": "Guest bed",
+      "name": "Activity",
       "rect": {
         "x": 0,
         "y": 0,
         "w": 3100,
-        "h": 3400
+        "h": 4000
       },
       "carved": true
     }
@@ -222,11 +224,11 @@
       "id": "flex-1",
       "rect": {
         "x": 0,
-        "y": 3400,
+        "y": 4000,
         "w": 3100,
-        "h": 2000
+        "h": 1400
       },
-      "cls": "Flex · storage"
+      "cls": "Flex · living"
     },
     {
       "id": "flex-2",
