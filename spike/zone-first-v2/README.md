@@ -119,7 +119,7 @@ and ends against the Core or room-sized Flex. It is never carried on by a hall.
 
 ## Options and enumeration
 
-Deterministic, no randomness. 5504 options for a 4-bed brief (the budget is 6000, round 4), 1408 for the 2-bed, 48 for the 8.8 m lot.
+Deterministic, no randomness. 5568 options for a 4-bed brief (the budget is 6000, round 4), 1472 for the 2-bed, 48 for the 8.8 m lot.
 
 | Option | Values |
 |---|---|
@@ -132,7 +132,7 @@ Deterministic, no randomness. 5504 options for a 4-bed brief (the budget is 6000
 | `rearPlan` (middle only) | the rear row left to right: `B` bedroom, `F` Flex, `M` Master. Four bases (`F`, `BBF`, `FBB`, `FBFB`; `FB` and `BFB` were dropped in round 3 and `BF` in round 4 to stay inside the budget) with at most as many `B` as the brief has secondary bedrooms; for `masterPos` rear, `M` is put at either end |
 | `wetForm` (round 4) | block: one `Bath + WC` cell; split: a separate `WC` cell above a `Bath` cell in the wet cluster (WC within one cell of the Bath, and it needs a walk-through neighbour like any room) |
 | `flexWall` | false: no flex-wall; true: a `Flex-wall` cell beside the wet block + laundry cluster |
-| `variant` | stack-lane order, packed toward the rear row: **0 (a)** wet block + laundry, the lane bedroom(s) right after them, Flex toward the front; **1 (b)** wet block + laundry, one Flex cell, then the lane bedroom(s) (the zf-04 wish); **2 (c)** a hall under the rear row first, so every rear bedroom has a walk-through neighbour, then (a): with the flex-wall option it is a sideways flex-wall 1000 deep (round 4), otherwise a 1200 Flex hall; **3 (d)** (only with the flex-wall option) the plain 1200 Flex hall. For `corePos` rear: 0 = laundry in the bedroom stack, 1 = laundry in the garage lane; both packed toward the Core |
+| `variant` | stack-lane order, packed toward the rear row: **0 (a)** wet block + laundry, the lane bedroom(s) right after them, Flex toward the front; **1 (b)** wet block + laundry, one Flex cell, then the lane bedroom(s) (the zf-04 wish); **2 (c)** a hall under the rear row first, so every rear bedroom has a walk-through neighbour, then (a): with the flex-wall option it is a sideways flex-wall 1000 deep (round 4), otherwise a 1200 Flex hall; **3 (d)** (only with the flex-wall option) the plain 1200 Flex hall; **4 (e)** (round 9, only for a 4-bed brief with `masterPos` front, `rearPlan` `F` and `coreLane` G or W) the bedroom column: three lane bedrooms on the side opposite the garage, rear to front Bed 2, Bed 3, wet block + laundry, Bed 4, with Flex spare. For `corePos` rear: 0 = laundry in the bedroom stack, 1 = laundry in the garage lane; both packed toward the Core |
 
 `corePos` rear generates only `coreForm` block and `masterPos` front or middle (the Core takes the rear wall).
 
@@ -226,10 +226,10 @@ area that a candidate covers with the same kind group.
 
 ## Results (this run)
 
-Valid / generated (round 8b, the default no-carve run — validity is decided before the carve pass, so these are the
-round 8a counts): zf-00 3200/5504, zf-01 354/1472, zf-03 964/5504, zf-04 3184/5504, zf-05 1758/5504, zf-07 1380/5504,
-zf-08 2814/5504, SAMPLE-15x27 3940/5504, custom-8800x20550 16/48, zf-17 3740/5504. Whole run 21350/45552, about 8 s
-(12.7 s with `--carve`).
+Round 9, the default run (split pass on, no carve): zf-00 2838/5568, zf-01 348/1472, zf-03 908/5568, zf-04 2828/5568,
+zf-05 1626/5568, zf-07 1112/5568, zf-08 2288/5568, SAMPLE-15x27 3184/5568, custom-8800x20550 40/48, zf-17 3114/5568.
+Whole run 18286/46064 valid, about 7.6 s (validity is decided before the split pass, so these counts include the
+candidates the split pass rejects). The option budget itself grew from 5504 to 5568 with the round 9 variant 4.
 
 ### Carve pass: big Flex becomes named rooms (round 5, user decision 2026-10-07; **off by default since round 8b**)
 
@@ -346,7 +346,7 @@ the depth, the other six 26-35 %). Every other golden plan is within 10 points o
 
 ### Brief with no golden layout (ranked against all seven plans)
 
-- **SAMPLE-15x27** 3940/5504 valid. Top 3: L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0 (Flex 40 %, grew: Master, Bed 2, Bed 3, Bed 4, Bath + WC, Laundry, score 42.26); L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v0 (Flex 49 %, grew: Master, Bed 2, Bed 3, score 44.3); L|midR|split|m:middle/block|wet:block|rr:BBF|fw|v3 (Flex 50 %, grew: Core · kitchen + living, Master, Bed 2, Bed 3, Bath + WC, score 44.32). Growing took the top 1 from 54 % to 40 % Flex; the 405 m2 envelope still cannot be filled with rooms held to their CATALOG maxima and a capped Core.
+- **SAMPLE-15x27** 3940/5504 valid *(round 7 numbers, kept as the record of that round; the current run is under "Results (this run)")*. Top 3: L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0 (Flex 40 %, grew: Master, Bed 2, Bed 3, Bed 4, Bath + WC, Laundry, score 42.26); L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v0 (Flex 49 %, grew: Master, Bed 2, Bed 3, score 44.3); L|midR|split|m:middle/block|wet:block|rr:BBF|fw|v3 (Flex 50 %, grew: Core · kitchen + living, Master, Bed 2, Bed 3, Bath + WC, score 44.32). Growing took the top 1 from 54 % to 40 % Flex; the 405 m2 envelope still cannot be filled with rooms held to their CATALOG maxima and a capped Core.
 - **custom-8800x20550** 16/48 valid, 12 distinct. Top: L|midG|block|m:middle/split|wet:block|rr:BBB|fw|v2 (Flex 12 %, grew: nothing, score 24.53) (12 % Flex, already under the ceiling, so unchanged). See "The 8.8 m lot" below.
 
 ### Short spine with the Core at the rear
@@ -550,6 +550,91 @@ L8b.4. **The grow-pass test is now a bound, not a strict rule.** With carving of
 L8b.5. **One review brief now has five different plans, not six.** `small/S-03` keeps its 302 valid / 206 distinct candidates,
    but the diversity pass runs out one plan earlier, so its `cand-6.svg|json` is gone (the medium and large sets are
    unchanged). The ranking that pass walks changed with the default, not the candidate set; nothing was retuned to hide it.
+
+## Round 9: split Flex into possible rooms; Master buffer; two-phase growth (user decision 2026-10-08)
+
+Brief: `knowledge/briefs/zf-v2-round9-brief.md`. The user's own Botanica 36 zoning (zf-17) has a few large Flex pieces
+that each read as one plausible space, while v2's Flex was often a single long strip down a wall. Round 9 cuts a Flex
+piece into the pieces a plan could plausibly be built from, marks each with what it looks like, grows the rooms the user
+cares about first, and drops the simplicity metric from the score. Five changes.
+
+1. **Split Flex into possible rooms (default).** After the grow pass and absorption, and before scoring, a Flex piece is
+   subdivided so no piece is longer than `FLEX_SPLIT_MAX_LONG = 5400` mm on a side (`splitFlex` / `splitCandidate` in
+   `carve.ts`). The cut is integer-near-equal (`spans`) and the pieces are re-sorted row-major and re-numbered `flex-N`.
+   Each piece is then labelled by what it looks like (`splitClass`):
+   - **`Flex · room`** — short side at least `FLEX_SPLIT_ROOM_MIN_SIDE = 2700` mm (a room-sized piece);
+   - **`Flex · circulation`** — short side 1000–1800 mm (`FLEX_SPLIT_CIRC_MIN_WIDTH` … `FLEX_SPLIT_CIRC_MAX_WIDTH`) and
+     long side at least `FLEX_SPLIT_CIRC_MIN_RATIO = 2` × the short side (a hall);
+   - **`Flex · storage`** — anything else that survives.
+   `Flex · living` and `Flex · circulation` pieces are kept as they are (a hall is already the smallest useful piece).
+   The pass is **labelling only**: no zone, extension or wall moves. A layout whose Flex cannot be cut without leaving a
+   side under 1000 mm is rejected (`SPLIT_SLIVER_FAILURE = 'split pass: Flex has a side under 1000 mm'`), so a sliver is
+   never created. `--no-split` on `run.ts` / `run-small.ts`, or `pipeline.runBrief(brief, { split: false })`, turns the
+   pass off; `--carve` keeps the round 5 named-room pass and wins over splitting. Thresholds are **provisional; the user
+   set the 5400 / 2700 / 1000–1800 values by eye, needs calibration**.
+2. **Variant 4, the bedroom column (round 9, 3-bed briefs).** For a brief with three secondary bedrooms, `masterPos`
+   front, `rearPlan` `F` and `coreLane` G or W, `variant` 4 stacks the lane bedrooms on the side opposite the garage,
+   rear to front: Bed 2, Bed 3, wet block + laundry, Bed 4, then Flex spare toward the front. It is one extra variant
+   (64 more options for a 4-bed brief: 5504 -> 5568).
+3. **Circulation as the Master buffer (default).** Where a lane Master sits next to a circulation-only stretch, the spare
+   Flex cell is moved between the Master and the following room instead of left at the envelope edge, so the Master keeps
+   a buffer. `generate` falls back to the edge position (and notes it) when the buffer would break the stack; that
+   fallback fires on 16 of 18286 candidates in the default run.
+4. **Two-phase grow pass.** Round 7's grow pass ran in one order under the Flex ceiling. Round 9 splits it: bedrooms,
+   the Master and any ensuite grow to their zone caps **first, regardless of the ceiling** (`PRIORITY_GROW_ORDER`), then
+   the ceiling-driven pass (`CEILING_GROW_ORDER`) grows the Core, wet rooms, WC, laundry and garage only while the
+   pre-fill Flex share is still above the ceiling. Neither phase may leave a sliver. The effect: of the 7124 grown
+   candidates in the audit sweep (zf-04, zf-07, SAMPLE-15x27), 586 were already under the ceiling and were reached by the
+   priority phase alone, and 7064 of all grown candidates still end with a lower Flex share (60 end slightly higher, worst
+   +2.61 points — the round 8b caveat, still noted as a todo).
+5. **`pieceDensity` weight 0.** The round 8a simplicity metric is still computed, still in the profile and still captioned
+   in the review pages, but `QUALITY_WEIGHTS.bandScale.pieceDensity = 0`: it no longer moves the score. The user preferred
+   the useful edges the smaller Flex pieces make to the reward for fewer pieces. No other weight was changed.
+
+**Acceptance check (from the brief): the round 7 top-1 option must rank above the round 8 top-1 option for zf-17.** Both
+are still valid and both are on the list; ranked over the 3114 valid zf-17 candidates (score order), the round 7 top 1
+`L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v2` is at valid rank **25**, the round 8 top 1
+`L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0` at valid rank **489** (deduped rank 365 of 2704). The round 7
+option no longer survives the layout dedupe — the Master buffer makes its layout identical to its `m:front/block` twin
+(valid rank 21) — so the comparison is over the valid list, not the deduped top 5.
+
+**Variant 4 on zf-17.** 20 ranked zf-17 candidates use variant 4; the best is
+`L|midG|split|m:front/block|wet:block|rr:F|nofw|v4` at valid rank 1663 (deduped 1355 of 2704). The variant exists and is
+valid for the brief; it does not reach the top of zf-17. The zf-17 top 1 is
+`L|midR|block|m:front/split|wet:split|rr:BBF|fw|v0` (score 22.50).
+
+### Blind test (7 golden plans, after the round 9 pass)
+
+| Brief | Passed | The user's score | Best top-5 score | Top-1 Flex share (the user's) |
+|---|---|---|---|---|
+| zf-01 | yes | 42.61 | 9.10 | 18 % (6 %) |
+| zf-03 | yes | 7.42 | 7.39 | 22 % (3 %) |
+| zf-04 | yes | 26.16 | 14.59 | 19 % (22 %) |
+| zf-05 | **no** | 8.31 | 8.44 | 22 % (12 %) |
+| zf-07 | yes | 8.72 | 8.01 | 7 % (7 %) |
+| zf-08 | **no** | 7.92 | 13.12 | 25 % (12 %) |
+| zf-17 | yes | 27.97 | 22.50 | 29 % (11 %) |
+
+Five pass and two are todos, up from four and three in round 8b: zf-03 and zf-07 now pass, and zf-05 is a 0.13-point
+near miss. The zf-17 target-signature regression first matches at rank 2086 of 2704 distinct valid candidates (was 2160 of
+3432 after round 8b — the denominator shrank because the split pass rejects candidates with a sub-1000 mm Flex side).
+
+Judgement calls (provisional, all round 9):
+
+L9.1. **Splitting is labelling, not geometry** — it changes only which `FlexClass` a piece carries (and how many pieces
+   there are), never a rectangle; the drawn plan and the review SVGs still tile the envelope exactly.
+L9.2. **A piece is cut, then classified, in that order**: the cut is what makes a 9000 mm strip into two room-sized
+   pieces, and the class is read off the cut piece.
+L9.3. **The split pass rejects rather than traces**: a candidate with a Flex piece under 1000 mm on a side never reaches
+   the ranking, so the round 8a sliver rule is not needed here.
+L9.4. **`Flex · living` and `Flex · circulation` are never cut**, so a rear living band and a hall keep their identity.
+L9.5. **Priority growth ignores the ceiling by design** — bedrooms and the Master are what the user asked to see first;
+   the ceiling still governs the Core, wet rooms and garage.
+L9.6. **The Master buffer is a default with a guard**, not a hard rule: the fallback note (16 candidates) records where
+   the buffer could not be kept.
+L9.7. **The review sets are regenerated** (`out-small` 2752/23488, `out-medium` 7898/27776, `out-large` 13608/27712).
+   `small/S-03` still shows five plans rather than six (L8b.5), now 298 valid / 202 distinct where round 8b had 302 / 206
+   — the split pass's rejections and the Master buffer, not a retune.
 
 ## Living Flex (round 6, user decision 2026-10-07) and Botanica 36
 

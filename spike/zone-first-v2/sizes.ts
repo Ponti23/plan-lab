@@ -39,6 +39,13 @@ export const ZONE_ALLOWANCE = {
   garageDepthMax: 8000,
 } as const;
 
+/** Round 9, provisional and user-approved for this round; calibrate against architect-reviewed plans. */
+export const FLEX_SPLIT_MAX_LONG = 5400;
+export const FLEX_SPLIT_ROOM_MIN_SIDE = 2700;
+export const FLEX_SPLIT_CIRC_MIN_WIDTH = 1000;
+export const FLEX_SPLIT_CIRC_MAX_WIDTH = 1800;
+export const FLEX_SPLIT_CIRC_MIN_RATIO = 2;
+
 const rng = (min: number, pref: number, max: number): Rng => ({ min, pref, max });
 const r100 = (v: number): number => Math.round(v / 100) * 100;
 

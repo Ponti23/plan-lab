@@ -156,7 +156,18 @@ export function enumerateOptions(brief: Brief): Options[] {
             for (const masterForm of ['block', 'split'] as const) {
               for (const flexWall of [false, true]) {
                 // variant 3 (a plain Flex hall instead of the sideways flex-wall) only exists with the flex-wall option
-                for (const variant of flexWall ? [0, 1, 2, 3] : [0, 1, 2]) {
+                const variants: number[] = flexWall ? [0, 1, 2, 3] : [0, 1, 2];
+                // round 9 v4: all three bedrooms form the opposite-garage column
+                if (
+                  nBeds === 3 &&
+                  masterPos === 'front' &&
+                  rearPlan.length === 1 &&
+                  rearPlan[0] === 'F' &&
+                  (coreLane === 'G' || coreLane === 'W')
+                ) {
+                  variants.push(4);
+                }
+                for (const variant of variants) {
                   for (const wetForm of ['block', 'split'] as const) {
                     out.push({
                       garageSide,
@@ -184,7 +195,7 @@ export function enumerateOptions(brief: Brief): Options[] {
 
 // ------------------------------------------------------------------ building the tree
 
-export function buildTree(brief: Brief, o: Options): Node {
+export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
   const gs = garageSize(brief.garage);
   const W = brief.envelope.w;
   const wr = W - gs.w - SPINE_W;
@@ -284,8 +295,9 @@ export function buildTree(brief: Brief, o: Options): Node {
     const masterInGcol = o.coreLane === 'W' && o.masterPos === 'middle';
     const frontMasterInStack = o.masterPos === 'front' && stackLane === 'R';
 
-    const mid: Node[] = Array.from({ length: stackBeds }, newBed);
-    if (o.masterPos === 'middle' && !masterInGcol && !narrow) mid.push(masterNode(stackLane));
+    const midBeds: Node[] = Array.from({ length: stackBeds }, newBed);
+    const laneMaster = o.masterPos === 'middle' && !masterInGcol && !narrow ? masterNode(stackLane) : null;
+    const mid: Node[] = [...midBeds, ...(laneMaster ? [laneMaster] : [])];
     const front: Node[] = frontMasterInStack ? [masterNode('R')] : [];
     const wl = (): Node => cluster([...wetCells(), lnd()], stackLane);
     // (a) the lane bedroom right after the laundry, Flex toward the front; (b) one Flex cell between them
@@ -297,13 +309,27 @@ export function buildTree(brief: Brief, o: Options): Node {
         : { t: 'flex', wMin: 1200, dMin: 1200, fixedD: 1200 };
     const hall = hallNode();
     // (c) a 1200 Flex hall under the rear row first, so every rear bedroom has a walk-through neighbour
-    const st: Node[] =
-      o.variant === 0 ? [wl(), ...mid, F(), ...front] : o.variant === 1 ? [wl(), F(), ...mid, ...front] : [hall, wl(), ...mid, F(), ...front];
+    let st: Node[];
+    if (o.variant === 4) {
+      // round 9 bedroom column, rear to front: Bed 2, Bed 3, wet/laundry, optional Flex, Bed 4, buffer, Master
+      if (midBeds.length !== 3 || front.length !== 1 || stackLane !== 'R') throw new Fail('bedroom column needs three lane bedrooms and a front Master opposite the garage');
+      const [bed2, bed3, bed4] = midBeds;
+      st = [bed2, bed3, wl(), F(), bed4, F(), ...front];
+    } else {
+      st = o.variant === 0 ? [wl(), ...mid, F(), ...front] : o.variant === 1 ? [wl(), F(), ...mid, ...front] : [hall, wl(), ...mid, F(), ...front];
+    }
     // a narrow lane (nothing but the wet block and laundry fits): hall, Flex, then the cluster beside the garage, so the
     // Core in the G lane reaches the hall through that Flex
     if (narrow) st.splice(0, st.length, hallNode(), F(), wl());
-    // a middle Master in the R lane must not end up on the front wall: keep Flex after it
-    if (o.masterPos === 'middle' && stackLane === 'R' && !masterInGcol && !st[st.length - 1].sink) st.push(F());
+    // Round 9: spare in the Master's lane buffers it from bedrooms/wet rooms instead of sitting on the front wall.
+    // `masterBuffer = false` is the per-option validity fallback in generate().
+    if (laneMaster && stackLane === 'R') {
+      if (!st[st.length - 1].sink) st.push(F());
+      if (masterBuffer) {
+        const spare = st.pop()!;
+        st.splice(st.indexOf(laneMaster), 0, spare);
+      }
+    }
 
     if (o.coreLane === 'W') {
       coreSection = stack('core section', coreNodes(), 'l');
@@ -390,13 +416,13 @@ const fail = (options: Options, reason: string): GenResult => ({ ok: false, opti
 
 const mirrorRect = (r: Rect, W: number): Rect => ({ x: W - r.x - r.w, y: r.y, w: r.w, h: r.h });
 
-export function generate(brief: Brief, options: Options, flexCeiling?: number): GenResult {
+function generateAttempt(brief: Brief, options: Options, flexCeiling: number | undefined, masterBuffer: boolean): GenResult {
   const W = brief.envelope.w;
   const D = brief.envelope.d;
   const env = R(0, 0, W, D);
   const ctx: Ctx = { env, placed: [], notes: [], flexCells: [] };
   try {
-    const tree = buildTree(brief, options);
+    const tree = buildTree(brief, options, masterBuffer);
     allocate(tree, env, ctx, 'l');
   } catch (e) {
     if (e instanceof Fail) return fail(options, e.message);
@@ -409,28 +435,34 @@ export function generate(brief: Brief, options: Options, flexCeiling?: number): 
   }));
   const flexCells = ctx.flexCells.map((r) => (options.garageSide === 'R' ? mirrorRect(r, W) : r));
   // grow first, then fill (round 7): the grown candidate fixes the plan, R14 absorption runs on what is left of the
-  // Flex afterwards. The grow pass therefore measures candidate.flexShareBeforeFill, not the reported share;
-  // only a plan whose *reported* share is above the ceiling needs growing at all.
+  // Flex afterwards. The grow pass therefore measures candidate.flexShareBeforeFill, not the reported share.
   const first = finish(brief, options, ctx.notes, placed, flexCells);
   if (!first.ok) return first;
-  if (flexCeiling === undefined || first.candidate.quality.flexShare <= flexCeiling) return first;
+  if (flexCeiling === undefined) return first;
   // the grow pass works in the canonical (garage-left) frame, so a plan and its mirror grow the same way
   return growPass(brief, options, ctx.placed, ctx.flexCells, first.candidate, flexCeiling);
+}
+
+/** Generate with the round-9 Master buffer; only an option made invalid by that move retries the old envelope-edge spare. */
+export function generate(brief: Brief, options: Options, flexCeiling?: number): GenResult {
+  const buffered = generateAttempt(brief, options, flexCeiling, true);
+  const usesBuffer = options.corePos === 'middle' && options.coreLane === 'G' && options.masterPos === 'middle';
+  if (buffered.ok || !usesBuffer) return buffered;
+  const legacy = generateAttempt(brief, options, flexCeiling, false);
+  if (!legacy.ok) return buffered;
+  legacy.candidate.notes.push(`Master buffer fallback: kept spare at the envelope edge (${buffered.reason})`);
+  return legacy;
 }
 
 // ------------------------------------------------------------------ grow pass (user decision 2026-10-07)
 
 /**
- * Big lots: when the reported Flex share is above the ceiling (the profile's Flex max, passed in by the caller), rooms
- * and the Core grow toward their zone allowance cap first, so that only what is still left stays Flex. A zone grows
- * into an adjacent ordinary Flex piece that covers one whole side of it, keeping its rectangle. Fixed order: Core, then
- * Master (and its parts), then the bedrooms, then the wet rooms and laundry; within a group, in list order. It stops
- * when the Flex share *before* R14 absorption (`flexShareBeforeFill`) is at or under the ceiling or nothing can grow:
- * growth and absorption are not spent on the same area twice. A growth is only kept if the candidate is still valid
- * (connectivity, R7, zone cap, the Core area cap, the spine unchanged) and gains no sliver; it never leaves a strip
- * under 1000 mm. When the reported Flex share is already within the ceiling nothing changes.
+ * Round 9 first grows secondary bedrooms, then the Master and its parts, toward their allowance caps regardless of the
+ * Flex ceiling. The old ceiling-driven phase then grows the Core, wet rooms, laundry and garage. Both phases take only
+ * an adjacent ordinary Flex piece that covers a whole side, keep the candidate valid and never add a sliver.
  */
-const GROW_ORDER: Record<string, number> = { core: 0, master: 1, ensuite: 1, bedroom: 2, wet: 3, wc: 3, laundry: 3, garage: 4 };
+const PRIORITY_GROW_ORDER: Record<string, number> = { bedroom: 0, master: 1, ensuite: 1 };
+const CEILING_GROW_ORDER: Record<string, number> = { core: 0, wet: 1, wc: 1, laundry: 1, garage: 2 };
 
 function growPass(
   brief: Brief,
@@ -449,62 +481,71 @@ function growPass(
   let cand = cand0;
   const baseNotes = cand0.notes.slice();
   const grew = new Map<number, true>();
-  for (let guard = 0; guard < 80 && cand.flexShareBeforeFill > ceiling; guard++) {
-    const needArea = cand.flexShareBeforeFill * total - ceiling * total;
-    const order = placed
-      .map((p, i) => ({ p, i }))
-      .filter(({ p }) => p.kind in GROW_ORDER && p.spec)
-      .sort((a, b) => GROW_ORDER[a.p.kind] - GROW_ORDER[b.p.kind] || a.i - b.i);
-    let done = false;
-    const canonFlex = computeFlex(envR, placed.map((x) => x.rect));
-    for (const { p, i } of order) {
-      const r = p.rect;
-      const spec = p.spec === 'garage' ? null : SPECS[p.spec!];
-      for (const f of canonFlex) {
-        if (f.cls === 'sliver') continue;
-        const q = f.rect;
-        // direction, the piece's depth along it, the zone's side length
-        let dir: 'r' | 'l' | 'f' | 'b' | null = null;
-        let depth = 0;
-        let side = 0;
-        if (q.x === r.x + r.w && q.y <= r.y && q.y + q.h >= r.y + r.h) [dir, depth, side] = ['r', q.w, r.h];
-        else if (q.x + q.w === r.x && q.y <= r.y && q.y + q.h >= r.y + r.h) [dir, depth, side] = ['l', q.w, r.h];
-        else if (q.y === r.y + r.h && q.x <= r.x && q.x + q.w >= r.x + r.w) [dir, depth, side] = ['f', q.h, r.w];
-        else if (q.y + q.h === r.y && q.x <= r.x && q.x + q.w >= r.x + r.w) [dir, depth, side] = ['b', q.h, r.w];
-        if (!dir) continue;
-        const grown = (g: number): Rect =>
-          dir === 'r' ? { ...r, w: r.w + g } : dir === 'l' ? { ...r, x: r.x - g, w: r.w + g } : dir === 'f' ? { ...r, h: r.h + g } : { ...r, y: r.y - g, h: r.h + g };
-        const withinCap = (rect: Rect): boolean =>
-          p.kind === 'garage'
-            ? (dir === 'f' || dir === 'b') && withinGarage(brief.garage, rect)
-            : p.kind === 'core'
-              ? withinSpec(spec!, rect)
-              : withinZoneAllowance(spec!, rect);
-        // the most it may grow: the piece, the zone cap, and no more than needed to reach the ceiling
-        let g = Math.min(depth, Math.ceil(needArea / side / 100) * 100);
-        while (g >= 100 && !withinCap(grown(g))) g -= 100;
-        if (g < 100) continue;
-        // never leave a strip under 1000 mm in the piece
-        if (depth - g > 0 && depth - g < SLIVER_MIN_SIDE) {
-          if (withinCap(grown(depth))) g = depth;
-          else g = depth - SLIVER_MIN_SIDE;
+  const runPhase = (growOrder: Record<string, number>, ceilingDriven: boolean): void => {
+    for (let guard = 0; guard < 80 && (!ceilingDriven || cand.flexShareBeforeFill > ceiling); guard++) {
+      const needArea = ceilingDriven ? cand.flexShareBeforeFill * total - ceiling * total : Number.POSITIVE_INFINITY;
+      const order = placed
+        .map((p, i) => ({ p, i }))
+        .filter(({ p }) => p.kind in growOrder && p.spec)
+        .sort((a, b) => growOrder[a.p.kind] - growOrder[b.p.kind] || a.i - b.i);
+      let done = false;
+      const canonFlex = computeFlex(envR, placed.map((x) => x.rect));
+      for (const { p, i } of order) {
+        const r = p.rect;
+        const spec = p.spec === 'garage' ? null : SPECS[p.spec!];
+        // A front Master takes the rear-side buffer before widening elsewhere, so at least its final 1000 mm stays
+        // between it and the secondary rooms instead of becoming an envelope-edge strip.
+        const nearby = p.kind === 'master' ? canonFlex.slice().sort((a, b) => Number(b.rect.y + b.rect.h === r.y) - Number(a.rect.y + a.rect.h === r.y)) : canonFlex;
+        for (const f of nearby) {
+          if (f.cls === 'sliver') continue;
+          const q = f.rect;
+          // direction, the piece's depth along it, the zone's side length
+          let dir: 'r' | 'l' | 'f' | 'b' | null = null;
+          let depth = 0;
+          let side = 0;
+          if (q.x === r.x + r.w && q.y <= r.y && q.y + q.h >= r.y + r.h) [dir, depth, side] = ['r', q.w, r.h];
+          else if (q.x + q.w === r.x && q.y <= r.y && q.y + q.h >= r.y + r.h) [dir, depth, side] = ['l', q.w, r.h];
+          else if (q.y === r.y + r.h && q.x <= r.x && q.x + q.w >= r.x + r.w) [dir, depth, side] = ['f', q.h, r.w];
+          else if (q.y + q.h === r.y && q.x <= r.x && q.x + q.w >= r.x + r.w) [dir, depth, side] = ['b', q.h, r.w];
+          if (!dir) continue;
+          const grown = (g: number): Rect =>
+            dir === 'r' ? { ...r, w: r.w + g } : dir === 'l' ? { ...r, x: r.x - g, w: r.w + g } : dir === 'f' ? { ...r, h: r.h + g } : { ...r, y: r.y - g, h: r.h + g };
+          const withinCap = (rect: Rect): boolean =>
+            p.kind === 'garage'
+              ? (dir === 'f' || dir === 'b') && withinGarage(brief.garage, rect)
+              : p.kind === 'core'
+                ? withinSpec(spec!, rect)
+                : withinZoneAllowance(spec!, rect);
+          // Priority rooms take as much as their cap permits; the second phase takes only what reaches the ceiling.
+          // An explicit Flex sink is intentional (including the Master buffer), so growth leaves 1000 mm of it.
+          const available = flexCells.some((c) => overlap(c, q)) ? depth - SLIVER_MIN_SIDE : depth;
+          let g = Math.min(available, Math.ceil(needArea / side / 100) * 100);
+          while (g >= 100 && !withinCap(grown(g))) g -= 100;
           if (g < 100) continue;
+          // never leave a strip under 1000 mm in the piece
+          if (depth - g > 0 && depth - g < SLIVER_MIN_SIDE) {
+            if (withinCap(grown(depth))) g = depth;
+            else g = depth - SLIVER_MIN_SIDE;
+            if (g < 100) continue;
+          }
+          const trial = placed.map((x, k) => (k === i ? { ...x, rect: grown(g) } : x));
+          const res = finish(brief, options, baseNotes.slice(), toActual(trial), cellsActual);
+          if (!res.ok) continue;
+          if (res.candidate.quality.slivers > cand.quality.slivers) continue;
+          if (res.candidate.flexShareBeforeFill >= cand.flexShareBeforeFill) continue;
+          placed = trial;
+          cand = res.candidate;
+          grew.set(i, true);
+          done = true;
+          break;
         }
-        const trial = placed.map((x, k) => (k === i ? { ...x, rect: grown(g) } : x));
-        const res = finish(brief, options, baseNotes.slice(), toActual(trial), cellsActual);
-        if (!res.ok) continue;
-        if (res.candidate.quality.slivers > cand.quality.slivers) continue;
-        if (res.candidate.flexShareBeforeFill >= cand.flexShareBeforeFill) continue;
-        placed = trial;
-        cand = res.candidate;
-        grew.set(i, true);
-        done = true;
-        break;
+        if (done) break;
       }
-      if (done) break;
+      if (!done) break;
     }
-    if (!done) break;
-  }
+  };
+  runPhase(PRIORITY_GROW_ORDER, false);
+  runPhase(CEILING_GROW_ORDER, true);
   if (!grew.size) return { ok: true, candidate: cand0 }; // the caller already computed this plan; nothing grew
   const notes = baseNotes.slice();
   for (const i of grew.keys()) {

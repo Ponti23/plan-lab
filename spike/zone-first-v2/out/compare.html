@@ -14,276 +14,276 @@
  details { margin-top:8px; font-size:12px }
 </style></head><body>
 <h1>zone-first v2 - the user's layout beside the generated top 3, with the blind-test result</h1>
-<p class="meta">Quality ranking (provisional): the score is built from the band of each metric across the user's own plans (the brief's own plan left out). One-sided metrics (Flex share, circulation share, spine length over depth, longest Flex piece over depth, pieces per 100 m²): only the amount above the band's max counts, and 0.1 per point of the metric's scale rewards less (a share per 1 %, the piece count per 0.1 pieces/100 m²). Two-sided metrics (Core share, bedroom spread): 1 per point outside the band plus 0.1 per point from its middle. +10 if no wet room is near a bedroom, +10 if the laundry is not near the wet rooms or the Core, +10 per Flex strip, +50 per sliver. Lower is better. The user's layouts never steer generation or ranking; closeness is a diagnostic. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
+<p class="meta">Quality ranking (provisional): the score is built from the band of each metric across the user's own plans (the brief's own plan left out). One-sided metrics (Flex share, circulation share, spine length over depth, longest Flex piece over depth): only the amount above the band's max counts, and 0.1 per point of the metric's scale rewards less (a share per 1 %). Pieces per 100 m² is still shown but has score weight 0. Two-sided metrics (Core share, bedroom spread): 1 per point outside the band plus 0.1 per point from its middle. +10 if no wet room is near a bedroom, +10 if the laundry is not near the wet rooms or the Core, +10 per Flex strip, +50 per sliver. Lower is better. The user's layouts never steer generation or ranking; closeness is a diagnostic. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
 <section>
 <h2>zf-00 - theatre reference <span class="dim">12500 x 24000 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 3200/5504 generated · 2890 distinct · 1445 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.93)<br><span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span><br><span class="ok">regression target: matched, rank 2184 of 2890</span></p>
+<p class="meta">valid 2838/5568 generated · 2440 distinct · 1220 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.84)<br><span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span><br><span class="ok">regression target: matched, rank 1417 of 2440</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-00-theatre-ref.png" alt="builder plan zf-00-theatre-ref.png"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-00-user-zoning.png" alt="user zoning zf-00"></figure>
 
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 2890)<br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v0<br><span class="flex">score 14.41 · <b>Flex share 22%</b> · living 6% (17.1 m²) · circulation 5% · Core 19% · pieces 5.0/100 m² · bedroom spread 9.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 57.9 · living 17.1 · circulation 0.0 · storage 8.7 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 2440)<br>L|midR|block|m:front/split|wet:split|rr:BBF|fw|v0<br><span class="flex">score 8.74 · <b>Flex share 23%</b> · living 6% (17.1 m²) · circulation 5% · Core 19% · pieces 6.0/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 65.4 · living 17.1 · circulation 0.0 · storage 3.5 · sliver 0.0</span></figcaption>
   <img src="zf-00/cand-1.svg" alt="zf-00 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 13 of 2890)<br>L|midG|split|m:front/block|wet:block|rr:FBFB|nofw|v2<br><span class="flex">score 18.63 · <b>Flex share 23%</b> · living 3% (8.7 m²) · circulation 6% · Core 19% · pieces 5.3/100 m² · bedroom spread 10.9 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 48.6 · living 8.7 · circulation 10.8 · storage 8.2 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 3 of 2440)<br>L|midG|split|m:front/block|wet:block|rr:FBB|fw|v2<br><span class="flex">score 11.14 · <b>Flex share 24%</b> · living 6% (17.1 m²) · circulation 11% · Core 19% · pieces 6.3/100 m² · bedroom spread 11.1 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 52.3 · living 17.1 · circulation 14.8 · storage 6.0 · sliver 0.0</span></figcaption>
   <img src="zf-00/cand-2.svg" alt="zf-00 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 53 of 2890)<br>L|midR|block|m:rear/block|wet:split|rr:BBFM|fw|v0<br><span class="flex">score 20.61 · <b>Flex share 28%</b> · living 0% (0.0 m²) · circulation 8% · Core 19% · pieces 5.0/100 m² · bedroom spread 12.5 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 73.5 · living 0.0 · circulation 9.6 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 23 of 2440)<br>L|midG|block|m:front/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 12.36 · <b>Flex share 25%</b> · living 6% (17.1 m²) · circulation 7% · Core 18% · pieces 5.7/100 m² · bedroom spread 12.2 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 55.3 · living 17.1 · circulation 14.8 · storage 6.0 · sliver 0.0</span></figcaption>
   <img src="zf-00/cand-3.svg" alt="zf-00 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 65 of 2890)<br>L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v3<br><span class="flex">score 21.19 · <b>Flex share 24%</b> · living 3% (8.7 m²) · circulation 10% · Core 19% · pieces 6.0/100 m² · bedroom spread 11.1 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 48.6 · living 8.7 · circulation 14.8 · storage 8.2 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 47 of 2440)<br>L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 13.8 · <b>Flex share 27%</b> · living 3% (8.7 m²) · circulation 11% · Core 19% · pieces 6.7/100 m² · bedroom spread 10.3 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 40.0 · living 8.7 · circulation 20.4 · storage 20.1 · sliver 0.0</span></figcaption>
   <img src="zf-00/cand-4.svg" alt="zf-00 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 151 of 2890)<br>L|midG|block|m:rear/block|wet:block|rr:MBBF|fw|v0<br><span class="flex">score 23.31 · <b>Flex share 26%</b> · living 0% (0.0 m²) · circulation 10% · Core 18% · pieces 5.0/100 m² · bedroom spread 12.6 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 56.0 · living 0.0 · circulation 16.1 · storage 6.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 87 of 2440)<br>L|midG|block|m:rear/split|wet:split|rr:FM|nofw|v0<br><span class="flex">score 17.2 · <b>Flex share 22%</b> · living 13% (40.1 m²) · circulation 7% · Core 18% · pieces 6.0/100 m² · bedroom spread 6.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 49.0 · living 40.1 · circulation 14.1 · storage 3.1 · sliver 0.0</span></figcaption>
   <img src="zf-00/cand-5.svg" alt="zf-00 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 2184 of 2890) <span class="badge">TARGET MATCH</span><br>R|rear|block|m:middle/block|wet:block|rr:-|fw|v3<br><span class="flex">score 73.37 · <b>Flex share 23%</b> · living 0% (0.0 m²) · circulation 14% · Core 27% · pieces 5.3/100 m² · bedroom spread 6.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 22.8 m² · flex m²: room 32.5 · living 0.0 · circulation 30.2 · storage 6.5 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 1417 of 2440) <span class="badge">TARGET MATCH</span><br>R|rear|block|m:middle/block|wet:block|rr:-|fw|v2<br><span class="flex">score 58.89 · <b>Flex share 12%</b> · living 0% (0.0 m²) · circulation 16% · Core 27% · pieces 5.0/100 m² · bedroom spread 6.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 22.8 m² · flex m²: room 0.0 · living 0.0 · circulation 34.9 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-00/cand-6.svg" alt="zf-00 target match (regression)">
 </figure></div></details>
 </section>
 <section>
 <h2>zf-01 - 2-bed 9.0 x 16.9 <span class="dim">9000 x 16900 mm, 2 bed, single garage</span></h2>
-<p class="meta">valid 354/1472 generated · 242 distinct · 121 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.67)<br><b class="ok">blind test PASSED</b>: best score in the top 5 22.78 vs the user's layout 47.87 (first candidate at least as good: rank 1); the user's layout: Flex 6%, circulation 15%, Core 33%; top 1 Flex 21%; closeness top 1 34%, best of all 75%<br><span class="ok">regression target: matched, rank 2 of 242</span></p>
+<p class="meta">valid 348/1472 generated · 238 distinct · 119 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.68)<br><b class="ok">blind test PASSED</b>: best score in the top 5 9.1 vs the user's layout 42.61 (first candidate at least as good: rank 1); the user's layout: Flex 6%, circulation 15%, Core 33%; top 1 Flex 18%; closeness top 1 10%, best of all 75%<br><span class="ok">regression target: matched, rank 8 of 238</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-01-2bed-9000x16900.png" alt="builder plan zf-01-2bed-9000x16900.png"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-01-user-zoning.png" alt="user zoning zf-01"></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-01/golden.svg" alt="measured zoning zf-01"></figure>
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 242)<br>L|rear|block|m:front/block|wet:block|rr:-|nofw|v2<br><span class="flex">score 22.78 · <b>Flex share 21%</b> · living 0% (0.0 m²) · circulation 5% · Core 27% · pieces 5.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 34% · spine 6.0 m · extensions 0.0 m² · flex m²: room 30.1 · living 0.0 · circulation 0.0 · storage 1.8 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 238)<br>L|midR|block|m:rear/split|wet:block|rr:MF|nofw|v0<br><span class="flex">score 9.1 · <b>Flex share 18%</b> · living 10% (14.5 m²) · circulation 6% · Core 24% · pieces 7.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 10% · spine 6.0 m · extensions 0.0 m² · flex m²: room 25.8 · living 14.5 · circulation 2.2 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-01/cand-1.svg" alt="zf-01 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 9 of 242)<br>L|midR|block|m:rear/split|wet:block|rr:MF|nofw|v0<br><span class="flex">score 26.62 · <b>Flex share 18%</b> · living 10% (14.5 m²) · circulation 5% · Core 24% · pieces 7.2/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 10% · spine 6.0 m · extensions 0.0 m² · flex m²: room 25.8 · living 14.5 · circulation 0.0 · storage 2.2 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 7 of 238)<br>L|rear|block|m:front/block|wet:block|rr:-|nofw|v2<br><span class="flex">score 9.7 · <b>Flex share 21%</b> · living 0% (0.0 m²) · circulation 5% · Core 27% · pieces 6.6/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 34% · spine 6.0 m · extensions 0.0 m² · flex m²: room 30.1 · living 0.0 · circulation 0.0 · storage 1.8 · sliver 0.0</span></figcaption>
   <img src="zf-01/cand-2.svg" alt="zf-01 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 13 of 242)<br>L|midG|block|m:rear/split|wet:block|rr:MF|nofw|v0<br><span class="flex">score 32.99 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 11% · Core 19% · pieces 7.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 9% · spine 6.0 m · extensions 0.0 m² · flex m²: room 21.9 · living 0.0 · circulation 9.8 · storage 1.8 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 15 of 238)<br>L|midW|block|m:rear/block|wet:block|rr:FM|fw|v0<br><span class="flex">score 11.65 · <b>Flex share 8%</b> · living 15% (22.5 m²) · circulation 11% · Core 24% · pieces 7.2/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 8% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 22.5 · circulation 3.4 · storage 8.9 · sliver 0.0</span></figcaption>
   <img src="zf-01/cand-3.svg" alt="zf-01 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 17 of 242)<br>L|midW|block|m:rear/block|wet:block|rr:FM|fw|v0<br><span class="flex">score 33.95 · <b>Flex share 10%</b> · living 15% (22.5 m²) · circulation 13% · Core 24% · pieces 7.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 8% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 22.5 · circulation 6.1 · storage 8.9 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 20 of 238)<br>L|midW|block|m:rear/split|wet:split|rr:MF|fw|v2<br><span class="flex">score 11.74 · <b>Flex share 8%</b> · living 10% (14.5 m²) · circulation 11% · Core 24% · pieces 8.5/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 11% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 14.5 · circulation 0.0 · storage 11.8 · sliver 0.0</span></figcaption>
   <img src="zf-01/cand-4.svg" alt="zf-01 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 24 of 242)<br>L|midW|block|m:rear/block|wet:split|rr:MF|fw|v0<br><span class="flex">score 36.53 · <b>Flex share 7%</b> · living 15% (23.5 m²) · circulation 15% · Core 25% · pieces 7.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 7% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 23.5 · circulation 10.2 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 37 of 238)<br>L|midG|block|m:rear/split|wet:split|rr:FM|fw|v3<br><span class="flex">score 18.58 · <b>Flex share 10%</b> · living 10% (15.8 m²) · circulation 15% · Core 19% · pieces 9.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 8% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 15.8 · circulation 9.1 · storage 5.8 · sliver 0.0</span></figcaption>
   <img src="zf-01/cand-5.svg" alt="zf-01 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 2 of 242) <span class="badge">TARGET MATCH</span><br>R|rear|block|m:front/block|wet:block|rr:-|nofw|v2<br><span class="flex">score 22.78 · <b>Flex share 21%</b> · living 0% (0.0 m²) · circulation 5% · Core 27% · pieces 5.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 68% · spine 6.0 m · extensions 0.0 m² · flex m²: room 30.1 · living 0.0 · circulation 0.0 · storage 1.8 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 8 of 238) <span class="badge">TARGET MATCH</span><br>R|rear|block|m:front/block|wet:block|rr:-|nofw|v2<br><span class="flex">score 9.7 · <b>Flex share 21%</b> · living 0% (0.0 m²) · circulation 5% · Core 27% · pieces 6.6/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 68% · spine 6.0 m · extensions 0.0 m² · flex m²: room 30.1 · living 0.0 · circulation 0.0 · storage 1.8 · sliver 0.0</span></figcaption>
   <img src="zf-01/cand-6.svg" alt="zf-01 target match (regression)">
 </figure></div></details>
 </section>
 <section>
 <h2>zf-03 - Turquoise Bay <span class="dim">9890 x 24790 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 964/5504 generated · 740 distinct · 370 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.69)<br><b class="bad">blind test NOT passed</b>: best score in the top 5 13.67 vs the user's layout 12.72 (first candidate at least as good: rank none); the user's layout: Flex 3%, circulation 5%, Core 27%; top 1 Flex 22%; closeness top 1 26%, best of all 73%<br><span class="ok">regression target: matched, rank 233 of 740</span></p>
+<p class="meta">valid 908/5568 generated · 684 distinct · 342 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.69)<br><b class="ok">blind test PASSED</b>: best score in the top 5 7.39 vs the user's layout 7.42 (first candidate at least as good: rank 1); the user's layout: Flex 3%, circulation 5%, Core 27%; top 1 Flex 22%; closeness top 1 29%, best of all 73%<br><span class="ok">regression target: matched, rank 215 of 684</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-03-turquoise-bay.webp" alt="builder plan zf-03-turquoise-bay.webp"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-03-user-zoning.png" alt="user zoning zf-03"></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-03/golden.svg" alt="measured zoning zf-03"></figure>
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 740)<br>L|midR|split|m:middle/block|wet:split|rr:FBFB|nofw|v0<br><span class="flex">score 13.67 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 3% · Core 21% · pieces 6.1/100 m² · bedroom spread 10.1 m · wet near bed yes · laundry near yes · closeness to the user's layout 26% · spine 6.0 m · extensions 0.0 m² · flex m²: room 49.0 · living 0.0 · circulation 0.0 · storage 4.8 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 684)<br>L|midR|split|m:middle/block|wet:block|rr:FBB|nofw|v2<br><span class="flex">score 7.39 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 8% · Core 21% · pieces 6.9/100 m² · bedroom spread 10.6 m · wet near bed yes · laundry near yes · closeness to the user's layout 29% · spine 6.0 m · extensions 0.0 m² · flex m²: room 35.8 · living 0.0 · circulation 13.5 · storage 4.8 · sliver 0.0</span></figcaption>
   <img src="zf-03/cand-1.svg" alt="zf-03 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 19 of 740)<br>L|midG|split|m:rear/block|wet:split|rr:FM|fw|v0<br><span class="flex">score 18.37 · <b>Flex share 11%</b> · living 14% (34.0 m²) · circulation 6% · Core 23% · pieces 6.1/100 m² · bedroom spread 7.3 m · wet near bed yes · laundry near yes · closeness to the user's layout 60% · spine 6.0 m · extensions 0.0 m² · flex m²: room 20.7 · living 34.0 · circulation 0.0 · storage 6.9 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 25 of 684)<br>L|midG|split|m:rear/split|wet:split|rr:FM|fw|v0<br><span class="flex">score 11.73 · <b>Flex share 13%</b> · living 10% (24.7 m²) · circulation 6% · Core 23% · pieces 7.3/100 m² · bedroom spread 7.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 57% · spine 6.0 m · extensions 0.0 m² · flex m²: room 22.7 · living 24.7 · circulation 0.0 · storage 10.0 · sliver 0.0</span></figcaption>
   <img src="zf-03/cand-2.svg" alt="zf-03 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 26 of 740)<br>L|midG|block|m:rear/block|wet:block|rr:MF|fw|v0<br><span class="flex">score 18.47 · <b>Flex share 17%</b> · living 14% (34.0 m²) · circulation 6% · Core 18% · pieces 4.9/100 m² · bedroom spread 7.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 46% · spine 6.0 m · extensions 0.0 m² · flex m²: room 40.8 · living 34.0 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 35 of 684)<br>L|rear|block|m:middle/split|wet:split|rr:-|fw|v2<br><span class="flex">score 12.19 · <b>Flex share 9%</b> · living 0% (0.0 m²) · circulation 8% · Core 26% · pieces 6.9/100 m² · bedroom spread 7.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 30% · spine 6.0 m · extensions 6.5 m² · flex m²: room 8.1 · living 0.0 · circulation 4.8 · storage 9.6 · sliver 0.0</span></figcaption>
   <img src="zf-03/cand-3.svg" alt="zf-03 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 53 of 740)<br>L|rear|block|m:middle/block|wet:block|rr:-|fw|v2<br><span class="flex">score 20.84 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 6% · Core 26% · pieces 4.9/100 m² · bedroom spread 7.1 m · wet near bed yes · laundry near yes · closeness to the user's layout 33% · spine 6.0 m · extensions 6.5 m² · flex m²: room 54.2 · living 0.0 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 45 of 684)<br>L|midG|split|m:rear/block|wet:split|rr:MF|nofw|v2<br><span class="flex">score 12.79 · <b>Flex share 11%</b> · living 17% (40.6 m²) · circulation 4% · Core 23% · pieces 6.5/100 m² · bedroom spread 7.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 41% · spine 6.0 m · extensions 0.0 m² · flex m²: room 20.7 · living 40.6 · circulation 3.2 · storage 4.1 · sliver 0.0</span></figcaption>
   <img src="zf-03/cand-4.svg" alt="zf-03 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 129 of 740)<br>L|midG|split|m:rear/block|wet:split|rr:MF|nofw|v0<br><span class="flex">score 23.62 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 9% · Core 23% · pieces 6.1/100 m² · bedroom spread 6.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 40% · spine 6.0 m · extensions 0.0 m² · flex m²: room 33.1 · living 0.0 · circulation 14.2 · storage 6.9 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 113 of 684)<br>L|midG|block|m:rear/split|wet:split|rr:MF|fw|v2<br><span class="flex">score 15.4 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 12% · Core 18% · pieces 7.3/100 m² · bedroom spread 7.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 51% · spine 6.0 m · extensions 0.0 m² · flex m²: room 30.8 · living 0.0 · circulation 11.2 · storage 12.0 · sliver 0.0</span></figcaption>
   <img src="zf-03/cand-5.svg" alt="zf-03 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 233 of 740) <span class="badge">TARGET MATCH</span><br>L|midW|split|m:rear/block|wet:block|rr:FM|fw|v0<br><span class="flex">score 27.69 · <b>Flex share 21%</b> · living 11% (26.4 m²) · circulation 5% · Core 26% · pieces 6.1/100 m² · bedroom spread 5.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 70% · spine 6.0 m · extensions 17.2 m² · flex m²: room 50.9 · living 26.4 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 215 of 684) <span class="badge">TARGET MATCH</span><br>L|midW|split|m:rear/block|wet:block|rr:FM|fw|v0<br><span class="flex">score 20.72 · <b>Flex share 21%</b> · living 11% (26.4 m²) · circulation 5% · Core 26% · pieces 7.3/100 m² · bedroom spread 5.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 70% · spine 6.0 m · extensions 17.2 m² · flex m²: room 50.9 · living 26.4 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-03/cand-6.svg" alt="zf-03 target match (regression)">
 </figure></div></details>
 </section>
 <section>
 <h2>zf-04 - Torquay Beach <span class="dim">12490 x 24190 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 3184/5504 generated · 2880 distinct · 1440 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.93)<br><b class="ok">blind test PASSED</b>: best score in the top 5 20.22 vs the user's layout 30.79 (first candidate at least as good: rank 1); the user's layout: Flex 22%, circulation 6%, Core 18%; top 1 Flex 19%; closeness top 1 62%, best of all 68%<br><span class="ok">regression target: matched, rank 1 of 2880</span></p>
+<p class="meta">valid 2828/5568 generated · 2436 distinct · 1218 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.84)<br><b class="ok">blind test PASSED</b>: best score in the top 5 14.59 vs the user's layout 26.16 (first candidate at least as good: rank 1); the user's layout: Flex 22%, circulation 6%, Core 18%; top 1 Flex 19%; closeness top 1 62%, best of all 65%<br><span class="ok">regression target: matched, rank 1 of 2436</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-04-torquay-beach.webp" alt="builder plan zf-04-torquay-beach.webp"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-04-user-zoning.png" alt="user zoning zf-04"></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-04/golden.svg" alt="measured zoning zf-04"></figure>
 <figure class="match">
-  <figcaption><b>top 1</b> (rank 1 of 2880) <span class="badge">TARGET MATCH</span><br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v0<br><span class="flex">score 20.22 · <b>Flex share 19%</b> · living 6% (17.1 m²) · circulation 7% · Core 19% · pieces 5.0/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · closeness to the user's layout 62% · spine 6.0 m · extensions 0.0 m² · flex m²: room 49.7 · living 17.1 · circulation 6.9 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 2436) <span class="badge">TARGET MATCH</span><br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v0<br><span class="flex">score 14.59 · <b>Flex share 19%</b> · living 6% (17.1 m²) · circulation 7% · Core 19% · pieces 5.3/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · closeness to the user's layout 62% · spine 6.0 m · extensions 0.0 m² · flex m²: room 49.7 · living 17.1 · circulation 6.9 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-04/cand-1.svg" alt="zf-04 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 5 of 2880)<br>L|midG|block|m:rear/block|wet:block|rr:FM|fw|v1<br><span class="flex">score 28.68 · <b>Flex share 15%</b> · living 17% (50.2 m²) · circulation 6% · Core 18% · pieces 5.3/100 m² · bedroom spread 6.7 m · wet near bed yes · laundry near yes · closeness to the user's layout 28% · spine 6.0 m · extensions 0.0 m² · flex m²: room 29.6 · living 50.2 · circulation 2.7 · storage 14.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 5 of 2436)<br>L|midG|split|m:front/block|wet:block|rr:FBB|fw|v2<br><span class="flex">score 22.03 · <b>Flex share 25%</b> · living 6% (17.1 m²) · circulation 11% · Core 19% · pieces 6.3/100 m² · bedroom spread 11.1 m · wet near bed yes · laundry near yes · closeness to the user's layout 45% · spine 6.0 m · extensions 0.0 m² · flex m²: room 53.9 · living 17.1 · circulation 14.7 · storage 6.0 · sliver 0.0</span></figcaption>
   <img src="zf-04/cand-2.svg" alt="zf-04 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 9 of 2880)<br>L|midG|split|m:front/block|wet:block|rr:FBFB|nofw|v2<br><span class="flex">score 28.93 · <b>Flex share 23%</b> · living 3% (8.4 m²) · circulation 6% · Core 19% · pieces 5.3/100 m² · bedroom spread 11.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 46% · spine 6.0 m · extensions 0.0 m² · flex m²: room 50.3 · living 8.4 · circulation 10.7 · storage 8.1 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 19 of 2436)<br>L|midG|block|m:rear/split|wet:block|rr:FM|fw|v2<br><span class="flex">score 23.56 · <b>Flex share 19%</b> · living 13% (40.1 m²) · circulation 11% · Core 18% · pieces 6.3/100 m² · bedroom spread 6.6 m · wet near bed yes · laundry near yes · closeness to the user's layout 29% · spine 6.0 m · extensions 0.0 m² · flex m²: room 32.3 · living 40.1 · circulation 15.1 · storage 9.0 · sliver 0.0</span></figcaption>
   <img src="zf-04/cand-3.svg" alt="zf-04 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 47 of 2880)<br>L|midW|block|m:rear/split|wet:block|rr:MF|nofw|v0<br><span class="flex">score 30.94 · <b>Flex share 16%</b> · living 13% (40.1 m²) · circulation 3% · Core 24% · pieces 6.0/100 m² · bedroom spread 5.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 42% · spine 6.0 m · extensions 20.6 m² · flex m²: room 24.2 · living 40.1 · circulation 2.7 · storage 22.4 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 41 of 2436)<br>L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 24.49 · <b>Flex share 27%</b> · living 3% (8.4 m²) · circulation 11% · Core 19% · pieces 6.6/100 m² · bedroom spread 10.3 m · wet near bed yes · laundry near yes · closeness to the user's layout 42% · spine 6.0 m · extensions 0.0 m² · flex m²: room 41.6 · living 8.4 · circulation 20.3 · storage 20.9 · sliver 0.0</span></figcaption>
   <img src="zf-04/cand-4.svg" alt="zf-04 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 87 of 2880)<br>L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v3<br><span class="flex">score 31.66 · <b>Flex share 24%</b> · living 3% (8.4 m²) · circulation 10% · Core 19% · pieces 6.0/100 m² · bedroom spread 11.1 m · wet near bed yes · laundry near yes · closeness to the user's layout 45% · spine 6.0 m · extensions 0.0 m² · flex m²: room 50.3 · living 8.4 · circulation 15.1 · storage 8.1 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 69 of 2436)<br>L|midW|block|m:rear/split|wet:block|rr:MF|nofw|v0<br><span class="flex">score 25.22 · <b>Flex share 16%</b> · living 13% (40.1 m²) · circulation 6% · Core 24% · pieces 6.3/100 m² · bedroom spread 5.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 42% · spine 6.0 m · extensions 20.6 m² · flex m²: room 24.2 · living 40.1 · circulation 9.9 · storage 15.3 · sliver 0.0</span></figcaption>
   <img src="zf-04/cand-5.svg" alt="zf-04 top 5">
 </figure></div></details>
 </section>
 <section>
 <h2>zf-05 - Swanbourne <span class="dim">10890 x 22590 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 1758/5504 generated · 1442 distinct · 721 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.89)<br><b class="ok">blind test PASSED</b>: best score in the top 5 13.61 vs the user's layout 14.41 (first candidate at least as good: rank 1); the user's layout: Flex 12%, circulation 6%, Core 24%; top 1 Flex 22%; closeness top 1 49%, best of all 76%<br><span class="ok">regression target: matched, rank 501 of 1442</span></p>
+<p class="meta">valid 1626/5568 generated · 1248 distinct · 624 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.74)<br><b class="bad">blind test NOT passed</b>: best score in the top 5 8.44 vs the user's layout 8.31 (first candidate at least as good: rank none); the user's layout: Flex 12%, circulation 6%, Core 24%; top 1 Flex 22%; closeness top 1 63%, best of all 72%<br><span class="ok">regression target: matched, rank 335 of 1248</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-05-swanbourne.webp" alt="builder plan zf-05-swanbourne.webp"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-05-user-zoning-v2.png" alt="user zoning zf-05"></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-05/golden.svg" alt="measured zoning zf-05"></figure>
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 1442)<br>L|midG|block|m:front/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 13.61 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 3% · Core 18% · pieces 4.5/100 m² · bedroom spread 10.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 49% · spine 6.0 m · extensions 0.0 m² · flex m²: room 47.5 · living 0.0 · circulation 0.0 · storage 6.9 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 1248)<br>L|midR|split|m:middle/block|wet:block|rr:BBF|fw|v0<br><span class="flex">score 8.44 · <b>Flex share 22%</b> · living 5% (11.4 m²) · circulation 7% · Core 24% · pieces 7.3/100 m² · bedroom spread 8.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 63% · spine 6.0 m · extensions 0.0 m² · flex m²: room 33.8 · living 11.4 · circulation 2.7 · storage 18.1 · sliver 0.0</span></figcaption>
   <img src="zf-05/cand-1.svg" alt="zf-05 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 5 of 1442)<br>L|midG|block|m:middle/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 13.95 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 3% · Core 18% · pieces 5.3/100 m² · bedroom spread 10.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 49% · spine 6.0 m · extensions 0.0 m² · flex m²: room 36.8 · living 0.0 · circulation 0.0 · storage 17.6 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 63 of 1248)<br>L|midG|block|m:rear/block|wet:split|rr:FM|nofw|v2<br><span class="flex">score 15.07 · <b>Flex share 15%</b> · living 16% (40.2 m²) · circulation 7% · Core 18% · pieces 6.1/100 m² · bedroom spread 6.5 m · wet near bed yes · laundry near yes · closeness to the user's layout 25% · spine 6.0 m · extensions 0.0 m² · flex m²: room 26.1 · living 40.2 · circulation 10.4 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-05/cand-2.svg" alt="zf-05 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 27 of 1442)<br>L|midR|block|m:middle/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 14.77 · <b>Flex share 23%</b> · living 3% (6.2 m²) · circulation 4% · Core 22% · pieces 5.7/100 m² · bedroom spread 9.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 50% · spine 6.0 m · extensions 0.0 m² · flex m²: room 52.2 · living 6.2 · circulation 3.0 · storage 1.8 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 91 of 1248)<br>L|midG|split|m:front/block|wet:block|rr:FBFB|fw|v1<br><span class="flex">score 15.76 · <b>Flex share 22%</b> · living 2% (6.0 m²) · circulation 9% · Core 23% · pieces 7.7/100 m² · bedroom spread 13.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 39% · spine 6.0 m · extensions 0.0 m² · flex m²: room 27.4 · living 6.0 · circulation 8.2 · storage 18.9 · sliver 0.0</span></figcaption>
   <img src="zf-05/cand-3.svg" alt="zf-05 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 73 of 1442)<br>L|midG|split|m:front/block|wet:block|rr:FBB|nofw|v2<br><span class="flex">score 15.27 · <b>Flex share 22%</b> · living 5% (12.3 m²) · circulation 4% · Core 23% · pieces 6.5/100 m² · bedroom spread 8.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 40% · spine 6.0 m · extensions 0.0 m² · flex m²: room 45.0 · living 12.3 · circulation 3.7 · storage 5.9 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 117 of 1248)<br>L|midW|block|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 16.48 · <b>Flex share 21%</b> · living 5% (12.3 m²) · circulation 3% · Core 27% · pieces 6.5/100 m² · bedroom spread 13.6 m · wet near bed yes · laundry near yes · closeness to the user's layout 51% · spine 6.0 m · extensions 11.7 m² · flex m²: room 49.6 · living 12.3 · circulation 0.0 · storage 1.8 · sliver 0.0</span></figcaption>
   <img src="zf-05/cand-4.svg" alt="zf-05 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 89 of 1442)<br>L|midR|split|m:rear/block|wet:block|rr:BBFM|nofw|v0<br><span class="flex">score 15.55 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 11% · Core 21% · pieces 6.5/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · closeness to the user's layout 41% · spine 6.0 m · extensions 0.0 m² · flex m²: room 32.6 · living 0.0 · circulation 18.9 · storage 3.1 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 165 of 1248)<br>L|midW|block|m:rear/split|wet:block|rr:FM|nofw|v0<br><span class="flex">score 19.46 · <b>Flex share 19%</b> · living 12% (29.1 m²) · circulation 4% · Core 21% · pieces 7.3/100 m² · bedroom spread 5.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 36% · spine 6.0 m · extensions 8.9 m² · flex m²: room 42.1 · living 29.1 · circulation 2.4 · storage 1.8 · sliver 0.0</span></figcaption>
   <img src="zf-05/cand-5.svg" alt="zf-05 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 501 of 1442) <span class="badge">TARGET MATCH</span><br>L|midR|block|m:front/block|wet:block|rr:BBF|fw|v3<br><span class="flex">score 33.12 · <b>Flex share 22%</b> · living 5% (12.3 m²) · circulation 18% · Core 20% · pieces 6.9/100 m² · bedroom spread 11.1 m · wet near bed yes · laundry near yes · closeness to the user's layout 66% · spine 6.5 m · extensions 0.0 m² · flex m²: room 12.4 · living 12.3 · circulation 27.8 · storage 14.5 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 335 of 1248) <span class="badge">TARGET MATCH</span><br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v3<br><span class="flex">score 27.89 · <b>Flex share 15%</b> · living 5% (12.3 m²) · circulation 21% · Core 20% · pieces 7.7/100 m² · bedroom spread 12.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 63% · spine 6.5 m · extensions 0.0 m² · flex m²: room 0.0 · living 12.3 · circulation 35.2 · storage 2.5 · sliver 0.0</span></figcaption>
   <img src="zf-05/cand-6.svg" alt="zf-05 target match (regression)">
 </figure></div></details>
 </section>
 <section>
 <h2>zf-07 - Riesling <span class="dim">11490 x 18290 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 1380/5504 generated · 1074 distinct · 537 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.86)<br><b class="bad">blind test NOT passed</b>: best score in the top 5 25.98 vs the user's layout 21.02 (first candidate at least as good: rank none); the user's layout: Flex 7%, circulation 5%, Core 25%; top 1 Flex 7%; closeness top 1 42%, best of all 75%<br><span class="ok">regression target: matched, rank 284 of 1074</span></p>
+<p class="meta">valid 1112/5568 generated · 856 distinct · 428 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.70)<br><b class="ok">blind test PASSED</b>: best score in the top 5 8.01 vs the user's layout 8.72 (first candidate at least as good: rank 1); the user's layout: Flex 7%, circulation 5%, Core 25%; top 1 Flex 7%; closeness top 1 13%, best of all 67%<br><span class="ok">regression target: matched, rank 312 of 856</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-07-riesling.png" alt="builder plan zf-07-riesling.png"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-07-user-zoning-v2.png" alt="user zoning zf-07"></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-07/golden.svg" alt="measured zoning zf-07"></figure>
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 1074)<br>L|midR|split|m:front/block|wet:block|rr:BBF|fw|v0<br><span class="flex">score 25.98 · <b>Flex share 7%</b> · living 7% (14.0 m²) · circulation 7% · Core 27% · pieces 7.1/100 m² · bedroom spread 9.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 42% · spine 6.0 m · extensions 6.8 m² · flex m²: room 10.5 · living 14.0 · circulation 0.0 · storage 4.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 856)<br>L|midG|split|m:front/block|wet:block|rr:FBB|nofw|v2<br><span class="flex">score 8.01 · <b>Flex share 7%</b> · living 7% (14.1 m²) · circulation 7% · Core 26% · pieces 7.1/100 m² · bedroom spread 9.3 m · wet near bed yes · laundry near yes · closeness to the user's layout 13% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 14.1 · circulation 7.8 · storage 6.8 · sliver 0.0</span></figcaption>
   <img src="zf-07/cand-1.svg" alt="zf-07 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 3 of 1074)<br>L|midG|block|m:front/block|wet:block|rr:FBB|nofw|v2<br><span class="flex">score 26.96 · <b>Flex share 14%</b> · living 7% (14.1 m²) · circulation 8% · Core 21% · pieces 6.7/100 m² · bedroom spread 9.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 12% · spine 6.0 m · extensions 0.0 m² · flex m²: room 18.7 · living 14.1 · circulation 9.0 · storage 2.7 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 21 of 856)<br>L|midR|split|m:front/block|wet:split|rr:BBF|fw|v0<br><span class="flex">score 8.46 · <b>Flex share 10%</b> · living 7% (14.1 m²) · circulation 8% · Core 24% · pieces 7.6/100 m² · bedroom spread 9.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 40% · spine 6.0 m · extensions 0.0 m² · flex m²: room 10.5 · living 14.1 · circulation 2.7 · storage 6.8 · sliver 0.0</span></figcaption>
   <img src="zf-07/cand-2.svg" alt="zf-07 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 5 of 1074)<br>L|midR|block|m:rear/split|wet:split|rr:FBBM|nofw|v0<br><span class="flex">score 28.14 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 3% · Core 21% · pieces 7.1/100 m² · bedroom spread 9.1 m · wet near bed yes · laundry near yes · closeness to the user's layout 34% · spine 6.0 m · extensions 0.0 m² · flex m²: room 40.7 · living 0.0 · circulation 0.0 · storage 5.9 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 45 of 856)<br>L|midG|block|m:front/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 9.56 · <b>Flex share 16%</b> · living 3% (6.9 m²) · circulation 9% · Core 21% · pieces 7.6/100 m² · bedroom spread 9.6 m · wet near bed yes · laundry near yes · closeness to the user's layout 11% · spine 6.0 m · extensions 0.0 m² · flex m²: room 18.7 · living 6.9 · circulation 12.5 · storage 2.3 · sliver 0.0</span></figcaption>
   <img src="zf-07/cand-3.svg" alt="zf-07 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 9 of 1074)<br>L|midG|split|m:middle/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 28.67 · <b>Flex share 19%</b> · living 0% (0.0 m²) · circulation 5% · Core 26% · pieces 7.1/100 m² · bedroom spread 10.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 23% · spine 6.0 m · extensions 0.0 m² · flex m²: room 28.4 · living 0.0 · circulation 2.7 · storage 9.2 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 50 of 856)<br>L|midR|block|m:rear/split|wet:block|rr:BBFM|nofw|v2<br><span class="flex">score 9.73 · <b>Flex share 22%</b> · living 0% (0.0 m²) · circulation 12% · Core 22% · pieces 8.1/100 m² · bedroom spread 9.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 30% · spine 6.0 m · extensions 0.0 m² · flex m²: room 28.7 · living 0.0 · circulation 18.0 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-07/cand-4.svg" alt="zf-07 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 11 of 1074)<br>L|midG|split|m:front/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 29.3 · <b>Flex share 19%</b> · living 0% (0.0 m²) · circulation 6% · Core 26% · pieces 7.1/100 m² · bedroom spread 10.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 23% · spine 6.0 m · extensions 0.0 m² · flex m²: room 25.4 · living 0.0 · circulation 5.7 · storage 9.2 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 75 of 856)<br>L|midW|block|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 13.31 · <b>Flex share 19%</b> · living 6% (12.7 m²) · circulation 3% · Core 22% · pieces 7.6/100 m² · bedroom spread 10.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 10% · spine 6.0 m · extensions 10.2 m² · flex m²: room 36.8 · living 12.7 · circulation 0.0 · storage 2.3 · sliver 0.0</span></figcaption>
   <img src="zf-07/cand-5.svg" alt="zf-07 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 284 of 1074) <span class="badge">TARGET MATCH</span><br>R|midW|block|m:middle/block|wet:block|rr:FBB|fw|v3<br><span class="flex">score 57.38 · <b>Flex share 12%</b> · living 7% (14.1 m²) · circulation 8% · Core 22% · pieces 7.1/100 m² · bedroom spread 15.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 47% · spine 6.0 m · extensions 0.0 m² · flex m²: room 15.9 · living 14.1 · circulation 3.5 · storage 5.2 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 312 of 856) <span class="badge">TARGET MATCH</span><br>R|midW|block|m:middle/block|wet:block|rr:FBB|fw|v3<br><span class="flex">score 34.98 · <b>Flex share 10%</b> · living 7% (14.1 m²) · circulation 8% · Core 22% · pieces 7.1/100 m² · bedroom spread 15.3 m · wet near bed yes · laundry near yes · closeness to the user's layout 47% · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 14.1 · circulation 2.4 · storage 18.7 · sliver 0.0</span></figcaption>
   <img src="zf-07/cand-6.svg" alt="zf-07 target match (regression)">
 </figure></div></details>
 </section>
 <section>
 <h2>zf-08 - Manly <span class="dim">14990 x 21790 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 2814/5504 generated · 2386 distinct · 1193 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.88)<br><b class="bad">blind test NOT passed</b>: best score in the top 5 25.32 vs the user's layout 13.43 (first candidate at least as good: rank none); the user's layout: Flex 12%, circulation 8%, Core 24%; top 1 Flex 22%; closeness top 1 59%, best of all 71%<br><span class="ok">regression target: matched, rank 335 of 2386</span><br><span class="ok">regression altTarget: matched, rank 75 of 2386</span></p>
+<p class="meta">valid 2288/5568 generated · 1792 distinct · 896 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.68)<br><b class="bad">blind test NOT passed</b>: best score in the top 5 13.12 vs the user's layout 7.92 (first candidate at least as good: rank none); the user's layout: Flex 12%, circulation 8%, Core 24%; top 1 Flex 25%; closeness top 1 53%, best of all 61%<br><span class="ok">regression target: matched, rank 311 of 1792</span><br><span class="ok">regression altTarget: matched, rank 1311 of 1792</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><img src="../../../knowledge/reference/ideal/zf-08-manly.webp" alt="builder plan zf-08-manly.webp"></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><img src="../../../knowledge/reference/ideal/user-zoning/zf-08-user-zoning.png" alt="user zoning zf-08"></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-08/golden.svg" alt="measured zoning zf-08"></figure>
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 2386)<br>L|midG|block|m:middle/block|wet:block|rr:FBFB|nofw|v2<br><span class="flex">score 25.32 · <b>Flex share 22%</b> · living 8% (24.6 m²) · circulation 9% · Core 18% · pieces 5.2/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · closeness to the user's layout 59% · spine 6.0 m · extensions 0.0 m² · flex m²: room 45.8 · living 24.6 · circulation 20.7 · storage 5.8 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 1792)<br>L|midG|block|m:middle/block|wet:block|rr:FBFB|nofw|v1<br><span class="flex">score 13.12 · <b>Flex share 25%</b> · living 8% (24.6 m²) · circulation 13% · Core 18% · pieces 5.8/100 m² · bedroom spread 12.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 53% · spine 6.0 m · extensions 0.0 m² · flex m²: room 38.6 · living 24.6 · circulation 34.9 · storage 7.0 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-1.svg" alt="zf-08 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 4 of 2386)<br>L|midG|block|m:middle/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 25.48 · <b>Flex share 22%</b> · living 8% (24.6 m²) · circulation 9% · Core 18% · pieces 5.2/100 m² · bedroom spread 9.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 53% · spine 6.0 m · extensions 0.0 m² · flex m²: room 39.5 · living 24.6 · circulation 23.7 · storage 9.3 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 27 of 1792)<br>L|rear|block|m:middle/block|wet:block|rr:-|fw|v3<br><span class="flex">score 18.98 · <b>Flex share 24%</b> · living 0% (0.0 m²) · circulation 8% · Core 30% · pieces 5.5/100 m² · bedroom spread 6.5 m · wet near bed yes · laundry near yes · closeness to the user's layout 26% · spine 6.0 m · extensions 38.9 m² · flex m²: room 51.7 · living 0.0 · circulation 14.0 · storage 11.4 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-2.svg" alt="zf-08 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 14 of 2386)<br>L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 26.39 · <b>Flex share 22%</b> · living 8% (24.6 m²) · circulation 5% · Core 23% · pieces 5.2/100 m² · bedroom spread 13.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 43% · spine 6.0 m · extensions 29.9 m² · flex m²: room 52.0 · living 24.6 · circulation 7.8 · storage 12.6 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 35 of 1792)<br>L|midR|block|m:rear/split|wet:block|rr:BBFM|nofw|v2<br><span class="flex">score 19.99 · <b>Flex share 32%</b> · living 4% (14.7 m²) · circulation 6% · Core 17% · pieces 7.0/100 m² · bedroom spread 11.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 33% · spine 6.0 m · extensions 0.0 m² · flex m²: room 78.5 · living 14.7 · circulation 11.7 · storage 13.9 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-3.svg" alt="zf-08 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 33 of 2386)<br>L|midW|block|m:middle/split|wet:split|rr:FBFB|nofw|v0<br><span class="flex">score 28.84 · <b>Flex share 16%</b> · living 8% (24.6 m²) · circulation 2% · Core 30% · pieces 5.5/100 m² · bedroom spread 15.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 39% · spine 6.0 m · extensions 71.1 m² · flex m²: room 52.1 · living 24.6 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 73 of 1792)<br>L|midW|block|m:middle/split|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 24.88 · <b>Flex share 20%</b> · living 8% (24.6 m²) · circulation 2% · Core 30% · pieces 5.8/100 m² · bedroom spread 16.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 43% · spine 6.0 m · extensions 38.9 m² · flex m²: room 59.3 · living 24.6 · circulation 0.0 · storage 6.7 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-4.svg" alt="zf-08 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 59 of 2386)<br>L|rear|block|m:middle/block|wet:block|rr:-|nofw|v3<br><span class="flex">score 31.89 · <b>Flex share 17%</b> · living 12% (38.9 m²) · circulation 7% · Core 18% · pieces 4.9/100 m² · bedroom spread 6.5 m · wet near bed yes · laundry near yes · closeness to the user's layout 25% · spine 6.0 m · extensions 18.6 m² · flex m²: room 38.7 · living 38.9 · circulation 15.8 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 103 of 1792)<br>L|midR|block|m:rear/block|wet:block|rr:MBBF|nofw|v0<br><span class="flex">score 28.83 · <b>Flex share 30%</b> · living 7% (23.5 m²) · circulation 8% · Core 17% · pieces 6.1/100 m² · bedroom spread 12.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 33% · spine 6.0 m · extensions 0.0 m² · flex m²: room 76.0 · living 23.5 · circulation 18.9 · storage 3.6 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-5.svg" alt="zf-08 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 335 of 2386) <span class="badge">TARGET MATCH</span><br>L|midW|split|m:middle/split|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 46.13 · <b>Flex share 26%</b> · living 11% (36.8 m²) · circulation 13% · Core 17% · pieces 6.7/100 m² · bedroom spread 18.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 43% · spine 6.0 m · extensions 0.0 m² · flex m²: room 53.5 · living 36.8 · circulation 30.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 311 of 1792) <span class="badge">TARGET MATCH</span><br>L|midW|split|m:middle/split|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 38.69 · <b>Flex share 26%</b> · living 11% (36.8 m²) · circulation 13% · Core 17% · pieces 7.0/100 m² · bedroom spread 18.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 43% · spine 6.0 m · extensions 0.0 m² · flex m²: room 27.7 · living 36.8 · circulation 30.0 · storage 25.9 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-6.svg" alt="zf-08 target match (regression)">
 </figure>
 <figure class="match">
-  <figcaption><b>alt-target match (regression)</b> (rank 75 of 2386) <span class="badge">ALT TARGET MATCH</span><br>L|midG|block|m:middle/split|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 33 · <b>Flex share 28%</b> · living 8% (24.6 m²) · circulation 12% · Core 18% · pieces 6.1/100 m² · bedroom spread 10.0 m · wet near bed yes · laundry near yes · closeness to the user's layout 58% · spine 6.0 m · extensions 0.0 m² · flex m²: room 59.5 · living 24.6 · circulation 25.3 · storage 7.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>alt-target match (regression)</b> (rank 1311 of 1792) <span class="badge">ALT TARGET MATCH</span><br>L|midW|block|m:middle/split|wet:block|rr:FBFB|fw|v3<br><span class="flex">score 81.5 · <b>Flex share 28%</b> · living 8% (24.6 m²) · circulation 17% · Core 18% · pieces 7.0/100 m² · bedroom spread 18.3 m · wet near bed yes · laundry near yes · closeness to the user's layout 41% · spine 6.0 m · extensions 0.0 m² · flex m²: room 18.7 · living 24.6 · circulation 41.7 · storage 29.5 · sliver 0.0</span></figcaption>
   <img src="zf-08/cand-7.svg" alt="zf-08 alt-target match (regression)">
 </figure></div></details>
 </section>
 <section>
 <h2>SAMPLE-15x27 - sample 15.0 x 27.0, 4 bed, double garage, WC <span class="dim">15000 x 27000 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 3940/5504 generated · 3782 distinct · 1891 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.85)<br><span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span><br></p>
+<p class="meta">valid 3184/5568 generated · 2886 distinct · 1443 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.81)<br><span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span><br></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><div class="missing">no builder plan image for this brief</div></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><div class="missing">no user zoning drawn for this brief</div></figure>
 
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 3782)<br>L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 21.94 · <b>Flex share 24%</b> · living 6% (24.6 m²) · circulation 4% · Core 24% · pieces 4.2/100 m² · bedroom spread 15.2 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 39.0 m² · flex m²: room 76.0 · living 24.6 · circulation 7.8 · storage 14.4 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 2886)<br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v0<br><span class="flex">score 21.44 · <b>Flex share 33%</b> · living 6% (24.6 m²) · circulation 5% · Core 14% · pieces 5.4/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 101.9 · living 24.6 · circulation 6.0 · storage 27.1 · sliver 0.0</span></figcaption>
   <img src="SAMPLE-15x27/cand-1.svg" alt="SAMPLE-15x27 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 3 of 3782)<br>L|midW|block|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 28.13 · <b>Flex share 32%</b> · living 6% (24.6 m²) · circulation 4% · Core 14% · pieces 4.2/100 m² · bedroom spread 13.9 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 107.5 · living 24.6 · circulation 7.8 · storage 14.4 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 3 of 2886)<br>L|midW|block|m:front/block|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 23.48 · <b>Flex share 28%</b> · living 6% (24.6 m²) · circulation 5% · Core 24% · pieces 5.9/100 m² · bedroom spread 17.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 57.6 m² · flex m²: room 99.8 · living 24.6 · circulation 5.2 · storage 8.6 · sliver 0.0</span></figcaption>
   <img src="SAMPLE-15x27/cand-2.svg" alt="SAMPLE-15x27 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 7 of 3782)<br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v0<br><span class="flex">score 30.81 · <b>Flex share 33%</b> · living 6% (24.6 m²) · circulation 5% · Core 14% · pieces 4.2/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 129.0 · living 24.6 · circulation 6.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 21 of 2886)<br>L|midW|block|m:front/block|wet:block|rr:FBB|fw|v2<br><span class="flex">score 28.5 · <b>Flex share 31%</b> · living 6% (24.6 m²) · circulation 5% · Core 14% · pieces 6.2/100 m² · bedroom spread 16.9 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 33.2 m² · flex m²: room 78.1 · living 24.6 · circulation 0.0 · storage 49.0 · sliver 0.0</span></figcaption>
   <img src="SAMPLE-15x27/cand-3.svg" alt="SAMPLE-15x27 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 11 of 3782)<br>L|midG|block|m:middle/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 33.35 · <b>Flex share 37%</b> · living 6% (24.6 m²) · circulation 6% · Core 14% · pieces 4.0/100 m² · bedroom spread 13.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 123.9 · living 24.6 · circulation 16.5 · storage 9.7 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 25 of 2886)<br>L|midW|block|m:rear/split|wet:block|rr:MF|fw|v0<br><span class="flex">score 28.95 · <b>Flex share 25%</b> · living 14% (54.9 m²) · circulation 6% · Core 24% · pieces 5.7/100 m² · bedroom spread 5.8 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 48.0 m² · flex m²: room 85.9 · living 54.9 · circulation 11.0 · storage 3.1 · sliver 0.0</span></figcaption>
   <img src="SAMPLE-15x27/cand-4.svg" alt="SAMPLE-15x27 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 43 of 3782)<br>L|midW|block|m:rear/block|wet:block|rr:FM|fw|v0<br><span class="flex">score 38.67 · <b>Flex share 23%</b> · living 16% (65.7 m²) · circulation 6% · Core 24% · pieces 4.0/100 m² · bedroom spread 5.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 47.4 m² · flex m²: room 83.5 · living 65.7 · circulation 11.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 33 of 2886)<br>L|midR|block|m:rear/block|wet:split|rr:BBFM|fw|v0<br><span class="flex">score 29.64 · <b>Flex share 42%</b> · living 6% (23.6 m²) · circulation 5% · Core 14% · pieces 5.9/100 m² · bedroom spread 12.8 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 148.8 · living 23.6 · circulation 4.4 · storage 15.6 · sliver 0.0</span></figcaption>
   <img src="SAMPLE-15x27/cand-5.svg" alt="SAMPLE-15x27 top 5">
 </figure></div></details>
 </section>
 <section>
 <h2>custom-8800x20550 - 8.8 x 20.55, Master + 3 bed, double garage <span class="dim">8800 x 20550 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 16/48 generated · 12 distinct · 6 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.00)<br><span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span><br></p>
+<p class="meta">valid 40/48 generated · 28 distinct · 14 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.00)<br><span class="note">no layout of the user's for this brief: ranked against the profile of all seven plans</span><br></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><div class="missing">no builder plan image for this brief</div></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><div class="missing">no user zoning drawn for this brief</div></figure>
 
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 12)<br>L|midG|block|m:middle/split|wet:block|rr:BBB|fw|v2<br><span class="flex">score 48.86 · <b>Flex share 12%</b> · living 0% (0.0 m²) · circulation 9% · Core 20% · pieces 8.3/100 m² · bedroom spread 5.8 m · wet near bed no · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 0.0 · circulation 0.0 · storage 22.5 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 28)<br>L|midG|block|m:middle/block|wet:block|rr:BBB|fw|v2<br><span class="flex">score 49.03 · <b>Flex share 8%</b> · living 0% (0.0 m²) · circulation 17% · Core 23% · pieces 7.2/100 m² · bedroom spread 5.8 m · wet near bed no · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 0.0 · circulation 13.9 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="custom-8800x20550/cand-1.svg" alt="custom-8800x20550 top 1">
 </figure>
 </div>
@@ -291,34 +291,34 @@
 </section>
 <section>
 <h2>zf-17 - Botanica 36 <span class="dim">14870 x 24590 mm, 4 bed, double garage</span></h2>
-<p class="meta">valid 3740/5504 generated · 3432 distinct · 1716 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.83)<br><b class="ok">blind test PASSED</b>: best score in the top 5 25.29 vs the user's layout 32.08 (first candidate at least as good: rank 1); the user's layout: Flex 11%, circulation 8%, Core 12%; top 1 Flex 22%; closeness top 1 23%, best of all 67%<br><span class="ok">regression target: matched, rank 2160 of 3432</span></p>
+<p class="meta">valid 3114/5568 generated · 2704 distinct · 1352 mirror images hidden · top 5 pairwise different: yes (largest same-kind overlap 0.55)<br><b class="ok">blind test PASSED</b>: best score in the top 5 22.5 vs the user's layout 27.97 (first candidate at least as good: rank 1); the user's layout: Flex 11%, circulation 8%, Core 12%; top 1 Flex 29%; closeness top 1 13%, best of all 67%<br><span class="ok">regression target: matched, rank 2086 of 2704</span></p>
 <div class="row">
 <figure class="ref"><figcaption><b>builder plan</b></figcaption><div class="missing">no builder plan image for this brief</div></figure>
 <figure class="ref"><figcaption><b>user's zoning drawing</b></figcaption><div class="missing">no user zoning drawn for this brief</div></figure>
 <figure class="ref"><figcaption><b>the user's layout, measured</b> (same style as candidates)</figcaption><img src="zf-17/golden.svg" alt="measured zoning zf-17"></figure>
 <figure>
-  <figcaption><b>top 1</b> (rank 1 of 3432)<br>L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 25.29 · <b>Flex share 22%</b> · living 7% (24.2 m²) · circulation 4% · Core 26% · pieces 4.6/100 m² · bedroom spread 15.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 23% · spine 6.0 m · extensions 38.2 m² · flex m²: room 59.2 · living 24.2 · circulation 7.2 · storage 14.4 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 1</b> (rank 1 of 2704)<br>L|midR|block|m:front/split|wet:split|rr:BBF|fw|v0<br><span class="flex">score 22.5 · <b>Flex share 29%</b> · living 7% (24.2 m²) · circulation 9% · Core 16% · pieces 5.2/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · closeness to the user's layout 13% · spine 6.0 m · extensions 0.0 m² · flex m²: room 87.2 · living 24.2 · circulation 19.4 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-17/cand-1.svg" alt="zf-17 top 1">
 </figure>
 <figure>
-  <figcaption><b>top 2</b> (rank 3 of 3432)<br>L|midG|split|m:middle/block|wet:block|rr:FBB|fw|v2<br><span class="flex">score 29.69 · <b>Flex share 28%</b> · living 7% (24.2 m²) · circulation 12% · Core 18% · pieces 5.5/100 m² · bedroom spread 9.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 30% · spine 6.0 m · extensions 6.7 m² · flex m²: room 69.7 · living 24.2 · circulation 26.5 · storage 7.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 2</b> (rank 3 of 2704)<br>L|midW|block|m:middle/split|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 22.84 · <b>Flex share 17%</b> · living 7% (24.2 m²) · circulation 5% · Core 26% · pieces 5.5/100 m² · bedroom spread 17.3 m · wet near bed yes · laundry near yes · closeness to the user's layout 22% · spine 6.0 m · extensions 66.6 m² · flex m²: room 59.6 · living 24.2 · circulation 4.0 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-17/cand-2.svg" alt="zf-17 top 2">
 </figure>
 <figure>
-  <figcaption><b>top 3</b> (rank 15 of 3432)<br>L|midW|block|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 32.46 · <b>Flex share 30%</b> · living 7% (24.2 m²) · circulation 4% · Core 16% · pieces 4.6/100 m² · bedroom spread 14.6 m · wet near bed yes · laundry near yes · closeness to the user's layout 25% · spine 6.0 m · extensions 0.0 m² · flex m²: room 86.7 · living 24.2 · circulation 7.2 · storage 15.4 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 3</b> (rank 15 of 2704)<br>L|midR|block|m:rear/block|wet:split|rr:BBFM|fw|v0<br><span class="flex">score 26.61 · <b>Flex share 36%</b> · living 6% (22.8 m²) · circulation 11% · Core 16% · pieces 6.3/100 m² · bedroom spread 12.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 9% · spine 6.0 m · extensions 0.0 m² · flex m²: room 106.2 · living 22.8 · circulation 24.5 · storage 0.0 · sliver 0.0</span></figcaption>
   <img src="zf-17/cand-3.svg" alt="zf-17 top 3">
 </figure>
 </div>
 <details><summary>top 4, top 5 and the regression target match</summary><div class="row"><figure>
-  <figcaption><b>top 4</b> (rank 21 of 3432)<br>L|midG|block|m:middle/block|wet:block|rr:BBF|nofw|v0<br><span class="flex">score 33.09 · <b>Flex share 31%</b> · living 7% (24.2 m²) · circulation 6% · Core 16% · pieces 4.4/100 m² · bedroom spread 12.9 m · wet near bed yes · laundry near yes · closeness to the user's layout 21% · spine 6.0 m · extensions 0.0 m² · flex m²: room 87.3 · living 24.2 · circulation 16.5 · storage 9.5 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 4</b> (rank 19 of 2704)<br>L|midG|block|m:front/block|wet:block|rr:FBFB|nofw|v0<br><span class="flex">score 27.24 · <b>Flex share 28%</b> · living 7% (24.2 m²) · circulation 10% · Core 16% · pieces 5.5/100 m² · bedroom spread 10.8 m · wet near bed yes · laundry near yes · closeness to the user's layout 25% · spine 6.0 m · extensions 0.0 m² · flex m²: room 63.8 · living 24.2 · circulation 27.8 · storage 9.5 · sliver 0.0</span></figcaption>
   <img src="zf-17/cand-4.svg" alt="zf-17 top 4">
 </figure>
 <figure>
-  <figcaption><b>top 5</b> (rank 49 of 3432)<br>L|midW|block|m:middle/block|wet:block|rr:FBFB|fw|v2<br><span class="flex">score 34.2 · <b>Flex share 22%</b> · living 7% (24.2 m²) · circulation 5% · Core 26% · pieces 4.6/100 m² · bedroom spread 17.4 m · wet near bed yes · laundry near yes · closeness to the user's layout 23% · spine 6.0 m · extensions 38.2 m² · flex m²: room 81.3 · living 24.2 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <figcaption><b>top 5</b> (rank 55 of 2704)<br>L|rear|block|m:middle/block|wet:split|rr:-|nofw|v2<br><span class="flex">score 29.82 · <b>Flex share 23%</b> · living 0% (0.0 m²) · circulation 6% · Core 26% · pieces 5.2/100 m² · bedroom spread 6.5 m · wet near bed yes · laundry near yes · closeness to the user's layout 20% · spine 6.0 m · extensions 38.2 m² · flex m²: room 68.7 · living 0.0 · circulation 14.2 · storage 1.8 · sliver 0.0</span></figcaption>
   <img src="zf-17/cand-5.svg" alt="zf-17 top 5">
 </figure>
 <figure class="match">
-  <figcaption><b>target match (regression)</b> (rank 2160 of 3432) <span class="badge">TARGET MATCH</span><br>R|midR|block|m:front/block|wet:block|rr:F|nofw|v2<br><span class="flex">score 88.55 · <b>Flex share 28%</b> · living 10% (35.7 m²) · circulation 7% · Core 15% · pieces 3.8/100 m² · bedroom spread 6.2 m · wet near bed yes · laundry near yes · closeness to the user's layout 56% · spine 6.0 m · extensions 0.0 m² · flex m²: room 81.1 · living 35.7 · circulation 19.1 · storage 3.6 · sliver 0.0</span></figcaption>
+  <figcaption><b>target match (regression)</b> (rank 2086 of 2704) <span class="badge">TARGET MATCH</span><br>R|midR|block|m:front/block|wet:block|rr:F|nofw|v0<br><span class="flex">score 85.1 · <b>Flex share 30%</b> · living 10% (35.7 m²) · circulation 8% · Core 15% · pieces 4.6/100 m² · bedroom spread 6.5 m · wet near bed yes · laundry near yes · closeness to the user's layout 57% · spine 6.0 m · extensions 0.0 m² · flex m²: room 81.1 · living 35.7 · circulation 23.8 · storage 3.6 · sliver 0.0</span></figcaption>
   <img src="zf-17/cand-6.svg" alt="zf-17 target match (regression)">
 </figure></div></details>
 </section>

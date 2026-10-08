@@ -10,10 +10,10 @@ import { join } from 'node:path';
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import { classifyPiece, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { BRIEFS } from './briefs.ts';
-import { carveCandidate, carvedLine, carveRooms, envelopeEdges } from './carve.ts';
+import { carveCandidate, carvedLine, carveRooms, envelopeEdges, splitFlex } from './carve.ts';
 import { checkConnectivity } from './connect.ts';
 import { distribute } from './layout.ts';
-import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, runBrief, type BriefResult } from './pipeline.ts';
+import { candidateRects, familyOf, layoutKey, OVERLAP_LIMIT, rank, runBrief, type BriefResult } from './pipeline.ts';
 import { GOLDEN, goldenById, profileFor, TRACING_NOOK_MAX_AREA } from './golden.ts';
 import { BAND_METRICS, buildProfile, CANDIDATE_ADJ, closeness, coreRectsOf, edgeBetween, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, sameKindOverlap, scoreOf, QUALITY_WEIGHTS } from './quality.ts';
 import { readFileSync } from 'node:fs';
@@ -23,6 +23,8 @@ import {
   CARVE_SPECS,
   CORE_AREA_MAX,
   CORE_AREA_MIN,
+  FLEX_SPLIT_CIRC_MIN_WIDTH,
+  FLEX_SPLIT_MAX_LONG,
   SPECS,
   SPINE_W,
   withinGarage,
@@ -38,6 +40,7 @@ import {
   findExtensions,
   longestRun,
   mismatches,
+  optionId,
   RUN_EXTRA,
   spineStopsAtCore,
   touchesBoundary,
@@ -653,27 +656,34 @@ test('closeness is a diagnostic: it is between 0 and 1 and the ranking ignores i
  * The grow pass audited once (a runBrief sweep is not cheap), shared by the three tests below: the tallies plus the
  * candidates that ended with a *higher* Flex share, which round 8b made possible (see the todo).
  */
-function auditGrowth(): { grown: number; unchanged: number; shed: number; shareUp: string[]; worstUp: number } {
+function auditGrowth(): { grown: number; belowCeiling: number; shed: number; shareUp: string[]; worstUp: number } {
   let grown = 0;
-  let unchanged = 0;
+  let belowCeiling = 0;
   let shed = 0;
   let worstUp = 0;
   const shareUp: string[] = [];
   for (const id of ['zf-04', 'zf-07', 'SAMPLE-15x27']) {
     const r = RESULTS.find((x) => x.brief.id === id)!;
-    const before = runBrief(r.brief, { grow: false });
+    // round 9: the pre-grow reference is unsplit as well as ungrown, so a candidate the split pass rejects but growth
+    // rescues still has a counterpart to compare with
+    const before = runBrief(r.brief, { grow: false, split: false });
     const ceiling = r.profile.flexShare.max;
     const byId = new Map(before.valid.map((c) => [c.optionId, c]));
     for (const c of r.valid) {
       const b = byId.get(c.optionId)!;
       const same = JSON.stringify(c.zones) === JSON.stringify(b.zones); // generation only: neither run carves (round 8b)
-      if (b.quality.flexShare <= ceiling) {
-        assert.ok(same, `${id} ${c.optionId}: changed although its Flex share was within the ceiling`);
-        unchanged++;
-        continue;
-      }
       if (same) continue;
       grown++;
+      // round 9: a plan already under the ceiling is only reached by the priority phase (bedrooms, then the Master), so
+      // its Core, wet, wc, laundry and garage cells must be untouched - the ceiling phase never runs for it
+      if (b.flexShareBeforeFill <= ceiling) {
+        belowCeiling++;
+        const bz = new Map(b.zones.map((z) => [z.id, z.rect]));
+        for (const z of c.zones) {
+          if (z.kind === 'bedroom' || z.kind === 'master' || z.kind === 'ensuite') continue;
+          assert.deepEqual(z.rect, bz.get(z.id), `${id} ${c.optionId}: the ceiling phase grew ${z.name} below the ceiling`);
+        }
+      }
       assert.deepEqual(c.spine, b.spine, `${c.optionId}: the spine moved or grew`);
       assert.ok(c.quality.slivers <= b.quality.slivers, `${c.optionId}: growth made a sliver`);
       const up = (c.quality.flexShare - b.quality.flexShare) * 100;
@@ -698,7 +708,7 @@ function auditGrowth(): { grown: number; unchanged: number; shed: number; shareU
       }
     }
   }
-  return { grown, unchanged, shed, shareUp, worstUp };
+  return { grown, belowCeiling, shed, shareUp, worstUp };
 }
 
 let growthAuditCache: ReturnType<typeof auditGrowth> | null = null;
@@ -706,8 +716,10 @@ const growthAudit = (): ReturnType<typeof auditGrowth> => (growthAuditCache ??= 
 
 test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the Core cap hold; each grown room is noted', () => {
   const a = growthAudit();
+  // round 9: the priority phase grows bedrooms and the Master even under the ceiling, so a within-ceiling candidate is
+  // no longer untouched - the audit instead checks that the ceiling phase never ran for one
   assert.ok(a.grown > 100, 'rooms grew on big lots');
-  assert.ok(a.unchanged > 100, 'candidates within the ceiling are untouched');
+  assert.ok(a.belowCeiling > 100, 'candidates within the ceiling were grown by the priority phase only');
   assert.ok(a.shed > a.grown * 0.99, `only ${a.shed} of ${a.grown} grown candidates shed Flex`);
 });
 
@@ -717,8 +729,8 @@ test('grow pass: only above the Flex ceiling; spine, slivers, zone caps and the 
  */
 const GROW_UP =
   'nothing carves the leftover any more (round 8b): a room that grows by swallowing its own extension can leave the ' +
-  'space it took as an ordinary Flex strip, so 26 of 7834 grown candidates end with a higher Flex share, worst ' +
-  '+1.62 pt (SAMPLE-15x27 L|midW|block|m:middle/split|wet:split|rr:BBF|nofw|v0)';
+  'space it took as an ordinary Flex strip, and round 9 grew bedrooms and the Master into Flex under the ceiling too, ' +
+  'so 60 of 7124 grown candidates end with a higher Flex share, worst +2.61 pt (zf-07 L|midR|split|m:front/block|wet:block|rr:BBF|fw|v0)';
 
 test('grow pass: every grown candidate ends with a lower Flex share', { todo: GROW_UP }, () => {
   const a = growthAudit();
@@ -727,24 +739,31 @@ test('grow pass: every grown candidate ends with a lower Flex share', { todo: GR
 
 test('grow pass: the candidates that do not shed Flex stay inside the guard (round 8b)', () => {
   const a = growthAudit();
-  assert.ok(a.shareUp.length <= 30, `${a.shareUp.length} of ${a.grown} grown candidates: ${a.shareUp.slice(0, 5).join('; ')}`);
-  assert.ok(a.worstUp <= 2, `worst Flex share rise ${a.worstUp.toFixed(2)} pt, over the 2 pt guard`);
+  assert.ok(a.shareUp.length <= 70, `${a.shareUp.length} of ${a.grown} grown candidates: ${a.shareUp.slice(0, 5).join('; ')}`);
+  assert.ok(a.worstUp <= 3, `worst Flex share rise ${a.worstUp.toFixed(2)} pt, over the 3 pt guard`);
 });
 
-// Round 8a changed this expectation: the zf-07 top 1 is no longer the same plan with and without the grow pass. The
-// plan itself is untouched - the same option, the same zones, the same score - but pieceDensity re-ranked the brief, and
-// a different candidate (L|midG|block…, a lot-surplus Bed 3) grew cheaper (28.68 -> 28.42) and took first place, so the
-// pre-grow top 1 is now rank 3. What the pass claims is still true: a plan under the ceiling is not grown.
-test('grow pass: the zf-07 pre-grow top 1 is untouched (its Flex share is already under the ceiling)', () => {
+// Round 8a changed this expectation and round 9 changed it again: the zf-07 top 1 is no longer the same plan with and
+// without the grow pass. The plan's structure holds - the same option, the same spine, the same ceiling-phase zones,
+// no score change from growth - but round 9's priority phase grows the bedrooms of a plan that is under the ceiling, so
+// the pre-grow top 1 gains a lot-surplus note and pieceDensity re-ranked the brief out from under it.
+test('grow pass: the zf-07 pre-grow top 1 keeps its spine and its ceiling-phase zones (its Flex share is under the ceiling)', () => {
   const r = RESULTS.find((x) => x.brief.id === 'zf-07')!;
-  const before = runBrief(r.brief, { grow: false });
+  const before = runBrief(r.brief, { grow: false, split: false });
   const b1 = before.top5[0];
-  assert.ok(b1.quality.flexShare <= r.profile.flexShare.max);
+  assert.ok(b1.flexShareBeforeFill <= r.profile.flexShare.max, 'the pre-grow top 1 is above the ceiling after all');
   const found = r.valid.find((c) => c.optionId === b1.optionId);
   assert.ok(found, `the pre-grow zf-07 top 1 (${b1.optionId}) is not among the grown valid candidates`);
-  assert.deepEqual(found.zones, b1.zones);
-  assert.equal(found.quality.score, b1.quality.score);
-  assert.ok(!found.notes.some((n) => n.includes('lot surplus')), found.optionId);
+  assert.deepEqual(found.spine, b1.spine);
+  // round 9: only the priority phase (bedrooms, then the Master) may touch a plan under the ceiling
+  const bz = new Map(b1.zones.map((z) => [z.id, z.rect]));
+  for (const z of found.zones) {
+    if (z.kind === 'bedroom' || z.kind === 'master' || z.kind === 'ensuite') continue;
+    assert.deepEqual(z.rect, bz.get(z.id), `the ceiling phase grew ${z.name}`);
+  }
+  // a priority-phase grow is still noted
+  const changed = JSON.stringify(found.zones) !== JSON.stringify(b1.zones);
+  assert.equal(found.notes.some((n) => n.includes('lot surplus')), changed, found.optionId);
 });
 
 // ------------------------------------------------------------------ determinism, v1 untouched
@@ -873,13 +892,15 @@ test('carve: deterministic - the same candidate carves the same way every time',
 });
 
 test('carve: carve false (the default) reproduces the earlier output; carving only lowers the Flex share', () => {
-  // round 8b: `carve: false` is what `runBrief(brief)` does now; this keeps the round 5 comparison as the opt-in check
+  // round 9: `carve: false` and `runBrief(brief)` both split now, so this compares the same pass with and without the
+  // carve opt-in; the inner loop still needs the unsplit generator output to compare the relabelled Flex against
   assert.deepEqual(
     RESULTS.map((r) => r.valid.map((c) => c.optionId)),
     BRIEFS.map((b) => runBrief(b, { carve: false }).valid.map((c) => c.optionId)),
   );
   for (const r of CARVE_RESULTS) {
-    const raw = runBrief(r.brief, { carve: false });
+    // round 9: the default now splits Flex, so the pass is compared against the unsplit generator output
+    const raw = runBrief(r.brief, { carve: false, split: false });
     const byId = new Map(raw.valid.map((c) => [c.optionId, c]));
     for (const c of raw.valid) {
       assert.equal(c.carved, undefined, c.optionId);
@@ -1108,7 +1129,10 @@ test('round 8a: a tracing nook in a measured zoning is not a sliver (zf-17 1100 
 });
 
 test('round 8a: the nook rule touches measured plans only - a real sliver in a generated plan is still a piece and still costs 50', () => {
-  const withSlivers = ALL.filter((x) => x.c.quality.slivers > 0);
+  // round 9: the default split pass rejects any candidate whose Flex has a side under 1000, so the default run has no
+  // sliver left (that is the split pass, not a metric change); real slivers live in the unsplit generator output
+  const unsplit = BRIEFS.flatMap((b) => runBrief(b, { split: false }).valid.map((c) => ({ brief: b, c })));
+  const withSlivers = unsplit.filter((x) => x.c.quality.slivers > 0);
   assert.ok(withSlivers.length > 100, `slivers are still common in generated plans (${withSlivers.length})`);
   const x = withSlivers[0];
   assert.equal(x.c.flex.filter((f) => f.cls === 'sliver').length, x.c.quality.slivers, `${where(x)}: the sliver is still a Flex piece of the candidate`);
@@ -1137,13 +1161,103 @@ test('round 8a: pieceDensity counts the zones (spine and flex-walls among them),
   const g = goldenById('zf-17')!;
   assert.equal(g.layout.zones.length + g.layout.flex.filter((f) => f.cls !== 'sliver').length + g.layout.extensions.length, 15);
   assert.ok(Math.abs(g.metrics.pieceDensity - 4.1) < 0.01, String(g.metrics.pieceDensity));
-  // one-sided: only the amount above the band's max costs (10 points per piece/100 m²), and less scores better
+  // round 9: pieceDensity is still computed, still in BAND_METRICS and still in the captions, but its band scale - and
+  // so its outside points and its score reward - is 0 (the user preferred the useful edges made by smaller Flex pieces)
+  assert.equal(QUALITY_WEIGHTS.bandScale.pieceDensity, 0);
   const p = profileFor('none');
-  const max = p.pieceDensity.max;
   const at = (v: number): ReturnType<typeof scoreOf> => scoreOf({ ...g.metrics, pieceDensity: v }, p);
-  assert.equal(at(max).outside.pieceDensity, 0);
-  assert.equal(at(max + 0.1).outside.pieceDensity, 1);
-  assert.ok(Math.abs(at(max + 1).outside.pieceDensity - 10) < 1e-9, '10 points per piece/100 m² above the band');
-  assert.ok(at(max - 1).score < at(max).score, 'a lower count is rewarded');
-  assert.ok(Math.abs(at(max).score - at(max - 1).score - 1) < 0.02, 'the reward is 1 point per piece/100 m²');
+  assert.equal(at(p.pieceDensity.max + 100).outside.pieceDensity, 0);
+  assert.equal(at(p.pieceDensity.max + 100).score, at(p.pieceDensity.min).score, 'pieceDensity still moves the score');
+});
+
+// ------------------------------------------------------------------ round 9: split Flex into possible rooms (2026-10-08)
+
+const FLEX_LABELS = ['Flex · room', 'Flex · circulation', 'Flex · storage', 'Flex · living'];
+
+test('round 9: a default run labels Flex only - no carved room name anywhere, and all three split labels occur', () => {
+  const seen = new Set<string>();
+  for (const x of ALL) {
+    assert.equal(x.c.carved, undefined, where(x));
+    for (const z of x.c.zones) assert.ok(!CARVE_ORDER.includes(z.name), `${where(x)}: carved room ${z.name} in a default run`);
+    for (const f of x.c.flex) {
+      assert.ok(FLEX_LABELS.includes(f.cls), `${where(x)}: unexpected Flex class ${f.cls}`);
+      seen.add(f.cls);
+    }
+  }
+  for (const label of ['Flex · room', 'Flex · circulation', 'Flex · storage']) assert.ok(seen.has(label), `no ${label} piece in any default run`);
+});
+
+test('round 9: splitFlex cuts a long piece into as few equal parts as the 5400 mm limit allows', () => {
+  // the brief's example: 9000 x 4900 becomes two 4500 x 4900 pieces
+  const two = splitFlex([{ id: 'p', rect: { x: 0, y: 0, w: 9000, h: 4900 }, cls: 'Flex · room' }])!;
+  assert.deepEqual(two.map((f) => [f.rect.w, f.rect.h, f.cls]), [[4500, 4900, 'Flex · room'], [4500, 4900, 'Flex · room']]);
+  // a piece already under the limit stays in one part
+  assert.deepEqual(splitFlex([{ id: 'p', rect: { x: 0, y: 0, w: 5000, h: 5000 }, cls: 'Flex · room' }])!.map((f) => f.rect.w), [5000]);
+  // a 1500-wide strip split across its long side is circulation (1000-1800 wide, at least twice as long)
+  assert.deepEqual(splitFlex([{ id: 'p', rect: { x: 0, y: 0, w: 6000, h: 1500 }, cls: 'Flex · storage' }])!.map((f) => f.cls), ['Flex · circulation', 'Flex · circulation']);
+  // a piece with a side under 1000 is rejected outright (this is what SPLIT_SLIVER_FAILURE reports in the pipeline)
+  assert.equal(splitFlex([{ id: 'p', rect: { x: 0, y: 0, w: 9000, h: 900 }, cls: 'Flex · room' }]), null);
+  // living Flex is never cut across
+  assert.deepEqual(splitFlex([{ id: 'p', rect: { x: 0, y: 0, w: 9000, h: 4900 }, cls: 'Flex · living' }])!.map((f) => [f.rect.w, f.rect.h, f.cls]), [[9000, 4900, 'Flex · living']]);
+});
+
+test('round 9: after the split no Flex piece has a side under 1000, and none but living/circulation exceeds 5400', () => {
+  for (const x of ALL) {
+    for (const f of x.c.flex) {
+      const long = Math.max(f.rect.w, f.rect.h);
+      const short = Math.min(f.rect.w, f.rect.h);
+      assert.ok(short >= FLEX_SPLIT_CIRC_MIN_WIDTH, `${where(x)}: ${f.cls} has a side of ${short} mm`);
+      if (f.cls === 'Flex · room' || f.cls === 'Flex · storage') assert.ok(long <= FLEX_SPLIT_MAX_LONG, `${where(x)}: ${f.cls} long side ${long} mm`);
+    }
+    assert.equal(x.c.quality.slivers, 0, `${where(x)}: the split left a sliver`);
+  }
+});
+
+test('round 9: the bedroom-column variant (v4) exists and is valid for zf-17', () => {
+  const brief = BRIEFS.find((b) => b.id === 'zf-17')!;
+  const v4 = enumerateOptions(brief).filter((o) => o.variant === 4);
+  assert.ok(v4.length > 0, 'no v4 option for a three-lane-bedroom, front-Master, rear-F brief');
+  // the column needs the rear row clear, so every v4 option is rear-F
+  for (const o of v4) assert.deepEqual(o.rearPlan, ['F'], `${optionId(o)}: v4 is not rear-F`);
+  const r = RESULTS.find((x) => x.brief.id === 'zf-17')!;
+  const valid4 = r.valid.filter((c) => c.options.variant === 4);
+  assert.ok(valid4.length > 0, 'no v4 candidate is valid for zf-17');
+  // The column rule, on every valid v4 candidate: the lane on the side opposite the garage stacks, from the rear wall
+  // (y 0, the frame the rear-row band and markLiving use) toward the front, Bed 2, Bed 3, the wet block and laundry in
+  // either order, then Bed 4. A split wet block arrives as a WC plus a Bath; both count as the block.
+  for (const c of valid4) {
+    const garage = c.zones.find((z) => z.kind === 'garage')!;
+    const opposite = (z: ZoneRec): boolean => z.rect.x >= garage.rect.x + garage.rect.w || z.rect.x + z.rect.w <= garage.rect.x;
+    const bed = (name: string): ZoneRec => {
+      const z = c.zones.find((q) => q.kind === 'bedroom' && q.name === name);
+      assert.ok(z, `${c.optionId}: no ${name} in the column`);
+      return z!;
+    };
+    const wet = c.zones.filter((z) => (z.kind === 'wet' || z.kind === 'wc' || z.kind === 'laundry') && opposite(z));
+    assert.ok(wet.some((z) => z.kind === 'wet'), `${c.optionId}: no wet block in the column`);
+    assert.ok(wet.some((z) => z.kind === 'laundry'), `${c.optionId}: no laundry in the column`);
+    const [bed2, bed3, bed4] = [bed('Bed 2'), bed('Bed 3'), bed('Bed 4')];
+    // opposite the garage, and stacked rear to front in order (the middle group free to order itself)
+    for (const z of [bed2, bed3, bed4, ...wet]) assert.ok(opposite(z), `${c.optionId}: ${z.name} has x ${z.rect.x}, not opposite the garage at x ${garage.rect.x}`);
+    assert.ok(bed2.rect.y < bed3.rect.y, `${c.optionId}: Bed 2 (y ${bed2.rect.y}) is not rear of Bed 3 (y ${bed3.rect.y})`);
+    for (const z of wet) assert.ok(bed3.rect.y < z.rect.y, `${c.optionId}: ${z.name} (y ${z.rect.y}) is not front of Bed 3 (y ${bed3.rect.y})`);
+    for (const z of wet) assert.ok(z.rect.y < bed4.rect.y, `${c.optionId}: ${z.name} (y ${z.rect.y}) is not rear of Bed 4 (y ${bed4.rect.y})`);
+  }
+});
+
+test('round 9: pieceDensity weight 0 ranks the round 7 top-1 option of zf-17 far above the round 8 top-1 option', () => {
+  const r = RESULTS.find((x) => x.brief.id === 'zf-17')!;
+  // the score order over the valid candidates is the pipeline's own `rank`; `ranked` is that list after layout dedupe
+  const order = r.valid.slice().sort(rank);
+  const rankOf = (id: string): number => order.findIndex((c) => c.optionId === id) + 1;
+  const rank7 = rankOf('L|midG|split|m:middle/block|wet:block|rr:FBFB|fw|v2');
+  const rank8 = rankOf('L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0');
+  assert.ok(rank7 > 0, 'the round 7 top-1 option is not a valid zf-17 candidate');
+  assert.ok(rank8 > 0, 'the round 8 top-1 option is not a valid zf-17 candidate');
+  assert.ok(rank7 < rank8, `round 7 top 1 (rank ${rank7}) does not beat round 8 top 1 (rank ${rank8})`);
+  assert.ok(order[rank7 - 1].quality.score < order[rank8 - 1].quality.score, 'the round 7 top 1 does not score better');
+  // round 9's Master buffer makes the option's layout identical to its front-Master twin's, so the deduped list keeps
+  // the twin; that twin is ranked at least as high as the option itself
+  const twinRank = r.ranked.findIndex((c) => c.optionId === 'L|midG|split|m:front/block|wet:block|rr:FBFB|fw|v2') + 1;
+  assert.ok(twinRank > 0 && twinRank <= rank7, `the round 7 family is not ranked in the deduped list (${twinRank})`);
 });

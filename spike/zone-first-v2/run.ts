@@ -1,5 +1,5 @@
-// Node 24, run directly: `node spike/zone-first-v2/run.ts` (add `--carve` for the round 5 carve pass; it is off by
-// default since round 8b, and `--no-carve` is still accepted as the default behaviour).
+// Node 24, run directly: `node spike/zone-first-v2/run.ts` (round 9 splits Flex by default; `--no-split` disables it.
+// `--carve` instead runs the old named-room carve pass; `--no-carve` remains accepted as the default behaviour).
 // Enumerates the options for every brief, scores each valid candidate against the quality profile taken from the
 // user's own zonings (leave-one-out for a brief that has one), keeps a diverse top 5, runs the blind test against the
 // user's layout, and checks the old target signatures as regression. Writes:
@@ -178,7 +178,7 @@ ${top}
  details { margin-top:8px; font-size:12px }
 </style></head><body>
 <h1>zone-first v2 - the user's layout beside the generated top 3, with the blind-test result</h1>
-<p class="meta">Quality ranking (provisional): the score is built from the band of each metric across the user's own plans (the brief's own plan left out). One-sided metrics (Flex share, circulation share, spine length over depth, longest Flex piece over depth, pieces per 100 m²): only the amount above the band's max counts, and ${QUALITY_WEIGHTS.perLowPoint} per point of the metric's scale rewards less (a share per 1 %, the piece count per 0.1 pieces/100 m²). Two-sided metrics (Core share, bedroom spread): 1 per point outside the band plus ${QUALITY_WEIGHTS.perCentrePoint} per point from its middle. +${QUALITY_WEIGHTS.wetNotNearBed} if no wet room is near a bedroom, +${QUALITY_WEIGHTS.laundryNotNear} if the laundry is not near the wet rooms or the Core, +${QUALITY_WEIGHTS.perFlexStrip} per Flex strip, +${QUALITY_WEIGHTS.perSliver} per sliver. Lower is better. The user's layouts never steer generation or ranking; closeness is a diagnostic. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
+<p class="meta">Quality ranking (provisional): the score is built from the band of each metric across the user's own plans (the brief's own plan left out). One-sided metrics (Flex share, circulation share, spine length over depth, longest Flex piece over depth): only the amount above the band's max counts, and ${QUALITY_WEIGHTS.perLowPoint} per point of the metric's scale rewards less (a share per 1 %). Pieces per 100 m² is still shown but has score weight 0. Two-sided metrics (Core share, bedroom spread): 1 per point outside the band plus ${QUALITY_WEIGHTS.perCentrePoint} per point from its middle. +${QUALITY_WEIGHTS.wetNotNearBed} if no wet room is near a bedroom, +${QUALITY_WEIGHTS.laundryNotNear} if the laundry is not near the wet rooms or the Core, +${QUALITY_WEIGHTS.perFlexStrip} per Flex strip, +${QUALITY_WEIGHTS.perSliver} per sliver. Lower is better. The user's layouts never steer generation or ranking; closeness is a diagnostic. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
 ${rows}
 </body></html>
 `;
@@ -187,9 +187,10 @@ ${rows}
 function main(): void {
   const t0 = Date.now();
   mkdirSync(OUT, { recursive: true });
-  // round 8b: no room carving unless `--carve` is given (`--no-carve` is accepted and is the default)
+  // Round 9: split by default; `--carve` keeps the old pass intact and wins over splitting.
   const carve = process.argv.includes('--carve');
-  const results = BRIEFS.map((b) => runBrief(b, { carve }));
+  const split = !carve && !process.argv.includes('--no-split');
+  const results = BRIEFS.map((b) => runBrief(b, { carve, split }));
   const kepts = results.map(keptFor);
   results.forEach((r, i) => writeBrief(r, kepts[i]));
 
@@ -213,7 +214,8 @@ function main(): void {
 
   const summary = {
     note: 'Ranking is provisional. Candidates are scored against the user\'s plans (leave-one-out); the user\'s layouts never steer generation.',
-    carve: process.argv.includes('--carve'),
+    carve,
+    split,
     briefs: results.map((r, i) => ({
       id: r.brief.id,
       title: r.brief.title,

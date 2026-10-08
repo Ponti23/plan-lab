@@ -1,5 +1,5 @@
-// Node 24, run directly: `node spike/zone-first-v2/run-small.ts [small|medium|large]` (add `--carve` for the round 5
-// carve pass; it is off by default since round 8b, and `--no-carve` is still accepted as the default behaviour).
+// Node 24, run directly: `node spike/zone-first-v2/run-small.ts [small|medium|large]` (round 9 splits Flex by default;
+// `--no-split` disables it. `--carve` instead runs the old named-room pass; `--no-carve` remains accepted).
 // Lot-size review run: the same pipeline as run.ts, but for the five briefs of the chosen set and
 // keeping the pairwise-different top 6 (runBrief(b, { top: 6 })) instead of the top 5. `small`
 // (default) reads SMALL_BRIEFS into out-small/, `medium` reads MEDIUM_BRIEFS into out-medium/,
@@ -151,7 +151,7 @@ ${cards}
  details { margin-top:8px; font-size:12px }
 </style></head><body>
 <h1>zone-first v2 - ${set.lots}: the six pairwise-different plans per brief</h1>
-<p class="meta">Ranking is the provisional quality score, lower is better: each metric is measured against the band across the user's own plans; a candidate is different from another when their layout families differ or their same-kind area overlap is below ${OVERLAP_LIMIT}. The user's layouts never steer generation or ranking. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
+<p class="meta">Ranking is the provisional quality score, lower is better: each scored metric is measured against the band across the user's own plans; pieces per 100 m² is shown at score weight 0. A candidate is different from another when their layout families differ or their same-kind area overlap is below ${OVERLAP_LIMIT}. The user's layouts never steer generation or ranking. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
 ${rows}
 </body></html>
 `;
@@ -168,15 +168,17 @@ function main(): void {
 
   const t0 = Date.now();
   mkdirSync(OUT, { recursive: true });
-  // round 8b: no room carving unless `--carve` is given (`--no-carve` is accepted and is the default)
+  // Round 9: split by default; `--carve` keeps the old pass intact and wins over splitting.
   const carve = process.argv.includes('--carve');
-  const results = set.briefs.map((b) => runBrief(b, { top: TOP, carve }));
+  const split = !carve && !process.argv.includes('--no-split');
+  const results = set.briefs.map((b) => runBrief(b, { top: TOP, carve, split }));
   for (const r of results) writeBrief(r);
 
   const summary = {
     note: set.note,
     // round 8b: recorded like run.ts does, so a summary.json says which run it came from
     carve,
+    split,
 
     briefs: results.map((r) => ({
       id: r.brief.id,

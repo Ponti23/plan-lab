@@ -2,14 +2,14 @@
   "role": "option 1",
   "rank": 1,
   "briefId": "M-02",
-  "optionId": "L|midR|split|m:front/block|wet:split|rr:FBFB|nofw|v0",
+  "optionId": "L|midR|split|m:front/block|wet:block|rr:FBFB|nofw|v0",
   "options": {
     "garageSide": "L",
     "corePos": "middle",
     "coreForm": "split",
     "masterPos": "front",
     "masterForm": "block",
-    "wetForm": "split",
+    "wetForm": "block",
     "rearPlan": [
       "F",
       "B",
@@ -39,47 +39,45 @@
     "coreSide": "R"
   },
   "quality": {
-    "flexShare": 0.22,
+    "flexShare": 0.22155555555555556,
     "livingShare": 0,
-    "circulationShare": 0.10533333333333333,
-    "coreShare": 0.25333333333333335,
+    "circulationShare": 0.04666666666666667,
+    "coreShare": 0.24533333333333332,
     "bedroomSpread": 7100,
     "spreadNorm": 0.3239848197933556,
     "wetNearBed": true,
     "laundryNear": true,
     "masterSeparated": true,
     "spineMetres": 6,
-    "circulationM2": 23.7,
+    "circulationM2": 10.5,
     "pieceDensity": 6.666666666666667,
     "slivers": 0,
     "spineRatio": 0.3333333333333333,
-    "longestFlexRatio": 0.3333333333333333,
+    "longestFlexRatio": 0.2611111111111111,
     "flexStrips": 0,
-    "score": 19.22,
+    "score": 9.52,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
       "spineRatio": 0,
-      "longestFlexRatio": 1.61,
-      "pieceDensity": 0.05,
+      "longestFlexRatio": 0,
+      "pieceDensity": 0,
       "coreShare": 0,
       "spreadNorm": 0
     }
   },
   "notes": [
     "Bed 2 grew to 5200 x 3000 (lot surplus; was 3400 x 3000)",
-    "WC grew to 4100 x 1000 (lot surplus; was 3000 x 1000)",
-    "Bath grew to 4100 x 2000 (lot surplus; was 3000 x 2000)",
-    "Core · kitchen + living grew to 7300 x 6000 (lot surplus; was 7000 x 6000)"
+    "Bath + WC grew to 5500 x 2500 (lot surplus; was 4000 x 2500)"
   ],
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 23700000,
+  "circulationArea": 10500000,
   "flexArea": {
-    "Flex · circulation": 16500000,
-    "Flex · room": 33000000,
-    "Flex · storage": 0,
+    "Flex · circulation": 3300000,
+    "Flex · room": 22500000,
+    "Flex · storage": 24050000,
     "Flex · living": 0,
     "sliver": 0
   },
@@ -110,25 +108,14 @@
       }
     },
     {
-      "id": "wc-1",
-      "kind": "wc",
-      "name": "WC",
+      "id": "wet-1",
+      "kind": "wet",
+      "name": "Bath + WC",
       "rect": {
         "x": 0,
         "y": 3000,
-        "w": 4100,
-        "h": 1000
-      }
-    },
-    {
-      "id": "wet-1",
-      "kind": "wet",
-      "name": "Bath",
-      "rect": {
-        "x": 0,
-        "y": 4000,
-        "w": 4100,
-        "h": 2000
+        "w": 5500,
+        "h": 2500
       }
     },
     {
@@ -137,7 +124,7 @@
       "name": "Laundry",
       "rect": {
         "x": 0,
-        "y": 6000,
+        "y": 5500,
         "w": 3000,
         "h": 1800
       }
@@ -169,9 +156,9 @@
       "kind": "core",
       "name": "Core · kitchen + living",
       "rect": {
-        "x": 5200,
+        "x": 5500,
         "y": 6000,
-        "w": 7300,
+        "w": 7000,
         "h": 6000
       }
     },
@@ -223,32 +210,42 @@
     {
       "id": "flex-3",
       "rect": {
-        "x": 4100,
+        "x": 5500,
         "y": 3000,
-        "w": 4000,
+        "w": 2600,
         "h": 3000
       },
-      "cls": "Flex · room"
+      "cls": "Flex · storage"
     },
     {
       "id": "flex-4",
       "rect": {
         "x": 3000,
-        "y": 6000,
-        "w": 2200,
-        "h": 6000
+        "y": 5500,
+        "w": 2500,
+        "h": 3250
       },
-      "cls": "Flex · circulation"
+      "cls": "Flex · storage"
     },
     {
       "id": "flex-5",
       "rect": {
         "x": 0,
-        "y": 7800,
+        "y": 7300,
         "w": 3000,
-        "h": 4200
+        "h": 4700
       },
       "cls": "Flex · room"
+    },
+    {
+      "id": "flex-6",
+      "rect": {
+        "x": 3000,
+        "y": 8750,
+        "w": 2500,
+        "h": 3250
+      },
+      "cls": "Flex · storage"
     }
   ]
 }

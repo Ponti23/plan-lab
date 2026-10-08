@@ -2,7 +2,7 @@
 // diverse top 5 -> blind test and closeness against the user's own zoning (diagnostics) -> target check (regression).
 // Pure (no file output) so run.ts and the tests share it.
 
-import { carveCandidate } from './carve.ts';
+import { carveCandidate, SPLIT_SLIVER_FAILURE, splitCandidate } from './carve.ts';
 import { goldenById, goldenRects, profileFor, type GoldenPlan } from './golden.ts';
 import { closeness, groupedRects, sameKindOverlap, scoreOf, type Group, type Metrics, type Profile } from './quality.ts';
 import { enumerateOptions, generate, mismatches, optionAimsAt } from './zones.ts';
@@ -81,7 +81,7 @@ export interface BriefResult {
   closenessOf: Map<Candidate, number>;
 }
 
-export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; carve?: boolean } = {}): BriefResult {
+export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; carve?: boolean; split?: boolean } = {}): BriefResult {
   const top = opts.top ?? 5;
   const options = enumerateOptions(brief);
   // the profile (leave-one-out for a golden brief) also gives the Flex ceiling the grow pass works against
@@ -90,14 +90,24 @@ export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; car
   const valid: Candidate[] = [];
   const failures = new Map<string, number>();
   const failedBy = new Map<Options, string>();
+  const failed = (o: Options, reason: string): void => {
+    failures.set(reason, (failures.get(reason) ?? 0) + 1);
+    failedBy.set(o, reason);
+  };
   for (const o of options) {
     const res = generate(brief, o, ceiling);
-    // round 8b: carving is off unless asked for - the architect decides what leftover space becomes (carve: true
-    // is the round 5 pass; it still runs before anything is scored, so the ranking then sees the carved rooms)
-    if (res.ok) valid.push(opts.carve ? carveCandidate(res.candidate) : res.candidate);
+    if (!res.ok) {
+      failed(o, res.reason);
+      continue;
+    }
+    // Round 9: split after growth and R14, before scoring. The opt-in round-5 carve pass wins so `--carve`
+    // keeps its old named-room behaviour; `split: false` exposes the unsplit generator output.
+    if (opts.carve) valid.push(carveCandidate(res.candidate));
+    else if (opts.split === false) valid.push(res.candidate);
     else {
-      failures.set(res.reason, (failures.get(res.reason) ?? 0) + 1);
-      failedBy.set(o, res.reason);
+      const split = splitCandidate(res.candidate);
+      if (split) valid.push(split);
+      else failed(o, SPLIT_SLIVER_FAILURE);
     }
   }
 

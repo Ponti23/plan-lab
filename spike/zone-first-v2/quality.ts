@@ -173,7 +173,7 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
 
 /** two-sided bands: too much and too little both cost (Core share, bedroom spread) */
 export const TWO_SIDED = ['coreShare', 'spreadNorm'] as const;
-/** one-sided bands: only the amount above the band's max costs, and less is rewarded (efficient plans are never worse) */
+/** one-sided bands: only the amount above the band's max costs, and less is rewarded; pieceDensity is reported at weight 0 */
 export const ONE_SIDED = ['flexShare', 'circulationShare', 'spineRatio', 'longestFlexRatio', 'pieceDensity'] as const;
 export const BAND_METRICS = [...ONE_SIDED, ...TWO_SIDED] as const;
 export type BandMetric = (typeof BAND_METRICS)[number];
@@ -197,8 +197,8 @@ export const QUALITY_WEIGHTS = {
   perLowPoint: 0.1,
   /**
    * Points per unit of each band metric when it is outside its band, and the scale the perLowPoint reward uses.
-   * A share is a fraction, so 100 = one point per percentage point. pieceDensity is pieces per 100 m², so its scale
-   * is provisional (round 8a): 10 = one point per 0.1 pieces/100 m², the brief's rate.
+   * A share is a fraction, so 100 = one point per percentage point. Round 9 keeps pieceDensity in the profile and
+   * captions but gives it no score weight: the user preferred the useful edges made by smaller Flex pieces.
    */
   bandScale: {
     flexShare: 100,
@@ -207,7 +207,7 @@ export const QUALITY_WEIGHTS = {
     longestFlexRatio: 100,
     coreShare: 100,
     spreadNorm: 100,
-    pieceDensity: 10,
+    pieceDensity: 0,
   } as Record<BandMetric, number>,
   perFlexStrip: 10,
   wetNotNearBed: 10,

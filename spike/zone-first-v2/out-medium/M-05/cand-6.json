@@ -1,6 +1,6 @@
 {
   "role": "option 6",
-  "rank": 45,
+  "rank": 117,
   "briefId": "M-05",
   "optionId": "L|midW|block|m:front/block|wet:block|rr:FBFB|nofw|v0",
   "options": {
@@ -42,7 +42,7 @@
   "quality": {
     "flexShare": 0.22163636363636363,
     "livingShare": 0.06218181818181818,
-    "circulationShare": 0.06545454545454546,
+    "circulationShare": 0.09163636363636364,
     "coreShare": 0.23636363636363636,
     "bedroomSpread": 13687,
     "spreadNorm": 0.5409184201078999,
@@ -50,13 +50,13 @@
     "laundryNear": true,
     "masterSeparated": false,
     "spineMetres": 6,
-    "circulationM2": 18,
-    "pieceDensity": 5.818181818181818,
+    "circulationM2": 25.2,
+    "pieceDensity": 6.909090909090909,
     "slivers": 0,
     "spineRatio": 0.2727272727272727,
     "longestFlexRatio": 0.2727272727272727,
     "flexStrips": 0,
-    "score": 23.34,
+    "score": 17.79,
     "outside": {
       "flexShare": 0,
       "circulationShare": 0,
@@ -74,11 +74,11 @@
   "spineLength": 6000,
   "longestRun": 6000,
   "flexWallLength": 0,
-  "circulationArea": 18000000,
+  "circulationArea": 25200000,
   "flexArea": {
-    "Flex · circulation": 10800000,
+    "Flex · circulation": 18000000,
     "Flex · room": 42950000,
-    "Flex · storage": 7200000,
+    "Flex · storage": 0,
     "Flex · living": 17100000,
     "sliver": 0
   },
@@ -223,12 +223,22 @@
       "cls": "Flex · living"
     },
     {
-      "id": "flex-4",
+      "id": "flex-3",
       "rect": {
         "x": 0,
         "y": 8200,
-        "w": 5500,
-        "h": 5900
+        "w": 2750,
+        "h": 2950
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-4",
+      "rect": {
+        "x": 2750,
+        "y": 8200,
+        "w": 2750,
+        "h": 2950
       },
       "cls": "Flex · room"
     },
@@ -240,10 +250,30 @@
         "w": 4000,
         "h": 1800
       },
-      "cls": "Flex · storage"
+      "cls": "Flex · circulation"
     },
     {
       "id": "flex-6",
+      "rect": {
+        "x": 0,
+        "y": 11150,
+        "w": 2750,
+        "h": 2950
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-7",
+      "rect": {
+        "x": 2750,
+        "y": 11150,
+        "w": 2750,
+        "h": 2950
+      },
+      "cls": "Flex · room"
+    },
+    {
+      "id": "flex-8",
       "rect": {
         "x": 5500,
         "y": 12500,
@@ -253,7 +283,7 @@
       "cls": "Flex · room"
     },
     {
-      "id": "flex-7",
+      "id": "flex-9",
       "rect": {
         "x": 6700,
         "y": 16000,
