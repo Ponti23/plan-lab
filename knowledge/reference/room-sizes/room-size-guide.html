@@ -1,0 +1,321 @@
+<title>How Big Is a Room?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single drafting-sheet column; dimensions set in mono like plan annotations; one to-scale drawing up top. */
+:root{
+  --paper:#f4f6f7; --sheet:#ffffff; --ink:#1b2430; --muted:#566373; --rule:#cfd8e0; --accent:#2f5d8a; --accent-soft:#e3ecf5;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0f141a; --sheet:#161d25; --ink:#e3e9ef; --muted:#9aa8b6; --rule:#2c3946; --accent:#8db6de; --accent-soft:#1d2b3a; color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0f141a; --sheet:#161d25; --ink:#e3e9ef; --muted:#9aa8b6; --rule:#2c3946; --accent:#8db6de; --accent-soft:#1d2b3a; color-scheme:dark}
+
+body{background:var(--paper);color:var(--ink);font:400 17px/1.6 var(--body);padding-inline:16px;padding-block:32px 64px}
+.wrap{max-width:860px;margin:0 auto;display:grid;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.1;margin:0}
+h1{font-size:clamp(2.4rem,7vw,3.8rem);font-weight:700;letter-spacing:.01em}
+h2{font-size:2rem;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:1.45rem;font-weight:600}
+p{margin:0;max-width:68ch}
+section{display:grid;gap:18px;min-width:0}
+.eyebrow{font:500 .78rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.15rem;color:var(--ink)}
+.note{color:var(--muted);font-size:.95rem}
+.dim{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+strong{font-weight:700}
+.tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--sheet)}
+table{border-collapse:collapse;width:100%;font-size:.93rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 .74rem/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:.86rem;white-space:nowrap}
+.tag{display:inline-block;font:500 .72rem/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border:1px solid currentColor;white-space:nowrap}
+.tag.strong{color:var(--accent)} .tag.mod{color:var(--muted)} .tag.none{color:var(--muted);border-style:dashed}
+.room{display:grid;gap:10px;padding:22px 0;border-top:1px solid var(--rule)}
+.room:first-of-type{border-top:0;padding-top:0}
+.kv{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:6px 18px}
+.kv dt{font:500 .78rem/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.kv dd{margin:0;min-width:0}
+@media (max-width:560px){.kv{grid-template-columns:1fr}.kv dd{margin-bottom:6px}}
+ul{margin:0;padding-left:1.2em;display:grid;gap:6px;max-width:68ch}
+.callout{background:var(--sheet);border:1px solid var(--rule);border-left:4px solid var(--accent);padding:16px 18px;display:grid;gap:8px}
+.callout p{font-size:.98rem}
+.drawing{background:var(--sheet);border:1px solid var(--rule);padding:18px;overflow-x:auto}
+.drawing svg{display:block;width:100%;min-width:560px;height:auto}
+.drawing text{font-family:var(--mono);fill:var(--ink)}
+.layouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.layouts figure{margin:0;background:var(--sheet);border:1px solid var(--rule);padding:14px;display:grid;gap:8px;min-width:0}
+.layouts pre{margin:0;font:400 .82rem/1.4 var(--mono);overflow-x:auto}
+.layouts figcaption{font-size:.92rem}
+.layouts figcaption b{font-family:var(--display);font-size:1.1rem;font-weight:600;display:block}
+footer{color:var(--muted);font-size:.88rem;border-top:1px solid var(--rule);padding-top:16px}
+</style>
+
+<div class="wrap">
+
+<header style="display:grid;gap:16px">
+  <span class="eyebrow">Room sizes · Australian single-storey homes · 3–4 bedrooms</span>
+  <h1>How big is a room?</h1>
+  <p class="lede">A plain-English guide to how a house-plan tool decides room sizes, based on what Australian builders actually draw on their published floor plans.</p>
+  <p class="note">Every size is written as <strong>short side × long side, in metres</strong>, plus area in m². The figures are room dimensions as printed by the builders. They look like clear internal sizes (wall face to wall face), but the plans never say so, so read them as "as printed". The tool's own sizes are still provisional until they are reviewed against architect-checked plans.</p>
+</header>
+
+<section aria-labelledby="quick">
+  <h2 id="quick">Quick answers</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Room</th><th>Builders typically draw</th><th>Tool minimum</th><th>Tool preferred</th><th>Tool maximum</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Garage, one car</strong></td><td class="num">3.5 × 6.0 (21.0 m²)</td><td class="num">3.5 × 5.5 (19.25 m²)</td><td class="num">3.5 × 6.0 (21.00 m²)</td><td class="num">4.5 × 6.5 (29.25 m²)</td></tr>
+      <tr><td><strong>Garage, two cars</strong></td><td class="num">5.51 × 6.00 (33.06 m²)</td><td class="num">5.5 × 5.5 (30.25 m²)</td><td class="num">5.5 × 6.0 (33.00 m²)</td><td class="num">7.0 × 7.0 (49.00 m²)</td></tr>
+      <tr><td><strong>Master bedroom</strong></td><td class="num">3.50 × 4.05</td><td class="num">3.0 × 3.0 (9.00 m²)</td><td class="num">3.5 × 4.0 (14.00 m²)</td><td class="num">4.3 × 5.2 (22.36 m²)</td></tr>
+      <tr><td><strong>Other bedrooms</strong></td><td class="num">2.97 × 3.40</td><td class="num">2.7 × 2.7 (7.29 m²)</td><td class="num">3.0 × 3.4 (10.20 m²)</td><td class="num">4.0 × 4.0 (16.00 m²)</td></tr>
+      <tr><td><strong>Open kitchen / dining / living</strong></td><td class="num">5.20 × 8.40 (41.6 m²)</td><td class="num">4.0 × 5.0 (20.00 m²)</td><td class="num">5.2 × 8.4 (43.68 m²)</td><td class="num">6.5 × 9.0 (58.50 m²)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The tool makes <strong>no claim that a car will fit</strong>. Garage sizes are geometry presets only.</p>
+
+  <figure class="drawing" style="margin:0">
+    <svg viewBox="0 0 640 250" role="img" aria-label="Typical rooms drawn to the same scale: single garage 3.5 by 6.0 metres, double garage 5.51 by 6.0, master bedroom 3.5 by 4.05, bedroom 2.97 by 3.4, open kitchen dining living 5.2 by 8.4">
+      <!-- scale: 22 px per metre -->
+      <g fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink)">
+        <rect x="20" y="40" width="77" height="132"/>
+        <rect x="120" y="40" width="121" height="132"/>
+        <rect x="264" y="40" width="77" height="89"/>
+        <rect x="364" y="40" width="65" height="75"/>
+        <rect x="452" y="40" width="114" height="185"/>
+      </g>
+      <g font-size="11" text-anchor="middle">
+        <text x="58" y="30">1-car garage</text><text x="58" y="190">3.5 × 6.0</text>
+        <text x="180" y="30">2-car garage</text><text x="180" y="190">5.51 × 6.0</text>
+        <text x="302" y="30">Master</text><text x="302" y="147">3.5 × 4.05</text>
+        <text x="396" y="30">Bedroom</text><text x="396" y="133">2.97 × 3.4</text>
+        <text x="509" y="30">Kitchen/dining/living</text><text x="509" y="243">5.2 × 8.4</text>
+      </g>
+      <g stroke="currentColor" stroke-width="2" style="color:var(--ink)">
+        <line x1="20" y1="225" x2="130" y2="225"/><line x1="20" y1="219" x2="20" y2="231"/><line x1="130" y1="219" x2="130" y2="231"/>
+      </g>
+      <text x="75" y="245" font-size="11" text-anchor="middle">5 m</text>
+    </svg>
+    <figcaption class="note" style="margin-top:8px">Typical sizes drawn to the same scale (metres). The open living zone is shown as its bounding rectangle; in real plans it is often L-shaped.</figcaption>
+  </figure>
+</section>
+
+<section aria-labelledby="how">
+  <h2 id="how">How we worked it out</h2>
+  <h3>Where the numbers came from</h3>
+  <p>Two independent sets of published builder plans, all single-storey, 3–4 bedroom detached project homes:</p>
+  <ul>
+    <li><strong>A large set: 387 plans from 7 builders.</strong> One volume builder supplied 276 of them (71%), covering about 100 designs that are each sold in several sizes.</li>
+    <li><strong>A second set: 53 plans from 7 builders</strong>, mostly <em>not</em> that same builder, so it works as a cross-check.</li>
+  </ul>
+  <p>Where the two sets agree, we trust the number more. Where they disagree, this guide says so.</p>
+
+  <h3>What median, p10 and p90 mean</h3>
+  <p>Line up every room of one type from smallest to largest. If you had 100 bedrooms in a row, the 10th one is the <strong>p10</strong> (a compact but real size), the 50th is the <strong>median</strong> (typical), and the 90th is the <strong>p90</strong> (generous but still normal). Percentiles are useful because one odd plan can't drag them around the way an average can.</p>
+  <p class="note">Each side and each area is summarised separately, so a median area is not always exactly median short side × median long side.</p>
+
+  <h3>Why we counted per design</h3>
+  <p>The same design is often sold in a smaller and larger version. Counting every plan would let a popular design outvote the rest. So each design contributes one value per side, and the percentiles are taken across designs. The two ways of counting give almost the same answers: the median master is <span class="dim">3.50 × 4.05</span> per design and <span class="dim">3.59 × 4.18</span> per plan.</p>
+
+  <h3>How the tool's minimum, preferred and maximum were chosen</h3>
+  <ul>
+    <li><strong>Preferred</strong> is about the typical (median) size, so the tool aims at what a builder would actually draw.</li>
+    <li><strong>Minimum and maximum</strong> start near p10 and p90, then widen where a small set of hand-checked test houses fell outside the range.</li>
+    <li><strong>Garages are a special case.</strong> Builders reuse one standard garage, so p10, median and p90 can all be the same number. The garages keep their existing min and max; only the preferred size was moved to match what builders draw.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="rooms">
+  <h2 id="rooms">Room by room</h2>
+
+  <div class="room">
+    <h3>Garage, one car</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.5 × 6.0 m</span> (21 m²); per design <span class="dim">3.51 × 6.00</span></dd>
+      <dt>Range seen</dt><dd>Short side 3.23–4.23 m (p10 3.29, p90 3.65). Long side 5.99–6.01 m in all 18 samples.</dd>
+      <dt>Tool uses</dt><dd><span class="dim">3.5 × 5.5</span> / <strong class="dim">3.5 × 6.0</strong> / <span class="dim">4.5 × 6.5</span></dd>
+    </dl>
+    <p>The length barely moves. Builders change the width, not the length. Only 18 single garages were measured (13 designs), and the second set found just 3, with the same 3.51 × 6.00 m median.</p>
+  </div>
+
+  <div class="room">
+    <h3>Garage, two cars</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">5.51 × 6.00 m</span> (33.06 m²) in both datasets</dd>
+      <dt>Range seen</dt><dd>Short side 5.49–5.87 m (p10 5.51, p90 5.59). Long side 5.76–7.18 m (p10 6.00, p90 6.12).</dd>
+      <dt>Tool uses</dt><dd><span class="dim">5.5 × 5.5</span> / <strong class="dim">5.5 × 6.0</strong> / <span class="dim">7.0 × 7.0</span></dd>
+    </dl>
+    <p>The most tightly clustered room in the study. Of 205 double garages in the large set, none was printed narrower than 5.49 m. In the second set, only 1 of 30 was under 5.50 m. For practical purposes, 5.5 × 6.0 m is <em>the</em> Australian project-home double garage.</p>
+  </div>
+
+  <div class="room">
+    <h3>Master bedroom</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.50 × 4.05 m</span> per design; <span class="dim">3.59 × 4.18</span> per plan; <span class="dim">3.50 × 4.00</span> (14.28 m²) in the second set</dd>
+      <dt>Range seen</dt><dd>Per design: short 2.80–5.15 m (p10 3.12, p90 4.25), long 3.18–6.11 m (p10 3.38, p90 5.18). Second set's largest: 4.60 × 5.63 m.</dd>
+      <dt>Tool uses</dt><dd><span class="dim">3.0 × 3.0</span> / <strong class="dim">3.5 × 4.0</strong> / <span class="dim">4.3 × 5.2</span></dd>
+    </dl>
+    <ul>
+      <li><strong>36% of masters (87 of 245) have a long side over 4.5 m.</strong> A 4.5 m cap would cut off a third of real plans, so the tool's maximum goes to 5.2 m.</li>
+      <li><strong>Unknown: does the printed master size include the walk-in robe?</strong> The plans don't say. If it does, the bedroom itself is smaller than it looks.</li>
+    </ul>
+  </div>
+
+  <div class="room">
+    <h3>Other bedrooms</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">2.97 × 3.40 m</span> per design; <span class="dim">3.00 × 3.31</span> per plan; <span class="dim">3.00 × 3.47</span> in the second set (149 rooms)</dd>
+      <dt>Range seen</dt><dd>Per design: short 2.45–4.45 m (p10 2.70, p90 3.42), long 2.80–5.05 m (p10 2.98, p90 3.89).</dd>
+      <dt>Tool uses</dt><dd><span class="dim">2.7 × 2.7</span> / <strong class="dim">3.0 × 3.4</span> / <span class="dim">4.0 × 4.0</span></dd>
+    </dl>
+    <p>Builders barely vary these. Bedrooms 2, 3 and 4 have medians of 3.00 × 3.31, 3.00 × 3.28 and 3.00 × 3.31 m. The tool's 2.7 m minimum sits at about the 7th percentile, and its 4.0 m maximum at about the 99th.</p>
+  </div>
+
+  <div class="room">
+    <h3>Study</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">2.97 × 3.53 m</span> per design (78 studies); the second set's 6 studies give a smaller <span class="dim">2.15 × 3.37</span></dd>
+      <dt>Range seen</dt><dd>Short 1.18–3.57 m (p10 1.67, p90 3.45); long 2.42–4.32 m. The small end is real: some "study nooks" are alcoves.</dd>
+      <dt>Tool uses</dt><dd><span class="dim">2.0 × 2.2</span> / <strong class="dim">3.0 × 3.5</span> / <span class="dim">3.5 × 4.0</span></dd>
+    </dl>
+    <p>The two datasets disagree here; the larger one is the stronger sample. The tool keeps a 2.0 m floor rather than following the data all the way down to a nook.</p>
+  </div>
+
+  <div class="room">
+    <h3>Theatre / media room</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.56 × 4.10 m</span> per design; <span class="dim">3.58 × 4.06</span> in the second set</dd>
+      <dt>Range seen</dt><dd>Per design: short 2.80–5.90 m (p10 3.15, p90 4.23), long 3.08–6.10 m (p10 3.50, p90 5.46).</dd>
+      <dt>Tool uses</dt><dd><span class="dim">3.15 × 3.5</span> / <strong class="dim">3.6 × 4.1</span> / <span class="dim">4.2 × 5.2</span></dd>
+    </dl>
+    <p>The 5.9 × 6.1 m theatre is a single outlier room, so the tool's maximum stops well short of it.</p>
+  </div>
+
+  <div class="room">
+    <h3>Living / family room</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.73 × 4.60 m</span> per design; <span class="dim">4.00 × 4.70</span> (18.4 m²) in the second set</dd>
+      <dt>Tool uses</dt><dd>No separate preset. It is part of the open kitchen/dining/living zone.</dd>
+    </dl>
+    <p>Many plans have two of these. The room labelled "Family" is the big one (median 3.84 × 4.80 m, about 18 m²); the one labelled "Living" is smaller (3.50 × 4.21 m). Only 3 of 327 are larger than 32.5 m² on their own: big living spaces come from opening onto the kitchen and dining.</p>
+  </div>
+
+  <div class="room">
+    <h3>Activity / rumpus room</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.44 × 4.02 m</span> per design; <span class="dim">3.40 × 4.19</span> in the second set</dd>
+      <dt>Tool uses</dt><dd><span class="dim">3.0 × 3.0</span> / <strong class="dim">3.5 × 4.0</strong> / <span class="dim">5.0 × 6.0</span> (a design rule that brackets most of the data)</dd>
+    </dl>
+    <p>The name tracks the size: rumpus rooms are largest (median 3.80 × 4.89 m), then sitting rooms (3.44 × 4.32), then leisure rooms (3.40 × 3.96), with retreats smallest (3.27 × 3.56).</p>
+  </div>
+
+  <div class="room">
+    <h3>Dining</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.30 × 4.33 m</span> per design; <span class="dim">3.23 × 4.54</span> in the second set</dd>
+      <dt>Tool uses</dt><dd>No separate preset. It sits inside the open zone.</dd>
+    </dl>
+    <p>The two datasets agree on typical dining area to within 0.2 m² (14.42 vs 14.62 m²). Dining rooms are clearly rectangular: the long side is about 1.35 times the short side, against about 1.1 for bedrooms.</p>
+  </div>
+
+  <div class="room">
+    <h3>Open kitchen / dining / living, and the kitchen alone</h3>
+    <dl class="kv">
+      <dt>Living + dining</dt><dd>Median 33.4 m² (p10 26.4, p90 42.8, max 56.1), kitchen not included</dd>
+      <dt>Kitchen alone</dt><dd><span class="dim">2.54 × 3.73 m</span> (9.52 m²), 22 kitchens from the second set</dd>
+      <dt>Whole zone</dt><dd><span class="dim">5.20 × 8.40 m</span> (41.6 m²) where builders printed it as one, p90 51.8 m², largest 6.40 × 8.50 m</dd>
+      <dt>Tool uses</dt><dd><span class="dim">4.0 × 5.0</span> / <strong class="dim">5.2 × 8.4</strong> / <span class="dim">6.5 × 9.0</span></dd>
+    </dl>
+    <p>The main builder never prints a kitchen size, so we added family + dining room by room (33.4 m²). Add a 9.5 m² kitchen and you land close to the 41.6 m² the second set measured directly. Two methods, same answer.</p>
+    <p>The zone is often <strong>not one clean rectangle</strong>: L-shapes, stepped shapes, and kitchens tucked into a recess are common. So the tool's numbers describe the zone's bounding rectangle, and it can build an L or stepped shape inside it.</p>
+  </div>
+
+  <div class="room">
+    <h3>Alfresco (covered outdoor room)</h3>
+    <dl class="kv">
+      <dt>Typical</dt><dd><span class="dim">3.24 × 4.32 m</span> per design; <span class="dim">3.12 × 4.08</span> in the second set</dd>
+      <dt>Range seen</dt><dd>Short 1.68–4.80 m, long 3.00–8.16 m. The second set's largest: 4.44 × 8.90 m.</dd>
+      <dt>Tool uses</dt><dd><span class="dim">2.5 × 3.0</span> / <strong class="dim">3.0 × 4.5</span> / <span class="dim">5.0 × 7.5</span></dd>
+    </dl>
+    <p>Typical sizes agree, but alfresco is one of the most variable spaces. Some are long strips across the back of the house.</p>
+  </div>
+</section>
+
+<section aria-labelledby="suite">
+  <h2 id="suite">Master suite layouts</h2>
+  <p>The second dataset noted where the walk-in robe (WIR) and ensuite (ENS) sit around the master. Four arrangements recur:</p>
+  <div class="layouts">
+    <figure><pre>[ WIR ][ Ensuite ]
+[     Master      ]</pre><figcaption><b>A. Side-by-side strip</b>Robe and ensuite share one strip beside the bedroom.</figcaption></figure>
+    <figure><pre>[ Master ][ WIR ]
+[        ][ ENS ]</pre><figcaption><b>B. Side cluster</b>Robe and ensuite stacked at one end.</figcaption></figure>
+    <figure><pre>[ WIR ][ Ensuite ]
+[   Master       ]</pre><figcaption><b>C. Band behind</b>The pair runs across the back of the bedroom.</figcaption></figure>
+    <figure><pre>Master → WIR → Ensuite</pre><figcaption><b>D. Walk-through</b>You pass through the robe to reach the ensuite. Common, but not the main pattern.</figcaption></figure>
+  </div>
+  <p>The tool treats the three as one cluster: they sit together, and at least one of the robe or ensuite is directly next to the bedroom.</p>
+</section>
+
+<section aria-labelledby="nodata">
+  <h2 id="nodata">Rooms builders draw but don't measure</h2>
+  <div class="callout">
+    <p><strong>This is the biggest gap.</strong> Builders draw the ensuite, walk-in robe, bathroom, WC, laundry and pantry, but they don't print sizes for them. Neither dataset has a single measured sample. The numbers below are <strong>design rules</strong>, sensible starting points rather than evidence.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Room</th><th>Tool minimum</th><th>Tool preferred</th><th>Tool maximum</th></tr></thead>
+    <tbody>
+      <tr><td>Master ensuite</td><td class="num">1.8 × 2.4 (4.32 m²)</td><td class="num">2.2 × 2.8 (6.16 m²)</td><td class="num">3.0 × 3.5 (10.50 m²)</td></tr>
+      <tr><td>Master walk-in robe</td><td class="num">1.8 × 2.2 (3.96 m²)</td><td class="num">2.2 × 3.0 (6.60 m²)</td><td class="num">3.0 × 4.0 (12.00 m²)</td></tr>
+      <tr><td>Shared bathroom</td><td class="num">2.0 × 2.4 (4.80 m²)</td><td class="num">2.4 × 3.0 (7.20 m²)</td><td class="num">3.0 × 3.6 (10.80 m²)</td></tr>
+      <tr><td>WC</td><td class="num">1.0 × 1.8 (1.80 m²)</td><td class="num">1.2 × 2.2 (2.64 m²)</td><td class="num">1.8 × 3.2 (5.76 m²)</td></tr>
+      <tr><td>Laundry</td><td class="num">1.8 × 2.0 (3.60 m²)</td><td class="num">2.2 × 2.6 (5.72 m²)</td><td class="num">3.0 × 3.5 (10.50 m²)</td></tr>
+      <tr><td>Pantry</td><td class="num">1.6 × 1.8 (2.88 m²)</td><td class="num">2.0 × 2.4 (4.80 m²)</td><td class="num">2.8 × 3.2 (8.96 m²)</td></tr>
+      <tr><td>Entry</td><td colspan="3">No size preset. The entry is treated as circulation from the front door.</td></tr>
+      <tr><td>Hallway</td><td colspan="3">No size preset. About 1.0 m clear width is allowed.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The WC maximum was widened so a WC can line up with a bedroom's depth; builder plans sometimes put the WC against a bedroom wall.</p>
+</section>
+
+<section aria-labelledby="house">
+  <h2 id="house">The whole house</h2>
+  <p>A typical footprint is about <span class="dim">12.23 × 21.71 m</span> in the large set and <span class="dim">12.29 × 22.50 m</span> in the second. That's within 6 cm on width and 79 cm on length. The box around the house is about 265 m², but that is not floor area: the builders' own living-area figure has a median of <strong>192 m²</strong> (p10 133, p90 325). Including garage and alfresco, total area has a median of 226 m².</p>
+</section>
+
+<section aria-labelledby="glance">
+  <h2 id="glance">Everything at a glance</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Room</th><th>Typical</th><th>Min</th><th>Preferred</th><th>Max</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Garage, single</td><td class="num">3.51 × 6.00</td><td class="num">3.5 × 5.5</td><td class="num">3.5 × 6.0</td><td class="num">4.5 × 6.5</td><td><span class="tag mod">Moderate</span></td></tr>
+      <tr><td>Garage, double</td><td class="num">5.51 × 6.00</td><td class="num">5.5 × 5.5</td><td class="num">5.5 × 6.0</td><td class="num">7.0 × 7.0</td><td><span class="tag strong">Strong</span></td></tr>
+      <tr><td>Master bedroom</td><td class="num">3.50 × 4.05</td><td class="num">3.0 × 3.0</td><td class="num">3.5 × 4.0</td><td class="num">4.3 × 5.2</td><td><span class="tag strong">Strong</span></td></tr>
+      <tr><td>Other bedrooms</td><td class="num">2.97 × 3.40</td><td class="num">2.7 × 2.7</td><td class="num">3.0 × 3.4</td><td class="num">4.0 × 4.0</td><td><span class="tag strong">Strong</span></td></tr>
+      <tr><td>Study</td><td class="num">2.97 × 3.53</td><td class="num">2.0 × 2.2</td><td class="num">3.0 × 3.5</td><td class="num">3.5 × 4.0</td><td><span class="tag mod">Moderate</span></td></tr>
+      <tr><td>Theatre / media</td><td class="num">3.56 × 4.10</td><td class="num">3.15 × 3.5</td><td class="num">3.6 × 4.1</td><td class="num">4.2 × 5.2</td><td><span class="tag mod">Moderate</span></td></tr>
+      <tr><td>Activity / rumpus</td><td class="num">3.44 × 4.02</td><td class="num">3.0 × 3.0</td><td class="num">3.5 × 4.0</td><td class="num">5.0 × 6.0</td><td><span class="tag mod">Moderate</span></td></tr>
+      <tr><td>Kitchen / dining / living</td><td class="num">5.20 × 8.40</td><td class="num">4.0 × 5.0</td><td class="num">5.2 × 8.4</td><td class="num">6.5 × 9.0</td><td><span class="tag mod">Moderate</span></td></tr>
+      <tr><td>Alfresco</td><td class="num">3.24 × 4.32</td><td class="num">2.5 × 3.0</td><td class="num">3.0 × 4.5</td><td class="num">5.0 × 7.5</td><td><span class="tag strong">Strong</span></td></tr>
+      <tr><td>Ensuite, robe, bathroom, WC, laundry, pantry</td><td>not measured</td><td colspan="3">design rules (table above)</td><td><span class="tag none">None</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">"Evidence" reflects sample size and whether the two datasets agree. It says nothing about whether the tool's preset is a good choice.</p>
+</section>
+
+<section aria-labelledby="caveats">
+  <h2 id="caveats">Caveats</h2>
+  <ul>
+    <li><strong>Volume-builder project homes only</strong>, not custom architect designs. Two-storey and 5+ bedroom plans were left out.</li>
+    <li><strong>The large set leans on one builder</strong> (276 of 387 plans). The second set checks that bias and agrees on the main rooms. Single garages are thin in both (18 and 3 samples).</li>
+    <li><strong>Builders round.</strong> Values come to the centimetre or to 10 cm, so the numbers bunch up, and garages often have p10 = median = p90.</li>
+    <li><strong>Internal vs external is unverified.</strong> Everything here is "as printed".</li>
+    <li><strong>Whether the master includes its walk-in robe is unknown</strong>, and it changes how big the bedroom really is.</li>
+    <li><strong>All the tool's numbers are provisional</strong> until they are reviewed against architect-checked plans.</li>
+  </ul>
+</section>
+
+<footer>Based on two datasets of published Australian builder floor plans (387 + 53 single-storey, 3–4 bedroom plans). Compiled October 2026.</footer>
+</div>

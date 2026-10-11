@@ -4,6 +4,7 @@
 #   write    (default) edits this checkout; holds an exclusive lock so two writers never collide
 #   ro       read-only sandbox (reviews, analysis); no lock, safe alongside a writer
 #   worktree edits a separate managed git worktree; no lock, for parallel writers
+# Env: WORKER_REPO=<path> runs against another git checkout instead of this repo.
 set -euo pipefail
 case "${1:?worker: luna|sol|<model>}" in
   luna) model=gpt-5.6-luna ;;
@@ -12,7 +13,7 @@ case "${1:?worker: luna|sol|<model>}" in
 esac
 mode="${2:-write}"
 effort="${3:-max}"
-repo="$(cd "$(dirname "$0")/.." && pwd)"
+repo="$(cd "${WORKER_REPO:-$(dirname "$0")/..}" && pwd)"   # WORKER_REPO targets another git checkout
 out="$(mktemp)"
 args=(-m "$model" -c "model_reasoning_effort=\"$effort\"" -C "$repo" --color never)
 

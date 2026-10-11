@@ -56,6 +56,10 @@ same contract. `ro` (default) can only Read/Grep/Glob; `write` may edit and run 
 5. When Codex cannot be dispatched, send the same brief to DeepSeek Flash (`cc-worker.sh`); Sonnet
    subagents if DeepSeek fails. Review stays with a different agent than the author.
 
+6. **Writing buckets** (docs, guides, reports, presentation or HTML pages): the brief must say
+   "Follow `knowledge/patterns/docs-style-guide.md`" and name the reader, sources and output
+   file. Opus fact-checks the result and publishes it; workers never publish.
+
 ## Manual fallback brief checklist (only if `cc-worker.sh` cannot run)
 
 - Exact bucket, requested outcome, scope, and allowed files.
@@ -74,4 +78,5 @@ needed; it does not authorize implementation or a gated action.
 ## Related
 
 - [[orchestrator-and-subagents]] — bucket execution and handoff loop.
+- [[docs-style-guide]] — how workers write docs and pages; include in every writing brief.
 - [[README]] — knowledge base home.
