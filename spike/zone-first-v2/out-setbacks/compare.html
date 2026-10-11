@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>zone-first v2 - setbacks review, 6 plans per brief</title>
+<style>
+ body { background:#fff; color:#000; font-family: Helvetica, Arial, sans-serif; margin:24px; }
+ h1 { font-size:20px } h2 { font-size:16px; border-top:2px solid #000; padding-top:12px }
+ .dim,.meta,.flex { color:#444; font-weight:normal; font-size:12px }
+ .row { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap }
+ figure { margin:0; width:300px } figcaption { font-size:12px; margin-bottom:4px }
+ img { width:100%; height:auto; border:1px solid #ccc }
+ b { font-weight:bold }
+ details { margin-top:8px; font-size:12px }
+</style></head><body>
+<h1>zone-first v2 - lots with setbacks: the six pairwise-different plans per brief</h1>
+<p class="meta">Ranking is the provisional quality score, lower is better: each scored metric is measured against the band across the user's own plans; pieces per 100 m² is shown at score weight 0. A candidate is different from another when their layout families differ or their same-kind area overlap is below 0.7. The user's layouts never steer generation or ranking. Every zone carries its name and size (metres, 1 dp); Flex is hatched with its class, an extension is hatched the other way and labelled "Zone · extension", flex-walls are hatched with a dashed edge, the spine is dotted - nothing relies on colour.</p>
+<section>
+<h2>SB-01 - 15.0 x 28.0 lot, 4 bed (user example) <span class="dim">13000 x 23000 mm, 4 bed, double garage</span></h2>
+<p class="meta">lot 15000 x 28000 mm - setbacks (mm) front 2000 / garage 4000 / left 1000 / right 1000 / rear 3000 - garage recess 2000 mm</p>
+<p class="meta">valid 2832/5824 generated · 2202 distinct · 1101 mirror images hidden</p>
+
+<div class="row">
+<figure>
+  <figcaption><b>option 1</b> (rank 1 of 2202)<br>L|midG|block|m:rear/split|wet:split|rr:FM|nofw|v0<br><span class="flex">score 8.75 · <b>Flex share 14%</b> · living 15% (43.1 m²) · circulation 5% · Core 20% · pieces 5.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 43.1 · circulation 4.3 · storage 35.9 · sliver 0.0</span></figcaption>
+  <img src="SB-01/cand-1.svg" alt="SB-01 option 1">
+</figure>
+<figure>
+  <figcaption><b>option 2</b> (rank 21 of 2202)<br>L|midR|block|m:front/block|wet:split|rr:BBF|fw|v2<br><span class="flex">score 9.23 · <b>Flex share 12%</b> · living 3% (8.8 m²) · circulation 12% · Core 17% · pieces 6.6/100 m² · bedroom spread 11.3 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 8.8 · circulation 13.4 · storage 19.8 · sliver 0.0</span></figcaption>
+  <img src="SB-01/cand-2.svg" alt="SB-01 option 2">
+</figure>
+<figure>
+  <figcaption><b>option 3</b> (rank 35 of 2202)<br>L|rear|block|m:front/block|wet:split|rr:-|nofw|v3<br><span class="flex">score 12.38 · <b>Flex share 26%</b> · living 0% (0.0 m²) · circulation 5% · Core 25% · pieces 5.6/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 22.0 m² · flex m²: room 61.0 · living 0.0 · circulation 5.2 · storage 7.4 · sliver 0.0</span></figcaption>
+  <img src="SB-01/cand-3.svg" alt="SB-01 option 3">
+</figure>
+<figure>
+  <figcaption><b>option 4</b> (rank 63 of 2202)<br>L|midR|split|m:middle/block|wet:block|rr:BBF|fw|v2<br><span class="flex">score 17.61 · <b>Flex share 30%</b> · living 2% (7.0 m²) · circulation 8% · Core 20% · pieces 7.3/100 m² · bedroom spread 9.3 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 84.5 · living 7.0 · circulation 2.7 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-01/cand-4.svg" alt="SB-01 option 4">
+</figure>
+<figure>
+  <figcaption><b>option 5</b> (rank 69 of 2202)<br>L|midR|split|m:rear/split|wet:split|rr:FBFBM|fw|v2<br><span class="flex">score 18.39 · <b>Flex share 29%</b> · living 0% (0.0 m²) · circulation 14% · Core 20% · pieces 9.0/100 m² · bedroom spread 11.8 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 59.7 · living 0.0 · circulation 21.3 · storage 3.7 · sliver 0.0</span></figcaption>
+  <img src="SB-01/cand-5.svg" alt="SB-01 option 5">
+</figure>
+<figure>
+  <figcaption><b>option 6</b> (rank 135 of 2202)<br>L|midG|split|m:front/block|wet:block|rr:FBB|fw|v3<br><span class="flex">score 20.75 · <b>Flex share 21%</b> · living 3% (8.8 m²) · circulation 11% · Core 21% · pieces 6.9/100 m² · bedroom spread 12.3 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 2.2 m² · flex m²: room 42.6 · living 8.8 · circulation 16.0 · storage 2.8 · sliver 0.0</span></figcaption>
+  <img src="SB-01/cand-6.svg" alt="SB-01 option 6">
+</figure>
+</div>
+</section>
+<section>
+<h2>SB-02 - 14.0 x 30.0 lot, 4 bed, garage 1.0 m back <span class="dim">12000 x 22500 mm, 4 bed, double garage</span></h2>
+<p class="meta">lot 14000 x 30000 mm - setbacks (mm) front 4500 / garage 5500 / left 1000 / right 1000 / rear 3000 - garage recess 1000 mm</p>
+<p class="meta">valid 3000/5824 generated · 2322 distinct · 1161 mirror images hidden</p>
+
+<div class="row">
+<figure>
+  <figcaption><b>option 1</b> (rank 1 of 2322)<br>L|midG|block|m:rear/split|wet:split|rr:FM|nofw|v0<br><span class="flex">score 8.15 · <b>Flex share 14%</b> · living 14% (37.2 m²) · circulation 6% · Core 20% · pieces 6.4/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 7.0 m · extensions 0.0 m² · flex m²: room 24.8 · living 37.2 · circulation 8.0 · storage 3.1 · sliver 0.0</span></figcaption>
+  <img src="SB-02/cand-1.svg" alt="SB-02 option 1">
+</figure>
+<figure>
+  <figcaption><b>option 2</b> (rank 37 of 2322)<br>L|midG|block|m:rear/split|wet:block|rr:MF|fw|v3<br><span class="flex">score 8.75 · <b>Flex share 16%</b> · living 14% (36.5 m²) · circulation 10% · Core 20% · pieces 6.8/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 7.0 m · extensions 0.0 m² · flex m²: room 25.6 · living 36.5 · circulation 12.9 · storage 2.9 · sliver 0.0</span></figcaption>
+  <img src="SB-02/cand-2.svg" alt="SB-02 option 2">
+</figure>
+<figure>
+  <figcaption><b>option 3</b> (rank 49 of 2322)<br>L|midR|block|m:middle/block|wet:block|rr:BBF|fw|v2<br><span class="flex">score 10.59 · <b>Flex share 24%</b> · living 2% (4.6 m²) · circulation 8% · Core 22% · pieces 6.4/100 m² · bedroom spread 9.5 m · wet near bed yes · laundry near yes · spine 7.0 m · extensions 0.0 m² · flex m²: room 60.5 · living 4.6 · circulation 2.9 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-02/cand-3.svg" alt="SB-02 option 3">
+</figure>
+<figure>
+  <figcaption><b>option 4</b> (rank 107 of 2322)<br>L|rear|block|m:front/block|wet:split|rr:-|nofw|v3<br><span class="flex">score 12.28 · <b>Flex share 26%</b> · living 0% (0.0 m²) · circulation 6% · Core 21% · pieces 6.4/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 7.0 m · extensions 14.1 m² · flex m²: room 62.5 · living 0.0 · circulation 6.2 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-02/cand-4.svg" alt="SB-02 option 4">
+</figure>
+<figure>
+  <figcaption><b>option 5</b> (rank 209 of 2322)<br>L|midG|split|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 19.04 · <b>Flex share 20%</b> · living 2% (5.4 m²) · circulation 8% · Core 22% · pieces 6.0/100 m² · bedroom spread 10.0 m · wet near bed yes · laundry near yes · spine 7.0 m · extensions 0.0 m² · flex m²: room 38.8 · living 5.4 · circulation 13.1 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-02/cand-5.svg" alt="SB-02 option 5">
+</figure>
+<figure>
+  <figcaption><b>option 6</b> (rank 219 of 2322)<br>L|midW|block|m:front/split|wet:split|rr:FBB|fw|v0<br><span class="flex">score 19.73 · <b>Flex share 22%</b> · living 2% (5.3 m²) · circulation 8% · Core 22% · pieces 7.9/100 m² · bedroom spread 14.2 m · wet near bed yes · laundry near yes · spine 7.0 m · extensions 14.7 m² · flex m²: room 48.9 · living 5.3 · circulation 8.6 · storage 1.0 · sliver 0.0</span></figcaption>
+  <img src="SB-02/cand-6.svg" alt="SB-02 option 6">
+</figure>
+</div>
+</section>
+<section>
+<h2>SB-03 - 12.5 x 32.0 lot, 3 bed, single garage <span class="dim">10100 x 26000 mm, 3 bed, single garage</span></h2>
+<p class="meta">lot 12500 x 32000 mm - setbacks (mm) front 4000 / garage 6000 / left 900 / right 1500 / rear 2000 - garage recess 2000 mm</p>
+<p class="meta">valid 1752/5504 generated · 1262 distinct · 631 mirror images hidden</p>
+
+<div class="row">
+<figure>
+  <figcaption><b>option 1</b> (rank 1 of 1262)<br>L|midR|split|m:rear/block|wet:split|rr:FM|nofw|v2<br><span class="flex">score 12.16 · <b>Flex share 26%</b> · living 15% (39.3 m²) · circulation 4% · Core 22% · pieces 6.3/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 61.7 · living 39.3 · circulation 0.0 · storage 4.0 · sliver 0.0</span></figcaption>
+  <img src="SB-03/cand-1.svg" alt="SB-03 option 1">
+</figure>
+<figure>
+  <figcaption><b>option 2</b> (rank 7 of 1262)<br>L|rear|block|m:front/block|wet:split|rr:-|nofw|v2<br><span class="flex">score 12.85 · <b>Flex share 26%</b> · living 0% (0.0 m²) · circulation 9% · Core 26% · pieces 7.0/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 7.2 m² · flex m²: room 48.5 · living 0.0 · circulation 13.3 · storage 4.4 · sliver 0.0</span></figcaption>
+  <img src="SB-03/cand-2.svg" alt="SB-03 option 2">
+</figure>
+<figure>
+  <figcaption><b>option 3</b> (rank 60 of 1262)<br>L|midR|block|m:rear/block|wet:block|rr:MF|nofw|v0<br><span class="flex">score 17.8 · <b>Flex share 31%</b> · living 14% (35.3 m²) · circulation 4% · Core 17% · pieces 5.1/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 78.2 · living 35.3 · circulation 0.0 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-03/cand-3.svg" alt="SB-03 option 3">
+</figure>
+<figure>
+  <figcaption><b>option 4</b> (rank 69 of 1262)<br>L|midW|split|m:rear/split|wet:split|rr:FM|fw|v2<br><span class="flex">score 18.33 · <b>Flex share 15%</b> · living 10% (26.0 m²) · circulation 10% · Core 23% · pieces 7.4/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 5.0 m² · flex m²: room 21.6 · living 26.0 · circulation 6.8 · storage 10.7 · sliver 0.0</span></figcaption>
+  <img src="SB-03/cand-4.svg" alt="SB-03 option 4">
+</figure>
+<figure>
+  <figcaption><b>option 5</b> (rank 71 of 1262)<br>L|midG|block|m:rear/block|wet:split|rr:FM|nofw|v1<br><span class="flex">score 18.36 · <b>Flex share 21%</b> · living 14% (35.3 m²) · circulation 8% · Core 21% · pieces 6.3/100 m² · bedroom spread 0.0 m · wet near bed no · laundry near yes · spine 8.0 m · extensions 0.0 m² · flex m²: room 42.7 · living 35.3 · circulation 9.8 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-03/cand-5.svg" alt="SB-03 option 5">
+</figure>
+<figure>
+  <figcaption><b>option 6</b> (rank 98 of 1262)<br>L|midW|block|m:rear/block|wet:split|rr:MF|fw|v2<br><span class="flex">score 18.55 · <b>Flex share 13%</b> · living 14% (35.3 m²) · circulation 11% · Core 26% · pieces 6.3/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 8.0 m · extensions 7.2 m² · flex m²: room 24.9 · living 35.3 · circulation 7.2 · storage 1.1 · sliver 0.0</span></figcaption>
+  <img src="SB-03/cand-6.svg" alt="SB-03 option 6">
+</figure>
+</div>
+</section>
+<section>
+<h2>SB-04 - 15.0 x 28.0 lot, 4 bed, no recess <span class="dim">13000 x 22000 mm, 4 bed, double garage</span></h2>
+<p class="meta">lot 15000 x 28000 mm - setbacks (mm) front 3000 / garage 3000 / left 1000 / right 1000 / rear 3000 - garage recess 0 mm</p>
+<p class="meta">valid 2896/5824 generated · 2194 distinct · 1097 mirror images hidden</p>
+
+<div class="row">
+<figure>
+  <figcaption><b>option 1</b> (rank 1 of 2194)<br>L|midG|split|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 8.74 · <b>Flex share 22%</b> · living 3% (8.8 m²) · circulation 9% · Core 20% · pieces 5.9/100 m² · bedroom spread 10.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 39.0 · living 8.8 · circulation 17.8 · storage 6.3 · sliver 0.0</span></figcaption>
+  <img src="SB-04/cand-1.svg" alt="SB-04 option 1">
+</figure>
+<figure>
+  <figcaption><b>option 2</b> (rank 17 of 2194)<br>L|midG|block|m:rear/split|wet:block|rr:FM|nofw|v0<br><span class="flex">score 9.65 · <b>Flex share 16%</b> · living 15% (43.1 m²) · circulation 4% · Core 20% · pieces 5.6/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 32.4 · living 43.1 · circulation 4.3 · storage 7.9 · sliver 0.0</span></figcaption>
+  <img src="SB-04/cand-2.svg" alt="SB-04 option 2">
+</figure>
+<figure>
+  <figcaption><b>option 3</b> (rank 70 of 2194)<br>L|midG|block|m:rear/split|wet:block|rr:MF|fw|v3<br><span class="flex">score 10.34 · <b>Flex share 18%</b> · living 14% (40.9 m²) · circulation 8% · Core 20% · pieces 6.3/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 35.1 · living 40.9 · circulation 10.8 · storage 6.2 · sliver 0.0</span></figcaption>
+  <img src="SB-04/cand-3.svg" alt="SB-04 option 3">
+</figure>
+<figure>
+  <figcaption><b>option 4</b> (rank 129 of 2194)<br>L|midR|split|m:middle/block|wet:block|rr:BBF|fw|v2<br><span class="flex">score 13.86 · <b>Flex share 28%</b> · living 3% (8.1 m²) · circulation 7% · Core 20% · pieces 7.3/100 m² · bedroom spread 9.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 76.3 · living 8.1 · circulation 3.2 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-04/cand-4.svg" alt="SB-04 option 4">
+</figure>
+<figure>
+  <figcaption><b>option 5</b> (rank 155 of 2194)<br>L|rear|block|m:front/block|wet:split|rr:-|nofw|v3<br><span class="flex">score 15.8 · <b>Flex share 30%</b> · living 0% (0.0 m²) · circulation 4% · Core 22% · pieces 5.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 19.2 m² · flex m²: room 75.8 · living 0.0 · circulation 5.2 · storage 3.4 · sliver 0.0</span></figcaption>
+  <img src="SB-04/cand-5.svg" alt="SB-04 option 5">
+</figure>
+<figure>
+  <figcaption><b>option 6</b> (rank 267 of 2194)<br>L|midG|block|m:front/block|wet:block|rr:F|nofw|v0|core-low<br><span class="flex">score 18.7 · <b>Flex share 18%</b> · living 17% (48.6 m²) · circulation 7% · Core 20% · pieces 4.5/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 36.9 · living 48.6 · circulation 13.8 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-04/cand-6.svg" alt="SB-04 option 6">
+</figure>
+</div>
+</section>
+<section>
+<h2>SB-05 - 15.0 x 28.0 lot, 4 bed, garage number smaller <span class="dim">13000 x 20000 mm, 4 bed, double garage</span></h2>
+<p class="meta">lot 15000 x 28000 mm - setbacks (mm) front 5000 / garage 4000 / left 1000 / right 1000 / rear 3000 - garage recess 0 mm</p>
+<p class="meta">valid 2220/5824 generated · 1604 distinct · 802 mirror images hidden</p>
+
+<div class="row">
+<figure>
+  <figcaption><b>option 1</b> (rank 1 of 1604)<br>L|midG|split|m:rear/block|wet:block|rr:MF|nofw|v0<br><span class="flex">score 7.22 · <b>Flex share 15%</b> · living 0% (0.0 m²) · circulation 4% · Core 22% · pieces 5.8/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 13.8 · living 0.0 · circulation 3.7 · storage 20.6 · sliver 0.0</span></figcaption>
+  <img src="SB-05/cand-1.svg" alt="SB-05 option 1">
+</figure>
+<figure>
+  <figcaption><b>option 2</b> (rank 3 of 1604)<br>L|midR|block|m:middle/block|wet:block|rr:FBFB|fw|v0<br><span class="flex">score 9.31 · <b>Flex share 21%</b> · living 1% (3.5 m²) · circulation 7% · Core 19% · pieces 6.5/100 m² · bedroom spread 10.4 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 23.4 · living 3.5 · circulation 6.2 · storage 25.9 · sliver 0.0</span></figcaption>
+  <img src="SB-05/cand-2.svg" alt="SB-05 option 2">
+</figure>
+<figure>
+  <figcaption><b>option 3</b> (rank 7 of 1604)<br>L|midG|block|m:front/block|wet:block|rr:FBB|nofw|v0<br><span class="flex">score 9.32 · <b>Flex share 21%</b> · living 3% (8.8 m²) · circulation 10% · Core 23% · pieces 5.4/100 m² · bedroom spread 9.9 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 36.9 · living 8.8 · circulation 17.8 · storage 0.0 · sliver 0.0</span></figcaption>
+  <img src="SB-05/cand-3.svg" alt="SB-05 option 3">
+</figure>
+<figure>
+  <figcaption><b>option 4</b> (rank 53 of 1604)<br>L|midR|split|m:rear/split|wet:split|rr:FBBM|fw|v2<br><span class="flex">score 11.27 · <b>Flex share 24%</b> · living 0% (0.0 m²) · circulation 11% · Core 22% · pieces 9.2/100 m² · bedroom spread 10.7 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 47.1 · living 0.0 · circulation 11.8 · storage 2.9 · sliver 0.0</span></figcaption>
+  <img src="SB-05/cand-4.svg" alt="SB-05 option 4">
+</figure>
+<figure>
+  <figcaption><b>option 5</b> (rank 77 of 1604)<br>L|midG|block|m:rear/split|wet:split|rr:FM|nofw|v2<br><span class="flex">score 13.56 · <b>Flex share 15%</b> · living 14% (36.5 m²) · circulation 6% · Core 23% · pieces 6.9/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 0.0 m² · flex m²: room 0.0 · living 36.5 · circulation 9.6 · storage 28.4 · sliver 0.0</span></figcaption>
+  <img src="SB-05/cand-5.svg" alt="SB-05 option 5">
+</figure>
+<figure>
+  <figcaption><b>option 6</b> (rank 101 of 1604)<br>L|rear|block|m:front/block|wet:split|rr:-|nofw|v3<br><span class="flex">score 14.36 · <b>Flex share 28%</b> · living 0% (0.0 m²) · circulation 5% · Core 22% · pieces 6.2/100 m² · bedroom spread 0.0 m · wet near bed yes · laundry near yes · spine 6.0 m · extensions 17.2 m² · flex m²: room 62.7 · living 0.0 · circulation 5.2 · storage 4.0 · sliver 0.0</span></figcaption>
+  <img src="SB-05/cand-6.svg" alt="SB-05 option 6">
+</figure>
+</div>
+</section>
+</body></html>

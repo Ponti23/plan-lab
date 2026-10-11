@@ -5,6 +5,7 @@
 import { carveCandidate, splitCandidate } from './carve.ts';
 import { goldenById, goldenRects, profileFor, type GoldenPlan } from './golden.ts';
 import { closeness, groupedRects, sameKindOverlap, scoreOf, type Group, type Metrics, type Profile } from './quality.ts';
+import { houseAreaOf } from './setbacks.ts';
 import { enumerateOptions, generate, mismatches, optionAimsAt } from './zones.ts';
 import type { Brief, Candidate, Options, Rect, Target, TargetResult } from './types.ts';
 
@@ -26,7 +27,7 @@ export function layoutKey(c: Candidate, mirror: boolean): string {
 }
 
 export const candidateRects = (c: Candidate): { g: Group; r: Rect }[] =>
-  groupedRects({ env: c.envelope, zones: [...c.zones, c.spine], flex: c.flex, extensions: c.extensions, total: c.envelope.w * c.envelope.d });
+  groupedRects({ env: c.envelope, zones: [...c.zones, c.spine], flex: c.flex, extensions: c.extensions, total: houseAreaOf(c) });
 
 /** two candidates are different when their families differ, or their same-kind area overlap is below this */
 export const OVERLAP_LIMIT = 0.7;
@@ -148,7 +149,8 @@ export function runBrief(brief: Brief, opts: { grow?: boolean; top?: number; car
     if (!v) rects.set(c, (v = candidateRects(c)));
     return v;
   };
-  const envArea = (c: Candidate): number => c.envelope.w * c.envelope.d;
+  // Setbacks: the share is taken of the house area (the envelope less anything outside it), not the envelope
+  const envArea = (c: Candidate): number => houseAreaOf(c);
   const overlap = (a: Candidate, b: Candidate): number => sameKindOverlap(rectsOf(a), rectsOf(b), envArea(a));
   const different = (a: Candidate, b: Candidate): boolean => familyOf(a) !== familyOf(b) || overlap(a, b) < OVERLAP_LIMIT;
   const topN: Candidate[] = [];

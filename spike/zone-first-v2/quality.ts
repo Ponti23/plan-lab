@@ -16,6 +16,11 @@ export interface Layout {
   extensions: ExtensionRec[];
   /** area the shares are taken of: w x d for a candidate, the sum of the cells for a measured zoning */
   total: number;
+  /**
+   * Setbacks: the pieces per 100 m² are counted against the house area (the envelope less anything outside it,
+   * see setbacks.ts), not the envelope. Omitted everywhere there is no lot, so those numbers stay as they were.
+   */
+  houseArea?: number;
 }
 
 export interface Adjacency {
@@ -198,7 +203,7 @@ export function metricsOf(l: Layout, adj: Adjacency): Metrics {
     masterSeparated,
     spineMetres: spineLen / 1000,
     circulationM2: circ / 1e6,
-    pieceDensity: (pieces * 100e6) / (l.env.w * l.env.d),
+    pieceDensity: (pieces * 100e6) / (l.houseArea ?? l.env.w * l.env.d),
     slivers: l.flex.filter((f) => f.cls === 'sliver').length,
     spineRatio: spineLen / l.env.d,
     longestFlexRatio: l.flex.length ? Math.max(...l.flex.map((f) => Math.max(f.rect.w, f.rect.h))) / l.env.d : 0,

@@ -9,6 +9,7 @@
 import { checkConnectivity } from './connect.ts';
 import { classifyPiece, decompose, mergeSlivers, SLIVER_MIN_SIDE } from '../zone-first/flex.ts';
 import { CANDIDATE_ADJ, coreRectsOf, flexAreaOf, markLiving, metricsOf } from './quality.ts';
+import { houseAreaOf } from './setbacks.ts';
 import {
   CARVE_SPECS,
   FLEX_SPLIT_CIRC_MAX_WIDTH,
@@ -246,7 +247,8 @@ function withFlex(c: Candidate, zones: ZoneRec[], flex: FlexPiece[], notes: stri
   const flexArea = flexAreaOf(flex);
   const walls = zones.filter((z) => z.kind === 'flexwall');
   const circulationArea = area(c.spine.rect) + walls.reduce((a, w) => a + area(w.rect), 0) + flexArea['Flex · circulation'];
-  const total = c.envelope.w * c.envelope.d;
+  // Setbacks: the shares are taken of the house area, the envelope less anything outside it (the driveway)
+  const total = houseAreaOf(c);
   return {
     ...c,
     zones,
@@ -256,7 +258,7 @@ function withFlex(c: Candidate, zones: ZoneRec[], flex: FlexPiece[], notes: stri
     slivers: flex.filter((f) => f.cls === 'sliver').length,
     notes,
     quality: {
-      ...metricsOf({ env: c.envelope, zones: [...zones, c.spine], flex, extensions: c.extensions, total }, CANDIDATE_ADJ),
+      ...metricsOf({ env: c.envelope, zones: [...zones, c.spine], flex, extensions: c.extensions, total, houseArea: total }, CANDIDATE_ADJ),
       score: 0,
       outside: {},
     },

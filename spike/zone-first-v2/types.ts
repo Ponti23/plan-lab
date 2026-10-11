@@ -116,6 +116,21 @@ export interface Target {
 /** The same fields, computed from a candidate's rectangles. */
 export type PlanSignature = Target;
 
+/** The land the house sits on, mm. */
+export interface Lot {
+  w: number;
+  d: number;
+}
+
+/** Distances from the lot boundaries, mm; `front`/`garage` are measured from the street (see setbacks.ts). */
+export interface Setbacks {
+  front: number;
+  garage: number;
+  left: number;
+  right: number;
+  rear: number;
+}
+
 export interface Brief {
   id: string;
   title: string;
@@ -128,6 +143,9 @@ export interface Brief {
   altTarget?: Target;
   /** the builder plan image in knowledge/reference/ideal/ */
   file?: string;
+  /** the lot; when given, `envelope` is derived from it and `setbacks` through setbacks.ts, never hand-typed */
+  lot?: Lot;
+  setbacks?: Setbacks;
 }
 
 export interface TargetResult {
@@ -177,4 +195,14 @@ export interface Candidate {
   quality: Quality;
   /** the rooms the carve pass made out of Flex (also in `zones`); undefined when the pass did not run */
   carved?: ZoneRec[];
+  /**
+   * Rectangles inside the envelope but outside the house: the `Empty (driveway)` strip in front of a recessed garage.
+   * Never a zone, never Flex; excluded from every area, from connectivity and from the grow pass. Absent without a lot.
+   */
+  outside?: Rect[];
+  /** the garage recess, mm; absent without a lot (see setbacks.ts) */
+  recess?: number;
+  /** the brief's lot and setbacks, carried for the renderer; absent without a lot */
+  lot?: Lot;
+  setbacks?: Setbacks;
 }

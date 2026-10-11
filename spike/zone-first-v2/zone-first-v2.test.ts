@@ -10,6 +10,8 @@ import { join } from 'node:path';
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import { classifyPiece, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { BRIEFS } from './briefs.ts';
+import { SETBACK_BRIEFS } from './briefs-setbacks.ts';
+import { envelopeOf, recessOf } from './setbacks.ts';
 import { carveCandidate, carvedLine, carveRooms, envelopeEdges, splitFlex } from './carve.ts';
 import { checkConnectivity } from './connect.ts';
 import { distribute, type Node } from './layout.ts';
@@ -1514,4 +1516,131 @@ test("round 10b: the preferred depths are the user's zoning, and the two small o
   };
   assert.equal(modeSide('wet'), SPECS.wet.s.min);
   assert.equal(modeSide('laundry'), SPECS.laundry.s.min);
+});
+
+// ---------------------------------------------------------------- setbacks (ZF-SETBACK-1)
+
+// Only the three briefs the tests below need: the whole set is the review run's job (run-small.ts setbacks).
+const SB_IDS = ['SB-01', 'SB-04', 'SB-05'];
+const SB_RESULTS: BriefResult[] = SETBACK_BRIEFS.filter((b) => SB_IDS.includes(b.id)).map((b) => runBrief(b));
+const sbResult = (id: string): BriefResult => SB_RESULTS.find((r) => r.brief.id === id)!;
+
+test('setbacks: the helper turns a lot and its setbacks into the envelope and the garage recess', () => {
+  // the user's example
+  assert.deepEqual(envelopeOf({ w: 15000, d: 28000 }, { front: 2000, garage: 4000, left: 1000, right: 1000, rear: 3000 }), {
+    envelope: { w: 13000, d: 23000 },
+    recess: 2000,
+  });
+  // garage < front, and garage === front: no recess either way
+  assert.equal(envelopeOf({ w: 15000, d: 28000 }, { front: 5000, garage: 4000, left: 1000, right: 1000, rear: 3000 }).recess, 0);
+  assert.equal(envelopeOf({ w: 15000, d: 28000 }, { front: 4000, garage: 4000, left: 1000, right: 1000, rear: 3000 }).recess, 0);
+  // and `recessOf` on a brief: 0 without a lot
+  assert.equal(recessOf({ lot: { w: 15000, d: 28000 }, setbacks: { front: 2000, garage: 4000, left: 1000, right: 1000, rear: 3000 } }), 2000);
+  assert.equal(recessOf({}), 0);
+  assert.equal(recessOf({ lot: { w: 15000, d: 28000 } }), 0);
+});
+
+test('setbacks: a negative number, a non-integer and an empty envelope are each rejected', () => {
+  const bad: [string, { w: number; d: number }, { front: number; garage: number; left: number; right: number; rear: number }, RegExp][] = [
+    ['a negative lot width', { w: -15000, d: 28000 }, { front: 2000, garage: 4000, left: 1000, right: 1000, rear: 3000 }, /lot width must not be negative/],
+    ['a negative setback', { w: 15000, d: 28000 }, { front: -2000, garage: 4000, left: 1000, right: 1000, rear: 3000 }, /front setback must not be negative/],
+    ['a non-integer setback', { w: 15000, d: 28000 }, { front: 2000.5, garage: 4000, left: 1000, right: 1000, rear: 3000 }, /front setback must be a whole number/],
+    ['a non-integer lot', { w: 15000, d: 28000.5 }, { front: 2000, garage: 4000, left: 1000, right: 1000, rear: 3000 }, /lot depth must be a whole number/],
+    ['no width left', { w: 15000, d: 28000 }, { front: 2000, garage: 4000, left: 7500, right: 7500, rear: 3000 }, /leave no envelope/],
+    ['no depth left', { w: 15000, d: 28000 }, { front: 2000, garage: 4000, left: 1000, right: 1000, rear: 26000 }, /leave no envelope/],
+  ];
+  for (const [what, lot, setbacks, msg] of bad) assert.throws(() => envelopeOf(lot, setbacks), msg, what);
+});
+
+test('setbacks: SB-01 keeps the garage 2000 back and the driveway strip in front of it, empty', () => {
+  const r = sbResult('SB-01');
+  assert.ok(r.valid.length > 0, 'no valid SB-01 candidate');
+  for (const c of r.valid) {
+    const w = `${c.briefId} ${c.optionId}`;
+    const g = c.zones.find((z) => z.kind === 'garage');
+    assert.ok(g, `${w}: no garage`);
+    assert.equal(c.recess, 2000, `${w}: the recess`);
+    assert.equal(g.rect.y + g.rect.h, c.envelope.d - 2000, `${w}: the garage front edge is not 2000 behind the house front`);
+    // the garage keeps its catalogue depth: the recess is taken from the lane, not the garage
+    assert.ok(withinGarage(r.brief.garage, g.rect), `${w}: the garage left its catalogue range`);
+    assert.ok(c.outside && c.outside.length === 1, `${w}: expected exactly one empty strip`);
+    const e = c.outside![0];
+    assert.equal(e.w, g.rect.w, `${w}: the strip is not the garage's width`);
+    assert.equal(e.h, 2000, `${w}: the strip is not 2000 deep`);
+    assert.equal(e.x, g.rect.x, `${w}: the strip is not in front of the garage`);
+    assert.equal(e.y, g.rect.y + g.rect.h, `${w}: the strip does not touch the garage front`);
+    assert.equal(e.y + e.h, c.envelope.d, `${w}: the strip does not reach the house front edge`);
+    // the entry stays on the house front: only the garage moved back
+    assert.equal(c.spine.rect.y + c.spine.rect.h, c.envelope.d, `${w}: the spine does not reach the front edge`);
+    // nothing of the house is in the driveway
+    for (const z of [...c.zones, c.spine]) assert.ok(!overlap(z.rect, e), `${w}: ${z.name} is in the driveway`);
+    for (const f of c.flex) assert.ok(!overlap(f.rect, e), `${w}: ${f.cls} is in the driveway`);
+    for (const x of c.extensions) assert.ok(!overlap(x.rect, e), `${w}: ${x.name} is in the driveway`);
+  }
+});
+
+test('setbacks: SB-01 zones, Flex, extensions, the spine and the driveway tile the envelope exactly', () => {
+  const r = sbResult('SB-01');
+  for (const c of r.valid) {
+    const w = `${c.briefId} ${c.optionId}`;
+    const rs = [...allRects(c), ...(c.outside ?? [])];
+    assert.equal(rs.reduce((a, x) => a + area(x), 0), c.envelope.w * c.envelope.d, `${w}: the pieces do not tile the envelope`);
+    for (let i = 0; i < rs.length; i++) {
+      for (let j = i + 1; j < rs.length; j++) assert.ok(!overlap(rs[i], rs[j]), `${w}: rects ${i} and ${j} overlap`);
+    }
+  }
+});
+
+test('setbacks: the garage is tried on both sides whatever the side setbacks, and the mirror holds', () => {
+  const r = sbResult('SB-01');
+  for (const side of ['L', 'R'] as const) {
+    const n = r.valid.filter((c) => c.options.garageSide === side).length;
+    assert.ok(n > 0, `no valid SB-01 candidate with the garage on the ${side}`);
+  }
+  // on the R side the driveway is the mirrored strip in front of the (now right-hand) garage, not a leftover
+  for (const c of r.valid) {
+    if (c.options.garageSide !== 'R') continue;
+    const g = c.zones.find((z) => z.kind === 'garage')!;
+    const e = c.outside![0];
+    assert.equal(e.x, g.rect.x, `${c.optionId}: the strip is not in front of the garage`);
+    assert.equal(e.w, g.rect.w, `${c.optionId}: the strip is not the garage's width`);
+  }
+});
+
+test('setbacks: SB-04 (garage on the front) and SB-05 (garage number smaller) make no empty strip', () => {
+  for (const id of ['SB-04', 'SB-05']) {
+    const r = sbResult(id);
+    assert.ok(r.valid.length > 0, `${id}: no valid candidate`);
+    for (const c of r.valid) {
+      const w = `${c.briefId} ${c.optionId}`;
+      assert.equal(c.outside, undefined, `${w}: an empty strip was made`);
+      assert.equal(c.recess, undefined, `${w}: a recess was recorded`);
+      assert.equal(c.lot?.d, 28000, `${w}: the lot is not carried`);
+      const g = c.zones.find((z) => z.kind === 'garage');
+      assert.ok(g, `${w}: no garage`);
+      assert.equal(g.rect.y + g.rect.h, c.envelope.d, `${w}: the garage front edge is not on the house front`);
+    }
+  }
+});
+
+test('setbacks: a brief without a lot is unchanged (stored snapshot of zf-00, ranked first)', () => {
+  const r = RESULTS[0];
+  const c = r.ranked[0];
+  // captured before the setback work started; the same digest must still come out
+  const expected =
+    '{"optionId":"L|rear|block|m:middle/split|wet:split|rr:-|nofw|v2","envelope":{"w":12500,"d":24000},"zones":[["core","Core",{"x":0,"y":0,"w":9000,"h":6500}],["master","Master + WIR",{"x":0,"y":6500,"w":4000,"h":10400}],["ensuite","Ensuite",{"x":4000,"y":6500,"w":3700,"h":3500}],["garage","Garage",{"x":0,"y":18000,"w":5500,"h":6000}],["wc","WC",{"x":8700,"y":6500,"w":3800,"h":1000}],["wet","Bath",{"x":8700,"y":7500,"w":3800,"h":2000}],["laundry","Laundry",{"x":8700,"y":9500,"w":3800,"h":1800}],["bedroom","Bed 2",{"x":7700,"y":11300,"w":4800,"h":3400}],["bedroom","Bed 3",{"x":7700,"y":14700,"w":4800,"h":3400}],["bedroom","Bed 4",{"x":7700,"y":18100,"w":4800,"h":4900}]],"spine":{"x":5500,"y":18000,"w":1200,"h":6000},"flex":[["Flex · circulation",{"x":7700,"y":6500,"w":1000,"h":4800}],["Flex · room",{"x":4000,"y":10000,"w":3700,"h":4000}],["Flex · room",{"x":4000,"y":14000,"w":3700,"h":4000}],["Flex · circulation",{"x":0,"y":16900,"w":4000,"h":1100}],["Flex · circulation",{"x":6700,"y":18000,"w":1000,"h":6000}],["Flex · circulation",{"x":7700,"y":23000,"w":4800,"h":1000}]],"extensions":[["Core · extension",{"x":9000,"y":0,"w":3500,"h":6500}]],"score":8.04}';
+  assert.equal(r.valid.length, 3474);
+  assert.equal(r.ranked.length, 2916);
+  assert.equal(
+    JSON.stringify({
+      optionId: c.optionId,
+      envelope: c.envelope,
+      zones: c.zones.map((z) => [z.kind, z.name, z.rect]),
+      spine: c.spine.rect,
+      flex: c.flex.map((f) => [f.cls, f.rect]),
+      extensions: c.extensions.map((e) => [e.name, e.rect]),
+      score: c.quality.score,
+    }),
+    expected,
+  );
 });

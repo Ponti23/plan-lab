@@ -1,9 +1,10 @@
-// Node 24, run directly: `node spike/zone-first-v2/run-small.ts [small|medium|large]` (round 9 splits Flex by default;
-// `--no-split` disables it. `--carve` instead runs the old named-room pass; `--no-carve` remains accepted).
+// Node 24, run directly: `node spike/zone-first-v2/run-small.ts [small|medium|large|setbacks]` (round 9 splits Flex by
+// default; `--no-split` disables it. `--carve` instead runs the old named-room pass; `--no-carve` remains accepted).
 // Lot-size review run: the same pipeline as run.ts, but for the five briefs of the chosen set and
 // keeping the pairwise-different top 6 (runBrief(b, { top: 6 })) instead of the top 5. `small`
 // (default) reads SMALL_BRIEFS into out-small/, `medium` reads MEDIUM_BRIEFS into out-medium/,
-// `large` reads LARGE_BRIEFS into out-large/.
+// `large` reads LARGE_BRIEFS into out-large/, `setbacks` reads SETBACK_BRIEFS (briefs with a lot and five setbacks,
+// see setbacks.ts) into out-setbacks/.
 // Writes:
 //   spike/zone-first-v2/<out>/<id>/cand-1..6.svg|json
 //   spike/zone-first-v2/<out>/summary.json
@@ -15,9 +16,11 @@ import { join } from 'node:path';
 import { SMALL_BRIEFS } from './briefs-small.ts';
 import { MEDIUM_BRIEFS } from './briefs-medium.ts';
 import { LARGE_BRIEFS } from './briefs-large.ts';
+import { SETBACK_BRIEFS } from './briefs-setbacks.ts';
 import { OVERLAP_LIMIT, runBrief, type BriefResult } from './pipeline.ts';
 import { carvedLabel, carvedLine } from './carve.ts';
 import { renderSVG } from './render.ts';
+import { envelopeOf } from './setbacks.ts';
 import type { Brief, Candidate, FlexClass } from './types.ts';
 
 const HERE = import.meta.dirname!;
@@ -57,6 +60,13 @@ const SETS: Record<string, SetSpec> = {
     pageTitle: 'zone-first v2 - large-lot review, 6 plans per brief',
     note: "Large-lot review run. Ranking is provisional; the user's layouts never steer generation. Keeps the top 6 pairwise-different valid candidates per brief.",
   },
+  setbacks: {
+    briefs: SETBACK_BRIEFS,
+    dir: 'out-setbacks',
+    lots: 'lots with setbacks',
+    pageTitle: 'zone-first v2 - setbacks review, 6 plans per brief',
+    note: "Setbacks review run: each brief gives a lot and five setbacks (setbacks.ts), so the house is planned inside the envelope the lot leaves and a garage set back from the house front is drawn with an empty driveway strip in front of it. Ranking is provisional; the user's layouts never steer generation. Keeps the top 6 pairwise-different valid candidates per brief.",
+  },
 };
 
 // set in main() from the chosen set
@@ -93,6 +103,11 @@ function jsonOf(r: BriefResult, c: Candidate, i: number): unknown {
     carved: c.carved?.map((z) => ({ name: z.name, label: carvedLabel(z), rect: z.rect })),
     zones: c.zones,
     spine: c.spine,
+    // setbacks: only present for a brief with a lot (JSON.stringify drops an undefined field, so the other sets are unchanged)
+    lot: c.lot,
+    setbacks: c.setbacks,
+    recess: c.recess,
+    outside: c.outside,
     flexWalls: c.zones.filter((z) => z.kind === 'flexwall'),
     flex: c.flex,
   };
@@ -128,9 +143,14 @@ function compareHtml(results: BriefResult[], set: SetSpec): string {
       const n = r.topN.length;
       const short = n < TOP ? `<p><b>only ${n} different plan${n === 1 ? '' : 's'} found</b></p>` : '';
       const cards = r.topN.map((c, i) => card(r, c, i)).join('\n');
+      // setbacks: printed only for a brief with a lot, so the other sets' pages are unchanged
+      const sb = b.lot && b.setbacks ? b.setbacks : null;
+      const setbackLine = sb
+        ? `<p class="meta">lot ${b.lot!.w} x ${b.lot!.d} mm - setbacks (mm) front ${sb.front} / garage ${sb.garage} / left ${sb.left} / right ${sb.right} / rear ${sb.rear} - garage recess ${envelopeOf(b.lot!, sb).recess} mm</p>\n`
+        : '';
       return `<section>
 <h2>${b.id} - ${esc(b.title)} <span class="dim">${b.envelope.w} x ${b.envelope.d} mm, ${b.bedrooms} bed, ${b.garage} garage</span></h2>
-<p class="meta">valid ${r.valid.length}/${r.options.length} generated · ${r.ranked.length} distinct · ${r.mirrorsHidden} mirror images hidden</p>
+${setbackLine}<p class="meta">valid ${r.valid.length}/${r.options.length} generated · ${r.ranked.length} distinct · ${r.mirrorsHidden} mirror images hidden</p>
 ${short}
 <div class="row">
 ${cards}
@@ -186,6 +206,9 @@ function main(): void {
       envelope: r.brief.envelope,
       bedrooms: r.brief.bedrooms,
       garage: r.brief.garage,
+      // setbacks: only for a brief with a lot; JSON.stringify drops an undefined field, so the other sets are unchanged
+      lot: r.brief.lot,
+      setbacks: r.brief.setbacks,
       generated: r.options.length,
       valid: r.valid.length,
       distinctValid: r.ranked.length,
@@ -209,6 +232,8 @@ function main(): void {
         slivers: c.slivers,
         carved: c.carved?.map((z) => carvedLabel(z)),
         signature: c.signature,
+        recess: c.recess,
+        outside: c.outside,
       })),
     })),
     totals: {

@@ -23,15 +23,16 @@ piece is drawn with a 200 mm gap to its neighbours; a zone and the extensions it
 ## Lot-size review runs
 
 A second, additive run for judging how v2 handles lots of a given size, keeping the six
-pairwise-different plans of each brief instead of the top 5. Three sets share the one runner:
+pairwise-different plans of each brief instead of the top 5. Four sets share the one runner:
 
 | set | briefs | output | lots |
 |---|---|---|---|
 | `small` (default) | `briefs-small.ts`, five blocks 7.5 m to 10.5 m wide | `out-small/` | small lots |
 | `medium` | `briefs-medium.ts`, five family-sized blocks 9.5 m to 14.0 m wide | `out-medium/` | medium lots |
 | `large` | `briefs-large.ts`, five big blocks 12.5 m to 17.0 m wide | `out-large/` | large lots |
+| `setbacks` | `briefs-setbacks.ts`, five lots each with five setbacks | `out-setbacks/` | lots with setbacks |
 
-Neither touches `out/` or the tests.
+None of them touches `out/` or the tests.
 
 ```sh
 node spike/zone-first-v2/run-small.ts           # small (the default) -> spike/zone-first-v2/out-small/
@@ -39,14 +40,48 @@ node spike/zone-first-v2/run-small.ts medium    # -> spike/zone-first-v2/out-med
 # add --carve to any of the three for round 5's carve pass (off by default since round 8b;
 # --carve wins if both --carve and --no-carve are given)
 node spike/zone-first-v2/run-small.ts large     # -> spike/zone-first-v2/out-large/
+node spike/zone-first-v2/run-small.ts setbacks  # -> spike/zone-first-v2/out-setbacks/
 ```
 
 Open `compare.html` with the repo root served:
 `/spike/zone-first-v2/out-small/compare.html`, `/spike/zone-first-v2/out-medium/compare.html` or
-`/spike/zone-first-v2/out-large/compare.html`.
+`/spike/zone-first-v2/out-large/compare.html` (and `/spike/zone-first-v2/out-setbacks/compare.html`).
 Output: `<out>/<id>/cand-1..6.svg|json`, `<out>/summary.json`, `<out>/compare.html`.
 The page shows one heading and meta line per brief, then the six cards (`option 1` .. `option 6`, each
 with its rank and the quality metric line); no builder plan, no zoning drawing and no blind test.
+
+## Setbacks and a recessed garage (user decision 2026-10-09)
+
+A brief may give a **lot** and five **setbacks** in mm (`Brief.lot`, `Brief.setbacks`): `front` (street to the
+house front), `garage` (street to the garage door), `left`, `right`, `rear`. `setbacks.ts` turns them into the
+envelope the engine plans inside — `envelope.w = lot.w - left - right`, `envelope.d = lot.d - front - rear` — and
+the garage **recess**, `max(0, garage - front)`. A brief with a lot gives its envelope through the helper, never
+by hand (`briefs-setbacks.ts` is the example); the helper throws with a plain message on a negative number, a
+non-integer, or setbacks that leave no envelope.
+
+**The recess.** When `garage > front`, the garage door sits `recess` mm behind the house front: the garage keeps
+its catalogue size and the **G lane** pays the extra depth, so the strip in front of it (garage width x `recess`,
+touching the house front edge) is **outside the house**. It is `Candidate.outside` (one rect). The entry and the
+Spine stay on the house front edge (the Spine's fixed depth covers the garage plus the recess). The strip is not a
+room, not Flex and not circulation: it is left out of the Flex share, the circulation share and the area the
+metrics divide by (the denominator is `envelope area - empty area`, `houseArea` in `setbacks.ts`), out of the grow
+pass (nothing grows into it, and the garage never grows forward into it), out of the R13/R14 extensions and out of
+the carve pass (it is passed to `computeFlex` as an obstacle, so it is a hole in the decomposition). It is not
+scored for; the garage is still tried on both sides (`garageSide` L and R), whatever the side setbacks. An option
+that cannot fit with the recess fails as usual, with `the G lane is too short for the garage recess`. When
+`garage <= front` there is no recess and nothing changes: the garage lines up with the house front exactly as
+before.
+
+**Drawing.** With a lot the SVG is in lot coordinates. The lot boundary is a thick solid outline around the
+envelope, offset by the setbacks, labelled `Lot boundary`; the setback ring (lot minus envelope) carries a light
+diagonal hatch and a `Setback` label; every setback has its dimension text (`Front 2.0 m`, `Garage 4.0 m`,
+`Left 1.0 m`, `Right 1.0 m`, `Rear 3.0 m`). The driveway is a dashed outline with no fill, labelled
+`Empty (driveway)` - no piece of the house can be there, so the label touches no room label. `FRONT (street)` is
+printed below the **lot**. Each of these is told apart by its label, its line style or its hatch, never by colour
+(the user is colourblind), and the 200 mm piece gaps are unchanged.
+
+**Untouched without a lot.** Every brief with no `lot` behaves exactly as before - the survey briefs, the golden
+plans and the review sets all produce byte-identical output; a test fails if the top candidate of zf-00 moves.
 
 ## Files
 
@@ -63,7 +98,9 @@ with its rank and the quality metric line); no builder plan, no zoning drawing a
 | `pipeline.ts` | enumerate, rank, dedupe, hide mirrors, check targets (shared by `run.ts` and the tests); `opts.top` (default 5) sets how many pairwise-different plans `topN` holds |
 | `run.ts` | writes the output |
 | `briefs-small.ts`, `briefs-medium.ts`, `briefs-large.ts` | the five review briefs per lot-size set |
-| `run-small.ts` | the lot-size review run (`small`, `medium`, `large`): top 6 per brief, no blind test |
+| `setbacks.ts` | a lot + five setbacks -> the envelope and the garage recess (`envelopeOf`), the house area (`houseArea`), input validation |
+| `briefs-setbacks.ts` | the five setback review briefs (`SB-01` .. `SB-05`), each envelope derived through `setbacks.ts` |
+| `run-small.ts` | the lot-size review run (`small`, `medium`, `large`, `setbacks`): top 6 per brief, no blind test |
 | `zone-first-v2.test.ts` | the tests |
 
 `flex.ts` (decomposition, sliver merge, classes, `sharedEdge`) is imported from `spike/zone-first/` unchanged.

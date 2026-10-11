@@ -14,6 +14,7 @@
 import { CATALOG } from '../geometry-feasibility/briefs.ts';
 import { classifyPiece, computeFlex, overlap, sharedEdge } from '../zone-first/flex.ts';
 import { checkConnectivity } from './connect.ts';
+import { houseArea, recessOf } from './setbacks.ts';
 import { CANDIDATE_ADJ, coreRectsOf, flexAreaOf, LIVING_MIN_EDGE, markLiving, metricsOf } from './quality.ts';
 import {
   allocate,
@@ -217,6 +218,10 @@ export function enumerateOptions(brief: Brief): Options[] {
 
 export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
   const gs = garageSize(brief.garage);
+  // Setbacks: the garage keeps its catalogue size, so the leaf is the garage plus the recess in front of it; the
+  // recess costs depth in the G lane. generateAttempt splits the driveway strip off once the leaf is placed.
+  const recess = recessOf(brief);
+  const gd = gs.d + recess;
   const W = brief.envelope.w;
   const wr = W - gs.w - SPINE_W;
   const narrow = wr < SPECS.bed.s.min;
@@ -298,7 +303,7 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
       ? [filling(room('WC', SPECS.wc)), filling(room('Bath', SPECS.bath))]
       : [filling(room('Bath + WC', SPECS.wet))];
   const lnd = (): Node => filling(room('Laundry', SPECS.laundry));
-  const garage = fixed('garage', 'Garage', gs.w, gs.d);
+  const garage = fixed('garage', 'Garage', gs.w, gd);
   const flexwallStrip = (): StripLeaf => ({
     t: 'strip',
     kind: 'flexwall',
@@ -406,7 +411,9 @@ export function buildTree(brief: Brief, o: Options, masterBuffer = true): Node {
 
   // Round 10a: a stack lane hands its rooms the whole lane width; a room takes what its zone allowance permits and
   // the rest of that row stays Flex (the fill happens in allocate, and a clip never leaves a strip under 1000 mm).
-  const spineFixed: StripLeaf = { t: 'strip', kind: 'spine', name: 'Spine', wMin: SPINE_W, wMax: SPINE_W, dMin: gs.d, d: gs.d };
+  // the spine sits in the front band beside the garage and must reach the house front edge, so it spans the garage
+  // plus the garage's recess (`gd`); only the front band rows below consume it as a fixed depth
+  const spineFixed: StripLeaf = { t: 'strip', kind: 'spine', name: 'Spine', wMin: SPINE_W, wMax: SPINE_W, dMin: gd, d: gd };
 
   let body: Node;
   if (o.corePos === 'rear' && o.variant >= 2) {
@@ -457,6 +464,26 @@ const fail = (options: Options, reason: string): GenResult => ({ ok: false, opti
 
 const mirrorRect = (r: Rect, W: number): Rect => ({ x: W - r.x - r.w, y: r.y, w: r.w, h: r.h });
 
+/** the actual-frame mirror of a rect list, for the callers that work in the canonical frame */
+const mirrorAll = (rs: Rect[], W: number, side: Options['garageSide']): Rect[] =>
+  side === 'R' ? rs.map((r) => mirrorRect(r, W)) : rs;
+
+/**
+ * Setbacks: the garage leaf was sized garage + recess, so the placed Garage is cut back to its catalogue depth here,
+ * in the canonical frame, and the strip in front of it becomes the `Empty (driveway)`. The strip touches the house
+ * front edge because `place` snaps a front-band piece to it. Empty when the brief has no recess or no garage.
+ */
+function splitDriveway(brief: Brief, placed: Placed[]): Rect[] {
+  const recess = recessOf(brief);
+  if (recess <= 0) return [];
+  const g = placed.find((p) => p.kind === 'garage');
+  if (!g) return [];
+  const keep = Math.min(garageSize(brief.garage).d, g.rect.h);
+  const strip: Rect = { x: g.rect.x, y: g.rect.y + keep, w: g.rect.w, h: g.rect.h - keep };
+  g.rect = { ...g.rect, h: keep };
+  return strip.h > 0 ? [strip] : [];
+}
+
 function generateAttempt(brief: Brief, options: Options, flexCeiling: number | undefined, masterBuffer: boolean): GenResult {
   const W = brief.envelope.w;
   const D = brief.envelope.d;
@@ -470,14 +497,16 @@ function generateAttempt(brief: Brief, options: Options, flexCeiling: number | u
     throw e;
   }
 
+  const outside0 = splitDriveway(brief, ctx.placed);
   const placed: Placed[] = ctx.placed.map((p) => ({
     ...p,
     rect: options.garageSide === 'R' ? mirrorRect(p.rect, W) : p.rect,
   }));
   const flexCells = ctx.flexCells.map((r) => (options.garageSide === 'R' ? mirrorRect(r, W) : r));
+  const outside = mirrorAll(outside0, W, options.garageSide);
   // grow first, then fill (round 7): the grown candidate fixes the plan, R14 absorption runs on what is left of the
   // Flex afterwards. The grow pass therefore measures candidate.flexShareBeforeFill, not the reported share.
-  const first = finish(brief, options, ctx.notes, placed, flexCells);
+  const first = finish(brief, options, ctx.notes, placed, flexCells, outside);
   if (!first.ok) return first;
   if (flexCeiling === undefined) return first;
   // the grow pass works in the canonical (garage-left) frame, so a plan and its mirror grow the same way
@@ -513,10 +542,15 @@ function growPass(
   cand0: Candidate,
   ceiling: number,
 ): GenResult {
-  const total = brief.envelope.w * brief.envelope.d;
+  const recess = recessOf(brief);
+  const outsideActual = cand0.outside ?? [];
+  // the house is the envelope less anything outside it (the driveway): the shares are taken of that
+  const total = houseArea(brief.envelope, outsideActual);
   const W = brief.envelope.w;
   const toActual = <T extends { rect: Rect }>(l: T[]): T[] => (options.garageSide === 'R' ? l.map((x) => ({ ...x, rect: mirrorRect(x.rect, W) })) : l);
   const cellsActual = flexCells.map((r) => (options.garageSide === 'R' ? mirrorRect(r, W) : r));
+  // the driveway is held out of the decomposition, so no Flex grows there (this pass works in the canonical frame)
+  const canonOutside = mirrorAll(outsideActual, W, options.garageSide);
   const envR = R(0, 0, W, brief.envelope.d);
   let placed = placed0;
   let cand = cand0;
@@ -530,7 +564,7 @@ function growPass(
         .filter(({ p }) => p.kind in growOrder && p.spec)
         .sort((a, b) => growOrder[a.p.kind] - growOrder[b.p.kind] || a.i - b.i);
       let done = false;
-      const canonFlex = computeFlex(envR, placed.map((x) => x.rect));
+      const canonFlex = computeFlex(envR, [...placed.map((x) => x.rect), ...canonOutside]);
       for (const { p, i } of order) {
         const r = p.rect;
         const spec = p.spec === 'garage' ? null : SPECS[p.spec!];
@@ -553,7 +587,8 @@ function growPass(
             dir === 'r' ? { ...r, w: r.w + g } : dir === 'l' ? { ...r, x: r.x - g, w: r.w + g } : dir === 'f' ? { ...r, h: r.h + g } : { ...r, y: r.y - g, h: r.h + g };
           const withinCap = (rect: Rect): boolean =>
             p.kind === 'garage'
-              ? (dir === 'f' || dir === 'b') && withinGarage(brief.garage, rect)
+              ? // a recessed garage may never grow toward the front into its driveway, only toward the rear
+                ((dir === 'f' && recess === 0) || dir === 'b') && withinGarage(brief.garage, rect)
               : p.kind === 'core'
                 ? withinSpec(spec!, rect)
                 : withinZoneAllowance(spec!, rect);
@@ -570,7 +605,7 @@ function growPass(
             if (g < 100) continue;
           }
           const trial = placed.map((x, k) => (k === i ? { ...x, rect: grown(g) } : x));
-          const res = finish(brief, options, baseNotes.slice(), toActual(trial), cellsActual);
+          const res = finish(brief, options, baseNotes.slice(), toActual(trial), cellsActual, outsideActual);
           if (!res.ok) continue;
           if (res.candidate.quality.slivers > cand.quality.slivers) continue;
           if (res.candidate.flexShareBeforeFill >= cand.flexShareBeforeFill) continue;
@@ -594,7 +629,7 @@ function growPass(
     const b = placed[i];
     notes.push(`${a.name} grew to ${b.rect.w} x ${b.rect.h} (lot surplus; was ${a.rect.w} x ${a.rect.h})`);
   }
-  const final = finish(brief, options, notes, toActual(placed), cellsActual);
+  const final = finish(brief, options, notes, toActual(placed), cellsActual, outsideActual);
   return final.ok ? final : fail(options, final.reason);
 }
 
@@ -650,7 +685,7 @@ export function spineStopsAtCore(spine: Rect, cores: Rect[]): boolean {
   return cores.every((c) => sharedEdge(spine, c) === 0 || spine.y >= c.y + c.h);
 }
 
-function finish(brief: Brief, options: Options, notes: string[], placed: Placed[], flexCells: Rect[]): GenResult {
+function finish(brief: Brief, options: Options, notes: string[], placed: Placed[], flexCells: Rect[], outside: Rect[] = []): GenResult {
   const env = R(0, 0, brief.envelope.w, brief.envelope.d);
   const spinePlaced = placed.find((p) => p.kind === 'spine');
   if (!spinePlaced) return fail(options, 'no spine');
@@ -674,6 +709,26 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   }
   for (const z of all) {
     if (!inEnvelope(z.rect, env)) return fail(options, `${z.name} falls outside the envelope`);
+  }
+  // Setbacks: with a recess the driveway strip must be exactly that deep, sit on the house front edge and lie
+  // directly in front of the garage; the garage then ends `recess` short of the front. A G lane too short to hold
+  // garage + driveway is a failed option, not a bent plan.
+  const recess = recessOf(brief);
+  if (recess > 0) {
+    const g = zones.find((z) => z.kind === 'garage');
+    const drive = outside.length === 1 ? outside[0] : null;
+    const ok =
+      !!g &&
+      !!drive &&
+      inEnvelope(drive, env) &&
+      drive.h === recess &&
+      drive.y === env.h - recess &&
+      drive.x === g.rect.x &&
+      drive.w === g.rect.w &&
+      g.rect.y + g.rect.h === env.h - recess;
+    if (!ok) return fail(options, 'the G lane is too short for the garage recess');
+  } else if (outside.length) {
+    return fail(options, 'a driveway strip was built without a garage recess');
   }
   // catalogue range
   for (const z of zones) {
@@ -717,7 +772,8 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   // piece: the decomposition would otherwise run a strip along the rear wall through it (to reach a Wet cell behind the
   // Core), cutting the band in two. The other lane's rear Flex cell (the wet lane's spare) is not a band.
   const bands = options.coreLower ? flexCells.filter((c) => c.y === 0 && cores.some((z) => sharedEdge(c, z.rect) >= LIVING_MIN_EDGE)) : [];
-  const flex: FlexPiece[] = [...bands.map((r) => ({ id: '', rect: r, cls: classifyPiece(r) })), ...computeFlex(env, [...all.map((z) => z.rect), ...bands])]
+  // the driveway is held out of the decomposition, so no Flex, sliver or extension can be made out of it
+  const flex: FlexPiece[] = [...bands.map((r) => ({ id: '', rect: r, cls: classifyPiece(r) })), ...computeFlex(env, [...all.map((z) => z.rect), ...bands, ...outside])]
     .sort((a, b) => a.rect.y - b.rect.y || a.rect.x - b.rect.x || a.rect.w - b.rect.w || a.rect.h - b.rect.h)
     .map((p, i) => ({ ...p, id: `flex-${i + 1}` }));
 
@@ -762,9 +818,10 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
   const flexKept = filled.rest;
   const flexArea = flexAreaOf(flexKept);
   const preFill = flexAreaOf(living);
+  // Setbacks: every share is taken of the house area, the envelope less the driveway strips outside the house
+  const total = houseArea(brief.envelope, outside);
   const flexShareBeforeFill =
-    (preFill['Flex · circulation'] + preFill['Flex · room'] + preFill['Flex · storage'] + preFill.sliver) /
-    (brief.envelope.w * brief.envelope.d);
+    (preFill['Flex · circulation'] + preFill['Flex · room'] + preFill['Flex · storage'] + preFill.sliver) / total;
   const circulationArea =
     spineRec.rect.w * spineRec.rect.h + walls.reduce((a, w) => a + w.rect.w * w.rect.h, 0) + flexArea['Flex · circulation'];
   const candidate: Candidate = {
@@ -787,9 +844,14 @@ function finish(brief: Brief, options: Options, notes: string[], placed: Placed[
     flexShareBeforeFill,
     slivers: flexKept.filter((f) => f.cls === 'sliver').length,
     signature: signatureOf(brief.envelope, zones, flexKept, extensions),
+    // Setbacks: carried for the renderer and the callers that only see a candidate (absent without a lot)
+    outside: outside.length ? outside : undefined,
+    recess: recess > 0 ? recess : undefined,
+    lot: brief.lot,
+    setbacks: brief.setbacks,
     quality: {
       ...metricsOf(
-        { env: brief.envelope, zones: [...zones, spineRec], flex: flexKept, extensions, total: brief.envelope.w * brief.envelope.d },
+        { env: brief.envelope, zones: [...zones, spineRec], flex: flexKept, extensions, total, houseArea: total },
         CANDIDATE_ADJ,
       ),
       score: 0, // set by the pipeline against the leave-one-out profile

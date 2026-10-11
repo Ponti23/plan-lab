@@ -186,13 +186,39 @@ function extensionSvg(c: Candidate, e: ExtensionRec, gaps: boolean): string {
   return `<g><rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="url(#hatch2)" stroke="#555" stroke-width="40"/>${label(cx, cy, lines)}<rect x="${u.x}" y="${u.y}" width="${u.w}" height="${u.h}" fill="none" stroke="#000" stroke-width="50" stroke-dasharray="350 200"/></g>`;
 }
 
+/** Setbacks: the light hatch of the setback ring, drawn only when the brief has a lot. Diagonal and faint, so it is
+ * told apart from the Flex hatch by spacing as well as by its `Setback` label (the user is colourblind). */
+const SETBACK_HATCH = `<pattern id="setback" width="1100" height="1100" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+  <rect width="1100" height="1100" fill="#ffffff"/>
+  <line x1="0" y1="0" x2="0" y2="1100" stroke="#d8d8d8" stroke-width="40"/>
+</pattern>`;
+
+/** a dimension or caption text, optionally rotated -90 to run up a side band */
+const dimText = (t: string, x: number, y: number, rot = false): string =>
+  rot
+    ? `<text transform="translate(${x} ${y}) rotate(-90)" font-size="${FONT_SMALL}" text-anchor="middle" dominant-baseline="middle">${esc(t)}</text>`
+    : `<text x="${x}" y="${y}" font-size="${FONT_SMALL}" text-anchor="middle" dominant-baseline="middle">${esc(t)}</text>`;
+
 export function renderSVG(c: Candidate, opts: RenderOptions = {}): string {
   const gaps = opts.gaps !== false;
   const { w, d } = c.envelope;
+  // Setbacks: with a lot the drawing is in lot coordinates - the house is offset by (left, rear) and the lot, the
+  // setback ring, the dimension texts and the driveway are drawn around it. Without a lot every number below keeps
+  // the value it had, so the SVG is the one of before.
+  const lot = c.lot && c.setbacks ? c.lot : null;
+  const sb = c.setbacks;
+  const left = sb?.left ?? 0;
+  const right = sb?.right ?? 0;
+  const rear = sb?.rear ?? 0;
+  const front = sb?.front ?? 0;
+  const lotW = lot ? lot.w : w;
+  const lotD = lot ? lot.d : d;
   const vbW = w + 2 * MARGIN;
-  const vbH = d + 3 * MARGIN; // extra room at the bottom for the FRONT caption
+  const vbH = lotD + 3 * MARGIN; // extra room at the bottom for the FRONT caption, under the lot
   const pxW = Math.round(vbW * PX_PER_MM);
   const pxH = Math.round(vbH * PX_PER_MM);
+  const vbX = -left - MARGIN;
+  const vbY = -MARGIN - 700;
 
   const defs = `<defs>
 <pattern id="hatch" width="600" height="600" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -221,16 +247,58 @@ export function renderSVG(c: Candidate, opts: RenderOptions = {}): string {
     zoneSvg(c, c.spine, gaps),
   ].join('\n');
 
-  const caption = `<text x="${w / 2}" y="${d + 2 * MARGIN}" font-size="700" text-anchor="middle" font-weight="bold">FRONT (street)</text>`;
+  // Setbacks: the driveway strips, dashed and unfilled, in front of the garage (envelope coordinates, so they go
+  // inside the house group below). No room or Flex piece can be there, so the label touches no room label.
+  const drives = (c.outside ?? []).map(
+    (r) =>
+      `<g><rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="none" stroke="#000" stroke-width="60" stroke-dasharray="300 200"/>` +
+      `${dimText('Empty (driveway)', r.x + r.w / 2, r.y + r.h / 2)}</g>`,
+  );
+  const house = `${body}\n<rect x="0" y="0" width="${w}" height="${d}" fill="none" stroke="#000" stroke-width="120"/>${drives.length ? `\n${drives.join('\n')}` : ''}`;
+
+  // the setback ring: lot minus envelope, four bands, and the dimension text of each setback. Rear is the back of the
+  // house (small y), so the front band is drawn at the bottom, under the house and above the FRONT caption.
+  const bands: Rect[] = [];
+  if (rear > 0) bands.push({ x: 0, y: 0, w: lotW, h: rear });
+  if (front > 0) bands.push({ x: 0, y: lotD - front, w: lotW, h: front });
+  if (left > 0) bands.push({ x: 0, y: rear, w: left, h: d });
+  if (right > 0) bands.push({ x: lotW - right, y: rear, w: right, h: d });
+  const garage = c.zones.find((z) => z.kind === 'garage');
+  const lotSvg = lot
+    ? [
+        ...bands.map((r) => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="url(#setback)" stroke="none"/>`),
+        // the `Setback` label goes in the rear band, clear of the centred dimension texts (and of the garage's)
+        rear >= 700
+          ? dimText('Setback', Math.round(lotW * 0.15), rear / 2)
+          : front >= 700
+            ? dimText('Setback', Math.round(lotW * 0.15), lotD - front / 2)
+            : left >= 700
+              ? dimText('Setback', left / 2, rear + d / 2, true)
+              : '',
+        front > 0 ? dimText(`Front ${ms(front)} m`, lotW / 2, lotD - front / 2) : '',
+        front > 0 && garage ? dimText(`Garage ${ms(sb!.garage)} m`, left + garage.rect.x + garage.rect.w / 2, lotD - front / 2) : '',
+        rear > 0 ? dimText(`Rear ${ms(rear)} m`, lotW / 2, rear / 2) : '',
+        left > 0 ? dimText(`Left ${ms(left)} m`, left / 2, rear + d / 2, true) : '',
+        right > 0 ? dimText(`Right ${ms(right)} m`, lotW - right / 2, rear + d / 2, true) : '',
+        // the lot outline: heavier than the envelope's 120, and labelled - by line weight and label, not by colour
+        `<rect x="0" y="0" width="${lotW}" height="${lotD}" fill="none" stroke="#000" stroke-width="240"/>`,
+        dimText('Lot boundary', -MARGIN / 2, lotD / 2, true),
+      ]
+        .filter(Boolean)
+        .join('\n')
+    : '';
+  // the house group is emitted only with a lot, so a brief without one renders exactly as it did before
+  const houseSvg = lot ? `<g transform="translate(${left} ${rear})">\n${house}\n</g>` : house;
+
+  const caption = `<text x="${lotW / 2}" y="${lotD + 2 * MARGIN}" font-size="700" text-anchor="middle" font-weight="bold">FRONT (street)</text>`;
   const head = `<text x="${MARGIN}" y="${-MARGIN * 0.4}" font-size="600" font-weight="bold">${esc(c.briefId)} - ${esc(c.optionId)}${c.target?.matches ? ' - matches the target' : ''}</text>`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="${pxW}" height="${pxH}" viewBox="${-MARGIN} ${-MARGIN - 700} ${vbW} ${vbH + 700}" font-family="Helvetica, Arial, sans-serif" fill="#000">
-${defs}
-<rect x="${-MARGIN}" y="${-MARGIN - 700}" width="${vbW}" height="${vbH + 700}" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="${pxW}" height="${pxH}" viewBox="${vbX} ${vbY} ${vbW} ${vbH + 700}" font-family="Helvetica, Arial, sans-serif" fill="#000">
+${lot ? defs.replace('\n</defs>', `\n${SETBACK_HATCH}\n</defs>`) : defs}
+<rect x="${vbX}" y="${vbY}" width="${vbW}" height="${vbH + 700}" fill="#ffffff"/>
 ${head}
-${body}
-<rect x="0" y="0" width="${w}" height="${d}" fill="none" stroke="#000" stroke-width="120"/>
+${lotSvg ? `${lotSvg}\n` : ''}${houseSvg}
 ${caption}
 </svg>
 `;
