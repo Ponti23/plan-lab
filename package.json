@@ -1,0 +1,13 @@
+{
+  "name": "plan-lab-web",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "build": "node web/build.mjs",
+    "dev": "node web/build.mjs && node web/serve.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

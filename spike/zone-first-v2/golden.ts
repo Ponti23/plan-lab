@@ -1,8 +1,6 @@
 // The user's own zonings (knowledge/specs/zone-first-golden.json) as v2 layouts. Read-only; they are the measuring
 // stick for "good" and are never used by the generator or its ranking, except through the leave-one-out profile.
 
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { classifyPiece } from '../zone-first/flex.ts';
 import { buildProfile, coreRectsOf, GOLDEN_ADJ, groupedRects, markLiving, metricsOf, type Layout, type Metrics, type Profile } from './quality.ts';
 import type { Candidate, FlexPiece, Rect, ZoneKind, ZoneRec } from './types.ts';
@@ -24,7 +22,7 @@ function absorbTracingNooks(flex: FlexPiece[]): void {
   }
 }
 
-const FILE = join(import.meta.dirname!, '..', '..', 'knowledge', 'specs', 'zone-first-golden.json');
+import raw from '../../knowledge/specs/zone-first-golden.json' with { type: 'json' };
 
 interface Raw {
   plans: Record<string, { drawing?: string; envelope: [number, number]; zones: [string, number, number, number, number][] }>;
@@ -57,8 +55,7 @@ export interface GoldenPlan {
 }
 
 export function loadGolden(): GoldenPlan[] {
-  const raw = JSON.parse(readFileSync(FILE, 'utf8')) as Raw;
-  return Object.entries(raw.plans).map(([id, p]) => {
+  return Object.entries((raw as unknown as Raw).plans).map(([id, p]) => {
     const zones: ZoneRec[] = [];
     const flex: FlexPiece[] = [];
     let total = 0;

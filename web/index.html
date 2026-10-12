@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlanLab: zone-first concepts</title>
+<link rel="preload" href="fonts/Inter-VF.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: "Inter"; src: url("fonts/Inter-VF.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+  :root {
+    --bg: #f5f7fa; --ink: #111827; --ink-2: #374151; --muted: #6b7280;
+    --line: #e5e7eb; --field: #d1d5db; --blue: #2563eb; --blue-h: #1d4ed8; --blue-bg: #eff6ff;
+    --font: "Inter", system-ui, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.45 var(--font); font-variant-numeric: tabular-nums; }
+  h1, h2, h3, p, ul, ol, li, dl, dt, dd, figure { margin: 0; padding: 0; }
+  button, input, select, summary { font: inherit; color: inherit; }
+  a { color: var(--blue); text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+  ::selection { background: #dbeafe; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  svg.ic { display: block; flex: none; }
+
+  /* ---------------------------------------------------------------- top bar */
+  .top { display: flex; align-items: center; gap: 16px; height: 64px; padding: 0 20px; background: #fff; border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 600; letter-spacing: -.015em; }
+  .brand svg { width: 26px; height: 26px; color: var(--blue); }
+  .vr { flex: none; width: 1px; height: 26px; background: var(--line); }
+  .summary { min-width: 0; font-size: 15px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .summary.none { font-weight: 400; color: var(--muted); }
+  .pill { flex: none; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 500; color: var(--muted); }
+
+  /* ---------------------------------------------------------------- shell */
+  .shell { display: flex; height: calc(100dvh - 64px); }
+  .sidebar { flex: none; width: 340px; padding: 24px 20px 40px; background: #fff; border-right: 1px solid var(--line); overflow-y: auto; }
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding: 20px; overflow: hidden; }
+
+  /* ---------------------------------------------------------------- brief form */
+  h2.h { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
+  .lede { margin-top: 6px; font-size: 14px; color: var(--muted); }
+  label.f { display: block; margin: 16px 0 6px; font-size: 14px; font-weight: 600; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  input[type=number], select { width: 100%; height: 40px; padding: 0 12px; font-size: 14px; background: #fff; border: 1px solid var(--field); border-radius: 6px; }
+  select { appearance: none; padding-right: 38px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; }
+  label.chk { display: flex; align-items: center; gap: 10px; min-height: 32px; margin-top: 10px; font-size: 14px; }
+  input[type=checkbox] { flex: none; width: 20px; height: 20px; accent-color: var(--blue); }
+  #go { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 44px; margin-top: 20px; background: var(--blue); color: #fff; border: 0; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  #go:hover:not(:disabled) { background: var(--blue-h); }
+  #go:disabled { background: #93b4f4; cursor: wait; }
+  #go svg { width: 18px; height: 18px; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0 20px; }
+  h2.h2 { font-size: 18px; font-weight: 600; }
+  h2.h2.sub { margin-top: 26px; }
+  details.grp { margin-top: 10px; }
+  details.grp summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 34px; padding: 0 2px; font-size: 15px; font-weight: 600; list-style: none; cursor: pointer; }
+  details.grp summary::-webkit-details-marker { display: none; }
+  details.grp summary svg { width: 18px; height: 18px; color: var(--muted); transition: transform .15s ease; }
+  details.grp[open] summary svg { transform: rotate(180deg); }
+  .pre { display: grid; gap: 6px; padding: 4px 0 8px; }
+  .pre button { display: grid; grid-template-columns: 14px 52px minmax(0, 1fr); align-items: center; gap: 8px; height: 32px; padding: 0 8px; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; cursor: pointer; }
+  .pre button:hover { border-color: #cbd5e1; }
+  .pre button svg { width: 14px; height: 14px; color: var(--blue); visibility: hidden; }
+  .pre button .code { font-weight: 500; }
+  .pre button .desc { border-left: 1px solid var(--line); padding-left: 10px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pre button[aria-pressed=true] { border: 2px solid var(--blue); padding: 0 7px; background: var(--blue-bg); }
+  .pre button[aria-pressed=true] svg { visibility: visible; }
+  .pre button[aria-pressed=true] .desc { border-left-color: #bfdbfe; }
+
+  /* ---------------------------------------------------------------- big card */
+  .card { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .viewer { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: 16px 16px 10px; }
+  .readout { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; min-height: 20px; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
+  #counts:not(:empty)::before { content: "·"; margin-right: 6px; }
+  #status.err { color: #b91c1c; font-weight: 500; }
+  .stage { position: relative; flex: 1; min-width: 0; min-height: 0; }
+  /* the viewer never scrolls on desktop/tablet: the plan is fitted inside it (see .layers > svg) */
+  .canvas { position: absolute; inset: 0; overflow: hidden; }
+  .layers { position: relative; }
+  /* an <svg> is replaced: inset:0 alone leaves it at its intrinsic ratio. Definite width/height make the
+     element box exactly the viewer, and preserveAspectRatio="xMidYMid meet" then contains the drawing */
+  .layers > svg, .empty svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .scroll-hint { display: none; margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .empty { position: absolute; inset: 0; }
+  .empty[hidden] { display: none; }
+  .stage svg { font-family: var(--font); }
+  .nav { position: absolute; top: 50%; translate: 0 -50%; z-index: 3; width: 48px; height: 48px; display: grid; place-items: center; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 50%; box-shadow: 0 2px 8px rgba(0, 0, 0, .12); cursor: pointer; }
+  .nav:hover:not(:disabled) { color: var(--blue); background: var(--blue-bg); }
+  .nav:disabled { opacity: .4; cursor: default; }
+  .nav svg { width: 24px; height: 24px; }
+  #prev { left: 8px; }
+  #next { right: 8px; }
+
+  /* ---------------------------------------------------------------- details */
+  .details { min-width: 0; padding: 32px; border-left: 1px solid var(--line); overflow-y: auto; }
+  .details h2 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; }
+  /* Stats sit in a two-column grid. The divider is a ::before on the column-2 items only, so it can
+     neither dangle at the end of a wrapped line nor sit at the start of one. A long Carved: value
+     takes a row of its own. */
+  .scoreline { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: 32px; row-gap: 4px; margin-top: 10px; font-size: 15px; color: var(--ink-2); }
+  .scoreline > .wide { grid-column: 1 / -1; }
+  .scoreline > .div::before { content: ""; display: inline-block; width: 1px; height: 14px; margin-right: 16px; background: var(--field); vertical-align: -2px; }
+  .details hr { margin: 24px 0; }
+  .notes { list-style: none; display: grid; gap: 10px; font-size: 15px; line-height: 1.6; }
+  .notes li { position: relative; padding-left: 20px; }
+  .notes li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+  .dl { display: flex; flex-wrap: wrap; gap: 32px; }
+  .dl a { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 500; }
+  .dl a svg { width: 18px; height: 18px; }
+  .hint { color: var(--muted); font-size: 15px; }
+
+  /* ---------------------------------------------------------------- thumbnails */
+  .strip { flex: none; height: 150px; min-width: 0; }
+  /* grid-auto-rows:100% pins the single row to the 150 px strip, so the cards can never grow past it */
+  .strip ol { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 100%; gap: 16px; height: 100%; list-style: none; }
+  .strip li { min-width: 0; min-height: 0; }
+  .thumb { position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; padding: 10px 12px 8px; overflow: hidden; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+  .thumb:hover:not(:disabled) { border-color: #cbd5e1; }
+  /* explicit height on the image box: the thumbnail is contained in it, never sized by its own ratio */
+  .thumb .th { flex: none; height: 92px; min-height: 0; overflow: hidden; display: grid; place-items: center; }
+  .thumb .th svg { width: 100%; height: 100%; display: block; }
+  /* caption is pinned to the bottom of the card, so Concept 0N / Selected stay visible */
+  .thumb .cap { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-top: auto; padding-top: 6px; font-size: 14px; font-weight: 500; }
+  /* the word "Selected" needs room next to "Concept 0N"; on narrow cards the tick carries it instead */
+  .thumb .sel { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: var(--blue); }
+  .thumb .sel svg { display: none; }
+  .thumb[aria-current=true] { padding: 9px 11px 7px; border: 2px solid var(--blue); background: var(--blue-bg); }
+  .thumb:disabled { color: var(--muted); background: #f9fafb; border-style: solid; cursor: default; }
+  .thumb:disabled .th { color: var(--muted); }
+
+  /* ---------------------------------------------------------------- responsive */
+  @media (max-width: 1199px) {
+    .sidebar { width: 300px; }
+    .card { display: flex; flex-direction: column; }
+    .viewer { flex: 1; min-height: 0; }
+    .details { border-left: 0; border-top: 1px solid var(--line); padding: 24px; max-height: 46%; flex: none; }
+    .strip ol { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 767px) {
+    .shell { display: block; height: auto; }
+    .sidebar { width: auto; border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; }
+    .main { display: block; padding: 12px; overflow: visible; }
+    .card { display: block; }
+    .viewer { padding: 12px 12px 0; }
+    .readout { display: block; margin-bottom: 8px; }
+    #counts:not(:empty) { display: block; margin-top: 3px; }
+    #counts:not(:empty)::before { content: none; }
+    /* phones: the status sits on its own lines, then the plan, then prev/next in a row under it.
+       The stage takes its height from the drawing (set in layout()); no flex:1, which would collapse
+       it to nothing in this auto-height column. */
+    .stage { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; height: auto; flex: none; }
+    /* phones keep the horizontal scroller (min width 640 px inside), so the labels stay readable.
+       The scrollbar is hidden (real phones overlay it) so it cannot eat into the drawing's height. */
+    .canvas { position: static; order: 0; flex: 0 0 100%; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+    .canvas::-webkit-scrollbar { display: none; }
+    #prev, #next { position: static; order: 1; translate: none; box-shadow: none; }
+    .thumb .sel svg { display: block; width: 14px; height: 14px; }
+    .thumb .sel-txt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .scroll-hint { display: block; }
+    .details { border-top: 1px solid var(--line); max-height: none; padding: 20px 16px; }
+    .strip { height: auto; margin-top: 12px; }
+    .strip ol { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: auto; gap: 12px; }
+    .thumb { height: 132px; }
+    .top { height: auto; min-height: 64px; flex-wrap: wrap; gap: 8px 12px; padding: 12px 16px; }
+    .summary { flex: 1 1 100%; order: 4; white-space: normal; overflow: visible; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    details.grp summary svg { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <span class="brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 10.5 12 3l9.5 7.5"/><path d="M5.5 9.5V21h13V9.5"/><path d="M9.75 21v-5.5h4.5V21"/></svg>
+    PlanLab
+  </span>
+  <span class="vr" aria-hidden="true"></span>
+  <p class="summary none" id="summary">No plan generated yet</p>
+  <span class="pill">Early prototype</span>
+</header>
+
+<div class="shell">
+  <aside class="sidebar">
+    <form id="form" autocomplete="off">
+      <h2 class="h">Brief</h2>
+      <p class="lede">Enter a lot and a brief to get zoning concepts: rooms as rectangles, with no walls or doors yet.</p>
+      <h2 class="h2 sub">Lot and setbacks</h2>
+      <div class="pair">
+        <div><label class="f" for="w">Lot width (m)</label><input id="w" type="number" step="0.1" min="5" max="40" value="12.5" required></div>
+        <div><label class="f" for="d">Lot depth (m)</label><input id="d" type="number" step="0.1" min="8" max="60" value="22" required></div>
+      </div>
+      <div class="pair">
+        <div><label class="f" for="sb-front">House setback (m)</label><input id="sb-front" type="number" step="0.1" min="0" value="0"></div>
+        <div><label class="f" for="sb-garage">Garage setback (m)</label><input id="sb-garage" type="number" step="0.1" min="0" value="0"></div>
+      </div>
+      <div class="pair">
+        <div><label class="f" for="sb-left">Left side setback (m)</label><input id="sb-left" type="number" step="0.1" min="0" value="0"></div>
+        <div><label class="f" for="sb-right">Right side setback (m)</label><input id="sb-right" type="number" step="0.1" min="0" value="0"></div>
+      </div>
+      <label class="f" for="sb-rear">Rear setback (m)</label>
+      <input id="sb-rear" type="number" step="0.1" min="0" value="0">
+      <label class="f" for="beds">Bedrooms (including Master, 2 to 5)</label>
+      <input id="beds" type="number" step="1" min="2" max="5" value="4" required aria-describedby="beds-help">
+      <p class="lede" id="beds-help" style="margin-top:4px">Includes the Master.</p>
+      <label class="f" for="garage">Garage</label>
+      <select id="garage"><option value="single">Single</option><option value="double" selected>Double</option></select>
+      <label class="chk"><input id="wc" type="checkbox" checked> Separate WC</label>
+      <label class="chk"><input id="laundry" type="checkbox" checked> Laundry</label>
+      <button id="go" type="submit">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.5 2.5 13.4 8l5.5 1.9-5.5 1.9-1.9 5.5-1.9-5.5L4.1 9.9 9.6 8z"/><path d="M18.5 14.4l.9 2.5 2.5.9-2.5.9-.9 2.5-.9-2.5-2.5-.9 2.5-.9z"/></svg>
+        <span id="go-label">Generate</span>
+      </button>
+
+      <hr>
+      <h2 class="h2">Quick fill</h2>
+      <p class="lede">Fills the form only. Press Generate to run.</p>
+      <div id="quick"></div>
+    </form>
+  </aside>
+
+  <main class="main">
+    <section class="card">
+      <div class="viewer">
+        <div class="readout" aria-live="polite">
+          <p id="status">Fill the brief and press Generate.</p>
+          <p id="counts"></p>
+        </div>
+        <div class="stage">
+          <button type="button" class="nav" id="prev" aria-label="Previous option"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <div class="canvas" id="canvas">
+            <div class="layers" id="layers">
+              <div class="empty" id="empty"></div>
+            </div>
+          </div>
+          <button type="button" class="nav" id="next" aria-label="Next option"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <p class="scroll-hint">Scroll sideways to see the whole plan</p>
+      </div>
+      <section class="details" id="detail" aria-label="Option details"></section>
+    </section>
+    <nav class="strip" aria-label="Options"><ol id="cards"></ol></nav>
+  </main>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
