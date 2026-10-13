@@ -157,12 +157,14 @@ function tone(it) {
 }
 const FILL = { spine: 'dots', flex: 'hatch', flexwall: 'hatch', ext: 'hatch2' };
 
+/** the fills of one space: flat, because the walls drawn over them are what separates two spaces now */
 function shape(it, u, K, live) {
-  const r = it.rect;
   const t = tone(it);
   const fill = SOLID[t] ?? `url(#${FILL[t]}-${u})`;
-  const dash = it.kind === 'flexwall' ? ` ${dashes(5, 4, K, live)}` : '';
-  let s = `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${fill}" stroke="#374151" ${paint(1.5, K, live)}${dash}/>`;
+  // a Flex-wall is the one that keeps an outline of its own: the dash says "a wall, and you may move it", which the
+  // walls themselves cannot say (the user is colourblind: shape, not hue)
+  const own = it.kind === 'flexwall' ? ` stroke="#374151" ${paint(1.5, K, live)} ${dashes(5, 4, K, live)}` : '';
+  let s = it.rects.map((r) => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${fill}"${own}/>`).join('');
   if (it.union) {
     const un = it.union;
     s += `<rect x="${un.x}" y="${un.y}" width="${un.w}" height="${un.h}" fill="none" stroke="#374151" ${paint(1, K, live)} ${dashes(6, 4, K, live)}/>`;
@@ -170,9 +172,16 @@ function shape(it, u, K, live) {
   return s;
 }
 
+/** the walls of the engine's own solver: 230 mm exterior, 90 mm interior, filled dark over the room fills */
+function wallsSVG(v, K, live) {
+  // on a thumbnail a 90 mm interior wall is well under a screen px: those are stroked to stay visible
+  const hair = live ? '' : ` stroke="#111827" stroke-width="${K}"`;
+  return v.walls.map((r) => `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="#111827"${hair}/>`).join('');
+}
+
 /** one <g> per label line, tagged with the item it belongs to (data-item) and its role (data-line) */
 function labelOf(it, item) {
-  const r = it.rect;
+  const r = it.clear;
   const rot = it.texts.some((t) => t.rot);
   const aw = rot ? r.h : r.w;
   const ah = rot ? r.w : r.h;
@@ -209,6 +218,7 @@ function planSVG(v) {
   if (!sb) s += dimLines(v.w, v.d); // without a lot the house is dimensioned as before
   s += `<g${sb ? ` transform="translate(${sb.left} ${sb.rear})"` : ''}>`;
   for (const it of v.items) s += shape(it, u, 1, live);
+  s += wallsSVG(v, 1, live);
   for (const r of v.outside ?? []) s += outsideShape(r);
   v.items.forEach((it, i) => { s += labelOf(it, i); });
   s += `<rect x="0" y="0" width="${v.w}" height="${v.d}" fill="none" stroke="#1f2937" data-house ${paint(4, 1, live)}/>`;
@@ -216,7 +226,7 @@ function planSVG(v) {
   if (sb) {
     const garage = v.items.find((it) => it.kind === 'garage');
     s += `<rect x="0" y="0" width="${lotW}" height="${lotD}" fill="none" stroke="#9ca3af" data-lot ${paint(1.5, 1, live)} ${dashes(7, 5, 1, live)}/>`;
-    s += setbackLabels(lotW, lotD, v, sb, garage);
+    s += setbackLabels(lotW, lotD, v, sb, garage && { rect: garage.rects[0] });
     // the caption's y is re-set by retune() at the current scale, so it clears the lot line and the front rows
     s += `<text x="${lotW / 2}" y="${lotD + LOT + 900}" data-front="${lotD}" data-foot="${LOT_FOOT}" data-rows="${frontRows(sb, garage)}"` +
       ` data-fpx="16" font-size="16" font-weight="600" text-anchor="middle" fill="#111827">FRONT (street)</text>`;
@@ -274,6 +284,7 @@ function thumbSVG(v) {
   const m = 400;
   let s = `<svg viewBox="${-m} ${-m} ${v.w + 2 * m} ${v.d + 2 * m}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${defs(u)}`;
   for (const it of v.items) s += shape(it, u, K, false);
+  s += wallsSVG(v, K, false);
   s += `<rect x="0" y="0" width="${v.w}" height="${v.d}" fill="none" stroke="#1f2937" stroke-width="${4 * K}"/></svg>`;
   return s;
 }
