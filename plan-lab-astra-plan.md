@@ -634,6 +634,36 @@ Stages 4-5 use the band templates (T2, T4; T1 only as a last resort when neither
 
 **Accepted.**
 
+## Accepted decisions - round 14 (zone-first walls and doors, 2026-10-13)
+
+Recorded from the user's answers on the zone-first v2 walls and doors spike. Door sizes stay provisional until G-CALIBRATION.
+
+**Status 2026-10-13 (later): parked.** The user saw the drawings with doors and said they looked bad, and asked to go back to walls only. The doors work is kept in `plan-lab-zf` `git stash` "ZF-DOOR-1 ... parked". D65, D66 and D68 are on hold until doors are reopened; D67 still stands. **User, same day: doors are left to the architect** (not generated in v1; the stash is kept only for reference).
+
+### D65 - Doors (zone-first v2)
+
+Door leaves are 820 mm for rooms, 720 mm for the WC and Ensuite, and 920 mm for the front door. WC and Ensuite doors swing outward; every other door swings into its room. There is no house-to-garage door. The garage car door is 2400 mm single or 4800 mm double, centred on the driveway wall. Doors do not pass through bedrooms, bathrooms, the laundry or the garage; the Ensuite opens to the Master. Windows are not drawn yet.
+
+**Accepted.**
+
+### D66 - Flex is undecided space: dashed walls, no door
+
+Flex pieces get no door. Walls between Flex and the open area, or between two Flex pieces, are drawn dashed: the space may become a pass-through or a room. A wall between Flex and a real room stays solid. A room may open into a Flex piece that connects to the open area.
+
+**Accepted.**
+
+### D67 - Alfresco as Flex; robes dropped
+
+D63 stands: no Alfresco is generated. The user treats any Alfresco as Flex. Built-in robes stay out of v1 (D58); the WIR stays a Master option.
+
+**Accepted.**
+
+### D68 - Rank by access, not a hallway rewrite
+
+The generator is not changed to force a real hallway. Instead, plans with rooms that cannot get a door rank below plans where every room has one, ahead of the D64 order. Reaching a room through Flex does not lower a plan (D66: Flex may be a walkway); it is reported only. (The user chose this over also ranking down via-Flex access, which pulled picks from ranks ~140-1,800 and cost much layout quality.)
+
+**Accepted.**
+
 ## Verified repository context — 2026-10-03
 
 A read-only fact-finding subagent inspected the workspace under the grilling skill's fact-finding rule. There is no application implementation, package manifest, source tree, or solver in this checkout. `ARCHITECTURE.md`, `AGENTS.md`, `DELEGATION-PLAN.md`, `HANDOFF.md`, `knowledge/PROGRESS.md`, and `knowledge/BOARD.md` contain scaffold/placeholders rather than concrete product stack commitments. This living plan is the substantive design record; no existing solver/framework must be preserved based on current files. The AGENTS-mentioned `impeccable` skill was not found in the searched project/user skill and plugin locations; no installation attempted. No application files were changed and no tests/builds run.

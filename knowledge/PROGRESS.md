@@ -7,6 +7,13 @@ tags: [progress, resume]
 
 ## Resume here
 
+- **Checkpoint 2026-10-13 (latest): DOORS PARKED.** The user saw the door drawings ("looks trash") and asked to go back to walls only. `plan-lab-zf` has been reset to `5545b23` (walls only, committed and pushed). All the doors work (doors.ts, access-rank.ts, tests, briefs fix1–3, render/run changes) is in `git stash` `stash@{0}` "ZF-DOOR-1 ... parked"; do not drop it. The untracked `review/` was restored. The web demo was never changed. Likely causes of the bad look: doors routed through Flex · storage (Bath and Laundry through cupboards), arcs crowded in corners, dashed walls plus hatching. **User: leave doors to the architect** (not in v1). Walls checked: all 63 plans have 230 mm exterior and 90 mm interior walls, as decided.
+
+- **Checkpoint 2026-10-13 (late): user answered, recorded as D65–D68 in `plan-lab-astra-plan.md`.**
+  - Flex pieces get **no doors** and **dashed walls** (pass-through or room, undecided). Alfresco = treat as Flex (no generation); robes dropped. Hallway: the cheap fix, rank plans by access (doorless rooms, then rooms via Flex), not a generator rewrite.
+  - **Done, uncommitted:** fix 2 (Sol, then Codex hit its usage limit, reset 23:18; Opus finished verifying) and fix 3, the doorless-only ranking (user's choice, D68), by DeepSeek, with a duplicate Sonnet run by mistake (see memory). 127/121/0 fail/6 todo; older suites 83/83. 63 plans, 0 rooms without a door, 52 via Flex; picks come from original ranks ≤95 (Botanica: 1 and 5). Stray `before-fix2-*.txt` in the zf root, untracked: delete before committing.
+  - **Then:** show the user. On OK: commit `plan-lab-zf`, port to web, and propose new lede copy ("rooms, walls and doors — no windows yet", plus the dashed-wall meaning). Deploy only on request.
+
 - **Checkpoint 2026-10-13 (evening): doors built (user said "go"), user asleep.**
   - **ZF-DOOR-1** in `plan-lab-zf` (`spike/zone-first-v2/doors.ts`, `doors.test.ts`, `render-walls.ts`, `run-walls.ts`, `out-walls/` regenerated). **Uncommitted, not ported to web, not deployed.** Briefs: `knowledge/briefs/zf-doors-brief.md`, `zf-doors-fix1-brief.md`.
   - Author: Codex Sol (2 rounds). Opus review round 1 FAIL: "Master + WIR" read as a robe (the Master opened into its Ensuite), "Bath + WC" read as a WC (720, swinging out), and the fallback chained rooms through bedrooms and bathrooms (`Bed 3 -> Bed 2`, `Laundry -> Bath`). Fix 1 then passed Opus's checks: an independent rescan finds no door into a wet room, WC, laundry, garage, bedroom or Master, except Ensuite → Master and Flex cupboards off a bedroom.
