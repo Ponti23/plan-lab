@@ -50,7 +50,9 @@
   #go:disabled { background: #93b4f4; cursor: wait; }
   #go svg { width: 18px; height: 18px; }
   hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0 20px; }
-  hr.sep { margin: 20px 0 4px; }
+  .box { margin-top: 16px; padding: 14px 14px 16px; background: var(--bg); border: 1px solid var(--field); border-radius: 10px; }
+  .box h3.bh { font-size: 16px; font-weight: 600; }
+  .box .hint { margin-top: 2px; font-size: 13px; color: var(--muted); }
   h2.h2 { font-size: 18px; font-weight: 600; }
   h2.h2.sub { margin-top: 26px; }
   details.grp { margin-top: 10px; }
@@ -187,30 +189,37 @@
     <form id="form" autocomplete="off">
       <h2 class="h">Brief</h2>
       <p class="lede">Enter a lot and a brief to get zoning concepts: rooms and walls, with no doors or windows yet.</p>
-      <h2 class="h2 sub">Lot and setbacks</h2>
-      <div class="pair">
-        <div><label class="f" for="w">Lot width (m)</label><input id="w" type="number" step="0.1" min="5" max="40" value="12.5" required></div>
-        <div><label class="f" for="d">Lot depth (m)</label><input id="d" type="number" step="0.1" min="8" max="60" value="22" required></div>
-      </div>
-      <hr class="sep">
-      <div class="pair">
-        <div><label class="f" for="sb-front">House setback (m)</label><input id="sb-front" type="number" step="0.1" min="0" value="0"></div>
-        <div><label class="f" for="sb-garage">Garage setback (m)</label><input id="sb-garage" type="number" step="0.1" min="0" value="0"></div>
-      </div>
-      <div class="pair">
-        <div><label class="f" for="sb-left">Left side setback (m)</label><input id="sb-left" type="number" step="0.1" min="0" value="0"></div>
-        <div><label class="f" for="sb-right">Right side setback (m)</label><input id="sb-right" type="number" step="0.1" min="0" value="0"></div>
-      </div>
-      <label class="f" for="sb-rear">Rear setback (m)</label>
-      <input id="sb-rear" type="number" step="0.1" min="0" value="0">
-      <hr class="sep">
-      <label class="f" for="beds">Bedrooms (including Master, 2 to 5)</label>
-      <input id="beds" type="number" step="1" min="2" max="5" value="4" required aria-describedby="beds-help">
-      <p class="lede" id="beds-help" style="margin-top:4px">Includes the Master.</p>
-      <label class="f" for="garage">Garage</label>
-      <select id="garage"><option value="single">Single</option><option value="double" selected>Double</option></select>
-      <label class="chk"><input id="wc" type="checkbox" checked> Separate WC</label>
-      <label class="chk"><input id="laundry" type="checkbox" checked> Laundry</label>
+      <section class="box" aria-labelledby="h-lot">
+        <h3 class="bh" id="h-lot">Lot</h3>
+        <div class="pair">
+          <div><label class="f" for="w">Lot width (m)</label><input id="w" type="number" step="0.1" min="5" max="40" value="12.5" required></div>
+          <div><label class="f" for="d">Lot depth (m)</label><input id="d" type="number" step="0.1" min="8" max="60" value="22" required></div>
+        </div>
+      </section>
+      <section class="box" aria-labelledby="h-sb">
+        <h3 class="bh" id="h-sb">Setbacks</h3>
+        <p class="hint">Metres from each boundary</p>
+        <div class="pair">
+          <div><label class="f" for="sb-front">House</label><input id="sb-front" type="number" step="0.1" min="0" value="0"></div>
+          <div><label class="f" for="sb-garage">Garage</label><input id="sb-garage" type="number" step="0.1" min="0" value="0"></div>
+        </div>
+        <div class="pair">
+          <div><label class="f" for="sb-left">Left side</label><input id="sb-left" type="number" step="0.1" min="0" value="0"></div>
+          <div><label class="f" for="sb-right">Right side</label><input id="sb-right" type="number" step="0.1" min="0" value="0"></div>
+        </div>
+        <label class="f" for="sb-rear">Rear</label>
+        <input id="sb-rear" type="number" step="0.1" min="0" value="0">
+      </section>
+      <section class="box" aria-labelledby="h-house">
+        <h3 class="bh" id="h-house">House</h3>
+        <label class="f" for="beds">Bedrooms (including Master, 2 to 5)</label>
+        <input id="beds" type="number" step="1" min="2" max="5" value="4" required aria-describedby="beds-help">
+        <p class="lede" id="beds-help" style="margin-top:4px">Includes the Master.</p>
+        <label class="f" for="garage">Garage</label>
+        <select id="garage"><option value="single">Single</option><option value="double" selected>Double</option></select>
+        <label class="chk"><input id="wc" type="checkbox" checked> Separate WC</label>
+        <label class="chk"><input id="laundry" type="checkbox" checked> Laundry</label>
+      </section>
       <button id="go" type="submit">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.5 2.5 13.4 8l5.5 1.9-5.5 1.9-1.9 5.5-1.9-5.5L4.1 9.9 9.6 8z"/><path d="M18.5 14.4l.9 2.5 2.5.9-2.5.9-.9 2.5-.9-2.5-2.5-.9 2.5-.9z"/></svg>
         <span id="go-label">Generate</span>
