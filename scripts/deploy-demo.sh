@@ -34,6 +34,12 @@ echo "== deploy"
 npx --yes vercel deploy --prod --yes --scope "$SCOPE" 2>&1 | grep -E "https://|Error|error" || true
 
 echo "== verify"
+# the alias can serve the previous version for a few seconds: wait until the live page matches the build
+for i in $(seq 1 12); do
+  curl -s "$URL/?v=$RANDOM" | cmp -s - index.html && break
+  [[ $i == 12 ]] && { echo "VERIFY FAILED: live index.html never matched the build" >&2; exit 1; }
+  sleep 5
+done
 home=$(curl -s -o /dev/null -w "%{http_code}" "$URL/")
 env=$(curl -s -o /dev/null -w "%{http_code}" "$URL/.env.local")
 echo "home $home (want 200), /.env.local $env (want 404)"
