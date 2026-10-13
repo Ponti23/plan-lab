@@ -1,0 +1,75 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "plan-lab-root",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8767",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "E:/Projects/plan-lab"
+      ],
+      "port": 8767
+    },
+    {
+      "name": "zone-first",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8768",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "E:/Projects/plan-lab-zf"
+      ],
+      "port": 8768
+    },
+    {
+      "name": "web-dist",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8772",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "E:/Projects/plan-lab-web/web/dist"
+      ],
+      "port": 8772
+    },
+    {
+      "name": "fp-data",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8773",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "C:/Users/ponti/OneDrive/projects/floorplan-engine/data"
+      ],
+      "port": 8773
+    },
+    {
+      "name": "fp-walls",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8776",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "C:/Users/ponti/OneDrive/projects/floorplan-engine-walls/data"
+      ],
+      "port": 8776
+    }
+  ]
+}
