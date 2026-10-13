@@ -4,6 +4,7 @@
 **Status:** 2026-10-08. `main` is at `44ad568`: `work/overnight-1006` (docs sync plus PL-25 iteration 4 / T3) was merged by fast-forward, user-approved.
 
 ## Next step (when you're back)
+**Latest (2026-10-13 evening):** walls committed and pushed (`plan-lab-zf` `5545b23`, `plan-lab-web` `28cbc5c`). The brief form is redesigned (boxed Lot / Setbacks / House) and live. Deploy is one command: `bash /e/Projects/plan-lab-web/scripts/deploy-demo.sh` (or `/deploy-demo`), only on the user's say-so. Doors are spec-settled and parked until the user says go. Batch scanning and DWG are parked. See PROGRESS "Resume here".
 0. **Setbacks (2026-10-11):** ZF-SETBACK-1 is built and reviewed in `plan-lab-zf`. It is uncommitted. Next: the user approves the web-demo input labels (copy gate), then port it to `plan-lab-web`. See PROGRESS "Resume here".
    **Live demo:** https://planlab-demo.vercel.app runs round 10 (deployed 2026-10-09 at the user's request). **Zone-first v2:** round 10 at `0536a9a` on `work/zone-first-proto` (pushed, not merged). Waiting on the user to judge `review/round10-compare.html` and the samples; see the PROGRESS "Resume here" block.
 1. PL-21 (G-SPIKE) is still undecided. T3 is parked until ZF-1 is judged (user 2026-10-07).

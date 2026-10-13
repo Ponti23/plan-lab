@@ -19,7 +19,7 @@ args=(-m "$model" -c "model_reasoning_effort=\"$effort\"" -C "$repo" --color nev
 
 case "$mode" in
   write)
-    lock="$repo/.git/codex-worker.lock"
+    lock="$(git -C "$repo" rev-parse --absolute-git-dir)/codex-worker.lock"   # works in linked worktrees too
     if ! mkdir "$lock" 2>/dev/null; then
       holder="$(cat "$lock/pid" 2>/dev/null || true)"
       if [ -n "$holder" ] && kill -0 "$holder" 2>/dev/null; then
