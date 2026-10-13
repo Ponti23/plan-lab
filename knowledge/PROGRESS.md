@@ -7,6 +7,16 @@ tags: [progress, resume]
 
 ## Resume here
 
+- **Checkpoint 2026-10-13 (evening): doors built (user said "go"), user asleep.**
+  - **ZF-DOOR-1** in `plan-lab-zf` (`spike/zone-first-v2/doors.ts`, `doors.test.ts`, `render-walls.ts`, `run-walls.ts`, `out-walls/` regenerated). **Uncommitted, not ported to web, not deployed.** Briefs: `knowledge/briefs/zf-doors-brief.md`, `zf-doors-fix1-brief.md`.
+  - Author: Codex Sol (2 rounds). Opus review round 1 FAIL: "Master + WIR" read as a robe (the Master opened into its Ensuite), "Bath + WC" read as a WC (720, swinging out), and the fallback chained rooms through bedrooms and bathrooms (`Bed 3 -> Bed 2`, `Laundry -> Bath`). Fix 1 then passed Opus's checks: an independent rescan finds no door into a wet room, WC, laundry, garage, bedroom or Master, except Ensuite → Master and Flex cupboards off a bedroom.
+  - Tests: v2 124 / 118 pass / 0 fail / 6 todo; older 83/83.
+  - Tally across 63 plans: every front door is on the spine, on the street (+y) side. 49 doors pass through a Flex piece (`via`). **27 rooms have no door**: 9 share no wall with the open area, 18 have a wall that is too short for door + 2 × 100 mm nibs. Worst: L-02/cand-3 (Bed 2, Flex, WC), M-04/cand-1, M-01/cand-2.
+  - The doorless rooms are evidence for **option 3** (the generator requires a real hallway). Show the user.
+  - **Tidy-up done** (user asked): committed `940a5a9`. Stale zone-first spec copies and the stray file were moved to scratchpad `tidy-backup/`. `dataset-cleanup-brief.md` was moved to `floorplan-engine/data/briefs/`, untracked there. Dead launch entries were dropped.
+  - **User answers 2026-10-13:** windows **not yet**. Alfresco and robes: discuss the decisions with the user. Hallway option 3: explain it more.
+  - **Next:** show the door drawings, then (on OK) commit `plan-lab-zf`, port to `plan-lab-web`, and change the lede ("no doors or windows yet" is a copy gate). Deploy only on request.
+
 - **Checkpoint 2026-10-13 (evening) — current state.**
   - **Next action:** nothing in flight. Wait for the user. Likely next: "go" on doors (spec below is complete), or front-end polish (show side-by-side inline mockups first, per the user's preference).
   - **Walls: committed and pushed** (user OK):
